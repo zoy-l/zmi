@@ -1,0 +1,17 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "father-build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/register": "^7.11.5",
+    "@types/node": "^14.11.4",
+    "father-build": "^1.18.5",
+    "lerna": "^3.22.1"
+  }
+}

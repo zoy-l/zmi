@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "module": "es2020",
+    "target": "esnext",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.spec.ts",
+    "packages/**/lib",
+    "packages/**/bin"
+  ]
+}
