@@ -1,5 +1,6 @@
 import { yargsParser } from '@lim/cli-utils'
-import create from './'
+import run from './'
+
 const args = yargsParser(process.argv.slice(2), {
   alias: {
     version: ['v'],
@@ -8,4 +9,9 @@ const args = yargsParser(process.argv.slice(2), {
   boolean: ['version']
 })
 
-create({ cwd: process.cwd(), args })
+if (args.version && !args._[0]) {
+  const { name, version } = require('../package')
+  console.log(`${name}@${version}`)
+} else {
+  run({ cwd: process.cwd(), args })
+}
