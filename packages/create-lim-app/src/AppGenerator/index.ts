@@ -1,14 +1,21 @@
-import { glob, chalk, mkdirp, mustache, yargs, inquirer } from '@lim/cli-utils'
+import {
+  clearConsole,
+  inquirer,
+  mustache,
+  mkdirp,
+  chalk,
+  yargs,
+  glob
+} from '@lim/cli-utils'
 import path from 'path'
 import {
+  writeFileSync,
   copyFileSync,
   readFileSync,
-  statSync,
-  writeFileSync,
-  existsSync,
   readdirSync,
-  unlinkSync,
-  rmdirSync
+  existsSync,
+  lstatSync,
+  statSync
 } from 'fs'
 
 export interface IOpts {
@@ -37,36 +44,50 @@ export default class Generator {
     this.args = opt.args
   }
 
-  run() {
+  async run() {
     const appName = this.args._[0]
-    if (existsSync(appName)) {
-      if (!!readdirSync(`${this.cwd}/${appName}`).length) {
-        inquirer
-          .prompt({
-            type: 'confirm',
-            name: 'createAppName',
+
+    const directoryList = readdirSync(this.cwd).filter((file) =>
+      lstatSync(`${this.cwd}/${file}`).isDirectory()
+    )
+
+    if (appName) {
+      let _appName = appName
+
+      while (1) {
+        if (
+          existsSync(_appName) &&
+          !!readdirSync(`${this.cwd}/${_appName}`).length
+        ) {
+          const { newAppName } = await inquirer.prompt({
+            type: 'input',
+            name: 'newAppName',
             message: chalk.yellow.bold(
-              'the directory already exists and it is not empty, Whether to cover?'
+              [`The ${chalk.cyan.bold(`"📁 ${_appName}"`)}`],
+              ['folder already exists and is not empty.\n'],
+              ['  please enter a new project name : '].join('')
             ),
-            prefix: '⚠️ ',
-            default: true
+            prefix: '⚠️ '
           })
-          .then(({ createAppName }) => {
-            createAppName
-              ? this.delDir(`${this.cwd}/${appName}`)
-              : process.exit(0)
-          })
-      } else {
-        this.cwd += appName
+
+          if (!directoryList.includes(`${newAppName}`)) {
+            this.cwd += `/${newAppName}`
+            break
+          } else {
+            _appName = `${newAppName}`
+          }
+        } else {
+          this.cwd += `/${_appName}`
+          break
+        }
       }
-    } else {
-      this.cwd += appName
-      this.createDirectory(this.cwd)
     }
+
     this.writing()
   }
 
   writing() {
+    clearConsole()
     this.copyDirectory({
       context: {
         version: require('../../package').version
@@ -76,32 +97,12 @@ export default class Generator {
     })
   }
 
-  delDir(appPath: string) {
-    let files = []
-    if (existsSync(appPath)) {
-      files = readdirSync(appPath)
-      files.forEach((file) => {
-        let curPath = path + '/' + file
-        if (statSync(curPath).isDirectory()) {
-          this.delDir(curPath)
-        } else {
-          unlinkSync(curPath)
-        }
-      })
-      rmdirSync(appPath)
-    }
-  }
-
-  createDirectory(appPath: string) {
-    mkdirp.sync(appPath)
-  }
-
   copyTpl(opts: copyTplOpts) {
     const tpl = readFileSync(opts.templatePath, 'utf-8')
     const content = mustache.render(tpl, opts.context)
     mkdirp.sync(path.dirname(opts.target))
     console.log(
-      `${chalk.magenta('Write:')} ${path.relative(this.cwd, opts.target)}`
+      `│ ${chalk.magenta('Copy: ')} ${path.relative(this.cwd, opts.target)}`
     )
     writeFileSync(opts.target, content, 'utf-8')
   }
@@ -123,11 +124,20 @@ export default class Generator {
           context: opts.context
         })
       } else {
-        console.log(`${chalk.magenta('Copy: ')} ${file}`)
+        console.log(`│ ${chalk.magenta('Copy: ')} ${file}`)
         const absTarget = path.join(opts.target, file)
         mkdirp.sync(path.dirname(absTarget))
         copyFileSync(absFile, absTarget)
       }
     })
+
+    console.log(
+      [
+        '┌────────────────────────────────────┐',
+        '│ Install dependencies: $ yarn       |',
+        '│ Start the dev server: $ yarn start |',
+        '└────────────────────────────────────┘'
+      ].join('\n')
+    )
   }
 }

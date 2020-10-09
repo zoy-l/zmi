@@ -7,7 +7,10 @@ import chalk from 'chalk'
 import yargs from 'yargs'
 import glob from 'glob'
 
+import clearConsole from './clearConsole'
+
 export {
+  clearConsole,
   portfinder,
   yargsParser,
   chalk,
