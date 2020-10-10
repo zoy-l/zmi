@@ -63,9 +63,11 @@ export default class Generator {
             type: 'input',
             name: 'newAppName',
             message: chalk.yellow.bold(
-              [`The ${chalk.cyan.bold(`"📁 ${_appName}"`)}`],
-              ['folder already exists and is not empty.\n'],
-              ['  please enter a new project name : '].join('')
+              [
+                `The ${chalk.cyan.bold(`"📁 ${_appName}"`)}`,
+                'folder already exists and is not empty.\n',
+                '  please enter a new project name : '
+              ].join('')
             ),
             prefix: '⚠️ '
           })
