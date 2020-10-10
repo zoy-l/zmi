@@ -11319,6 +11319,11 @@ type-fest@^0.13.1:
   resolved "https://registry.npm.taobao.org/type-fest/download/type-fest-0.13.1.tgz?cache=0&sync_timestamp=1601425465054&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftype-fest%2Fdownload%2Ftype-fest-0.13.1.tgz#0172cb5bce80b0bd542ea348db50c7e21834d934"
   integrity sha1-AXLLW86AsL1ULqNI21DH4hg02TQ=
 
+type-fest@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.npm.taobao.org/type-fest/download/type-fest-0.17.0.tgz?cache=0&sync_timestamp=1601425309553&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftype-fest%2Fdownload%2Ftype-fest-0.17.0.tgz#268bb55d38701ce3915f60a4367a1e9f28672deb"
+  integrity sha1-Jou1XThwHOORX2CkNnoenyhnLes=
+
 type-fest@^0.3.0:
   version "0.3.1"
   resolved "https://registry.npm.taobao.org/type-fest/download/type-fest-0.3.1.tgz?cache=0&sync_timestamp=1601425465054&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftype-fest%2Fdownload%2Ftype-fest-0.3.1.tgz#63d00d204e059474fe5e1b7c011112bbd1dc29e1"

@@ -8,9 +8,11 @@ import yargs from 'yargs'
 import glob from 'glob'
 
 import clearConsole from './clearConsole'
+import paths from './paths'
 
 export {
   clearConsole,
+  paths,
   portfinder,
   yargsParser,
   chalk,
