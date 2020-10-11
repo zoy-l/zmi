@@ -8,10 +8,14 @@ import yargs from 'yargs'
 import glob from 'glob'
 
 import clearConsole from './clearConsole'
+import prepareUrls from './prepareUrls'
+import getArgs from './getArgs'
 import paths from './paths'
 
 export {
+  getArgs,
   clearConsole,
+  prepareUrls,
   paths,
   portfinder,
   yargsParser,

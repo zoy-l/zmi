@@ -3,7 +3,6 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import webpack from 'webpack'
 import webpackChain from 'webpack-chain'
 import { paths } from '@lim/cli-utils'
-
 import path from 'path'
 
 export default function getConfig(opts: any) {
