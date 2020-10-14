@@ -9,10 +9,11 @@ import glob from 'glob'
 
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
-import getArgs from './getArgs'
+import getArgs, { defaultYargsOptions as dyo } from './getArgs'
 import paths from './paths'
 
 export {
+  dyo,
   getArgs,
   clearConsole,
   prepareUrls,

@@ -1,12 +1,9 @@
-import { getArgs, chalk } from '@lim/cli-utils'
-
+import { getArgs, chalk, dyo, clearConsole } from '@lim/cli-utils'
 import fork from './utils/fork'
 
-const args = getArgs()
-
-const run = async () => {
+getArgs(dyo).then(({ command }) => {
   try {
-    switch (args._[0]) {
+    switch (command) {
       case 'dev':
         const child = fork({
           scriptPath: require.resolve('./forkedDev')
@@ -20,8 +17,12 @@ const run = async () => {
           process.exit(1)
         })
         break
-
       default:
+        clearConsole()
+
+        if (command === 'build') {
+          process.env.NODE_ENV = 'production'
+        }
         break
     }
   } catch (err) {
@@ -29,6 +30,4 @@ const run = async () => {
     console.error(err.stack)
     process.exit(1)
   }
-}
-
-run()
+})
