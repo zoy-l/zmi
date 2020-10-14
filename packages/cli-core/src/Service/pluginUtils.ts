@@ -41,6 +41,7 @@ function pathToRegister({
     path,
     apply() {
       //
+      return require(path)
     }
   }
 }

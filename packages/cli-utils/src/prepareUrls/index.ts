@@ -25,7 +25,7 @@ export default function prepareUrls(opts: PrepareUrls) {
     url.format({
       protocol,
       hostname,
-      port: chalk.bold(port),
+      port: chalk.bold(`${port}`),
       pathname
     })
 

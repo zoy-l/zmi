@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "dependencies": {
+    "@lim/cli-core": "1.0.0"
+  },
   "bin": {
     "lim": "bin/lim.js"
   }

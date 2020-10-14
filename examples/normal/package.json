@@ -1,0 +1,13 @@
+{
+  "name": "normal",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": "true",
+  "scripts": {
+    "dev": "lim dev"
+  },
+  "peerDependencies": {
+    "lim": "latest"
+  }
+}

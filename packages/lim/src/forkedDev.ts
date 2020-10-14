@@ -1,9 +1,17 @@
 import { chalk, launchDevice } from '@lim/cli-utils'
+import Service from './service'
 
-launchDevice().then(() => {
+launchDevice().then(({ args }) => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
   try {
     process.env.NODE_ENV = 'development'
+
+    const service = new Service({})
+
+    service.run({
+      name: 'dev',
+      args
+    })
 
     let closed = false
 

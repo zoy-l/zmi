@@ -8,6 +8,8 @@ export default class Service extends EventEmitter {
 
   extraPlugins = []
 
+  userConfig: any
+
   initialPresets: any
   initialPlugins: any
 
@@ -17,16 +19,32 @@ export default class Service extends EventEmitter {
     this.cwd = opts.cwd || process.cwd()
     this.pkg = opts.pkg
     this.env = opts.env
+
+    this.initialPresets({
+      cwd: this.cwd,
+      pkg: this.pkg,
+      presets: opts.presets || [],
+      userConfigPresets: this.userConfig.presets || []
+    })
   }
 
   init() {}
 
-  initPresetsAndPlugins() {
-    this.extraPlugins = []
-    
+  initPreset(preset: any) {
+    const { id, key, apply } = preset
+
+    preset.isPreset = true
   }
 
-  run() {}
+  initPresetsAndPlugins() {
+    this.extraPlugins = []
+
+    while (this.initialPresets.length) {
+      this.initPreset(this.initialPresets.shift())
+    }
+  }
+
+  run(opts: any) {}
 
   runCommand() {}
 }
