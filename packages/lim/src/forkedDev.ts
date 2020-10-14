@@ -1,16 +1,15 @@
 import { chalk, launchDevice } from '@lim/cli-utils'
 
 launchDevice().then(() => {
+  const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
   try {
     process.env.NODE_ENV = 'development'
 
     let closed = false
 
-    process.once('SIGINT', () => onSignal('SIGINT'))
-
-    process.once('SIGQUIT', () => onSignal('SIGQUIT'))
-
-    process.once('SIGTERM', () => onSignal('SIGTERM'))
+    Signals.forEach((signal) => {
+      process.once(signal, () => onSignal(signal))
+    })
 
     function onSignal(signal: string) {
       process.exit(0)
