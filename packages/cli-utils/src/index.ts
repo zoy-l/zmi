@@ -9,12 +9,15 @@ import glob from 'glob'
 
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
-import getArgs, { defaultYargsOptions as dyo } from './getArgs'
+import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import paths from './paths'
 
+const isWin = process.platform === 'win32'
+
 export {
+  isWin,
   dyo,
-  getArgs,
+  launchDevice,
   clearConsole,
   prepareUrls,
   paths,

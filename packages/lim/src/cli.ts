@@ -1,21 +1,35 @@
-import { getArgs, chalk, dyo, clearConsole } from '@lim/cli-utils'
+import { launchDevice, chalk, dyo, clearConsole, isWin } from '@lim/cli-utils'
+import readline from 'readline'
 import fork from './utils/fork'
 
-getArgs(dyo).then(({ command }) => {
+launchDevice(dyo).then(({ command }) => {
+  const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
+
   try {
     switch (command) {
       case 'dev':
         const child = fork({
           scriptPath: require.resolve('./forkedDev')
         })
-        process.on('SIGINT', () => {
-          child.kill('SIGINT')
-          process.exit(1)
+
+        if (isWin) {
+          const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+          })
+
+          rl.on(Signals[0], function () {
+            process.emit(Signals[0], Signals[0])
+          })
+        }
+
+        Signals.forEach((SignalKey) => {
+          process.on(SignalKey, () => {
+            child.kill(SignalKey)
+            process.exit(1)
+          })
         })
-        process.on('SIGTERM', () => {
-          child.kill('SIGTERM')
-          process.exit(1)
-        })
+
         break
       default:
         clearConsole()
