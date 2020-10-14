@@ -18,7 +18,7 @@ launchDevice(dyo).then(({ command }) => {
             output: process.stdout
           })
 
-          rl.on(Signals[0], function () {
+          rl.on(Signals[0], () => {
             process.emit(Signals[0], Signals[0])
           })
         }
@@ -40,8 +40,8 @@ launchDevice(dyo).then(({ command }) => {
         break
     }
   } catch (err) {
-    console.error(chalk.red(err.message))
-    console.error(err.stack)
+    console.log(chalk.red(err.message))
+    console.log(err.stack)
     process.exit(1)
   }
 })
