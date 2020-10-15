@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import yargs from 'yargs'
 import { resolvePlugins, resolvePresets } from './pluginUtils'
 
 export default class Service extends EventEmitter {
@@ -44,7 +45,9 @@ export default class Service extends EventEmitter {
     }
   }
 
-  run(opts: any) {}
+  run({ args, command }: { args: yargs.Arguments; command: string }) {
+    this.init()
+  }
 
   runCommand() {}
 }

@@ -46,7 +46,7 @@ launchDevice(dyo).then(({ args, command }) => {
           cwd: getCwd(),
           pkg: getPkg(process.cwd())
         }).run({
-          name: command,
+          command,
           args
         })
         break
