@@ -1,8 +1,12 @@
 import { launchDevice, chalk, dyo, clearConsole, isWin } from '@lim/cli-utils'
 import readline from 'readline'
-import fork from './utils/fork'
 
-launchDevice(dyo).then(({ command }) => {
+import { getCwd, getPkg } from './utils/getRoot'
+import fork from './utils/fork'
+import Service from './service'
+
+launchDevice(dyo).then(({ args, command }) => {
+  debugger
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
 
   try {
@@ -37,6 +41,14 @@ launchDevice(dyo).then(({ command }) => {
         if (command === 'build') {
           process.env.NODE_ENV = 'production'
         }
+
+        new Service({
+          cwd: getCwd(),
+          pkg: getPkg(process.cwd())
+        }).run({
+          name: command,
+          args
+        })
         break
     }
   } catch (err) {

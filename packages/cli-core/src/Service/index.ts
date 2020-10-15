@@ -8,7 +8,7 @@ export default class Service extends EventEmitter {
 
   extraPlugins = []
 
-  userConfig: any
+  userConfig: any = {}
 
   initialPresets: any
   initialPlugins: any
@@ -20,7 +20,7 @@ export default class Service extends EventEmitter {
     this.pkg = opts.pkg
     this.env = opts.env
 
-    this.initialPresets({
+    this.initialPresets = resolvePresets({
       cwd: this.cwd,
       pkg: this.pkg,
       presets: opts.presets || [],
