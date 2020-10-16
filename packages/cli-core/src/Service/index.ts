@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events'
 import yargs from 'yargs'
+import PluginAPI from './pluginAPI'
 import { resolvePlugins, resolvePresets } from './pluginUtils'
 
 export default class Service extends EventEmitter {
@@ -13,6 +14,10 @@ export default class Service extends EventEmitter {
 
   initialPresets: any
   initialPlugins: any
+
+  pluginMethods: {
+    [name: string]: Function
+  } = {}
 
   constructor(opts: any) {
     super()
@@ -29,12 +34,8 @@ export default class Service extends EventEmitter {
     })
   }
 
-  init() {}
-
-  initPreset(preset: any) {
-    const { id, key, apply } = preset
-
-    preset.isPreset = true
+  init() {
+    this.initPresetsAndPlugins()
   }
 
   initPresetsAndPlugins() {
@@ -45,7 +46,33 @@ export default class Service extends EventEmitter {
     }
   }
 
+  initPreset(preset: any) {
+    const { id, key, apply } = preset
+
+    preset.isPreset = true
+  }
+
+  getPluginAPI(opts: any) {
+    const pluginAPI = new PluginAPI(opts)
+
+    return new Proxy(pluginAPI, {
+      get: (target, prop) => {
+        //
+        return target[prop]
+      }
+    })
+  }
+
+  applyAPI(opts: any) {
+    let ret = opts.apply()(opts.api)
+    // if (isPromise(ret)) {
+    //   ret = await ret
+    // }
+    return ret || {}
+  }
+
   run({ args, command }: { args: yargs.Arguments; command: string }) {
+    debugger
     this.init()
   }
 
