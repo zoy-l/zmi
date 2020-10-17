@@ -4,17 +4,9 @@ import { resolve } from '@lim/cli-utils'
 function getPluginsOrPresets(type: any, opts: any) {
   const arr: any[] = []
 
-  arr.concat(
-    opts[type === PluginType.preset ? 'presets' : 'plugins'] || []
-  )
+  arr.concat(opts[type === PluginType.preset ? 'presets' : 'plugins'] || [])
 
-  arr.concat(
-    opts[
-      type === PluginType.preset
-        ? 'userConfigPresets'
-        : 'userConfigPlugins'
-    ] || []
-  )
+  arr.concat(opts[type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'] || [])
 
   return arr.map((path) =>
     resolve.sync(path, {
@@ -24,15 +16,7 @@ function getPluginsOrPresets(type: any, opts: any) {
   )
 }
 
-function pathToRegister({
-  type,
-  path,
-  cwd
-}: {
-  type: any
-  path: string
-  cwd: string
-}) {
+export function pathToRegister({ type, path, cwd }: { type: any; path: string; cwd: string }) {
   let id
   let key
   return {
@@ -50,9 +34,7 @@ export function resolvePresets(opts: any) {
   const type = PluginType.preset
   const presets = [...getPluginsOrPresets(type, opts)]
 
-  return presets.map((path) =>
-    pathToRegister({ type, path, cwd: opts.cwd })
-  )
+  return presets.map((path) => pathToRegister({ type, path, cwd: opts.cwd }))
 }
 
 export function resolvePlugins() {
