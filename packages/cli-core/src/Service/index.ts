@@ -4,6 +4,13 @@ import { ApplyPluginsType, PluginType } from './enums'
 import PluginAPI from './pluginAPI'
 import { resolvePlugins, resolvePresets, pathToRegister } from './pluginUtils'
 
+interface IRun {
+  args: yargs.Arguments
+  command: string
+}
+
+const cycle = ['onPluginReady', 'modifyPaths', 'onStart', 'modifyDefaultConfig', 'modifyConfig']
+
 export default class Service extends EventEmitter {
   cwd: string
   pkg: any
@@ -15,6 +22,8 @@ export default class Service extends EventEmitter {
 
   initialPresets: any
   initialPlugins: any
+
+  commands: any
 
   pluginMethods: {
     [name: string]: Function
@@ -83,9 +92,17 @@ export default class Service extends EventEmitter {
   getPluginAPI(opts: any) {
     const pluginAPI = new PluginAPI(opts)
 
+    // 生命周期
+    cycle.forEach((name) => {
+      pluginAPI.registerMethod({ name, exitsError: false })
+    })
+
     return new Proxy(pluginAPI, {
-      get: (target, prop) => {
-        //
+      get: (target, prop: string) => {
+        if (this.pluginMethods[prop]) {
+          return this.pluginMethods[prop]
+        }
+
         return target[prop]
       }
     })
@@ -100,7 +117,7 @@ export default class Service extends EventEmitter {
     // if (isPromise(ret)) {
     //   ret = await ret
     // }
-    return ret || {}
+    return ret ?? {}
   }
 
   applyPlugins(pluginOptions: any) {
@@ -119,10 +136,22 @@ export default class Service extends EventEmitter {
     }
   }
 
-  run({ args, command }: { args: yargs.Arguments; command: string }) {
+  run({ args, command }: IRun) {
     debugger
     this.init()
+
+    this.applyPlugins({
+      key: 'onStart',
+      type: ApplyPluginsType.event,
+      args: { args }
+    })
+
+    return this.runCommand({ command, args })
   }
 
-  runCommand() {}
+  runCommand({ command, args }: IRun) {
+    const { fn } = this.commands[command]
+
+    return fn({ args })
+  }
 }
