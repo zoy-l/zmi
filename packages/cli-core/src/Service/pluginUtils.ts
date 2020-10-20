@@ -3,10 +3,10 @@ import { resolve } from '@lim/cli-utils'
 
 function getPluginsOrPresets(type: any, opts: any) {
   const arr: any[] = []
+  debugger
+  arr.push(...(opts[type === PluginType.preset ? 'presets' : 'plugins'] || []))
 
-  arr.concat(opts[type === PluginType.preset ? 'presets' : 'plugins'] || [])
-
-  arr.concat(opts[type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'] || [])
+  arr.push(...(opts[type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'] || []))
 
   return arr.map((path) =>
     resolve.sync(path, {
@@ -17,8 +17,8 @@ function getPluginsOrPresets(type: any, opts: any) {
 }
 
 export function pathToRegister({ type, path, cwd }: { type: any; path: string; cwd: string }) {
-  let id
-  let key
+  let id = '@lim/cli-preset/src/plugins/commands/dev'
+  let key = 'dev'
   return {
     id,
     key,

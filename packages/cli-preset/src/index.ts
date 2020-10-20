@@ -1,3 +1,5 @@
 export default () => {
-  return {}
+  return {
+    plugins: [require.resolve('./plugins/commands/dev')]
+  }
 }

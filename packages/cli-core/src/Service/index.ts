@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import { AsyncSeriesWaterfallHook } from 'tapable'
 import yargs from 'yargs'
 import { ApplyPluginsType, PluginType } from './enums'
 import PluginAPI from './pluginAPI'
@@ -37,7 +38,7 @@ export default class Service extends EventEmitter {
     this.cwd = opts.cwd || process.cwd()
     this.pkg = opts.pkg
     this.env = opts.env
-
+    debugger
     this.initialPresets = resolvePresets({
       cwd: this.cwd,
       pkg: this.pkg,
@@ -60,6 +61,7 @@ export default class Service extends EventEmitter {
 
   initPreset(preset: any) {
     const { id, key, apply } = preset
+    debugger
 
     preset.isPreset = true
 
@@ -140,11 +142,11 @@ export default class Service extends EventEmitter {
     debugger
     this.init()
 
-    this.applyPlugins({
-      key: 'onStart',
-      type: ApplyPluginsType.event,
-      args: { args }
-    })
+    // this.applyPlugins({
+    //   key: 'onStart',
+    //   type: ApplyPluginsType.event,
+    //   args: { args }
+    // })
 
     return this.runCommand({ command, args })
   }

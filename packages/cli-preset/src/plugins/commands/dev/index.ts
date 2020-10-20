@@ -3,7 +3,7 @@ export default (api: any) => {
     name: 'dev',
     description: 'start a dev server for development',
     fn: () => {
-      
+      console.log(1)
     }
   })
 }

@@ -6,6 +6,11 @@ export default class PluginAPI {
     this.service = opts.service
   }
 
+  registerCommand(command: any) {
+    const { name } = command
+    this.service.commands[name] = command
+  }
+
   registerMethod(opts: any) {
     const { fn, name, exitsError } = opts
     const { pluginMethods } = this.service
