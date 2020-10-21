@@ -8,14 +8,16 @@ import chalk from 'chalk'
 import yargs from 'yargs'
 import glob from 'glob'
 
+import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
+import compatibleWithESModule from './compatibleWithESModule'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
-import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import paths from './paths'
 
 const isWin = process.platform === 'win32'
 
 export {
+  compatibleWithESModule,
   isWin,
   dyo,
   resolve,

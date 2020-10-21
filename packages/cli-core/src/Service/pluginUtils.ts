@@ -1,19 +1,18 @@
 import { PluginType } from './enums'
-import { resolve } from '@lim/cli-utils'
+import { resolve, compatibleWithESModule } from '@lim/cli-utils'
 
 function getPluginsOrPresets(type: any, opts: any) {
-  const arr: any[] = []
-  debugger
-  arr.push(...(opts[type === PluginType.preset ? 'presets' : 'plugins'] || []))
-
-  arr.push(...(opts[type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'] || []))
-
-  return arr.map((path) =>
-    resolve.sync(path, {
-      basedir: opts.cwd,
-      extensions: ['.js', '.ts']
-    })
-  )
+  return [
+    opts[type === PluginType.preset ? 'presets' : 'plugins'] ?? [],
+    opts[type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'] ?? []
+  ]
+    .flat()
+    .map((path) =>
+      resolve.sync(path, {
+        basedir: opts.cwd,
+        extensions: ['.js', '.ts']
+      })
+    )
 }
 
 export function pathToRegister({ type, path, cwd }: { type: any; path: string; cwd: string }) {
@@ -24,8 +23,9 @@ export function pathToRegister({ type, path, cwd }: { type: any; path: string; c
     key,
     path,
     apply() {
-      //
-      return require(path)
+      const ret = require(path)
+
+      return compatibleWithESModule(ret)
     }
   }
 }

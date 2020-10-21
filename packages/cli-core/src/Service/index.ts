@@ -24,12 +24,12 @@ export default class Service extends EventEmitter {
   initialPresets: any
   initialPlugins: any
 
-  commands: any
+  commands: any = {}
 
   pluginMethods: {
     [name: string]: Function
   } = {}
-  plugins: any
+  plugins: any = {}
   hooks: any
 
   constructor(opts: any) {
@@ -57,6 +57,20 @@ export default class Service extends EventEmitter {
     while (this.initialPresets.length) {
       this.initPreset(this.initialPresets.shift())
     }
+
+    while (this.extraPlugins.length) {
+      this.initPlugins(this.extraPlugins.shift())
+    }
+  }
+
+  initPlugins(plugin: any) {
+    const { id, key, apply } = plugin
+
+    const api = this.getPluginAPI({ id, key, service: this })
+
+    this.registerPlugin(plugin)
+
+    this.applyAPI({ api, apply })
   }
 
   initPreset(preset: any) {
@@ -101,16 +115,18 @@ export default class Service extends EventEmitter {
 
     return new Proxy(pluginAPI, {
       get: (target, prop: string) => {
+        debugger
         if (this.pluginMethods[prop]) {
           return this.pluginMethods[prop]
         }
-
+        debugger
         return target[prop]
       }
     })
   }
 
   registerPlugin(plugin: any) {
+    debugger
     this.plugins[plugin.id] = plugin
   }
 
@@ -152,6 +168,7 @@ export default class Service extends EventEmitter {
   }
 
   runCommand({ command, args }: IRun) {
+    debugger
     const { fn } = this.commands[command]
 
     return fn({ args })

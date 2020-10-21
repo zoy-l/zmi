@@ -1,5 +1,5 @@
 export default (api: any) => {
-  api.reegisterCommand({
+  api.registerCommand({
     name: 'dev',
     description: 'start a dev server for development',
     fn: () => {
