@@ -40,3 +40,11 @@ export function resolvePresets(opts: any) {
 export function resolvePlugins() {
   const type = PluginType.plugin
 }
+
+export function isPromise(obj: any) {
+  return (
+    !!obj &&
+    (typeof obj === 'object' || typeof obj === 'function') &&
+    typeof obj.then === 'function'
+  )
+}

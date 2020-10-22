@@ -3,7 +3,7 @@ import { AsyncSeriesWaterfallHook } from 'tapable'
 import yargs from 'yargs'
 import { ApplyPluginsType, PluginType } from './enums'
 import PluginAPI from './pluginAPI'
-import { resolvePlugins, resolvePresets, pathToRegister } from './pluginUtils'
+import { resolvePlugins, resolvePresets, pathToRegister, isPromise } from './pluginUtils'
 
 interface IRun {
   args: yargs.Arguments
@@ -35,15 +35,15 @@ export default class Service extends EventEmitter {
   constructor(opts: any) {
     super()
 
-    this.cwd = opts.cwd || process.cwd()
+    this.cwd = opts.cwd ?? process.cwd()
     this.pkg = opts.pkg
     this.env = opts.env
-    debugger
+
     this.initialPresets = resolvePresets({
       cwd: this.cwd,
       pkg: this.pkg,
-      presets: opts.presets || [],
-      userConfigPresets: this.userConfig.presets || []
+      presets: opts.presets ?? [],
+      userConfigPresets: this.userConfig.presets ?? []
     })
   }
 
@@ -75,7 +75,6 @@ export default class Service extends EventEmitter {
 
   initPreset(preset: any) {
     const { id, key, apply } = preset
-    debugger
 
     preset.isPreset = true
 
@@ -83,58 +82,57 @@ export default class Service extends EventEmitter {
 
     this.registerPlugin(preset)
 
-    const { presets, plugins } = this.applyAPI({
+    this.applyAPI({
       api,
       apply
+    }).then(({ presets, plugins }) => {
+      if (presets) {
+        this.extraPlugins.unshift(
+          ...plugins.map((path: any) =>
+            pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
+          )
+        )
+      }
+
+      if (plugins) {
+        this.extraPlugins.push(
+          ...plugins.map((path: any) =>
+            pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
+          )
+        )
+      }
     })
-
-    if (presets) {
-      this.extraPlugins.unshift(
-        ...plugins.map((path: any) =>
-          pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
-        )
-      )
-    }
-
-    if (plugins) {
-      this.extraPlugins.push(
-        ...plugins.map((path: any) =>
-          pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
-        )
-      )
-    }
   }
 
   getPluginAPI(opts: any) {
     const pluginAPI = new PluginAPI(opts)
 
-    // 生命周期
+    // life cycle
     cycle.forEach((name) => {
       pluginAPI.registerMethod({ name, exitsError: false })
     })
 
     return new Proxy(pluginAPI, {
       get: (target, prop: string) => {
-        debugger
         if (this.pluginMethods[prop]) {
           return this.pluginMethods[prop]
         }
-        debugger
+
         return target[prop]
       }
     })
   }
 
   registerPlugin(plugin: any) {
-    debugger
     this.plugins[plugin.id] = plugin
   }
 
-  applyAPI(opts: any) {
+  async applyAPI(opts: any) {
     let ret = opts.apply()(opts.api)
-    // if (isPromise(ret)) {
-    //   ret = await ret
-    // }
+    // import() returns a Promise object
+    if (isPromise(ret)) {
+      ret = await ret
+    }
     return ret ?? {}
   }
 
