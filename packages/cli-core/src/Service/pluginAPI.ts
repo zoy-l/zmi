@@ -18,25 +18,29 @@ export default class PluginAPI {
     const { fn, name, exitsError } = opts
     const { pluginMethods } = this.service
 
-    if (pluginMethods[name]) {
-      //
+    if (!pluginMethods[name]) {
+      pluginMethods[name] =
+        fn ??
+        function (this: PluginAPI, Fn: Function) {
+          const hook = {
+            key: name,
+            Fn
+          }
+
+          this.register(hook)
+        }
+      return
     }
 
-    pluginMethods[name] =
-      fn ??
-      function (this: PluginAPI, Fn: Function) {
-        const hook = {
-          key: name,
-          Fn
-        }
-
-        this.register(hook)
-      }
+    if (exitsError) {
+      throw new Error(
+        `api.registerMethod() failed, method ${name} is already exist.`
+      )
+    }
   }
 
   register(hook: any) {
-    this.service.hooksByPluginId[this.id] = (
-      this.service.hooksByPluginId[this.id] ?? []
-    ).concat(hook)
+    const { hooksByPluginId } = this.service
+    hooksByPluginId[this.id] = (hooksByPluginId[this.id] ?? []).concat(hook)
   }
 }
