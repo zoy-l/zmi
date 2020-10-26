@@ -3,14 +3,25 @@ import { AsyncSeriesWaterfallHook } from 'tapable'
 import yargs from 'yargs'
 import { ApplyPluginsType, PluginType } from './enums'
 import PluginAPI from './pluginAPI'
-import { resolvePlugins, resolvePresets, pathToRegister, isPromise } from './pluginUtils'
+import {
+  resolvePlugins,
+  resolvePresets,
+  pathToRegister,
+  isPromise
+} from './pluginUtils'
 
 interface IRun {
   args: yargs.Arguments
   command: string
 }
 
-const cycle = ['onPluginReady', 'modifyPaths', 'onStart', 'modifyDefaultConfig', 'modifyConfig']
+const cycle = [
+  'onPluginReady',
+  'modifyPaths',
+  'onStart',
+  'modifyDefaultConfig',
+  'modifyConfig'
+]
 
 export default class Service extends EventEmitter {
   cwd: string
@@ -31,6 +42,7 @@ export default class Service extends EventEmitter {
   } = {}
   plugins: any = {}
   hooks: any
+  hooksByPluginId: any
 
   constructor(opts: any) {
     super()
@@ -47,15 +59,15 @@ export default class Service extends EventEmitter {
     })
   }
 
-  init() {
-    this.initPresetsAndPlugins()
+  async init() {
+    await this.initPresetsAndPlugins()
   }
 
-  initPresetsAndPlugins() {
+  async initPresetsAndPlugins() {
     this.extraPlugins = []
 
     while (this.initialPresets.length) {
-      this.initPreset(this.initialPresets.shift())
+      await this.initPreset(this.initialPresets.shift())
     }
 
     while (this.extraPlugins.length) {
@@ -73,7 +85,7 @@ export default class Service extends EventEmitter {
     this.applyAPI({ api, apply })
   }
 
-  initPreset(preset: any) {
+  async initPreset(preset: any) {
     const { id, key, apply } = preset
 
     preset.isPreset = true
@@ -82,26 +94,26 @@ export default class Service extends EventEmitter {
 
     this.registerPlugin(preset)
 
-    this.applyAPI({
+    const { presets, plugins } = await this.applyAPI({
       api,
       apply
-    }).then(({ presets, plugins }) => {
-      if (presets) {
-        this.extraPlugins.unshift(
-          ...plugins.map((path: any) =>
-            pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
-          )
-        )
-      }
-
-      if (plugins) {
-        this.extraPlugins.push(
-          ...plugins.map((path: any) =>
-            pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
-          )
-        )
-      }
     })
+
+    if (presets) {
+      this.extraPlugins.unshift(
+        ...plugins.map((path: any) =>
+          pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
+        )
+      )
+    }
+
+    if (plugins) {
+      this.extraPlugins.push(
+        ...plugins.map((path: any) =>
+          pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
+        )
+      )
+    }
   }
 
   getPluginAPI(opts: any) {
@@ -148,27 +160,28 @@ export default class Service extends EventEmitter {
       case ApplyPluginsType.event:
         break
       default:
-        throw new Error(`applyPlugin failed, type is not defined or is not matched, got ${type}.`)
+        throw new Error(
+          `applyPlugin failed, type is not defined or is not matched, got ${type}.`
+        )
     }
   }
 
-  run({ args, command }: IRun) {
+  async run({ args, command }: IRun) {
     debugger
-    this.init()
+    await this.init()
 
     // this.applyPlugins({
     //   key: 'onStart',
     //   type: ApplyPluginsType.event,
     //   args: { args }
     // })
-
-    return this.runCommand({ command, args })
+    this.runCommand({ command, args })
   }
 
   runCommand({ command, args }: IRun) {
     debugger
     const { fn } = this.commands[command]
 
-    return fn({ args })
+    fn({ args })
   }
 }
