@@ -1,10 +1,12 @@
 import { PluginType } from './enums'
-import { resolve, compatibleWithESModule } from '../../../lim-utils/lib'
+import { resolve, compatibleWithESModule } from '@lim/utils'
 
 function getPluginsOrPresets(type: any, opts: any) {
   return [
     opts[type === PluginType.preset ? 'presets' : 'plugins'] ?? [],
-    opts[type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'] ?? []
+    opts[
+      type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'
+    ] ?? []
   ]
     .flat()
     .map((path) =>
@@ -15,9 +17,17 @@ function getPluginsOrPresets(type: any, opts: any) {
     )
 }
 
-export function pathToRegister({ type, path, cwd }: { type: any; path: string; cwd: string }) {
-  let id = '@lim/cli-preset/src/plugins/commands/dev'
-  let key = 'dev'
+export function pathToRegister({
+  // type,
+  path
+}: // cwd
+{
+  type: any
+  path: string
+  cwd: string
+}) {
+  const id = '@lim/preset/src/plugins/commands/dev'
+  const key = 'dev'
   return {
     id,
     key,
@@ -37,8 +47,17 @@ export function resolvePresets(opts: any) {
   return presets.map((path) => pathToRegister({ type, path, cwd: opts.cwd }))
 }
 
-export function resolvePlugins() {
+export function resolvePlugins(opts: any) {
   const type = PluginType.plugin
+  const plugins = getPluginsOrPresets(type, opts)
+
+  return plugins.map((path: string) =>
+    pathToRegister({
+      type,
+      path,
+      cwd: opts.cwd
+    })
+  )
 }
 
 export function isPromise(obj: any) {

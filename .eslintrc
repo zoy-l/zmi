@@ -1,4 +1,9 @@
 {
   "root": true,
-  "extends": ["@lim"]
+  "extends": ["@lim"],
+  "rules": {
+    "no-case-declarations": "off",
+    "import/no-dynamic-require": "off",
+    "global-require": "off"
+  }
 }

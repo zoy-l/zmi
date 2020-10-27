@@ -2,6 +2,7 @@ import Service from '.'
 
 export default class PluginAPI {
   service: Service
+
   id: string
 
   constructor(opts: any) {
@@ -21,7 +22,7 @@ export default class PluginAPI {
     if (!pluginMethods[name]) {
       pluginMethods[name] =
         fn ??
-        function (this: PluginAPI, Fn: Function) {
+        function (this: PluginAPI, Fn: typeof Function) {
           const hook = {
             key: name,
             Fn

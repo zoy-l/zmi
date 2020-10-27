@@ -1,8 +1,9 @@
+import yargs from 'yargs'
 import { EventEmitter } from 'events'
 import { AsyncSeriesWaterfallHook } from 'tapable'
-import yargs from 'yargs'
-import { ApplyPluginsType, PluginType } from './enums'
+
 import PluginAPI from './pluginAPI'
+import { ApplyPluginsType, PluginType } from './enums'
 import {
   resolvePlugins,
   resolvePresets,
@@ -25,7 +26,9 @@ const cycle = [
 
 export default class Service extends EventEmitter {
   cwd: string
+
   pkg: any
+
   env: any
 
   extraPlugins: any[] = []
@@ -33,15 +36,19 @@ export default class Service extends EventEmitter {
   userConfig: any = {}
 
   initialPresets: any
+
   initialPlugins: any
 
   commands: any = {}
 
   pluginMethods: {
-    [name: string]: Function
+    [name: string]: typeof Function
   } = {}
+
   plugins: any = {}
+
   hooks: any
+
   hooksByPluginId: any
 
   constructor(opts: any) {
@@ -57,6 +64,13 @@ export default class Service extends EventEmitter {
       presets: opts.presets ?? [],
       userConfigPresets: this.userConfig.presets ?? []
     })
+
+    this.initialPlugins = resolvePlugins({
+      cwd: this.cwd,
+      pkg: this.pkg,
+      plugins: opts.plugins ?? [],
+      userConfigPlugins: this.userConfig.plugins ?? []
+    })
   }
 
   async init() {
@@ -67,6 +81,7 @@ export default class Service extends EventEmitter {
     this.extraPlugins = []
 
     while (this.initialPresets.length) {
+      // eslint-disable-next-line no-await-in-loop
       await this.initPreset(this.initialPresets.shift())
     }
 
@@ -99,21 +114,19 @@ export default class Service extends EventEmitter {
       apply
     })
 
-    if (presets) {
-      this.extraPlugins.unshift(
-        ...plugins.map((path: any) =>
-          pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
+    presets ??
+      presets.forEach((path: any) => {
+        this.extraPlugins.unshift(
+          pathToRegister({ type: PluginType.preset, path, cwd: this.cwd })
         )
-      )
-    }
+      })
 
-    if (plugins) {
-      this.extraPlugins.push(
-        ...plugins.map((path: any) =>
+    plugins ??
+      plugins.forEach((path: any) => {
+        this.extraPlugins.unshift(
           pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
         )
-      )
-    }
+      })
   }
 
   getPluginAPI(opts: any) {
@@ -148,8 +161,8 @@ export default class Service extends EventEmitter {
     return ret ?? {}
   }
 
-  applyPlugins(pluginOptions: any) {
-    const { key, type } = pluginOptions
+  async applyPlugins(pluginOptions: any) {
+    const { key, type, args } = pluginOptions
     const hooks = this.hooks[key]
 
     switch (type) {
@@ -158,7 +171,20 @@ export default class Service extends EventEmitter {
       case ApplyPluginsType.modify:
         break
       case ApplyPluginsType.event:
-        break
+        const typeEvent = new AsyncSeriesWaterfallHook(['_'])
+        hooks.forEach((hook: any) => {
+          typeEvent.tapPromise(
+            {
+              name: hook.pluginId,
+              stage: hook.stage ?? 0,
+              before: hook.before
+            },
+            async () => {
+              await hook.fn(args)
+            }
+          )
+        })
+        return typeEvent.promise()
       default:
         throw new Error(
           `applyPlugin failed, type is not defined or is not matched, got ${type}.`

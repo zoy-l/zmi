@@ -1,4 +1,4 @@
-import { launchDevice, chalk, dyo, clearConsole, isWin } from '../../lim-utils/lib'
+import { launchDevice, chalk, dyo, clearConsole, isWin } from '@lim/utils'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './utils/getRoot'
@@ -36,12 +36,10 @@ launchDevice(dyo).then(({ args, command }) => {
 
         break
       default:
-        clearConsole()
-
         if (command === 'build') {
           process.env.NODE_ENV = 'production'
         }
-
+        clearConsole()
         new Service({
           cwd: getCwd(),
           pkg: getPkg(process.cwd())
