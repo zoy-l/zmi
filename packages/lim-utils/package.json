@@ -1,0 +1,27 @@
+{
+  "name": "@lim/utils",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/inquirer": "^7.3.1",
+    "@types/mkdirp": "^1.0.1",
+    "@types/mustache": "^4.0.1",
+    "@types/resolve": "^1.17.1",
+    "@types/yargs": "^15.0.7",
+    "@types/yargs-parser": "^15.0.0",
+    "address": "^1.1.2",
+    "chalk": "^4.1.0",
+    "glob": "^7.1.6",
+    "inquirer": "^7.3.3",
+    "mkdirp": "^1.0.4",
+    "mustache": "^4.0.1",
+    "portfinder": "^1.0.28",
+    "resolve": "^1.17.0",
+    "url": "^0.11.0",
+    "yargs": "^16.0.3",
+    "yargs-parser": "^20.2.1"
+  }
+}

@@ -1,4 +1,4 @@
-import { launchDevice, chalk, dyo, clearConsole, isWin } from '@lim/cli-utils'
+import { launchDevice, chalk, dyo, clearConsole, isWin } from '../../lim-utils/lib'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './utils/getRoot'

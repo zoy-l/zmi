@@ -1,4 +1,4 @@
-import { Service as CoreService } from '@lim/cli-core'
+import { Service as CoreService } from '../../lim-core/lib'
 import { log } from 'console'
 
 export default class Service extends CoreService {

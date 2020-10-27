@@ -20,6 +20,8 @@
     "node_modules",
     "**/*.spec.ts",
     "packages/**/lib",
-    "packages/**/bin"
+    "packages/**/bin",
+    "packages/lim/*.js",
+    "packages/lim-eslint-config/*"
   ]
 }

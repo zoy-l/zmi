@@ -1,0 +1,13 @@
+{
+  "name": "@lim/preset",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "lim"
+  ]
+}

@@ -1,13 +1,12 @@
 {
-  "name": "lim",
+  "name": "@lim/create-app",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@lim/core": "1.0.0",
-    "@lim/preset": "1.0.0"
+    "@lim/utils": "1.0.0"
   },
   "bin": {
-    "lim": "bin/lim.js"
+    "lim-create-app": "bin/lim-create-app.js"
   }
 }

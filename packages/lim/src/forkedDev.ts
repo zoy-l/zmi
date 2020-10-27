@@ -1,4 +1,4 @@
-import { chalk, launchDevice } from '@lim/cli-utils'
+import { chalk, launchDevice } from '../../lim-utils/lib'
 import Service from './service'
 
 launchDevice().then(({ args }) => {
