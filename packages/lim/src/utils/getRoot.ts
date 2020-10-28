@@ -1,7 +1,7 @@
 import path from 'path'
 
 export function getCwd() {
-  let cwd = process.cwd()
+  const cwd = process.cwd()
   if (process.env.APP_ROOT) {
     // avoid repeat cwd path
     if (!path.isAbsolute(process.env.APP_ROOT)) {

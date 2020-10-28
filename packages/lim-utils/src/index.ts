@@ -12,6 +12,7 @@ import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
+import assert from './assert'
 import paths from './paths'
 
 const isWin = process.platform === 'win32'
@@ -19,6 +20,7 @@ const isWin = process.platform === 'win32'
 export {
   compatibleWithESModule,
   isWin,
+  assert,
   dyo,
   resolve,
   launchDevice,

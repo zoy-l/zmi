@@ -21,7 +21,7 @@ export default function start({ scriptPath }: IOpts) {
       inspectArgv.replace(/--inspect-brk=(.*)/, (match, s1) => {
         let port
         try {
-          port = parseInt(s1) + 1
+          port = parseInt(s1, 10) + 1
         } catch (e) {
           port = 9230 // node default inspect port plus 1.
         }
@@ -36,8 +36,7 @@ export default function start({ scriptPath }: IOpts) {
 
   // set port to env when current port has value
   if (CURRENT_PORT) {
-    // @ts-ignore
-    process.env.PORT = CURRENT_PORT
+    process.env.PORT = `${CURRENT_PORT}`
   }
 
   const child = fork(scriptPath, process.argv.slice(2), { execArgv })

@@ -34,7 +34,6 @@ export function pathToRegister({
     path,
     apply() {
       const ret = require(path)
-
       return compatibleWithESModule(ret)
     }
   }

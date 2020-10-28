@@ -1,5 +1,10 @@
-import { chalk, launchDevice } from '../../lim-utils/lib'
+import { chalk, launchDevice } from '@lim/utils'
 import Service from './service'
+
+function onSignal(signal: string) {
+  console.log(signal)
+  process.exit(0)
+}
 
 launchDevice().then(({ args }) => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
@@ -9,19 +14,15 @@ launchDevice().then(({ args }) => {
     const service = new Service({})
 
     service.run({
-      name: 'dev',
+      command: 'dev',
       args
     })
 
-    let closed = false
+    // let closed = false
 
     Signals.forEach((signal) => {
       process.once(signal, () => onSignal(signal))
     })
-
-    function onSignal(signal: string) {
-      process.exit(0)
-    }
   } catch (e) {
     console.error(chalk.red(e.message))
     console.error(e.stack)

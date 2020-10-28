@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "lim-debug": "node --inspect-brk packages/lim/bin/lim.js",
+    "debug": "node --inspect-brk packages/lim/bin/lim.js",
     "lim-build": "father-build",
     "lim-build:watch": "father-build --watch",
     "lim-link:lim": "cd packages/lim && yarn link && cd -",

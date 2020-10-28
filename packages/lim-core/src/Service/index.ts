@@ -1,7 +1,9 @@
 import yargs from 'yargs'
 import { EventEmitter } from 'events'
 import { AsyncSeriesWaterfallHook } from 'tapable'
+import { assert } from '@lim/utils'
 
+import { IPlugin } from './types'
 import PluginAPI from './pluginAPI'
 import { ApplyPluginsType, PluginType } from './enums'
 import {
@@ -29,7 +31,7 @@ export default class Service extends EventEmitter {
 
   pkg: any
 
-  env: any
+  env: string | undefined
 
   extraPlugins: any[] = []
 
@@ -37,7 +39,7 @@ export default class Service extends EventEmitter {
 
   initialPresets: any
 
-  initialPlugins: any
+  initialPlugins: IPlugin[]
 
   commands: any = {}
 
@@ -45,9 +47,9 @@ export default class Service extends EventEmitter {
     [name: string]: typeof Function
   } = {}
 
-  plugins: any = {}
+  plugins: { [id: string]: IPlugin } = {}
 
-  hooks: any
+  hooks: any = {}
 
   hooksByPluginId: any
 
@@ -114,14 +116,14 @@ export default class Service extends EventEmitter {
       apply
     })
 
-    presets ??
+    presets &&
       presets.forEach((path: any) => {
         this.extraPlugins.unshift(
           pathToRegister({ type: PluginType.preset, path, cwd: this.cwd })
         )
       })
 
-    plugins ??
+    plugins &&
       plugins.forEach((path: any) => {
         this.extraPlugins.unshift(
           pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
@@ -163,8 +165,9 @@ export default class Service extends EventEmitter {
 
   async applyPlugins(pluginOptions: any) {
     const { key, type, args } = pluginOptions
-    const hooks = this.hooks[key]
 
+    const hooks = this.hooks[key] ?? []
+    debugger
     switch (type) {
       case ApplyPluginsType.add:
         const typeAdd = new AsyncSeriesWaterfallHook(['memo'])
@@ -213,8 +216,9 @@ export default class Service extends EventEmitter {
         })
         return typeEvent.promise(null)
       default:
-        throw new Error(
-          `applyPlugin failed, type is not defined or is not matched, got ${type}.`
+        assert(
+          false,
+          `applyPlugin failed, type is not defined or is not matched, got "${type}".`
         )
     }
   }
@@ -223,7 +227,7 @@ export default class Service extends EventEmitter {
     debugger
     await this.init()
 
-    this.applyPlugins({
+    await this.applyPlugins({
       key: 'onStart',
       type: ApplyPluginsType.event,
       args: { args }
@@ -233,9 +237,14 @@ export default class Service extends EventEmitter {
   }
 
   runCommand({ command, args }: IRun) {
-    debugger
-    const { fn } = this.commands[command]
+    const event = this.commands[command]
 
-    fn({ args })
+    assert(event, `run command failed, command "${command}" does not exists.`)
+    assert(
+      event.fn,
+      `run command failed, command "${command}",method is not defined`
+    )
+
+    event.fn({ args })
   }
 }

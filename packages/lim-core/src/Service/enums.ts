@@ -8,3 +8,8 @@ export enum ApplyPluginsType {
   modify = 'modify',
   event = 'event'
 }
+
+export enum EnableBy {
+  register = 'register',
+  config = 'config'
+}

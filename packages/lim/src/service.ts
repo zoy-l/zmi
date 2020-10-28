@@ -1,11 +1,10 @@
-import { Service as CoreService } from '../../lim-core/lib'
-import { log } from 'console'
+import { Service as CoreService } from '@lim/core'
 
 export default class Service extends CoreService {
   constructor(opts: any) {
     super({
       ...opts,
-      presets: [require.resolve('@lim/cli-preset')]
+      presets: [require.resolve('@lim/preset')]
     })
   }
 }
