@@ -167,9 +167,36 @@ export default class Service extends EventEmitter {
 
     switch (type) {
       case ApplyPluginsType.add:
-        break
+        const typeAdd = new AsyncSeriesWaterfallHook(['memo'])
+        hooks.forEach((hook: any) => {
+          typeAdd.tapPromise(
+            {
+              name: hook.pluginId,
+              stage: hook.stage ?? 0,
+              before: hook.before
+            },
+            async (memo: any) => {
+              const items = await hook.fn(pluginOptions.args)
+              return memo.concat(items)
+            }
+          )
+        })
+        return typeAdd.promise(pluginOptions.initialValue ?? [])
       case ApplyPluginsType.modify:
-        break
+        const typeModify = new AsyncSeriesWaterfallHook(['memo'])
+        hooks.forEach((hook: any) => {
+          typeModify.tapPromise(
+            {
+              name: hook.pluginId,
+              stage: hook.stage ?? 0,
+              before: hook.before
+            },
+            async (memo: any) => {
+              return hook.fn(memo, pluginOptions.args)
+            }
+          )
+        })
+        return typeModify.promise(pluginOptions.initialValue)
       case ApplyPluginsType.event:
         const typeEvent = new AsyncSeriesWaterfallHook(['_'])
         hooks.forEach((hook: any) => {
@@ -184,7 +211,7 @@ export default class Service extends EventEmitter {
             }
           )
         })
-        return typeEvent.promise()
+        return typeEvent.promise(null)
       default:
         throw new Error(
           `applyPlugin failed, type is not defined or is not matched, got ${type}.`
@@ -196,11 +223,12 @@ export default class Service extends EventEmitter {
     debugger
     await this.init()
 
-    // this.applyPlugins({
-    //   key: 'onStart',
-    //   type: ApplyPluginsType.event,
-    //   args: { args }
-    // })
+    this.applyPlugins({
+      key: 'onStart',
+      type: ApplyPluginsType.event,
+      args: { args }
+    })
+
     this.runCommand({ command, args })
   }
 

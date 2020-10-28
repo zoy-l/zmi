@@ -1,5 +1,5 @@
 {
-  "name": "@lim/cli-webpack",
+  "name": "@lim/webpack",
   "version": "1.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

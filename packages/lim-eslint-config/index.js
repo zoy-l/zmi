@@ -66,7 +66,7 @@ module.exports = {
      ************************************* */
     '@typescript-eslint/camelcase': 'off',
     // 驼峰命名
-    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/ban-ts-comment': 'warn',
     // @ts-xxxx
     '@typescript-eslint/no-unused-vars': 'error',
     // 没有用的变量定义
