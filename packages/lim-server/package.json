@@ -1,6 +1,13 @@
 {
   "name": "@lim/server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "lim"
+  ],
   "license": "MIT"
 }
