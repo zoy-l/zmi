@@ -1,4 +1,4 @@
-import { portfinder, prepareUrls } from '@lim/utils'
+import { portfinder } from '@lim/utils'
 import Server from '@lim/server'
 
 export default (api: any) => {
@@ -16,8 +16,6 @@ export default (api: any) => {
       port = await portfinder.getPortPromise({ port: defaultPort })
       host = process.env.HOST ?? api.config.devServer?.host ?? '0.0.0.0'
       // const urls = prepareUrls({ host: '0.0.0.0', port })
-
-      server = new Server()
 
       return server.listen({
         port,
