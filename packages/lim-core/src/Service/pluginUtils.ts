@@ -1,18 +1,25 @@
 import {
-  resolve,
   compatibleWithESModule,
-  assert,
-  pkgUp,
+  resolve,
+  winPath,
   lodash,
-  winPath
+  assert,
+  pkgUp
 } from '@lim/utils'
 
 import fs from 'fs'
 import path from 'path'
 
-import { PluginType } from './enums'
+import { IPackage } from './types'
 
-function getPluginsOrPresets(type: any, opts: any) {
+interface IResolvePluginsOpts {
+  pkg: IPackage
+  cwd: string
+  plugins: string[]
+  userConfigPlugins: string[]
+}
+
+function getPlugins(opts: IResolvePluginsOpts) {
   return [opts.plugins ?? [], opts.userConfigPlugins ?? []].flat().map((path) =>
     resolve.sync(path, {
       basedir: opts.cwd,
@@ -22,7 +29,6 @@ function getPluginsOrPresets(type: any, opts: any) {
 }
 
 function nameToKey(name: string) {
-  debugger
   return name
     .split('.')
     .map((part) => lodash.camelCase(part))
@@ -34,7 +40,7 @@ function pkgNameToKey(pkgName: string) {
   if (pkgName.charAt(0) === '@' && !pkgName.startsWith('@lim/')) {
     pkgName = pkgName.split('/')[1]
   }
-  debugger
+
   return nameToKey(pkgName.replace(/^(@lim\/|lim-)plugin-/, ''))
 }
 
@@ -54,7 +60,7 @@ export function pathToRegister({
   )
 
   const pkgJSONPath = pkgUp.sync({ cwd: pluginPath })
-  debugger
+
   if (pkgJSONPath) {
     pkg = require(pkgJSONPath)
     isPkgPlugin =
@@ -106,17 +112,9 @@ export function pathToRegister({
   }
 }
 
-export function resolvePresets(opts: any) {
-  const type = PluginType.preset
-  const presets = [...getPluginsOrPresets(type, opts)]
-
-  return presets.map((path) => pathToRegister({ path, cwd: opts.cwd }))
-}
-
-export function resolvePlugins(opts: any) {
-  const type = PluginType.plugin
-  let plugins = getPluginsOrPresets(type, opts)
-  plugins = Array.isArray(plugins) ? [...plugins] : plugins
+export function resolvePlugins(opts: IResolvePluginsOpts) {
+  let plugins = getPlugins(opts)
+  plugins = [...plugins]
   debugger
   return plugins.map((path: string) =>
     pathToRegister({

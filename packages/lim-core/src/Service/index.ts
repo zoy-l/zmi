@@ -1,17 +1,12 @@
-import yargs from 'yargs'
-import { EventEmitter } from 'events'
-import { AsyncSeriesWaterfallHook } from 'tapable'
 import { assert, BabelRegister, lodash } from '@lim/utils'
+import { AsyncSeriesWaterfallHook } from 'tapable'
+import { EventEmitter } from 'events'
+import yargs from 'yargs'
 
-import { IPlugin } from './types'
-import PluginAPI from './pluginAPI'
+import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
 import { ApplyPluginsType } from './enums'
-import {
-  resolvePlugins,
-  // resolvePresets,
-  pathToRegister,
-  isPromise
-} from './pluginUtils'
+import PluginAPI from './pluginAPI'
+import { IPlugin } from './types'
 
 interface IRun {
   args: yargs.Arguments
@@ -64,21 +59,12 @@ export default class Service extends EventEmitter {
 
     this.babelRegister = new BabelRegister()
 
-    // this.initialPresets = resolvePresets({
-    //   cwd: this.cwd,
-    //   pkg: this.pkg,
-    //   presets: opts.presets ?? [],
-    //   userConfigPresets: this.userConfig.presets ?? []
-    // })
-
     this.initialPlugins = resolvePlugins({
       cwd: this.cwd,
       pkg: this.pkg,
       plugins: opts.plugins ?? [],
       userConfigPlugins: this.userConfig.plugins ?? []
     })
-
-    debugger
 
     this.babelRegister.setOnlyMap({
       key: 'initialPlugins',
@@ -93,13 +79,7 @@ export default class Service extends EventEmitter {
   initPresetsAndPlugins() {
     this.extraPlugins = [this.initialPlugins.shift()]
 
-    // debugger
-    // while (this.initialPresets.length) {
-    //   this.initPreset(this.initialPresets.shift())
-    // }
-
     while (this.extraPlugins.length) {
-      debugger
       this.initPlugins(this.extraPlugins.shift())
     }
   }
@@ -128,31 +108,6 @@ export default class Service extends EventEmitter {
       ])
     }
   }
-
-  // initPreset(preset: any) {
-  //   const { id, key, apply } = preset
-
-  //   preset.isPreset = true
-
-  //   const api = this.getPluginAPI({ id, key, service: this })
-
-  //   this.registerPlugin(preset)
-
-  //   const { presets, plugins } = this.applyAPI({
-  //     api,
-  //     apply
-  //   })
-
-  //   presets &&
-  //     presets.forEach((path: any) => {
-  //       this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
-  //     })
-
-  //   plugins &&
-  //     plugins.forEach((path: any) => {
-  //       this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
-  //     })
-  // }
 
   getPluginAPI(opts: any) {
     const pluginAPI = new PluginAPI(opts)
