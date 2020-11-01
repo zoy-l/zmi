@@ -5,7 +5,7 @@ import { assert, BabelRegister, lodash } from '@lim/utils'
 
 import { IPlugin } from './types'
 import PluginAPI from './pluginAPI'
-import { ApplyPluginsType, PluginType } from './enums'
+import { ApplyPluginsType } from './enums'
 import {
   resolvePlugins,
   // resolvePresets,
@@ -111,53 +111,48 @@ export default class Service extends EventEmitter {
 
     this.registerPlugin(plugin)
 
-    if (this.extraPlugins.length > 1) {
-      this.applyAPI({ api, apply })
-    } else {
-      const plugins = this.applyAPI({
-        api,
-        apply
-      }) as string[]
+    const plugins = this.applyAPI({
+      api,
+      apply
+    }) as string[] | Record<string, unknown>
 
+    if (Array.isArray(plugins)) {
       plugins &&
         plugins.forEach((path) => {
-          this.extraPlugins.unshift(
-            pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
-          )
+          this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
         })
 
-      this.extraPlugins = [...this.initialPlugins]
+      this.extraPlugins = lodash.uniq([
+        ...this.extraPlugins,
+        ...this.initialPlugins
+      ])
     }
   }
 
-  initPreset(preset: any) {
-    const { id, key, apply } = preset
+  // initPreset(preset: any) {
+  //   const { id, key, apply } = preset
 
-    preset.isPreset = true
+  //   preset.isPreset = true
 
-    const api = this.getPluginAPI({ id, key, service: this })
+  //   const api = this.getPluginAPI({ id, key, service: this })
 
-    this.registerPlugin(preset)
+  //   this.registerPlugin(preset)
 
-    const { presets, plugins } = this.applyAPI({
-      api,
-      apply
-    })
+  //   const { presets, plugins } = this.applyAPI({
+  //     api,
+  //     apply
+  //   })
 
-    presets &&
-      presets.forEach((path: any) => {
-        this.extraPlugins.unshift(
-          pathToRegister({ type: PluginType.preset, path, cwd: this.cwd })
-        )
-      })
+  //   presets &&
+  //     presets.forEach((path: any) => {
+  //       this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
+  //     })
 
-    plugins &&
-      plugins.forEach((path: any) => {
-        this.extraPlugins.unshift(
-          pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
-        )
-      })
-  }
+  //   plugins &&
+  //     plugins.forEach((path: any) => {
+  //       this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
+  //     })
+  // }
 
   getPluginAPI(opts: any) {
     const pluginAPI = new PluginAPI(opts)

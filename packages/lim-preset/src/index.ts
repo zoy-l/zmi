@@ -1,6 +1,6 @@
 export default () => {
   return [
-    require.resolve('./plugins'),
+    require.resolve('./plugins/registerMethods'),
     require.resolve('./plugins/commands/dev')
   ]
 }
