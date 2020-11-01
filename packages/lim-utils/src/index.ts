@@ -5,21 +5,27 @@ import mustache from 'mustache'
 import inquirer from 'inquirer'
 import resolve from 'resolve'
 import mkdirp from 'mkdirp'
+import lodash from 'lodash'
 import chalk from 'chalk'
 import yargs from 'yargs'
 import glob from 'glob'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
+import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
+import mergeConfig from './mergeConfig'
 import assert from './assert'
 import paths from './paths'
 
 const isWin = process.platform === 'win32'
 
 export {
+  lodash,
+  BabelRegister,
   deepmerge,
+  mergeConfig,
   compatibleWithESModule,
   isWin,
   assert,

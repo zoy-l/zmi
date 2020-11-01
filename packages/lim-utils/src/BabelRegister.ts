@@ -18,7 +18,7 @@ export default class BabelRegister {
         .map(winPath)
     )
     require('@babel/register')({
-      presets: [require.resolve('@umijs/babel-preset-umi/node')],
+      presets: [require.resolve('@lim/babel-preset/node')],
       ignore: [/node_modules/],
       only,
       extensions: ['.jsx', '.js', '.ts', '.tsx'],

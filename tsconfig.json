@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "es2020",
     "target": "esnext",
     "resolveJsonModule": true,
     "moduleResolution": "node",
@@ -22,6 +21,7 @@
     "packages/**/lib",
     "packages/**/bin",
     "packages/lim/*.js",
-    "packages/lim-eslint-config/*"
+    "packages/lim-eslint-config/*",
+    "packages/lim-babel-preset/*.js"
   ]
 }

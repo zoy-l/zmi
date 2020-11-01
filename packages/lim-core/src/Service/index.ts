@@ -1,7 +1,7 @@
 import yargs from 'yargs'
 import { EventEmitter } from 'events'
 import { AsyncSeriesWaterfallHook } from 'tapable'
-import { assert } from '@lim/utils'
+import { assert, BabelRegister, lodash } from '@lim/utils'
 
 import { IPlugin } from './types'
 import PluginAPI from './pluginAPI'
@@ -37,6 +37,8 @@ export default class Service extends EventEmitter {
 
   userConfig: any = {}
 
+  babelRegister: BabelRegister
+
   initialPresets: any
 
   initialPlugins: IPlugin[]
@@ -47,7 +49,7 @@ export default class Service extends EventEmitter {
     [name: string]: typeof Function
   } = {}
 
-  plugins: { [id: string]: IPlugin } = {}
+  plugins: Record<string, IPlugin> = {}
 
   hooks: any = {}
 
@@ -59,6 +61,8 @@ export default class Service extends EventEmitter {
     this.cwd = opts.cwd ?? process.cwd()
     this.pkg = opts.pkg
     this.env = opts.env
+
+    this.babelRegister = new BabelRegister()
 
     // this.initialPresets = resolvePresets({
     //   cwd: this.cwd,
@@ -73,6 +77,13 @@ export default class Service extends EventEmitter {
       plugins: opts.plugins ?? [],
       userConfigPlugins: this.userConfig.plugins ?? []
     })
+
+    debugger
+
+    this.babelRegister.setOnlyMap({
+      key: 'initialPlugins',
+      value: lodash.uniq(this.initialPlugins.map(({ path }) => path))
+    })
   }
 
   init() {
@@ -80,25 +91,43 @@ export default class Service extends EventEmitter {
   }
 
   initPresetsAndPlugins() {
-    this.extraPlugins = []
-    debugger
-    while (this.initialPresets.length) {
-      this.initPreset(this.initialPresets.shift())
-    }
+    this.extraPlugins = [this.initialPlugins.shift()]
+
+    // debugger
+    // while (this.initialPresets.length) {
+    //   this.initPreset(this.initialPresets.shift())
+    // }
 
     while (this.extraPlugins.length) {
+      debugger
       this.initPlugins(this.extraPlugins.shift())
     }
   }
 
-  initPlugins(plugin: any) {
+  initPlugins(plugin: IPlugin) {
     const { id, key, apply } = plugin
 
     const api = this.getPluginAPI({ id, key, service: this })
 
     this.registerPlugin(plugin)
 
-    this.applyAPI({ api, apply })
+    if (this.extraPlugins.length > 1) {
+      this.applyAPI({ api, apply })
+    } else {
+      const plugins = this.applyAPI({
+        api,
+        apply
+      }) as string[]
+
+      plugins &&
+        plugins.forEach((path) => {
+          this.extraPlugins.unshift(
+            pathToRegister({ type: PluginType.plugin, path, cwd: this.cwd })
+          )
+        })
+
+      this.extraPlugins = [...this.initialPlugins]
+    }
   }
 
   initPreset(preset: any) {
@@ -153,7 +182,7 @@ export default class Service extends EventEmitter {
     this.plugins[plugin.id] = plugin
   }
 
-  applyAPI(options: { apply: typeof Function; api: PluginAPI }) {
+  applyAPI(options: { apply: () => any; api: PluginAPI }) {
     const ret = options.apply()(options.api) ?? {}
 
     if (isPromise(ret)) {

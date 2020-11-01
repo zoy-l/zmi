@@ -43,7 +43,7 @@ export function resolvePlugins(opts: any) {
   const type = PluginType.plugin
   let plugins = getPluginsOrPresets(type, opts)
   plugins = Array.isArray(plugins) ? [...plugins] : plugins
-
+  debugger
   return plugins.map((path: string) =>
     pathToRegister({
       type,
