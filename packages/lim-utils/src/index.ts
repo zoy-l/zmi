@@ -1,5 +1,6 @@
 import yargsParser from 'yargs-parser'
 import portfinder from 'portfinder'
+import deepmerge from 'deepmerge'
 import mustache from 'mustache'
 import inquirer from 'inquirer'
 import resolve from 'resolve'
@@ -18,6 +19,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  deepmerge,
   compatibleWithESModule,
   isWin,
   assert,

@@ -8,7 +8,7 @@ import PluginAPI from './pluginAPI'
 import { ApplyPluginsType, PluginType } from './enums'
 import {
   resolvePlugins,
-  resolvePresets,
+  // resolvePresets,
   pathToRegister,
   isPromise
 } from './pluginUtils'
@@ -60,12 +60,12 @@ export default class Service extends EventEmitter {
     this.pkg = opts.pkg
     this.env = opts.env
 
-    this.initialPresets = resolvePresets({
-      cwd: this.cwd,
-      pkg: this.pkg,
-      presets: opts.presets ?? [],
-      userConfigPresets: this.userConfig.presets ?? []
-    })
+    // this.initialPresets = resolvePresets({
+    //   cwd: this.cwd,
+    //   pkg: this.pkg,
+    //   presets: opts.presets ?? [],
+    //   userConfigPresets: this.userConfig.presets ?? []
+    // })
 
     this.initialPlugins = resolvePlugins({
       cwd: this.cwd,
@@ -75,16 +75,15 @@ export default class Service extends EventEmitter {
     })
   }
 
-  async init() {
-    await this.initPresetsAndPlugins()
+  init() {
+    this.initPresetsAndPlugins()
   }
 
-  async initPresetsAndPlugins() {
+  initPresetsAndPlugins() {
     this.extraPlugins = []
-
+    debugger
     while (this.initialPresets.length) {
-      // eslint-disable-next-line no-await-in-loop
-      await this.initPreset(this.initialPresets.shift())
+      this.initPreset(this.initialPresets.shift())
     }
 
     while (this.extraPlugins.length) {
@@ -102,7 +101,7 @@ export default class Service extends EventEmitter {
     this.applyAPI({ api, apply })
   }
 
-  async initPreset(preset: any) {
+  initPreset(preset: any) {
     const { id, key, apply } = preset
 
     preset.isPreset = true
@@ -111,7 +110,7 @@ export default class Service extends EventEmitter {
 
     this.registerPlugin(preset)
 
-    const { presets, plugins } = await this.applyAPI({
+    const { presets, plugins } = this.applyAPI({
       api,
       apply
     })
@@ -150,17 +149,20 @@ export default class Service extends EventEmitter {
     })
   }
 
-  registerPlugin(plugin: any) {
+  registerPlugin(plugin: IPlugin) {
     this.plugins[plugin.id] = plugin
   }
 
-  async applyAPI(opts: any) {
-    let ret = opts.apply()(opts.api)
-    // import() returns a Promise object
+  applyAPI(options: { apply: typeof Function; api: PluginAPI }) {
+    const ret = options.apply()(options.api) ?? {}
+
     if (isPromise(ret)) {
-      ret = await ret
+      assert(
+        false,
+        'Only allowed "require", "improt" still an experimental feature'
+      )
     }
-    return ret ?? {}
+    return ret
   }
 
   async applyPlugins(pluginOptions: any) {
@@ -225,7 +227,7 @@ export default class Service extends EventEmitter {
 
   async run({ args, command }: IRun) {
     debugger
-    await this.init()
+    this.init()
 
     await this.applyPlugins({
       key: 'onStart',

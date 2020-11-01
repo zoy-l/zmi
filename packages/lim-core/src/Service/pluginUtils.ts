@@ -2,19 +2,12 @@ import { PluginType } from './enums'
 import { resolve, compatibleWithESModule } from '@lim/utils'
 
 function getPluginsOrPresets(type: any, opts: any) {
-  return [
-    opts[type === PluginType.preset ? 'presets' : 'plugins'] ?? [],
-    opts[
-      type === PluginType.preset ? 'userConfigPresets' : 'userConfigPlugins'
-    ] ?? []
-  ]
-    .flat()
-    .map((path) =>
-      resolve.sync(path, {
-        basedir: opts.cwd,
-        extensions: ['.js', '.ts']
-      })
-    )
+  return [opts.plugins ?? [], opts.userConfigPlugins ?? []].flat().map((path) =>
+    resolve.sync(path, {
+      basedir: opts.cwd,
+      extensions: ['.js', '.ts']
+    })
+  )
 }
 
 export function pathToRegister({
@@ -48,7 +41,8 @@ export function resolvePresets(opts: any) {
 
 export function resolvePlugins(opts: any) {
   const type = PluginType.plugin
-  const plugins = getPluginsOrPresets(type, opts)
+  let plugins = getPluginsOrPresets(type, opts)
+  plugins = Array.isArray(plugins) ? [...plugins] : plugins
 
   return plugins.map((path: string) =>
     pathToRegister({
