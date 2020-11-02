@@ -115,7 +115,7 @@ export default class Service extends EventEmitter {
     const plugins = this.applyAPI({
       api,
       apply
-    }) as string[] | Record<string, unknown>
+    }) as string[] | undefined
 
     if (Array.isArray(plugins)) {
       plugins.forEach((path) => {
@@ -153,10 +153,10 @@ export default class Service extends EventEmitter {
   }
 
   applyAPI(options: {
-    apply: () => (api: PluginAPI) => string | string[]
+    apply: () => (api: PluginAPI) => string[] | undefined
     api: PluginAPI
   }) {
-    const ret = options.apply()(options.api) ?? {}
+    const ret = options.apply()(options.api)
 
     if (isPromise(ret)) {
       assert(
