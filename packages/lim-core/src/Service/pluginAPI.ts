@@ -1,11 +1,17 @@
 import Service from '.'
 
+export interface IPluginAPIOptions {
+  id: string
+  key: string
+  service: Service
+}
+
 export default class PluginAPI {
   service: Service
 
   id: string
 
-  constructor(opts: any) {
+  constructor(opts: IPluginAPIOptions) {
     this.service = opts.service
     this.id = opts.id
   }

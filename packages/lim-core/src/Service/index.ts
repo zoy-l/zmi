@@ -1,16 +1,31 @@
-import { assert, BabelRegister, lodash } from '@lim/utils'
+import { assert, BabelRegister, lodash, NodeEnv } from '@lim/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { EventEmitter } from 'events'
 import yargs from 'yargs'
+import path from 'path'
 
 import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
+import { IPlugin, IHook, ICommand, IPackage } from './types'
+import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
 import { ApplyPluginsType } from './enums'
-import PluginAPI from './pluginAPI'
-import { IPlugin } from './types'
 
 interface IRun {
   args: yargs.Arguments
   command: string
+}
+
+interface IApply {
+  key: string
+  type: ApplyPluginsType
+  initialValue?: unknown
+  args?: any
+}
+
+export interface IServiceOptions {
+  cwd: string
+  pkg?: IPackage
+  plugins?: string[]
+  env?: NodeEnv
 }
 
 const cycle = [
@@ -24,37 +39,33 @@ const cycle = [
 export default class Service extends EventEmitter {
   cwd: string
 
-  pkg: any
+  pkg: IPackage
 
   env: string | undefined
 
-  extraPlugins: any[] = []
+  extraPlugins: IPlugin[] = []
 
   userConfig: any = {}
 
   babelRegister: BabelRegister
 
-  initialPresets: any
+  initialPlugins: IPlugin[] = []
 
-  initialPlugins: IPlugin[]
+  commands: Record<string, ICommand> = {}
 
-  commands: any = {}
-
-  pluginMethods: {
-    [name: string]: typeof Function
-  } = {}
+  pluginMethods: Record<string, typeof Function> = {}
 
   plugins: Record<string, IPlugin> = {}
 
-  hooks: any = {}
+  hooks: Record<string, IHook[]> = {}
 
-  hooksByPluginId: any
+  hooksByPluginId: Record<string, IHook[]> = {}
 
-  constructor(opts: any) {
+  constructor(opts: IServiceOptions) {
     super()
 
     this.cwd = opts.cwd ?? process.cwd()
-    this.pkg = opts.pkg
+    this.pkg = opts.pkg ?? this.resolvePackage()
     this.env = opts.env
 
     this.babelRegister = new BabelRegister()
@@ -73,15 +84,25 @@ export default class Service extends EventEmitter {
   }
 
   init() {
-    this.initPresetsAndPlugins()
-  }
-
-  initPresetsAndPlugins() {
-    this.extraPlugins = [this.initialPlugins.shift()]
+    this.extraPlugins = [this.initialPlugins[0]]
 
     while (this.extraPlugins.length) {
-      this.initPlugins(this.extraPlugins.shift())
+      this.initPlugins(this.extraPlugins.shift()!)
     }
+
+    Object.keys(this.hooksByPluginId).forEach((id) => {
+      const hooks = this.hooksByPluginId[id]
+      hooks.forEach((hook) => {
+        const { key } = hook
+        hook.pluginId = id
+        this.hooks[key] = (this.hooks[key] ?? []).concat(hook)
+      })
+    })
+
+    this.applyPlugins({
+      key: 'onPluginReady',
+      type: ApplyPluginsType.event
+    })
   }
 
   initPlugins(plugin: IPlugin) {
@@ -97,10 +118,9 @@ export default class Service extends EventEmitter {
     }) as string[] | Record<string, unknown>
 
     if (Array.isArray(plugins)) {
-      plugins &&
-        plugins.forEach((path) => {
-          this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
-        })
+      plugins.forEach((path) => {
+        this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
+      })
 
       this.extraPlugins = lodash.uniq([
         ...this.extraPlugins,
@@ -109,7 +129,7 @@ export default class Service extends EventEmitter {
     }
   }
 
-  getPluginAPI(opts: any) {
+  getPluginAPI(opts: IPluginAPIOptions) {
     const pluginAPI = new PluginAPI(opts)
 
     // life cycle
@@ -144,7 +164,7 @@ export default class Service extends EventEmitter {
     return ret
   }
 
-  async applyPlugins(pluginOptions: any) {
+  async applyPlugins(pluginOptions: IApply) {
     const { key, type, args } = pluginOptions
 
     const hooks = this.hooks[key] ?? []
@@ -152,10 +172,10 @@ export default class Service extends EventEmitter {
     switch (type) {
       case ApplyPluginsType.add:
         const typeAdd = new AsyncSeriesWaterfallHook(['memo'])
-        hooks.forEach((hook: any) => {
+        hooks.forEach((hook) => {
           typeAdd.tapPromise(
             {
-              name: hook.pluginId,
+              name: hook.pluginId ?? hook.key,
               stage: hook.stage ?? 0,
               before: hook.before
             },
@@ -201,6 +221,14 @@ export default class Service extends EventEmitter {
           false,
           `applyPlugin failed, type is not defined or is not matched, got "${type}".`
         )
+    }
+  }
+
+  resolvePackage() {
+    try {
+      return require(path.join(this.cwd, 'package.json'))
+    } catch (err) {
+      return {}
     }
   }
 

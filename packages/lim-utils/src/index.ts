@@ -17,6 +17,7 @@ import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
 import mergeConfig from './mergeConfig'
+import { NodeEnv } from './types'
 import winPath from './winPath'
 import assert from './assert'
 import paths from './paths'
@@ -24,6 +25,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  NodeEnv,
   winPath,
   pkgUp,
   lodash,
