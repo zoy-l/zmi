@@ -14,7 +14,7 @@ interface IRun {
   command: string
 }
 
-interface IApply {
+interface IApplyPlugins {
   key: string
   type: ApplyPluginsType
   initialValue?: unknown
@@ -152,7 +152,10 @@ export default class Service extends EventEmitter {
     this.plugins[plugin.id] = plugin
   }
 
-  applyAPI(options: { apply: () => any; api: PluginAPI }) {
+  applyAPI(options: {
+    apply: () => (api: PluginAPI) => string | string[]
+    api: PluginAPI
+  }) {
     const ret = options.apply()(options.api) ?? {}
 
     if (isPromise(ret)) {
@@ -164,7 +167,7 @@ export default class Service extends EventEmitter {
     return ret
   }
 
-  async applyPlugins(pluginOptions: IApply) {
+  async applyPlugins(pluginOptions: IApplyPlugins) {
     const { key, type, args } = pluginOptions
 
     const hooks = this.hooks[key] ?? []
