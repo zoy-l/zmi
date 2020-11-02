@@ -188,10 +188,10 @@ export default class Service extends EventEmitter {
         return typeAdd.promise(pluginOptions.initialValue ?? [])
       case ApplyPluginsType.modify:
         const typeModify = new AsyncSeriesWaterfallHook(['memo'])
-        hooks.forEach((hook: any) => {
+        hooks.forEach((hook) => {
           typeModify.tapPromise(
             {
-              name: hook.pluginId,
+              name: hook.pluginId ?? hook.key,
               stage: hook.stage ?? 0,
               before: hook.before
             },
@@ -203,10 +203,10 @@ export default class Service extends EventEmitter {
         return typeModify.promise(pluginOptions.initialValue)
       case ApplyPluginsType.event:
         const typeEvent = new AsyncSeriesWaterfallHook(['_'])
-        hooks.forEach((hook: any) => {
+        hooks.forEach((hook) => {
           typeEvent.tapPromise(
             {
-              name: hook.pluginId,
+              name: hook.pluginId ?? hook.key,
               stage: hook.stage ?? 0,
               before: hook.before
             },

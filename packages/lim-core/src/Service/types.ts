@@ -29,7 +29,7 @@ export interface IPlugin {
 
 export interface IHook {
   key: string
-  fn: (value: any) => any | Promise<unknown>
+  fn: (args: any, option?: any) => any | Promise<unknown>
   pluginId?: string
   before?: string
   stage?: number
