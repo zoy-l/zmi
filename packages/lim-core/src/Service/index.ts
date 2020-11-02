@@ -37,28 +37,64 @@ const cycle = [
 ]
 
 export default class Service extends EventEmitter {
+  /**
+   * @desc Directory path
+   */
   cwd: string
 
+  /**
+   * @desc Directory package.json
+   */
   pkg: IPackage
 
+  /**
+   * @desc Environment variable
+   */
   env: string | undefined
 
+  /**
+   * @desc Plug-in to be registered
+   */
   extraPlugins: IPlugin[] = []
 
+  /**
+   * @desc user config
+   */
   userConfig: any = {}
 
+  /**
+   * @desc runtime babel
+   */
   babelRegister: BabelRegister
 
+  /**
+   * @desc initial Plugins
+   */
   initialPlugins: IPlugin[] = []
 
+  /**
+   * @desc registered commands
+   */
   commands: Record<string, ICommand> = {}
 
+  /**
+   * @desc plugin Methods
+   */
   pluginMethods: Record<string, typeof Function> = {}
 
+  /**
+   * @desc plugin set
+   */
   plugins: Record<string, IPlugin> = {}
 
+  /**
+   * @desc hooks
+   */
   hooks: Record<string, IHook[]> = {}
 
+  /**
+   * @desc { Record<string, IHook[]> }
+   */
   hooksByPluginId: Record<string, IHook[]> = {}
 
   constructor(opts: IServiceOptions) {
@@ -83,7 +119,7 @@ export default class Service extends EventEmitter {
     })
   }
 
-  init() {
+  async init() {
     this.extraPlugins = [this.initialPlugins[0]]
 
     while (this.extraPlugins.length) {
@@ -99,7 +135,7 @@ export default class Service extends EventEmitter {
       })
     })
 
-    this.applyPlugins({
+    await this.applyPlugins({
       key: 'onPluginReady',
       type: ApplyPluginsType.event
     })
@@ -112,16 +148,22 @@ export default class Service extends EventEmitter {
 
     this.registerPlugin(plugin)
 
+    // Plugin or Plugins
     const plugins = this.applyAPI({
       api,
       apply
     }) as string[] | undefined
 
+    // If it is an Array
+    // It represents a collection of plugins added to the top of extraPlugins
+    // Path verification pathToRegister has been done
     if (Array.isArray(plugins)) {
       plugins.forEach((path) => {
         this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
       })
 
+      // The collection may not be at the top
+      // At this time, the remaining plugins of initialPlugins have been added
       this.extraPlugins = lodash.uniq([
         ...this.extraPlugins,
         ...this.initialPlugins
@@ -168,57 +210,46 @@ export default class Service extends EventEmitter {
   }
 
   async applyPlugins(pluginOptions: IApplyPlugins) {
+    const { add, modify, event } = ApplyPluginsType
     const { key, type, args } = pluginOptions
 
+    const isMemo = [add, modify].includes(type)
     const hooks = this.hooks[key] ?? []
-    debugger
+
+    // tapable: https://github.com/webpack/tapable
+    const TypeSeriesWater = new AsyncSeriesWaterfallHook([
+      isMemo ? 'memo' : '_'
+    ])
+    const TypeSeriesWaterApply = (
+      func: (hook: IHook) => (...args: any[]) => Promise<any>
+    ) => {
+      hooks.forEach((hook) => {
+        // prettier-ignore
+        TypeSeriesWater.tapPromise({
+          name: hook.pluginId ?? `$${hook.key}`,
+          stage: hook.stage ?? 0,
+          before: hook.before
+        }, func(hook))
+      })
+    }
+
     switch (type) {
-      case ApplyPluginsType.add:
-        const typeAdd = new AsyncSeriesWaterfallHook(['memo'])
-        hooks.forEach((hook) => {
-          typeAdd.tapPromise(
-            {
-              name: hook.pluginId ?? hook.key,
-              stage: hook.stage ?? 0,
-              before: hook.before
-            },
-            async (memo: any) => {
-              const items = await hook.fn(pluginOptions.args)
-              return memo.concat(items)
-            }
-          )
+      case add:
+        TypeSeriesWaterApply((hook) => async (memo) => {
+          const items = await hook.fn(pluginOptions.args)
+          return memo.concat(items)
         })
-        return typeAdd.promise(pluginOptions.initialValue ?? [])
-      case ApplyPluginsType.modify:
-        const typeModify = new AsyncSeriesWaterfallHook(['memo'])
-        hooks.forEach((hook) => {
-          typeModify.tapPromise(
-            {
-              name: hook.pluginId ?? hook.key,
-              stage: hook.stage ?? 0,
-              before: hook.before
-            },
-            async (memo: any) => {
-              return hook.fn(memo, pluginOptions.args)
-            }
-          )
+        return TypeSeriesWater.promise(pluginOptions.initialValue ?? [])
+      case modify:
+        TypeSeriesWaterApply((hook) => async (memo) => {
+          return hook.fn(memo, pluginOptions.args)
         })
-        return typeModify.promise(pluginOptions.initialValue)
-      case ApplyPluginsType.event:
-        const typeEvent = new AsyncSeriesWaterfallHook(['_'])
-        hooks.forEach((hook) => {
-          typeEvent.tapPromise(
-            {
-              name: hook.pluginId ?? hook.key,
-              stage: hook.stage ?? 0,
-              before: hook.before
-            },
-            async () => {
-              await hook.fn(args)
-            }
-          )
+        return TypeSeriesWater.promise(pluginOptions.initialValue)
+      case event:
+        TypeSeriesWaterApply((hook) => async () => {
+          await hook.fn(args)
         })
-        return typeEvent.promise(null)
+        return TypeSeriesWater.promise(null)
       default:
         assert(
           false,
@@ -236,8 +267,7 @@ export default class Service extends EventEmitter {
   }
 
   async run({ args, command }: IRun) {
-    debugger
-    this.init()
+    await this.init()
 
     await this.applyPlugins({
       key: 'onStart',

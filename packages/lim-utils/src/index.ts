@@ -1,4 +1,5 @@
 import yargsParser from 'yargs-parser'
+import clearModule from 'clear-module'
 import portfinder from 'portfinder'
 import deepmerge from 'deepmerge'
 import mustache from 'mustache'
@@ -25,6 +26,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  clearModule,
   NodeEnv,
   winPath,
   pkgUp,
