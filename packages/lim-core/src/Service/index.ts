@@ -4,27 +4,34 @@ import { EventEmitter } from 'events'
 import path from 'path'
 
 import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
-import { IPlugin, IHook, ICommand, IPackage } from './types'
 import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
-import { ApplyPluginsType } from './enums'
+import loadDotEnv from './withEnv'
+import {
+  IPlugin,
+  IHook,
+  ICommand,
+  IPackage,
+  EnumApplyPlugins,
+  EnumEnableBy
+} from './types'
 
 interface IRun {
-  args: yargs.Arguments
   command: string
+  args: yargs.Arguments
 }
 
 interface IApplyPlugins {
   key: string
-  type: ApplyPluginsType
+  type: EnumApplyPlugins
   initialValue?: unknown
-  args?: yargs.Arguments
+  args?: { args: yargs.Arguments }
 }
 
 export interface IServiceOptions {
   cwd: string
+  env?: NodeEnv
   pkg?: IPackage
   plugins?: string[]
-  env?: NodeEnv
 }
 
 const cycle = [
@@ -33,6 +40,24 @@ const cycle = [
   'onStart',
   'modifyDefaultConfig',
   'modifyConfig'
+]
+
+const ServiceAttribute = [
+  'applyPlugins',
+  'ApplyPluginsType',
+  'EnableBy',
+  'ConfigChangeType',
+  'babelRegister',
+  'stage',
+  'ServiceStage',
+  'paths',
+  'cwd',
+  'pkg',
+  'userConfig',
+  'config',
+  'env',
+  'args',
+  'hasPlugins'
 ]
 
 export default class Service extends EventEmitter {
@@ -104,14 +129,27 @@ export default class Service extends EventEmitter {
    */
   skipPluginIds: Set<string> = new Set<string>()
 
+  /**
+   * @desc How to enable the plug-in, the default is to register and enable
+   */
+  EnableBy = EnumEnableBy
+
+  /**
+   * @desc Apply Plugin enumeration value, provide a plug-in use
+   */
+  ApplyPluginsType = EnumApplyPlugins
+
   constructor(opts: IServiceOptions) {
     super()
 
     this.cwd = opts.cwd ?? process.cwd()
     this.pkg = opts.pkg ?? this.resolvePackage()
-    this.env = opts.env
+    this.env = opts.env ?? process.env.NODE_ENV
 
     this.babelRegister = new BabelRegister()
+
+    // Load environment variables from .env file into process.env
+    this.loadEnv()
 
     this.initialPlugins = resolvePlugins({
       cwd: this.cwd,
@@ -144,7 +182,7 @@ export default class Service extends EventEmitter {
 
     await this.applyPlugins({
       key: 'onPluginReady',
-      type: ApplyPluginsType.event
+      type: EnumApplyPlugins.event
     })
   }
 
@@ -153,6 +191,7 @@ export default class Service extends EventEmitter {
 
     const api = this.getPluginAPI({ id, key, service: this })
 
+    // Plugin is cached here for checking
     this.registerPlugin(plugin)
 
     // Plugin or Plugins
@@ -186,17 +225,16 @@ export default class Service extends EventEmitter {
 
     return new Proxy(pluginAPI, {
       get: (target, prop: string) => {
-        if (this.pluginMethods[prop]) {
-          return this.pluginMethods[prop]
-        }
-
-        return target[prop]
+        // The plugin Method has the highest weight, followed by Service, and finally plugin API
+        // Because pluginMethods needs to be available in the register phase
+        // The latest update must be dynamically obtained through proxy to achieve the effect of registering and using
+        return this.pluginMethods[prop] ?? ServiceAttribute.includes(prop)
+          ? typeof this[prop] === 'function'
+            ? this[prop].bind(this)
+            : this[prop]
+          : target[prop]
       }
     })
-  }
-
-  registerPlugin(plugin: IPlugin) {
-    this.plugins[plugin.id] = plugin
   }
 
   applyAPI(options: {
@@ -212,7 +250,7 @@ export default class Service extends EventEmitter {
   }
 
   async applyPlugins(pluginOptions: IApplyPlugins) {
-    const { add, modify, event } = ApplyPluginsType
+    const { add, modify, event } = EnumApplyPlugins
     const { key, type, args } = pluginOptions
 
     const isMemo = [add, modify].includes(type)
@@ -259,6 +297,42 @@ export default class Service extends EventEmitter {
     }
   }
 
+  registerPlugin(plugin: IPlugin) {
+    this.plugins[plugin.id] = plugin
+  }
+
+  isPluginEnable(pluginId: string) {
+    if (this.skipPluginIds.has(pluginId)) return false
+
+    const { key, enableBy } = this.plugins[pluginId]
+
+    if (this.userConfig[key] === false) return false
+
+    if (enableBy === this.EnableBy.config && !(key in this.userConfig)) {
+      return false
+    }
+
+    if (typeof enableBy === 'function') {
+      return enableBy()
+    }
+
+    return true
+  }
+
+  loadEnv() {
+    const basePath = path.join(this.cwd, '.env')
+    const localPath = `${basePath}.local`
+    loadDotEnv(basePath)
+    loadDotEnv(localPath)
+  }
+
+  hasPlugins(pluginIds: string[]) {
+    return pluginIds.every((pluginId) => {
+      const plugin = this.plugins[pluginId]
+      return plugin && this.isPluginEnable(pluginId)
+    })
+  }
+
   resolvePackage() {
     try {
       return require(path.join(this.cwd, 'package.json'))
@@ -272,7 +346,7 @@ export default class Service extends EventEmitter {
 
     await this.applyPlugins({
       key: 'onStart',
-      type: ApplyPluginsType.event,
+      type: EnumApplyPlugins.event,
       args: { args }
     })
 
@@ -280,7 +354,12 @@ export default class Service extends EventEmitter {
   }
 
   runCommand({ command, args }: IRun) {
-    const event = this.commands[command]
+    // If type alias is set
+    // Need to find the actual command
+    const event =
+      typeof this.commands[command] === 'string'
+        ? this.commands[this.commands[command] as string]
+        : this.commands[command]
 
     assert(`run command failed, command "${command}" does not exists.`, event)
     const { fn } = event as ICommand

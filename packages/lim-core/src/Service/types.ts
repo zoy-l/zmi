@@ -1,5 +1,15 @@
 import { yargs } from '@lim/utils'
-import { EnableBy } from './enums'
+
+export enum EnumApplyPlugins {
+  add = 'add',
+  modify = 'modify',
+  event = 'event'
+}
+
+export enum EnumEnableBy {
+  register = 'register',
+  config = 'config'
+}
 
 export interface IDep {
   [name: string]: string
@@ -24,12 +34,12 @@ export interface IPlugin {
   apply: () => any
   config?: IPluginConfig
   isPreset?: boolean
-  enableBy?: EnableBy | typeof Function
+  enableBy?: EnumEnableBy | (() => void)
 }
 
 export interface IHook {
   key: string
-  fn: (args: any, option?: any) => any | Promise<unknown>
+  fn: (args?: { args: yargs.Arguments }, option?: any) => Promise<any> | void
   pluginId?: string
   before?: string
   stage?: number
@@ -44,4 +54,3 @@ export interface ICommand {
     ({ args }: { args: yargs.Arguments }): void
   }
 }
-
