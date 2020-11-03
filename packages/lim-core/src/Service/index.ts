@@ -75,12 +75,15 @@ export default class Service extends EventEmitter {
   /**
    * @desc registered commands
    */
-  commands: Record<string, ICommand> = {}
+  commands: Record<string, ICommand | string> = {}
 
   /**
    * @desc plugin Methods
    */
-  pluginMethods: Record<string, typeof Function> = {}
+  pluginMethods: Record<
+    string,
+    typeof Function | ((this: PluginAPI, fn: typeof Function) => void)
+  > = {}
 
   /**
    * @desc plugin set
@@ -96,6 +99,11 @@ export default class Service extends EventEmitter {
    * @desc { Record<string, IHook[]> }
    */
   hooksByPluginId: Record<string, IHook[]> = {}
+
+  /**
+   * @desc The id of the plugin that does not need to be loaded
+   */
+  skipPluginIds: Set<string> = new Set<string>()
 
   constructor(opts: IServiceOptions) {
     super()
@@ -120,7 +128,7 @@ export default class Service extends EventEmitter {
   }
 
   async init() {
-    this.extraPlugins = [this.initialPlugins[0]]
+    this.extraPlugins = lodash.cloneDeep(this.initialPlugins)
 
     while (this.extraPlugins.length) {
       this.initPlugins(this.extraPlugins.shift()!)
@@ -149,6 +157,7 @@ export default class Service extends EventEmitter {
     this.registerPlugin(plugin)
 
     // Plugin or Plugins
+    // Execute plugin method and pass in api.any
     const plugins = this.applyAPI({
       api,
       apply
@@ -162,12 +171,9 @@ export default class Service extends EventEmitter {
         this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
       })
 
-      // The collection may not be at the top
-      // At this time, the remaining plugins of initialPlugins have been added
-      this.extraPlugins = lodash.uniq([
-        ...this.extraPlugins,
-        ...this.initialPlugins
-      ])
+      // The collection may contain the same plugin
+      // So here is a de-duplication process
+      this.extraPlugins = lodash.uniq(this.extraPlugins)
     }
   }
 
@@ -201,10 +207,7 @@ export default class Service extends EventEmitter {
     const ret = options.apply()(options.api)
 
     if (isPromise(ret)) {
-      assert(
-        false,
-        'Only allowed "require", "improt" still an experimental feature'
-      )
+      assert('Only allowed "require", "improt" still an experimental feature')
     }
     return ret
   }
@@ -252,7 +255,6 @@ export default class Service extends EventEmitter {
         return TypeSeriesWater.promise(null)
       default:
         assert(
-          false,
           `applyPlugin failed, type is not defined or is not matched, got "${type}".`
         )
     }
@@ -281,12 +283,9 @@ export default class Service extends EventEmitter {
   runCommand({ command, args }: IRun) {
     const event = this.commands[command]
 
-    assert(event, `run command failed, command "${command}" does not exists.`)
-    assert(
-      event.fn,
-      `run command failed, command "${command}",method is not defined`
-    )
+    assert(`run command failed, command "${command}" does not exists.`, event)
+    const { fn } = event as ICommand
 
-    event.fn({ args })
+    fn({ args })
   }
 }

@@ -1,3 +1,5 @@
+import { assert } from '@lim/utils'
+import { ICommand } from './types'
 import Service from '.'
 
 export interface IPluginAPIOptions {
@@ -7,8 +9,14 @@ export interface IPluginAPIOptions {
 }
 
 export default class PluginAPI {
+  /**
+   * @desc Service class this
+   */
   service: Service
 
+  /**
+   * @desc hook di
+   */
   id: string
 
   constructor(opts: IPluginAPIOptions) {
@@ -16,12 +24,23 @@ export default class PluginAPI {
     this.id = opts.id
   }
 
-  registerCommand(command: any) {
-    const { name } = command
+  registerCommand(command: ICommand) {
+    const { name, alias } = command
+    assert(
+      `api.registerCommand() failed, the command ${name} is exists.`,
+      !this.service.commands[name]
+    )
     this.service.commands[name] = command
+    if (alias) {
+      this.service.commands[alias] = name
+    }
   }
 
-  registerMethod(opts: any) {
+  registerMethod(opts: {
+    name: string
+    fn?: typeof Function
+    exitsError?: boolean
+  }) {
     const { fn, name, exitsError } = opts
     const { pluginMethods } = this.service
 
@@ -40,14 +59,18 @@ export default class PluginAPI {
     }
 
     if (exitsError) {
-      throw new Error(
-        `api.registerMethod() failed, method ${name} is already exist.`
-      )
+      assert(`api.registerMethod() failed, method ${name} is already exist.`)
     }
   }
 
   register(hook: any) {
     const { hooksByPluginId } = this.service
     hooksByPluginId[this.id] = (hooksByPluginId[this.id] ?? []).concat(hook)
+  }
+
+  skipPlugins(pluginIds: string[]) {
+    pluginIds.forEach((pluginId) => {
+      this.service.skipPluginIds.add(pluginId)
+    })
   }
 }

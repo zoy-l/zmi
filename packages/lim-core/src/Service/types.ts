@@ -44,3 +44,4 @@ export interface ICommand {
     ({ args }: { args: yargs.Arguments }): void
   }
 }
+

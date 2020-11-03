@@ -55,8 +55,8 @@ export function pathToRegister({
   let isPkgPlugin = false
 
   assert(
-    fs.existsSync(pluginPath),
-    `${pluginPath} not exists, pathToRegister failed`
+    `${pluginPath} not exists, pathToRegister failed`,
+    fs.existsSync(pluginPath)
   )
 
   const pkgJSONPath = pkgUp.sync({ cwd: pluginPath })
@@ -106,7 +106,7 @@ export function pathToRegister({
         const ret = require(pluginPath)
         return compatibleWithESModule(ret)
       } catch (err) {
-        assert(false, `Register ${pluginPath} failed, since ${err.message}`)
+        assert(`Register ${pluginPath} failed, since ${err.message}`)
       }
     }
   }
