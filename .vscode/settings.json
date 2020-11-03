@@ -1,4 +1,4 @@
+// Leave it to eslint to solve the annoying "..."
 {
-  "git.ignoreLimitWarning": true,
   "javascript.validate.enable": false
 }
