@@ -1,4 +1,4 @@
-import { assert } from '@lim/utils'
+import { assert, yargs } from '@lim/utils'
 import { ICommand } from './types'
 import Service from '.'
 
@@ -38,7 +38,7 @@ export default class PluginAPI {
 
   registerMethod(opts: {
     name: string
-    fn?: typeof Function
+    fn?: (args: yargs.Arguments) => void
     exitsError?: boolean
   }) {
     const { fn, name, exitsError } = opts

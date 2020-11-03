@@ -1,7 +1,6 @@
-import { assert, BabelRegister, lodash, NodeEnv } from '@lim/utils'
+import { assert, BabelRegister, lodash, NodeEnv, yargs } from '@lim/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { EventEmitter } from 'events'
-import yargs from 'yargs'
 import path from 'path'
 
 import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
@@ -82,7 +81,7 @@ export default class Service extends EventEmitter {
    */
   pluginMethods: Record<
     string,
-    typeof Function | ((this: PluginAPI, fn: typeof Function) => void)
+    ((args: yargs.Arguments) => void) | ((fn: typeof Function) => void)
   > = {}
 
   /**
