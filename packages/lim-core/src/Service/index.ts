@@ -17,7 +17,7 @@ interface IApplyPlugins {
   key: string
   type: ApplyPluginsType
   initialValue?: unknown
-  args?: any
+  args?: yargs.Arguments
 }
 
 export interface IServiceOptions {
@@ -223,7 +223,7 @@ export default class Service extends EventEmitter {
       isMemo ? 'memo' : '_'
     ])
     const TypeSeriesWaterApply = (
-      func: (hook: IHook) => (...args: any[]) => Promise<any>
+      func: (hook: IHook) => (...Args: any[]) => Promise<any>
     ) => {
       hooks.forEach((hook) => {
         // prettier-ignore
@@ -238,13 +238,13 @@ export default class Service extends EventEmitter {
     switch (type) {
       case add:
         TypeSeriesWaterApply((hook) => async (memo) => {
-          const items = await hook.fn(pluginOptions.args)
+          const items = await hook.fn(args)
           return memo.concat(items)
         })
         return TypeSeriesWater.promise(pluginOptions.initialValue ?? [])
       case modify:
         TypeSeriesWaterApply((hook) => async (memo) => {
-          return hook.fn(memo, pluginOptions.args)
+          return hook.fn(memo, args)
         })
         return TypeSeriesWater.promise(pluginOptions.initialValue)
       case event:
