@@ -23,7 +23,7 @@ interface IRun {
 interface IApplyPlugins {
   key: string
   type: EnumApplyPlugins
-  initialValue?: unknown
+  initialValue?: any
   args?: { args: yargs.Arguments }
 }
 
@@ -251,15 +251,23 @@ export default class Service extends EventEmitter {
 
   async applyPlugins(pluginOptions: IApplyPlugins) {
     const { add, modify, event } = EnumApplyPlugins
-    const { key, type, args } = pluginOptions
+    const { key, type, args, initialValue } = pluginOptions
 
-    const isMemo = [add, modify].includes(type)
+    const hookArgs = {
+      [add]: initialValue ?? [],
+      [modify]: initialValue,
+      [event]: null
+    }
+    const typeIndex = Object.keys(hookArgs).indexOf(type)
     const hooks = this.hooks[key] ?? []
 
     // tapable: https://github.com/webpack/tapable
     const TypeSeriesWater = new AsyncSeriesWaterfallHook([
-      isMemo ? 'memo' : '_'
+      typeIndex !== 2 ? 'memo' : '_'
     ])
+
+    // Add hook method into the actuator
+    // Prepare for later
     const TypeSeriesWaterApply = (
       func: (hook: IHook) => (...Args: any[]) => Promise<any>
     ) => {
@@ -273,28 +281,32 @@ export default class Service extends EventEmitter {
       })
     }
 
+    // `add` requires return values, these return values will eventually be combined into an array
+    // `modify`, need to modify the first parameter and return
+    // `event`, no return value
     switch (type) {
       case add:
         TypeSeriesWaterApply((hook) => async (memo) => {
           const items = await hook.fn(args)
           return memo.concat(items)
         })
-        return TypeSeriesWater.promise(pluginOptions.initialValue ?? [])
+        break
       case modify:
         TypeSeriesWaterApply((hook) => async (memo) => {
           return hook.fn(memo, args)
         })
-        return TypeSeriesWater.promise(pluginOptions.initialValue)
+        break
       case event:
         TypeSeriesWaterApply((hook) => async () => {
           await hook.fn(args)
         })
-        return TypeSeriesWater.promise(null)
+        break
       default:
         assert(
           `applyPlugin failed, type is not defined or is not matched, got "${type}".`
         )
     }
+    return TypeSeriesWater.promise(hookArgs[EnumApplyPlugins[typeIndex]])
   }
 
   registerPlugin(plugin: IPlugin) {
@@ -302,21 +314,23 @@ export default class Service extends EventEmitter {
   }
 
   isPluginEnable(pluginId: string) {
-    if (this.skipPluginIds.has(pluginId)) return false
-
     const { key, enableBy } = this.plugins[pluginId]
 
-    if (this.userConfig[key] === false) return false
+    const skipStep = [
+      this.skipPluginIds.has(pluginId),
+      this.userConfig[key] === false,
+      this.EnableBy.config === enableBy && !(key in this.userConfig)
+    ]
 
-    if (enableBy === this.EnableBy.config && !(key in this.userConfig)) {
-      return false
+    // judgment in order
+    // the array order is fixed, the priority is the same as the array order
+    for (let step = 0; step < skipStep.length; step++) {
+      if (skipStep[step]) {
+        return false
+      }
     }
 
-    if (typeof enableBy === 'function') {
-      return enableBy()
-    }
-
-    return true
+    return typeof enableBy !== 'function' || enableBy()
   }
 
   loadEnv() {
