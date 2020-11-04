@@ -14,6 +14,7 @@ import glob from 'glob'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
+import parseRequireDeps from './parseRequireDeps'
 import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
@@ -27,6 +28,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  parseRequireDeps,
   getFile,
   clearModule,
   NodeEnv,

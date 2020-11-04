@@ -6,6 +6,7 @@ import path from 'path'
 import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
 import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
 import loadDotEnv from './withEnv'
+import Config from '../Config'
 import {
   IPlugin,
   IHook,
@@ -32,6 +33,11 @@ export interface IServiceOptions {
   env?: NodeEnv
   pkg?: IPackage
   plugins?: string[]
+}
+
+interface IConfig {
+  plugins?: string[]
+  [key: string]: any
 }
 
 const cycle = [
@@ -82,9 +88,14 @@ export default class Service extends EventEmitter {
   extraPlugins: IPlugin[] = []
 
   /**
+   * @desc Config Instance
+   */
+  configInstance: Config
+
+  /**
    * @desc user config
    */
-  userConfig: any = {}
+  userConfig: IConfig
 
   /**
    * @desc runtime babel
@@ -150,6 +161,13 @@ export default class Service extends EventEmitter {
 
     // Load environment variables from .env file into process.env
     this.loadEnv()
+
+    this.configInstance = new Config({
+      cwd: this.cwd,
+      service: this
+    })
+
+    this.userConfig = this.configInstance.getUserConfig()
 
     this.initialPlugins = resolvePlugins({
       cwd: this.cwd,

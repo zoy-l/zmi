@@ -1,7 +1,16 @@
-import { winPath, getFile, assert } from '@lim/utils'
+import {
+  compatibleWithESModule,
+  parseRequireDeps,
+  clearModule,
+  deepmerge,
+  winPath,
+  getFile,
+  assert
+} from '@lim/utils'
 
-import fs from 'fs'
+import { Service } from '..'
 import path from 'path'
+import fs from 'fs'
 
 const possibleConfigPaths = [
   process.env.LIM_SERVICE_CONFIG_PATH,
@@ -10,12 +19,24 @@ const possibleConfigPaths = [
 ].filter(Boolean) as string[]
 
 export default class Config {
-  cwd: any
+  /**
+   * @desc Directory path
+   */
+  cwd: string
 
+  /**
+   * @desc file name
+   */
   configFile?: string
 
-  constructor(options: any) {
-    this.cwd = options.cwd
+  /**
+   * @desc Service instance
+   */
+  service: Service
+
+  constructor(options: { cwd: string; service: Service }) {
+    this.cwd = options.cwd ?? process.cwd()
+    this.service = options.service
   }
 
   getConfigFile() {
@@ -43,20 +64,56 @@ export default class Config {
           type: 'javascript'
         })?.filename
 
-        if (!envConfigFile) {
+        !envConfigFile &&
           assert(
-            `get user config failed, ${envConfigFile} does not exist, but process.env.UMI_ENV is set to ${process.env.LIM_ENV}.`
+            [
+              `get user config failed, ${envConfigFile} does not exist, `,
+              `but process.env.UMI_ENV is set to ${process.env.LIM_ENV}.`
+            ].join('')
           )
-        }
       }
+
       const files = [configFile, envConfigFile].filter((file) => {
         return file && fs.existsSync(path.join(this.cwd, file))
+      }) as string[]
+
+      const requireDeps = files.reduce((memo: string[], file) => {
+        memo = memo.concat(parseRequireDeps(file))
+        return memo
+      }, [])
+
+      requireDeps.forEach(clearModule)
+      this.service.babelRegister.setOnlyMap({
+        key: 'config',
+        value: requireDeps
       })
+
+      return this.mergeConfig(...this.requireConfigs(files))
     }
+
+    return {}
   }
 
   addAffix(file: string, affix: string) {
     const ext = path.extname(file)
     return file.replace(new RegExp(`${ext}$`), `.${affix}${ext}`)
+  }
+
+  requireConfigs(configFiles: string[]) {
+    return (
+      configFiles &&
+      configFiles.map((file) => compatibleWithESModule(require(file)))
+    )
+  }
+
+  mergeConfig(...configs: Record<string, unknown>[]) {
+    let ret = {}
+
+    // TODO: Refined processing, such as processing dotted config key
+    configs.forEach((config) => {
+      ret = deepmerge(ret, config)
+    })
+
+    return ret
   }
 }

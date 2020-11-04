@@ -16,6 +16,7 @@
     "address": "^1.1.2",
     "chalk": "^4.1.0",
     "clear-module": "^4.1.1",
+    "crequire": "^1.8.1",
     "deepmerge": "^4.2.2",
     "glob": "^7.1.6",
     "inquirer": "^7.3.3",

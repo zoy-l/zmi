@@ -1,5 +1,5 @@
 import path from 'path'
-import { existsSync } from 'fs'
+import fs from 'fs'
 import winPath from './winPath'
 
 /**
@@ -36,7 +36,7 @@ export default function getFile(opts: IGetFileOpts) {
   while (ex.length) {
     const filename = `${opts.fileNameWithoutExt}${ex.shift()}`
     const paths = winPath(path.join(opts.base, filename))
-    if (existsSync(paths)) {
+    if (fs.existsSync(paths)) {
       return {
         path,
         filename
