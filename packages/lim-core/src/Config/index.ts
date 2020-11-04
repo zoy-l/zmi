@@ -1,4 +1,5 @@
-import { winPath, clearModule } from '@lim/utils'
+import { winPath, getFile, assert } from '@lim/utils'
+
 import fs from 'fs'
 import path from 'path'
 
@@ -29,7 +30,30 @@ export default class Config {
     this.configFile = configFile
 
     if (configFile) {
-      //
+      let envConfigFile
+      if (process.env.LIM_ENV) {
+        const envConfigFileName = this.addAffix(configFile, process.env.LIM_ENV)
+        const fileNameWithoutExt = envConfigFileName.replace(
+          path.extname(envConfigFileName),
+          ''
+        )
+        envConfigFile = getFile({
+          base: this.cwd,
+          fileNameWithoutExt,
+          type: 'javascript'
+        })?.filename
+
+        if (!envConfigFile) {
+          assert(
+            `get user config failed, ${envConfigFile} does not exist, but process.env.UMI_ENV is set to ${process.env.LIM_ENV}.`
+          )
+        }
+      }
     }
+  }
+
+  addAffix(file: string, affix: string) {
+    const ext = path.extname(file)
+    return file.replace(new RegExp(`${ext}$`), `.${affix}${ext}`)
   }
 }

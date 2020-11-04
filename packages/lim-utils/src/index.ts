@@ -19,6 +19,7 @@ import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
 import mergeConfig from './mergeConfig'
 import { NodeEnv } from './types'
+import getFile from './getFile'
 import winPath from './winPath'
 import assert from './assert'
 import paths from './paths'
@@ -26,6 +27,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  getFile,
   clearModule,
   NodeEnv,
   winPath,

@@ -43,21 +43,21 @@ const cycle = [
 ]
 
 const ServiceAttribute = [
-  'applyPlugins',
-  'ApplyPluginsType',
-  'EnableBy',
   'ConfigChangeType',
+  'ApplyPluginsType',
   'babelRegister',
-  'stage',
+  'applyPlugins',
   'ServiceStage',
-  'paths',
-  'cwd',
-  'pkg',
   'userConfig',
+  'hasPlugins',
+  'EnableBy',
   'config',
-  'env',
+  'paths',
+  'stage',
   'args',
-  'hasPlugins'
+  'env',
+  'cwd',
+  'pkg'
 ]
 
 export default class Service extends EventEmitter {
