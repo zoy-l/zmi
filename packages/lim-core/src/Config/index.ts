@@ -49,6 +49,9 @@ export default class Config {
           )
         }
       }
+      const files = [configFile, envConfigFile].filter((file) => {
+        return file && fs.existsSync(path.join(this.cwd, file))
+      })
     }
   }
 
