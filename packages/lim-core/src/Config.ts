@@ -8,7 +8,7 @@ import {
   assert
 } from '@lim/utils'
 
-import { Service } from '..'
+import { Service } from '.'
 import path from 'path'
 import fs from 'fs'
 

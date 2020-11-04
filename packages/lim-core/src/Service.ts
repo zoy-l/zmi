@@ -6,7 +6,7 @@ import path from 'path'
 import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
 import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
 import loadDotEnv from './withEnv'
-import Config from '../Config'
+import Config from './Config'
 import {
   IPlugin,
   IHook,

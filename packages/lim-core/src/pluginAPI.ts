@@ -1,6 +1,6 @@
 import { assert, yargs } from '@lim/utils'
 import { ICommand } from './types'
-import Service from '.'
+import Service from './Service'
 
 export interface IPluginAPIOptions {
   id: string
