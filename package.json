@@ -5,12 +5,12 @@
     "packages/*"
   ],
   "scripts": {
-    "debug": "node --inspect-brk packages/lim/bin/lim.js",
-    "lim-build": "father-build",
-    "lim-build:watch": "father-build --watch",
-    "lim-link:lim": "cd packages/lim && yarn link && cd -",
-    "lim-clean:modules": "lerna clean --yes",
-    "lim-update:deps": "yarn upgrade-interactive --latest"
+    "debug": "node --inspect-brk packages/zmi/bin/zmi.js",
+    "zmi-build": "father-build",
+    "zmi-build:watch": "father-build --watch",
+    "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
+    "zmi-clean:modules": "lerna clean --yes",
+    "zmi-update:deps": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

@@ -1,0 +1,12 @@
+{
+  "name": "@zmi/create-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@zmi/utils": "1.0.0"
+  },
+  "bin": {
+    "zmi-create-app": "bin/zmi-create-app.js"
+  }
+}

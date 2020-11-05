@@ -1,0 +1,14 @@
+{
+  "name": "@zmi/core",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "tapable": "^2.0.0"
+  }
+}

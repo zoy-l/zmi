@@ -1,6 +1,6 @@
 {
   "root": true,
-  "extends": ["@lim"],
+  "extends": ["@zmi"],
   "rules": {
     "global-require": "off",
     "no-case-declarations": "off",

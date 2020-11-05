@@ -1,0 +1,29 @@
+{
+  "name": "@zmi/babel-preset",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "7.12.1",
+    "@babel/plugin-proposal-decorators": "7.12.1",
+    "@babel/plugin-proposal-do-expressions": "7.12.1",
+    "@babel/plugin-proposal-export-default-from": "7.12.1",
+    "@babel/plugin-proposal-function-bind": "7.12.1",
+    "@babel/plugin-proposal-logical-assignment-operators": "7.12.1",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "7.12.1",
+    "@babel/plugin-proposal-pipeline-operator": "7.12.1",
+    "@babel/plugin-syntax-top-level-await": "7.12.1",
+    "@babel/plugin-transform-destructuring": "7.12.1",
+    "@babel/plugin-transform-runtime": "7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
+    "@types/node": "^14.14.6",
+    "babel-plugin-dynamic-import-node": "^2.3.3",
+    "babel-plugin-import": "^1.13.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
+    "babel-plugin-transform-typescript-metadata": "^0.3.1"
+  }
+}

@@ -3,11 +3,11 @@ export default {
   cjs: { type: 'babel', lazy: true },
   disableTypeCheck: true,
   pkgs: [
-    'lim-utils',
-    'lim-babel-preset',
-    'lim-create-app',
-    'lim',
-    'lim-core',
-    'lim-preset'
+    'zmi-utils',
+    'zmi-babel-preset',
+    'zmi-create-app',
+    'zmi',
+    'zmi-core',
+    'zmi-preset'
   ]
 }

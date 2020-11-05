@@ -5,9 +5,9 @@
   "license": "MIT",
   "private": "true",
   "scripts": {
-    "dev": "lim dev"
+    "dev": "zmi dev"
   },
   "peerDependencies": {
-    "lim": "latest"
+    "zmi": "latest"
   }
 }

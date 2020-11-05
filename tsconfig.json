@@ -20,8 +20,8 @@
     "**/*.spec.ts",
     "packages/**/lib",
     "packages/**/bin",
-    "packages/lim/*.js",
-    "packages/lim-eslint-config/*",
-    "packages/lim-babel-preset/*.js"
+    "packages/zmi/*.js",
+    "packages/zmi-eslint-config/*",
+    "packages/zmi-babel-preset/*.js"
   ]
 }
