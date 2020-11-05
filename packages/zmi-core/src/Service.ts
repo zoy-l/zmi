@@ -259,8 +259,15 @@ export default class Service extends EventEmitter {
     apply: () => (api: PluginAPI) => string[] | undefined
     api: PluginAPI
   }) {
+    // There are two situations here
+    // 1. Import the plug-in collection, then return a string[]
+    // 2. Execute plug-in method and pass in api
     const ret = options.apply()(options.api)
 
+    // there is an extra, no `require` is used, but `import` is used
+    // although it can be supported, but considering adding a method,
+    // thereby increasing mental burden, although the impact is limited
+    // this is only temporary and may increase in the future
     if (isPromise(ret)) {
       assert('Only allowed "require", "improt" still an experimental feature')
     }
