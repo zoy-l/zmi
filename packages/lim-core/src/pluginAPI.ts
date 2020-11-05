@@ -102,7 +102,6 @@ export default class PluginAPI {
             key: name,
             fn: Fn
           }
-
           this.register(hook)
         }
       return

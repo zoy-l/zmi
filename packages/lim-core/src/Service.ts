@@ -342,10 +342,8 @@ export default class Service extends EventEmitter {
 
     // judgment in order
     // the array order is fixed, the priority is the same as the array order
-    for (let step = 0; step < skipStep.length; step++) {
-      if (skipStep[step]) {
-        return false
-      }
+    while (skipStep.length) {
+      if (skipStep.shift()) return false
     }
 
     return typeof enableBy !== 'function' || enableBy()
@@ -359,9 +357,9 @@ export default class Service extends EventEmitter {
   }
 
   hasPlugins(pluginIds: string[]) {
+    // exposed to the outside for inspection
     return pluginIds.every((pluginId) => {
-      const plugin = this.plugins[pluginId]
-      return plugin && this.isPluginEnable(pluginId)
+      return this.plugins[pluginId] && this.isPluginEnable(pluginId)
     })
   }
 

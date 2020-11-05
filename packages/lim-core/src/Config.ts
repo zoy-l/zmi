@@ -13,7 +13,7 @@ import path from 'path'
 import fs from 'fs'
 
 const possibleConfigPaths = [
-  process.env.LIM_SERVICE_CONFIG_PATH,
+  process.env.LIM_CONFIG_PATH,
   '.limrc.ts',
   '.limrc.js'
 ].filter(Boolean) as string[]
@@ -50,53 +50,67 @@ export default class Config {
     const configFile = this.getConfigFile()
     this.configFile = configFile
 
-    if (configFile) {
-      let envConfigFile
-      if (process.env.LIM_ENV) {
-        const envConfigFileName = this.addAffix(configFile, process.env.LIM_ENV)
-        const fileNameWithoutExt = envConfigFileName.replace(
-          path.extname(envConfigFileName),
-          ''
+    let envConfigFile
+    if (process.env.LIM_ENV) {
+      // environment variable config file `.env.LIM_ENV` and remove ext
+      // Because it is synthesized according to the base file
+      // local may be `(j|t)s` file
+      // If there is no configFile, the default is `.limrc`
+      // Set here to `.ts` it has no practical effect, just a placeholder
+      const envConfigFileName = this.addAffix(
+        configFile ?? '.limrc.ts',
+        process.env.LIM_ENV,
+        false
+      )
+
+      // 👆 follow the above, or the real local environment config file
+      envConfigFile = getFile({
+        fileNameWithoutExt: envConfigFileName,
+        type: 'javascript',
+        base: this.cwd
+      })?.filename
+
+      !envConfigFile &&
+        assert(
+          [
+            `get user config failed, ${envConfigFile} does not exist, `,
+            `but process.env.LIM_ENV is set to ${process.env.LIM_ENV}.`
+          ].join('')
         )
-        envConfigFile = getFile({
-          base: this.cwd,
-          fileNameWithoutExt,
-          type: 'javascript'
-        })?.filename
+    }
 
-        !envConfigFile &&
-          assert(
-            [
-              `get user config failed, ${envConfigFile} does not exist, `,
-              `but process.env.UMI_ENV is set to ${process.env.LIM_ENV}.`
-            ].join('')
-          )
+    // check the authenticity of documents
+    const files = [configFile, envConfigFile].filter((file) => {
+      if (file) {
+        const real = path.join(this.cwd, file)
+        return fs.existsSync(real) && real
       }
+      return false
+    }) as string[]
 
-      const files = [configFile, envConfigFile].filter((file) => {
-        return file && fs.existsSync(path.join(this.cwd, file))
-      }) as string[]
-
+    if (files.length) {
+      // handling circular references
+      // clear require cache
       const requireDeps = files.reduce((memo: string[], file) => {
-        memo = memo.concat(parseRequireDeps(file))
-        return memo
+        return memo.concat(parseRequireDeps(file))
       }, [])
-
       requireDeps.forEach(clearModule)
+
+      // Just-in-time compilation at runtime
       this.service.babelRegister.setOnlyMap({
         key: 'config',
         value: requireDeps
       })
 
-      return this.mergeConfig(...this.requireConfigs(files))
+      return this.mergeConfig([...files])
     }
 
     return {}
   }
 
-  addAffix(file: string, affix: string) {
+  addAffix(file: string, affix: string, isExt = true) {
     const ext = path.extname(file)
-    return file.replace(new RegExp(`${ext}$`), `.${affix}${ext}`)
+    return file.replace(new RegExp(`${ext}$`), `.${affix}${isExt ? ext : ''}`)
   }
 
   requireConfigs(configFiles: string[]) {
@@ -106,14 +120,14 @@ export default class Config {
     )
   }
 
-  mergeConfig(...configs: Record<string, unknown>[]) {
-    let ret = {}
+  mergeConfig(configs: string[]) {
+    let newConfig = {}
 
     // TODO: Refined processing, such as processing dotted config key
-    configs.forEach((config) => {
-      ret = deepmerge(ret, config)
+    this.requireConfigs(configs).forEach((config) => {
+      newConfig = deepmerge(newConfig, config)
     })
 
-    return ret
+    return newConfig
   }
 }
