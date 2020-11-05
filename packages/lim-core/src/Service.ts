@@ -40,7 +40,7 @@ interface IConfig {
   [key: string]: any
 }
 
-const cycle = [
+const Cycle = [
   'onPluginReady',
   'modifyPaths',
   'onStart',
@@ -237,7 +237,7 @@ export default class Service extends EventEmitter {
     const pluginAPI = new PluginAPI(opts)
 
     // life cycle
-    cycle.forEach((name) => {
+    Cycle.forEach((name) => {
       pluginAPI.registerMethod({ name, exitsError: false })
     })
 

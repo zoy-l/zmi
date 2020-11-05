@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+
 import winPath from './winPath'
 
 /**
@@ -29,8 +30,8 @@ const extsMap: Record<FileType, string[]> = {
 export default function getFile(opts: IGetFileOpts) {
   const exts = extsMap[opts.type]
   const ex = [...exts]
-  // why while instead of for-of ?
-  // because eslint prompts that you cannot use for-of
+  // why while instead of for-x ?
+  // because eslint prompts that you cannot use for-x
   // `eslint no-restricted-syntax`
   // and i don't want to ban it 😑
   while (ex.length) {

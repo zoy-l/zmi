@@ -1,11 +1,25 @@
-import { assert, yargs } from '@lim/utils'
-import { ICommand } from './types'
+import * as utils from '@lim/utils'
+
+import { ICommand, IHook, IPluginConfig, EnumEnableBy } from './types'
 import Service from './Service'
 
 export interface IPluginAPIOptions {
   id: string
   key: string
   service: Service
+}
+
+interface IDescribe {
+  id?: string
+  key?: string
+  config?: IPluginConfig
+  enableBy?: EnumEnableBy | (() => boolean)
+}
+
+interface IRegisterMethod {
+  name: string
+  fn?: (args: utils.yargs.Arguments) => void
+  exitsError?: boolean
 }
 
 export default class PluginAPI {
@@ -15,18 +29,58 @@ export default class PluginAPI {
   service: Service
 
   /**
-   * @desc hook di
+   * @desc plugin di
    */
   id: string
 
-  constructor(opts: IPluginAPIOptions) {
-    this.service = opts.service
-    this.id = opts.id
+  /**
+   * @desc plugin key
+   */
+  key: string
+
+  /**
+   * @desc utils
+   */
+  utils: typeof utils
+
+  constructor(options: IPluginAPIOptions) {
+    this.service = options.service
+    this.id = options.id
+    this.key = options.key
+    this.utils = utils
+  }
+
+  describe({ id, key, config, enableBy }: IDescribe = {}) {
+    const { plugins } = this.service
+    // this.id and this.key is generated automatically
+    // so we need to diff first
+    if (id && this.id !== id) {
+      plugins[id] &&
+        utils.assert(
+          `api.describe() failed, plugin ${id} is already registered by ${plugins[id].path}.`
+        )
+
+      // overwrite the old describe
+      plugins[id] = plugins[this.id]
+      plugins[id].id = id
+      delete plugins[this.id]
+      this.id = id
+    }
+    if (key && this.key !== key) {
+      this.key = key
+      plugins[this.id].key = key
+    }
+
+    if (config) {
+      plugins[this.id].config = config
+    }
+
+    plugins[this.id].enableBy = enableBy ?? EnumEnableBy.register
   }
 
   registerCommand(command: ICommand) {
     const { name, alias } = command
-    assert(
+    utils.assert(
       `api.registerCommand() failed, the command ${name} is exists.`,
       !this.service.commands[name]
     )
@@ -36,21 +90,17 @@ export default class PluginAPI {
     }
   }
 
-  registerMethod(opts: {
-    name: string
-    fn?: (args: yargs.Arguments) => void
-    exitsError?: boolean
-  }) {
-    const { fn, name, exitsError } = opts
+  registerMethod(options: IRegisterMethod) {
+    const { fn, name, exitsError } = options
     const { pluginMethods } = this.service
 
     if (!pluginMethods[name]) {
       pluginMethods[name] =
         fn ??
-        function (this: PluginAPI, Fn: typeof Function) {
+        function (this: PluginAPI, Fn: () => void) {
           const hook = {
             key: name,
-            Fn
+            fn: Fn
           }
 
           this.register(hook)
@@ -59,11 +109,21 @@ export default class PluginAPI {
     }
 
     if (exitsError) {
-      assert(`api.registerMethod() failed, method ${name} is already exist.`)
+      utils.assert(
+        `api.registerMethod() failed, method ${name} is already exist.`
+      )
     }
   }
 
-  register(hook: any) {
+  register(hook: IHook) {
+    utils.assert(
+      `api.register() failed, hook.key must supplied and should be string, but got ${hook.key}.`,
+      hook.key && typeof hook.key === 'string'
+    )
+    utils.assert(
+      `api.register() failed, hook.fn must supplied and should be function, but got ${hook.fn}.`,
+      hook.fn && typeof hook.fn === 'function'
+    )
     const { hooksByPluginId } = this.service
     hooksByPluginId[this.id] = (hooksByPluginId[this.id] ?? []).concat(hook)
   }
