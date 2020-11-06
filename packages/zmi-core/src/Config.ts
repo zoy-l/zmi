@@ -9,7 +9,7 @@ import {
 } from '@zmi/utils'
 import Joi from 'joi'
 
-import { getUserConfigWithKey, mergeDefault } from './configUtils'
+import { mergeDefault } from './configUtils'
 import { ServiceStage } from './types'
 import { Service } from '.'
 import path from 'path'
@@ -55,9 +55,10 @@ export default class Config {
   }
 
   getConfig({ defaultConfig }: { defaultConfig: Record<string, unknown> }) {
+    const { stage, plugins } = this.service
     assert(
       `Config.getConfig() failed, it should not be executed before plugin is ready.`,
-      this.service.stage >= ServiceStage.pluginReady
+      stage >= ServiceStage.pluginReady
     )
 
     const userConfig = this.getUserConfig()
@@ -67,15 +68,12 @@ export default class Config {
     })
 
     // get config
-    const pluginIds = Object.keys(this.service.plugins)
-    pluginIds.forEach((pluginId) => {
-      const { key, config = {} } = this.service.plugins[pluginId]
+    Object.keys(plugins).forEach((pluginId) => {
+      const { key, config = {} } = plugins[pluginId]
+      const value = userConfig[key]
+
       // recognize as key if have schema config
-      if (!config.schema) return
-
-      const value = getUserConfigWithKey({ key, userConfig })
-
-      if (value === false) return
+      if (!config.schema || !value) return
 
       const schema = config.schema(Joi)
       assert(
@@ -83,17 +81,7 @@ export default class Config {
         Joi.isSchema(schema)
       )
       const { error } = schema.validate(value)
-      if (error) {
-        const e = new Error(`Validate config "${key}" failed, ${error.message}`)
-        e.stack = error.stack
-        throw e
-      }
-
-      // remove key
-      const index = userConfigKeys.indexOf(key.split('.')[0])
-      if (index !== -1) {
-        userConfigKeys.splice(index, 1)
-      }
+      error && assert(`Validate config "${key}" failed, ${error.message}`)
 
       // update userConfig with defaultConfig
       if (key in defaultConfig) {
@@ -107,7 +95,7 @@ export default class Config {
 
     if (userConfigKeys.length) {
       const keys = userConfigKeys.length > 1 ? 'keys' : 'key'
-      throw new Error(`Invalid config ${keys}: ${userConfigKeys.join(', ')}`)
+      assert(`Invalid config ${keys}: ${userConfigKeys.join(', ')}`)
     }
 
     return userConfig
@@ -134,7 +122,7 @@ export default class Config {
       const envConfigFileName = this.addAffix(
         configFile ?? '.limrc.ts',
         process.env.LIM_ENV,
-        false
+        !!configFile
       )
 
       // 👆 follow the above, or the real local environment config file
@@ -145,12 +133,10 @@ export default class Config {
       })?.filename
 
       !envConfigFile &&
-        assert(
-          [
-            `get user config failed, ${envConfigFile} does not exist, `,
-            `but process.env.LIM_ENV is set to ${process.env.LIM_ENV}.`
-          ].join('')
-        )
+        assert([
+          `get user config failed, ${envConfigFile} does not exist, `,
+          `but process.env.LIM_ENV is set to ${process.env.LIM_ENV}.`
+        ])
     }
 
     // check the authenticity of documents
