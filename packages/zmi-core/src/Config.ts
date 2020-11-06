@@ -9,11 +9,11 @@ import {
 } from '@zmi/utils'
 import Joi from 'joi'
 
+import { getUserConfigWithKey, mergeDefault } from './configUtils'
+import { ServiceStage } from './types'
 import { Service } from '.'
 import path from 'path'
 import fs from 'fs'
-import { ServiceStage } from './types'
-import { getUserConfigWithKey } from './configUtils'
 
 const possibleConfigPaths = [
   process.env.LIM_CONFIG_PATH,
@@ -97,15 +97,11 @@ export default class Config {
 
       // update userConfig with defaultConfig
       if (key in defaultConfig) {
-        // const newValue = mergeDefault({
-        //   defaultConfig: defaultConfig[key],
-        //   config: value
-        // })
-        // updateUserConfigWithKey({
-        //   key,
-        //   value: newValue,
-        //   userConfig
-        // })
+        const newValue = mergeDefault({
+          defaultConfig: defaultConfig[key],
+          config: value
+        })
+        userConfig[key] = newValue
       }
     })
 
