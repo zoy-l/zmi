@@ -7,6 +7,7 @@ import { resolvePlugins, pathToRegister } from './pluginUtils'
 import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
 import loadDotEnv from './withEnv'
 import Config from './Config'
+import paths from './paths'
 import {
   IPlugin,
   IHook,
@@ -14,7 +15,8 @@ import {
   IPackage,
   EnumApplyPlugins,
   EnumEnableBy,
-  ServiceStage
+  ServiceStage,
+  IServicePaths
 } from './types'
 
 interface IRun {
@@ -36,7 +38,7 @@ export interface IServiceOptions {
   plugins?: string[]
 }
 
-interface IConfig {
+export interface IConfig {
   plugins?: string[]
   [key: string]: any
 }
@@ -161,6 +163,11 @@ export default class Service extends EventEmitter {
    */
   ServiceStage = ServiceStage
 
+  /**
+   * @desc App path
+   */
+  paths: IServicePaths
+
   constructor(opts: IServiceOptions) {
     super()
 
@@ -179,6 +186,13 @@ export default class Service extends EventEmitter {
     })
 
     this.userConfig = this.configInstance.getUserConfig()
+
+    // Get the path of the app and expose it to the outside
+    this.paths = paths({
+      config: this.userConfig,
+      cwd: this.cwd,
+      env: this.env
+    })
 
     this.initialPlugins = resolvePlugins({
       cwd: this.cwd,
@@ -224,6 +238,19 @@ export default class Service extends EventEmitter {
       key: 'onPluginReady',
       type: EnumApplyPlugins.event
     })
+
+    // const defaultConfig = await this.applyPlugins({
+    //   key: 'modifyDefaultConfig',
+    //   type: this.ApplyPluginsType.modify,
+    //   initialValue: this.configInstance.getDefaultConfig()
+    // })
+    // this.config = await this.applyPlugins({
+    //   key: 'modifyConfig',
+    //   type: this.ApplyPluginsType.modify,
+    //   initialValue: this.configInstance.getConfig({
+    //     defaultConfig
+    //   }) as any
+    // })
   }
 
   async initPlugins(plugin: IPlugin) {

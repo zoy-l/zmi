@@ -65,3 +65,14 @@ export interface ICommand {
     ({ args }: { args: yargs.Arguments }): void
   }
 }
+
+export type IServicePathKeys =
+  | 'cwd'
+  | 'appNodeModulesPath'
+  | 'appOutputPath'
+  | 'appSrcPath'
+  | 'appPagesPath'
+
+export type IServicePaths = {
+  [key in IServicePathKeys]: string
+}

@@ -39,6 +39,18 @@ export default class Config {
     this.service = options.service
   }
 
+  getDefaultConfig() {
+    const { plugins } = this.service
+    const pluginIds = Object.keys(plugins)
+
+    // collect default config
+    return pluginIds.reduce((memo, pluginId) => {
+      const { key, config = {} } = plugins[pluginId]
+      if ('default' in config) memo[key] = config.default
+      return memo
+    }, {})
+  }
+
   getConfigFile() {
     const configFile = possibleConfigPaths.find((file) =>
       fs.existsSync(path.join(this.cwd, file))
