@@ -1,0 +1,13 @@
+{
+  "name": "@zmi/test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "babel-jest": "^26.6.3",
+    "core-js": "^3.6.5",
+    "jest": "^26.6.3",
+    "jest-cli": "^26.6.3"
+  }
+}
