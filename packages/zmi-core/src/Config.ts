@@ -7,10 +7,13 @@ import {
   getFile,
   assert
 } from '@zmi/utils'
+import Joi from 'joi'
 
 import { Service } from '.'
 import path from 'path'
 import fs from 'fs'
+import { ServiceStage } from './types'
+import { getUserConfigWithKey } from './configUtils'
 
 const possibleConfigPaths = [
   process.env.LIM_CONFIG_PATH,
@@ -49,6 +52,69 @@ export default class Config {
       if ('default' in config) memo[key] = config.default
       return memo
     }, {})
+  }
+
+  getConfig({ defaultConfig }: { defaultConfig: Record<string, unknown> }) {
+    assert(
+      `Config.getConfig() failed, it should not be executed before plugin is ready.`,
+      this.service.stage >= ServiceStage.pluginReady
+    )
+
+    const userConfig = this.getUserConfig()
+
+    const userConfigKeys = Object.keys(userConfig).filter((key) => {
+      return userConfig[key] !== false
+    })
+
+    // get config
+    const pluginIds = Object.keys(this.service.plugins)
+    pluginIds.forEach((pluginId) => {
+      const { key, config = {} } = this.service.plugins[pluginId]
+      // recognize as key if have schema config
+      if (!config.schema) return
+
+      const value = getUserConfigWithKey({ key, userConfig })
+
+      if (value === false) return
+
+      const schema = config.schema(Joi)
+      assert(
+        `schema return from plugin ${pluginId} is not valid schema.`,
+        Joi.isSchema(schema)
+      )
+      const { error } = schema.validate(value)
+      if (error) {
+        const e = new Error(`Validate config "${key}" failed, ${error.message}`)
+        e.stack = error.stack
+        throw e
+      }
+
+      // remove key
+      const index = userConfigKeys.indexOf(key.split('.')[0])
+      if (index !== -1) {
+        userConfigKeys.splice(index, 1)
+      }
+
+      // update userConfig with defaultConfig
+      if (key in defaultConfig) {
+        // const newValue = mergeDefault({
+        //   defaultConfig: defaultConfig[key],
+        //   config: value
+        // })
+        // updateUserConfigWithKey({
+        //   key,
+        //   value: newValue,
+        //   userConfig
+        // })
+      }
+    })
+
+    if (userConfigKeys.length) {
+      const keys = userConfigKeys.length > 1 ? 'keys' : 'key'
+      throw new Error(`Invalid config ${keys}: ${userConfigKeys.join(', ')}`)
+    }
+
+    return userConfig
   }
 
   getConfigFile() {

@@ -1,4 +1,5 @@
 import { yargs } from '@zmi/utils'
+import Joi from 'joi'
 
 export enum ServiceStage {
   uninitialized,
@@ -35,6 +36,9 @@ export interface IPackage {
 
 export interface IPluginConfig {
   default?: any
+  schema?: {
+    (joi: Joi.Root): Joi.Schema
+  }
   onChange?: string | typeof Function
 }
 
