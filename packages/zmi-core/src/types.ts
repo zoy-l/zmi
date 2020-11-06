@@ -1,5 +1,16 @@
 import { yargs } from '@zmi/utils'
 
+export enum ServiceStage {
+  uninitialized,
+  init,
+  initPlugins,
+  initHooks,
+  pluginReady,
+  getConfig,
+  getPaths,
+  run
+}
+
 export enum EnumApplyPlugins {
   add = 'add',
   modify = 'modify',

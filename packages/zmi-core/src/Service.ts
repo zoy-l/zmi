@@ -3,7 +3,7 @@ import { AsyncSeriesWaterfallHook } from 'tapable'
 import { EventEmitter } from 'events'
 import path from 'path'
 
-import { resolvePlugins, pathToRegister, isPromise } from './pluginUtils'
+import { resolvePlugins, pathToRegister } from './pluginUtils'
 import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
 import loadDotEnv from './withEnv'
 import Config from './Config'
@@ -13,7 +13,8 @@ import {
   ICommand,
   IPackage,
   EnumApplyPlugins,
-  EnumEnableBy
+  EnumEnableBy,
+  ServiceStage
 } from './types'
 
 interface IRun {
@@ -150,6 +151,16 @@ export default class Service extends EventEmitter {
    */
   ApplyPluginsType = EnumApplyPlugins
 
+  /**
+   * @desc lifecycle stage
+   */
+  stage: ServiceStage = ServiceStage.uninitialized
+
+  /**
+   * @desc enum lifecycle
+   */
+  ServiceStage = ServiceStage
+
   constructor(opts: IServiceOptions) {
     super()
 
@@ -182,13 +193,23 @@ export default class Service extends EventEmitter {
     })
   }
 
+  setStage(stage: ServiceStage) {
+    this.stage = stage
+  }
+
   async init() {
+    this.setStage(ServiceStage.init)
     this.extraPlugins = lodash.cloneDeep(this.initialPlugins)
 
+    this.setStage(ServiceStage.initPlugins)
     while (this.extraPlugins.length) {
-      this.initPlugins(this.extraPlugins.shift()!)
+      // An error will be reported here because `ESlint` prohibits all circular use of `await`
+      // It is safe to use `await` in a loop without callbacks
+      // eslint-disable-next-line no-await-in-loop
+      await this.initPlugins(this.extraPlugins.shift()!)
     }
 
+    this.setStage(ServiceStage.initHooks)
     Object.keys(this.hooksByPluginId).forEach((id) => {
       const hooks = this.hooksByPluginId[id]
       hooks.forEach((hook) => {
@@ -198,13 +219,14 @@ export default class Service extends EventEmitter {
       })
     })
 
+    this.setStage(ServiceStage.pluginReady)
     await this.applyPlugins({
       key: 'onPluginReady',
       type: EnumApplyPlugins.event
     })
   }
 
-  initPlugins(plugin: IPlugin) {
+  async initPlugins(plugin: IPlugin) {
     const { id, key, apply } = plugin
 
     const api = this.getPluginAPI({ id, key, service: this })
@@ -214,10 +236,12 @@ export default class Service extends EventEmitter {
 
     // Plugin or Plugins
     // Execute plugin method and pass in api.any
-    const plugins = this.applyAPI({
-      api,
-      apply
-    }) as string[] | undefined
+    // There are two situations here
+    // 1. Import the plug-in collection, then return a string[]
+    // 2. Execute plug-in method and pass in api
+    // there is an extra, no `require` is used, but `import` is used
+    // and ʻimport` is a Promise, so ʻawait` is needed here
+    const plugins = (await apply()(api)) as string[] | undefined
 
     // If it is an Array
     // It represents a collection of plugins added to the top of extraPlugins
@@ -253,25 +277,6 @@ export default class Service extends EventEmitter {
           : target[prop]
       }
     })
-  }
-
-  applyAPI(options: {
-    apply: () => (api: PluginAPI) => string[] | undefined
-    api: PluginAPI
-  }) {
-    // There are two situations here
-    // 1. Import the plug-in collection, then return a string[]
-    // 2. Execute plug-in method and pass in api
-    const ret = options.apply()(options.api)
-
-    // there is an extra, no `require` is used, but `import` is used
-    // although it can be supported, but considering adding a method,
-    // thereby increasing mental burden, although the impact is limited
-    // this is only temporary and may increase in the future
-    if (isPromise(ret)) {
-      assert('Only allowed "require", "improt" still an experimental feature')
-    }
-    return ret
   }
 
   async applyPlugins(pluginOptions: IApplyPlugins) {
@@ -381,6 +386,7 @@ export default class Service extends EventEmitter {
   async run({ args, command }: IRun) {
     await this.init()
 
+    this.setStage(ServiceStage.run)
     await this.applyPlugins({
       key: 'onStart',
       type: EnumApplyPlugins.event,
