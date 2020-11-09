@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "files": [
+    "lib",
+    "helpers",
+    "bin"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "babel-jest": "^26.6.3",
@@ -14,5 +22,8 @@
     "jest-environment-jsdom-global": "^2.0.4",
     "regenerator-runtime": "^0.13.7",
     "whatwg-fetch": "^3.5.0"
+  },
+  "bin": {
+    "zmi-test": "bin/zmi-test.js"
   }
 }

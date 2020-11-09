@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const { yargsParser, chalk, createDebug, assert } = require('@zmi/utils')
 
 const args = yargsParser(process.argv.slice(2), {
