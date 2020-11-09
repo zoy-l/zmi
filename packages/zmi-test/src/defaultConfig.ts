@@ -1,6 +1,6 @@
-import { ILmiTestArgs } from './types'
+import { IZmiTestArgs } from './types'
 
-export default function defaultConfig(_cwd: string, _args: ILmiTestArgs) {
+export default function defaultConfig(_cwd: string, _args: IZmiTestArgs) {
   console.log(_cwd, _args)
   return {
     collectCoverageFrom: [],
