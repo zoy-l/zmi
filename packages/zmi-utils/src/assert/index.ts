@@ -7,6 +7,6 @@ export default function assert(desc: string | string[], value: any = false) {
     console.error(
       chalk.red(`✖ ERROR: ${Array.isArray(desc) ? desc.join('') : desc}\n`)
     )
-    process.exit(1)
+    process.exit(0)
   }
 }

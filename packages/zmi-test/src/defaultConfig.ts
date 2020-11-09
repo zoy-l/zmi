@@ -33,10 +33,10 @@ export default function defaultConfig(cwd: string, args: IZmiTestArgs) {
       '!**/*.d.ts'
     ].filter(Boolean),
 
-    setupFilesAfterEnv: [require.resolve('../../helpers/setupFiles/jasmine')],
+    setupFilesAfterEnv: [require.resolve('../helpers/jasmine')],
     testPathIgnorePatterns: ['/node_modules/', '/fixtures/'],
     moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
-    setupFiles: [require.resolve('../../helpers/shim')],
+    setupFiles: [require.resolve('../helpers/shim')],
     testEnvironment: 'jest-environment-jsdom-global',
 
     moduleNameMapper: {
@@ -46,12 +46,10 @@ export default function defaultConfig(cwd: string, args: IZmiTestArgs) {
       `${testMatchPrefix}**/?*.(${testMatchTypes.join('|')}).(j|t)s?(x)`
     ],
     transform: {
-      '^.+\\.(js|jsx|ts|tsx)$': require.resolve('../../helpers/javascript'),
-      '^.+\\.(css|less|sass|scss|stylus)$': require.resolve(
-        '../../helpers/css'
-      ),
+      '^.+\\.(js|jsx|ts|tsx)$': require.resolve('../helpers/javascript'),
+      '^.+\\.(css|less|sass|scss|stylus)$': require.resolve('../helpers/css'),
       '^(?!.*\\.(js|jsx|ts|tsx|css|less|sass|scss|stylus|json)$)': require.resolve(
-        '../../helpers/file'
+        '../helpers/file'
       )
     },
     verbose: true,
