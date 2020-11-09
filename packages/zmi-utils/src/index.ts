@@ -19,7 +19,7 @@ import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
 import mergeConfig from './mergeConfig'
-import { NodeEnv } from './types'
+import { NodeEnv, ArgsType } from './types'
 import getFile from './getFile'
 import winPath from './winPath'
 import assert from './assert'
@@ -32,6 +32,7 @@ export {
   getFile,
   clearModule,
   NodeEnv,
+  ArgsType,
   winPath,
   pkgUp,
   lodash,
