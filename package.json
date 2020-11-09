@@ -10,7 +10,8 @@
     "zmi-build:watch": "father-build --watch",
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
     "zmi-clean:modules": "lerna clean --yes",
-    "zmi-update:deps": "yarn upgrade-interactive --latest"
+    "zmi-update:deps": "yarn upgrade-interactive --latest",
+    "zmi-test": "zmi-test"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

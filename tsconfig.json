@@ -4,7 +4,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "jsx": "preserve",
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -14,15 +14,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "declaration": true
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/*.spec.ts",
-    "packages/**/lib",
-    "packages/**/bin",
-    "packages/zmi/*.js",
-    "packages/zmi-eslint-config/*",
-    "packages/zmi-babel-preset/*.js",
-    "packages/zmi-test/helpers/*.js"
-  ]
+  "include": ["packages"],
+  "exclude": ["dist", "node_modules", "**/*.spec.ts"]
 }
