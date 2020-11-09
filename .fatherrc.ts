@@ -8,6 +8,7 @@ export default {
     'zmi-create-app',
     'zmi',
     'zmi-core',
-    'zmi-preset'
+    'zmi-preset',
+    'zmi-test'
   ]
 }

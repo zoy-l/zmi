@@ -15,11 +15,12 @@ import glob from 'glob'
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
 import parseRequireDeps from './parseRequireDeps'
+import { NodeEnv, ArgsType } from './types'
 import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import prepareUrls from './prepareUrls'
 import mergeConfig from './mergeConfig'
-import { NodeEnv, ArgsType } from './types'
+import isLerna from './isLerna'
 import getFile from './getFile'
 import winPath from './winPath'
 import assert from './assert'
@@ -28,6 +29,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  isLerna,
   parseRequireDeps,
   getFile,
   clearModule,

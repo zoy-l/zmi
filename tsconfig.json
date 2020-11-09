@@ -22,6 +22,7 @@
     "packages/**/bin",
     "packages/zmi/*.js",
     "packages/zmi-eslint-config/*",
-    "packages/zmi-babel-preset/*.js"
+    "packages/zmi-babel-preset/*.js",
+    "packages/zmi-test/helpers/*.js"
   ]
 }
