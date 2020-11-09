@@ -1,8 +1,8 @@
-import { launchDevice, chalk, dyo, clearConsole, isWin } from '../../zmi-utils/lib'
+import { launchDevice, chalk, dyo, clearConsole, isWin } from '@zmi/utils'
 import readline from 'readline'
 
-import { getCwd, getPkg } from './utils/getRoot'
-import fork from './utils/fork'
+import { getCwd, getPkg } from './getRoot'
+import fork from './fork'
 import Service from './service'
 
 launchDevice(dyo).then(({ args, command }) => {

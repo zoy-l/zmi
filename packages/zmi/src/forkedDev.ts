@@ -1,4 +1,4 @@
-import { chalk, launchDevice } from '../../zmi-utils/lib'
+import { chalk, launchDevice } from '@zmi/utils'
 import Service from './service'
 
 function onSignal(signal: string) {
