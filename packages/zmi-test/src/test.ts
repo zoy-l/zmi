@@ -15,12 +15,10 @@ export default async function (args: any) {
   const userJestConfigFile = path.join(cwd, 'jest.config.js')
   const userJestConfig =
     fs.existsSync(userJestConfigFile) && require(userJestConfigFile)
-  // assert(`config from jest.config.js: ${JSON.stringify(userJestConfig)}`)
 
   const packageJSONPath = path.join(cwd, 'package.json')
   const packageJestConfig =
     fs.existsSync(packageJSONPath) && require(packageJSONPath).jest
-  // assert(`jest config from package.json: ${JSON.stringify(packageJestConfig)}`)
 
   const config = mergeConfig(
     defaultConfig(cwd, args),

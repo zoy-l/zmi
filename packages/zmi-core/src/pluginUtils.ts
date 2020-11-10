@@ -114,7 +114,7 @@ export function pathToRegister({
 export function resolvePlugins(opts: IResolvePluginsOpts) {
   let plugins = getPlugins(opts)
   plugins = [...plugins]
-  debugger
+
   return plugins.map((path: string) =>
     pathToRegister({
       path,
