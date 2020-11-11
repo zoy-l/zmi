@@ -2,8 +2,8 @@ import { launchDevice, chalk, dyo, clearConsole, isWin } from '@zmi/utils'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'
+import Service from './Service'
 import fork from './fork'
-import Service from './service'
 
 launchDevice(dyo).then(({ args, command }) => {
   debugger
