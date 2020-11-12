@@ -1,0 +1,16 @@
+{
+  "name": "@zmi/build",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "chokidar": "^3.4.3",
+    "gulp-less": "^4.0.1",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "through2": "^4.0.2",
+    "vinyl-fs": "^3.0.3"
+  },
+  "peerDependencies": {
+    "typescript": "4.x"
+  }
+}
