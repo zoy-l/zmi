@@ -37,6 +37,7 @@ interface copyDirectoryOpts {
 
 export default class Generator {
   cwd: string
+
   args: yargs.Arguments
 
   constructor(opt: IOpts) {
@@ -52,19 +53,19 @@ export default class Generator {
     )
 
     if (appName) {
-      let _appName = appName
+      let IappName = appName
 
       while (1) {
         if (
-          existsSync(_appName) &&
-          !!readdirSync(`${this.cwd}/${_appName}`).length
+          existsSync(IappName) &&
+          !!readdirSync(`${this.cwd}/${IappName}`).length
         ) {
           const { newAppName } = await inquirer.prompt({
             type: 'input',
             name: 'newAppName',
             message: chalk.yellow.bold(
               [
-                `The ${chalk.cyan.bold(`"📁 ${_appName}"`)}`,
+                `The ${chalk.cyan.bold(`"📁 ${IappName}"`)}`,
                 'folder already exists and is not empty.\n',
                 '  please enter a new project name : '
               ].join('')
@@ -76,10 +77,10 @@ export default class Generator {
             this.cwd += `/${newAppName}`
             break
           } else {
-            _appName = `${newAppName}`
+            IappName = `${newAppName}`
           }
         } else {
-          this.cwd += `/${_appName}`
+          this.cwd += `/${IappName}`
           break
         }
       }
