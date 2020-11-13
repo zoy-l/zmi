@@ -26,12 +26,12 @@ export interface IOpts {
 interface copyTplOpts {
   templatePath: string
   target: string
-  context: object
+  context: Record<string, unknown>
 }
 
 interface copyDirectoryOpts {
   path: string
-  context: object
+  context: Record<string, unknown>
   target: string
 }
 
@@ -55,11 +55,13 @@ export default class Generator {
     if (appName) {
       let IappName = appName
 
+      // eslint-disable-next-line no-constant-condition
       while (1) {
         if (
           existsSync(IappName) &&
           !!readdirSync(`${this.cwd}/${IappName}`).length
         ) {
+          // eslint-disable-next-line no-await-in-loop
           const { newAppName } = await inquirer.prompt({
             type: 'input',
             name: 'newAppName',
