@@ -1,8 +1,8 @@
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import webpack from 'webpack'
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import WebpackChain from 'webpack-chain'
 import { paths } from '@zmi/utils'
+import webpack from 'webpack'
 import path from 'path'
 
 export default function getConfig(opts: any) {
@@ -29,9 +29,9 @@ export default function getConfig(opts: any) {
     .chunkFilename(useHash ? '[name].[contenthash:8].js' : '[name].js')
     .publicPath(config.publicPath)
 
-  webpackConfig.resolve
-    .set('symlinks', true)
-    .modules.add('node_modules')
+  // To be verified .set('symlinks', true)
+  webpackConfig.resolve.modules
+    .add('node_modules')
     .add(paths('../../node_modules'))
     .end()
 
