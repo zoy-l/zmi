@@ -244,6 +244,10 @@ export default class Service extends EventEmitter {
       type: EnumApplyPlugins.event
     })
 
+    // get config, including:
+    // 1. merge default config
+    // 2. validate
+    this.setStage(ServiceStage.getConfig)
     const defaultConfig = await this.applyPlugins({
       key: 'modifyDefaultConfig',
       type: this.ApplyPluginsType.modify,
@@ -256,6 +260,21 @@ export default class Service extends EventEmitter {
       initialValue: this.configInstance.getConfig({
         defaultConfig
       })
+    })
+
+    this.setStage(ServiceStage.getPaths)
+    // config.outputPath may be modified by plugins
+    if (this.config?.outputPath) {
+      this.paths.appOutputPath = path.join(this.cwd, this.config.outputPath)
+    }
+    const paths = await this.applyPlugins({
+      key: 'modifyPaths',
+      type: this.ApplyPluginsType.modify,
+      initialValue: this.paths
+    })
+
+    Object.keys(paths).forEach((key) => {
+      this.paths[key] = paths[key]
     })
   }
 
