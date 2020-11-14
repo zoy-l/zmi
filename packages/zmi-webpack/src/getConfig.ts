@@ -6,12 +6,13 @@ import { paths } from '@zmi/utils'
 import path from 'path'
 
 export default function getConfig(opts: any) {
-  const { env, config, cwd, hot, port } = opts
+  const { env, config, cwd, hot } = opts
 
   const webpackConfig = new WebpackChain()
 
   const isDev = env === 'development'
   const isProd = env === 'production'
+  const disableCompress = process.env.COMPRESS === 'none'
 
   const { devtool } = config
 
@@ -19,7 +20,14 @@ export default function getConfig(opts: any) {
     isDev ? devtool !== false || devtool || 'cheap-module-source-map' : devtool
   )
 
+  const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
+  const useHash = config.hash && isProd
+
   webpackConfig.output
+    .path(appOutputPath)
+    .filename(useHash ? '[name].[contenthash:8].js' : '[name].js')
+    .chunkFilename(useHash ? '[name].[contenthash:8].js' : '[name].js')
+    .publicPath(config.publicPath)
 
   webpackConfig.resolve
     .set('symlinks', true)
@@ -70,21 +78,52 @@ export default function getConfig(opts: any) {
     .use('raw-loader')
     .loader(require.resolve('raw-loader'))
 
-  webpackConfig.when(isDev, (webpackConfig) => {
-    if (hot) {
-      webpackConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
-    }
+  // Turn on react fast refresh
+  // Official implementation
+  // And also added in cra 4.0
+  // https://github.com/pmmmwh/react-refresh-webpack-plugin
+  webpackConfig.when(isDev && hot, (WConfig) => {
+    WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
   })
 
-  if (config.alias) {
+  // IgnorePlugin ignores localized content when packaging
+  // https://www.webpackjs.com/plugins/ignore-plugin/
+  webpackConfig.when(config.ignoreMomentLocale, (WConfig) => {
+    WConfig.plugin('ignore-moment-locale').use(webpack.IgnorePlugin, [
+      {
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/
+      }
+    ])
+  })
+
+  webpackConfig.when(config.externals, (WConfig) => {
+    WConfig.externals(config.externals)
+  })
+
+  webpackConfig.when(config.alias, (WConfig) => {
     Object.keys(config.alias).forEach((key) => {
-      webpackConfig.resolve.alias.set(key, config.alias![key])
+      WConfig.resolve.alias.set(key, config.alias![key])
     })
-  }
+  })
+
+  webpackConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin)
 
   // webpackConfig.externals
 
   let ret = webpackConfig.toConfig()
+
+  // && type === BundlerConfigType.csr
+  if (process.env.SPEED_MEASURE) {
+    const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
+    // prettier-ignore
+    // https://github.com/stephencookdev/speed-measure-webpack-plugin
+    const smpOption = process.env.SPEED_MEASURE === 'CONSOLE'
+        ? { outputFormat: 'human', outputTarget: console.log }
+        : { outputFormat: 'json', outputTarget: path.join(process.cwd(), 'speed-measure.json')}
+    const smp = new SpeedMeasurePlugin(smpOption)
+    ret = smp.wrap(ret)
+  }
 
   return ret
 }

@@ -241,7 +241,7 @@ export default class Service extends EventEmitter {
     this.setStage(ServiceStage.pluginReady)
     await this.applyPlugins({
       key: 'onPluginReady',
-      type: EnumApplyPlugins.event
+      type: this.ApplyPluginsType.event
     })
 
     // get config, including:
@@ -263,6 +263,7 @@ export default class Service extends EventEmitter {
     })
 
     this.setStage(ServiceStage.getPaths)
+
     // config.outputPath may be modified by plugins
     if (this.config?.outputPath) {
       this.paths.appOutputPath = path.join(this.cwd, this.config.outputPath)
@@ -292,7 +293,7 @@ export default class Service extends EventEmitter {
     // 1. Import the plug-in collection, then return a string[]
     // 2. Execute plug-in method and pass in api
     // there is an extra, no `require` is used, but `import` is used
-    // and ʻimport` is a Promise, so ʻawait` is needed here
+    // and ʻimport` is a Promise, so `await` is needed here
     const plugins = (await apply()(api)) as string[] | undefined
 
     // If it is an Array
@@ -332,7 +333,7 @@ export default class Service extends EventEmitter {
   }
 
   async applyPlugins(pluginOptions: IApplyPlugins) {
-    const { add, modify, event } = EnumApplyPlugins
+    const { add, modify, event } = this.ApplyPluginsType
     const { key, type, args, initialValue } = pluginOptions
 
     const hookArgs = {
@@ -445,7 +446,7 @@ export default class Service extends EventEmitter {
     this.setStage(ServiceStage.run)
     await this.applyPlugins({
       key: 'onStart',
-      type: EnumApplyPlugins.event,
+      type: this.ApplyPluginsType.event,
       args: { args }
     })
 

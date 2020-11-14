@@ -1,8 +1,9 @@
-import webpackDevSever from 'webpack-dev-server'
 import { portfinder, prepareUrls, clearConsole, chalk } from '@zmi/utils'
+import webpackDevSever from 'webpack-dev-server'
 import webpack from 'webpack'
-import getConfig from './getConfig'
+
 import createCompiler from './createCompiler'
+import getConfig from './getConfig'
 
 class Bundler {
   cwd: string

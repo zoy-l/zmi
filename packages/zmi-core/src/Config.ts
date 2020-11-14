@@ -72,7 +72,8 @@ export default class Config {
       const { key, config = {} } = plugins[pluginId]
       const value = userConfig[key]
 
-      // recognize as key if have schema config
+      // recognize as key if have `schema` config
+      // disabled when `value` is false
       if (!config.schema || !value) return
 
       const schema = config.schema(Joi)
@@ -82,6 +83,11 @@ export default class Config {
       )
       const { error } = schema.validate(value)
       error && assert(`Validate config "${key}" failed, ${error.message}`)
+
+      const index = userConfigKeys.indexOf(key.split('.')[0])
+      if (index !== -1) {
+        userConfigKeys.splice(index, 1)
+      }
 
       // update userConfig with defaultConfig
       if (key in defaultConfig) {
