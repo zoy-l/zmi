@@ -121,7 +121,7 @@ export default class PluginAPI {
     )
     utils.assert(
       `api.register() failed, hook.fn must supplied and should be function, but got ${hook.fn}.`,
-      hook.fn && typeof hook.fn === 'function'
+      typeof hook.fn === 'function'
     )
     const { hooksByPluginId } = this.service
     hooksByPluginId[this.id] = (hooksByPluginId[this.id] ?? []).concat(hook)

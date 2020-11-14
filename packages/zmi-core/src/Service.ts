@@ -168,6 +168,11 @@ export default class Service extends EventEmitter {
    */
   paths: IServicePaths
 
+  /**
+   * @desc finally config
+   */
+  config: IConfig | null = null
+
   constructor(opts: IServiceOptions) {
     super()
 
@@ -239,18 +244,19 @@ export default class Service extends EventEmitter {
       type: EnumApplyPlugins.event
     })
 
-    // const defaultConfig = await this.applyPlugins({
-    //   key: 'modifyDefaultConfig',
-    //   type: this.ApplyPluginsType.modify,
-    //   initialValue: this.configInstance.getDefaultConfig()
-    // })
-    // this.config = await this.applyPlugins({
-    //   key: 'modifyConfig',
-    //   type: this.ApplyPluginsType.modify,
-    //   initialValue: this.configInstance.getConfig({
-    //     defaultConfig
-    //   }) as any
-    // })
+    const defaultConfig = await this.applyPlugins({
+      key: 'modifyDefaultConfig',
+      type: this.ApplyPluginsType.modify,
+      initialValue: this.configInstance.getDefaultConfig()
+    })
+
+    this.config = await this.applyPlugins({
+      key: 'modifyConfig',
+      type: this.ApplyPluginsType.modify,
+      initialValue: this.configInstance.getConfig({
+        defaultConfig
+      })
+    })
   }
 
   async initPlugins(plugin: IPlugin) {
@@ -325,16 +331,18 @@ export default class Service extends EventEmitter {
 
     // Add hook method into the actuator
     // Prepare for later
+    // prettier-ignore
     const TypeSeriesWaterApply = (
       func: (hook: IHook) => (...Args: any[]) => Promise<any>
     ) => {
       hooks.forEach((hook) => {
-        // prettier-ignore
-        TypeSeriesWater.tapPromise({
-          name: hook.pluginId ?? `$${hook.key}`,
-          stage: hook.stage ?? 0,
-          before: hook.before
-        }, func(hook))
+        if (!this.isPluginEnable(hook.pluginId!)) {
+          TypeSeriesWater.tapPromise({
+            name: hook.pluginId ?? `$${hook.key}`,
+            stage: hook.stage ?? 0,
+            before: hook.before
+          }, func(hook))
+        }
       })
     }
 
@@ -363,7 +371,9 @@ export default class Service extends EventEmitter {
           `applyPlugin failed, type is not defined or is not matched, got "${type}".`
         )
     }
-    return TypeSeriesWater.promise(hookArgs[EnumApplyPlugins[typeIndex]])
+    return TypeSeriesWater.promise(
+      hookArgs[EnumApplyPlugins[typeIndex]]
+    ) as Promise<any>
   }
 
   registerPlugin(plugin: IPlugin) {

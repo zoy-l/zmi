@@ -9,6 +9,7 @@ export default {
     'zmi',
     'zmi-core',
     'zmi-preset',
-    'zmi-test'
+    'zmi-test',
+    'zmi-webpack'
   ]
 }

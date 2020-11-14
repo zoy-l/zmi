@@ -1,4 +1,4 @@
-import { portfinder } from '../../../../../zmi-utils/lib'
+import { portfinder } from '@zmi/utils'
 
 export default (api: any) => {
   let port: number
@@ -7,7 +7,7 @@ export default (api: any) => {
   api.registerCommand({
     name: 'dev',
     description: 'start a dev server for development',
-    fn: async ({ args }) => {
+    fn: async ({ args }: any) => {
       const defaultPort =
         process.env.PORT ?? args?.port ?? api.config.devServer?.port
 

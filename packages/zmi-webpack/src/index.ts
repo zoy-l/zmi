@@ -17,7 +17,7 @@ class Bundler {
     return getConfig({})
   }
 
-  async setupDevServer(): Promise<any> {
+  async setupDevServer() {
     if (process.env.PORT) {
     }
     const port = await portfinder.getPortPromise({ port: 6060 })
