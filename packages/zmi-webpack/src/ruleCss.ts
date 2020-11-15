@@ -12,12 +12,17 @@ interface IOpts {
   miniCSSExtractPluginLoaderPath?: string
 }
 
-interface ICreateCSSRuleOpts extends IOpts {
+interface ICreateCSSRuleOpts {
   lang: string
   test: RegExp
   loader?: string
   options?: Record<string, unknown>
 }
+
+type IApplyLoadersOpts = {
+  rule: Config.Rule<Config.Rule>
+  isCSSModules: boolean
+} & Omit<ICreateCSSRuleOpts, 'test' | 'lang'>
 
 export default class RuleCss {
   options: IOpts
@@ -26,35 +31,41 @@ export default class RuleCss {
     this.options = options
   }
 
-  createCSSRule(options: ICreateCSSRuleOpts) {
-    const { webpackConfig, lang, test } = options
+  createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
+    const { lang, test, loader, options } = createCSSRuleOptions
+    const { webpackConfig } = this.options
     const rule = webpackConfig.module.rule(lang).test(test)
 
     this.applyLoaders({
       rule: rule.oneOf('css-modules').resourceQuery(/modules/),
-      isCSSModules: true
+      isCSSModules: true,
+      loader,
+      options
     })
-    this.applyLoaders({ rule: rule.oneOf('css'), isCSSModules: false })
+    this.applyLoaders({
+      rule: rule.oneOf('css'),
+      isCSSModules: false,
+      loader,
+      options
+    })
   }
 
-  applyLoaders(applyLoadersOptions: {
-    rule: Config.Rule<Config.Rule>
-    isCSSModules: boolean
-    loader?: string
-    options?: Record<string, unknown>
-  }) {
-    const { config, isDev } = this.options
+  applyLoaders(applyLoadersOptions: IApplyLoadersOpts) {
     const { rule, isCSSModules, loader, options } = applyLoadersOptions
+    const { config, isDev } = this.options
+
     // prettier-ignore
-    rule.when(config.styleLoader, (WConfig) => {
+    rule.when(config.styleLoader,
+    (WConfig) => {
       WConfig.use('style-loader')
         .loader(require.resolve('style-loader'))
         .options(
           deepmerge({
-              base: 0
+            base: 0
           }, config.styleLoader)
         )
     },(WConfig)=>{
+  
       if (!config.styleLoader) {
         WConfig
           .use('extract-css-loader')
@@ -87,26 +98,9 @@ export default class RuleCss {
   }
 
   step() {
-    const {
-      type,
-      config,
-      webpackConfig,
-      isDev,
-      // disableCompress,
-      browserslist,
-      // miniCSSExtractPluginPath,
-      miniCSSExtractPluginLoaderPath
-    } = this.options
-
     this.createCSSRule({
-      type,
-      webpackConfig,
-      config,
-      isDev,
       lang: 'css',
-      test: /\.(css)(\?.*)?$/,
-      browserslist,
-      miniCSSExtractPluginLoaderPath
+      test: /\.(css)(\?.*)?$/
     })
   }
 }
