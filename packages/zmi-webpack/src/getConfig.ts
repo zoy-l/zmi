@@ -12,7 +12,7 @@ export default function getConfig(opts: any) {
 
   const isDev = env === 'development'
   const isProd = env === 'production'
-  const disableCompress = process.env.COMPRESS === 'none'
+  // const disableCompress = process.env.COMPRESS === 'none'
 
   const { devtool } = config
 
