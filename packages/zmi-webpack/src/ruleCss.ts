@@ -20,22 +20,31 @@ interface ICreateCSSRuleOpts extends IOpts {
 }
 
 export default class RuleCss {
-  options: ICreateCSSRuleOpts
+  options: IOpts
 
-  constructor(options: ICreateCSSRuleOpts) {
+  constructor(options: IOpts) {
     this.options = options
   }
 
   createCSSRule(options: ICreateCSSRuleOpts) {
-    const { webpackConfig, lang } = options
+    const { webpackConfig, lang, test } = options
     const rule = webpackConfig.module.rule(lang).test(test)
 
-    this.applyLoaders(rule.oneOf('css-modules').resourceQuery(/modules/), true)
-    this.applyLoaders(rule.oneOf('css'), false)
+    this.applyLoaders({
+      rule: rule.oneOf('css-modules').resourceQuery(/modules/),
+      isCSSModules: true
+    })
+    this.applyLoaders({ rule: rule.oneOf('css'), isCSSModules: false })
   }
 
-  applyLoaders(rule: Config.Rule<Config.Rule>, isCSSModules: boolean) {
+  applyLoaders(applyLoadersOptions: {
+    rule: Config.Rule<Config.Rule>
+    isCSSModules: boolean
+    loader?: string
+    options?: Record<string, unknown>
+  }) {
     const { config, isDev } = this.options
+    const { rule, isCSSModules, loader, options } = applyLoadersOptions
     // prettier-ignore
     rule.when(config.styleLoader, (WConfig) => {
       WConfig.use('style-loader')
@@ -70,7 +79,11 @@ export default class RuleCss {
       }
     )
 
-    // rule.when()
+    rule.when(!!loader, (WConfig) => {
+      WConfig.use(loader!)
+        .loader(loader!)
+        .options(options ?? {})
+    })
   }
 
   step() {
