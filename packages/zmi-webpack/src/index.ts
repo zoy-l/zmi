@@ -1,12 +1,13 @@
-import { portfinder, prepareUrls, clearConsole, chalk } from '@zmi/utils'
-import webpackDevSever from 'webpack-dev-server'
-import webpack from 'webpack'
+// import { portfinder, prepareUrls, clearConsole, chalk } from '@zmi/utils'
+// import webpackDevSever from 'webpack-dev-server'
+// import defaultWebpack from 'webpack'
 
-import createCompiler from './createCompiler'
-import getConfig from './getConfig'
+// import createCompiler from './createCompiler'
+import getConfig, { IGetConfigOpts } from './getConfig'
 
-class Bundler {
+export default class Bundler {
   cwd: string
+
   config: any
 
   constructor({ cwd, config }: any) {
@@ -14,34 +15,31 @@ class Bundler {
     this.config = config
   }
 
-  getConfig() {
-    return getConfig({})
+  async getConfig(options: IGetConfigOpts) {
+    return getConfig({ ...options, cwd: this.cwd, config: this.config })
   }
 
   async setupDevServer() {
-    if (process.env.PORT) {
-    }
-    const port = await portfinder.getPortPromise({ port: 6060 })
-    const urls = prepareUrls({ host: '0.0.0.0', port })
-    const config = this.getConfig()
-    const compiler = createCompiler({
-      port,
-      urls,
-      config,
-      appName: 'app'
-    })
-
-    const devServer = new webpackDevSever(compiler, config.devServer)
-
-    devServer.listen(port, urls.localUrlForTerminal, (err) => {
-      if (err) {
-        return console.log(err)
-      }
-      clearConsole()
-      console.log()
-      console.log(chalk.blue('🎯 Speed ​​up the server,Wait a minute...'))
-    })
-
-    return
+    // if (process.env.PORT) {
+    // }
+    // const port = await portfinder.getPortPromise({ port: 6060 })
+    // const urls = prepareUrls({ host: '0.0.0.0', port })
+    // // const config = await this.getConfig()
+    // const compiler = createCompiler({
+    //   port,
+    //   urls,
+    //   // config,
+    //   appName: 'app'
+    // })s
+    // const devServer = new webpackDevSever(compiler, config.devServer)
+    // devServer.listen(port, urls.localUrlForTerminal, (err) => {
+    //   if (err) {
+    //     return console.log(err)
+    //   }
+    //   clearConsole()
+    //   console.log()
+    //   console.log(chalk.blue('🎯 Speed ​​up the server,Wait a minute...'))
+    // })
+    // return
   }
 }

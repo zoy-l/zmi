@@ -53,7 +53,7 @@ function printInstructions(opts: { appName: string; urls: any; port: number }) {
 
 function createCompiler(opts: {
   appName: string
-  config: any
+  // config: any
   urls: any
   port: number
 }) {

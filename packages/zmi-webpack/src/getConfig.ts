@@ -1,17 +1,62 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import WebpackChain from 'webpack-chain'
+import defaultWebpack from 'webpack'
 import { paths } from '@zmi/utils'
-import webpack from 'webpack'
 import path from 'path'
 
-export default function getConfig(opts: any) {
-  const { env, config, cwd, hot } = opts
+import RuleCss from './RuleCss'
 
-  const webpackConfig = new WebpackChain()
+export interface IGetConfigOpts {
+  cwd: string
+  config: any
+  type: any
+  env: 'development' | 'production'
+  entry?: {
+    [key: string]: string
+  }
+  hot?: boolean
+  port?: number
+  babelOpts?: Record<string, unknown>
+  babelOptsForDep?: Record<string, unknown>
+  targets?: any
+  browserslist?: any
+  bundleImplementor?: typeof defaultWebpack
+  modifyBabelOpts?: (opts: Record<string, unknown>) => Promise<any>
+  modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
+  chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
+  miniCSSExtractPluginPath?: string
+  miniCSSExtractPluginLoaderPath?: string
+  __disableTerserForTest?: boolean
+}
+
+export default async function getConfig(opts: IGetConfigOpts) {
+  const {
+    env,
+    config,
+    cwd,
+    hot,
+    type,
+    bundleImplementor = defaultWebpack,
+    miniCSSExtractPluginLoaderPath
+  } = opts
 
   const isDev = env === 'development'
   const isProd = env === 'production'
+
+  let webpackConfig = new WebpackChain()
+  const createCSSRule = new RuleCss({
+    webpackConfig,
+    config,
+    isDev,
+    type,
+    // browserslist,
+    miniCSSExtractPluginLoaderPath
+  })
+
+  // Set css
+  createCSSRule.step()
+
   // const disableCompress = process.env.COMPRESS === 'none'
 
   const { devtool } = config
@@ -78,23 +123,31 @@ export default function getConfig(opts: any) {
     .use('raw-loader')
     .loader(require.resolve('raw-loader'))
 
+  if (opts.chainWebpack) {
+    webpackConfig = await opts.chainWebpack(webpackConfig, {
+      createCSSRule: createCSSRule.createCSSRule,
+      webpack: bundleImplementor,
+      type
+    })
+  }
+
   // Turn on react fast refresh
   // Official implementation
   // And also added in cra 4.0
   // https://github.com/pmmmwh/react-refresh-webpack-plugin
-  webpackConfig.when(isDev && hot, (WConfig) => {
+  webpackConfig.when(isDev && !!hot, (WConfig) => {
     WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
   })
 
   // IgnorePlugin ignores localized content when packaging
   // https://www.webpackjs.com/plugins/ignore-plugin/
+  // prettier-ignore
   webpackConfig.when(config.ignoreMomentLocale, (WConfig) => {
-    WConfig.plugin('ignore-moment-locale').use(webpack.IgnorePlugin, [
-      {
+    WConfig.plugin('ignore-moment-locale').use(bundleImplementor.IgnorePlugin,
+      [{
         resourceRegExp: /^\.\/locale$/,
         contextRegExp: /moment$/
-      }
-    ])
+      }])
   })
 
   webpackConfig.when(config.externals, (WConfig) => {
