@@ -223,7 +223,7 @@ export default class Service extends EventEmitter {
     this.setStage(ServiceStage.initPlugins)
     while (this.extraPlugins.length) {
       // An error will be reported here because `ESlint` prohibits all circular use of `await`
-      // It is safe to use `await` in a loop without callbacks
+      // It is safe to use `await` in a loop without callback
       // eslint-disable-next-line no-await-in-loop
       await this.initPlugins(this.extraPlugins.shift()!)
     }
