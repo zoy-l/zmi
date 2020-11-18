@@ -1,9 +1,14 @@
 // import { portfinder, prepareUrls, clearConsole, chalk } from '@zmi/utils'
 // import webpackDevSever from 'webpack-dev-server'
-// import defaultWebpack from 'webpack'
+import defaultWebpack from 'webpack'
 
 // import createCompiler from './createCompiler'
 import getConfig, { IGetConfigOpts } from './getConfig'
+
+interface ISetupOpts {
+  bundleConfigs: defaultWebpack.Configuration[]
+  bundleImplementor?: typeof defaultWebpack
+}
 
 export default class Bundler {
   cwd: string
@@ -19,7 +24,15 @@ export default class Bundler {
     return getConfig({ ...options, cwd: this.cwd, config: this.config })
   }
 
-  async setupDevServer() {
+  async setupDevServer(options: ISetupOpts) {
+    const { bundleConfigs, bundleImplementor = defaultWebpack } = options
+
+    const compiler = bundleImplementor(bundleConfigs)
+
+    return {
+      onListening: () => {},
+      compiler
+    }
     // if (process.env.PORT) {
     // }
     // const port = await portfinder.getPortPromise({ port: 6060 })

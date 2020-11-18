@@ -1,7 +1,11 @@
 {
   "name": "@zmi/types",
   "version": "1.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "license": "MIT"
+  "main": "lib/index.js",
+  "types": "index",
+  "license": "MIT",
+  "files": [
+    "index.d.ts",
+    "index.js"
+  ]
 }

@@ -1,9 +1,4 @@
-// import {
-//   IConfig,
-//   ITargets,
-//   BundlerConfigType,
-//   IBundlerConfigType
-// } from '@zmi/types'
+import { BundlerConfigType } from '@zmi/types'
 
 interface IOpts {
   config: any
@@ -17,7 +12,7 @@ export default function ({ config, type }: IOpts) {
     .filter((key) => {
       // filter false and 0 targets
       if (targets[key] === false) return false
-      // if (type === BundlerConfigType.ssr) return key === 'node'
+      if (type === BundlerConfigType.ssr) return key === 'node'
       return key !== 'node'
     })
     .reduce((memo, key) => {
