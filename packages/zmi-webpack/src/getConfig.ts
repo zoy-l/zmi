@@ -5,7 +5,7 @@ import defaultWebpack from 'webpack'
 import { paths } from '@zmi/utils'
 import path from 'path'
 
-import RuleCss from './RuleCss'
+import RuleCss from './ruleCss'
 
 export interface IGetConfigOpts {
   cwd: string

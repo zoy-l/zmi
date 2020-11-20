@@ -50,8 +50,9 @@ export default class Bundler {
     //     return console.log(err)
     //   }
     //   clearConsole()
+
     //   console.log()
-    //   console.log(chalk.blue('🎯 Speed ​​up the server,Wait a minute...'))
+
     // })
     // return
   }

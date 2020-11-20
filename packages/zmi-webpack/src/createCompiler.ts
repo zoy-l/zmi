@@ -1,6 +1,6 @@
 import webpack from 'webpack'
-import forkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import { Issue } from 'fork-ts-checker-webpack-plugin/lib/issue'
+// import forkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+// import { Issue } from 'fork-ts-checker-webpack-plugin/lib/issue'
 import { chalk, clearConsole } from '@zmi/utils'
 import formatWebpackMessages from './formatWebpackMessages'
 
@@ -53,7 +53,7 @@ function printInstructions(opts: { appName: string; urls: any; port: number }) {
 
 function createCompiler(opts: {
   appName: string
-  // config: any
+  config: any
   urls: any
   port: number
 }) {
@@ -71,21 +71,21 @@ function createCompiler(opts: {
     process.exit(1)
   }
 
-  let isFirstCompile = true
+  // let isFirstCompile = true
 
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
     console.log(chalk.cyan('🎯 Accelerating compilation ,Wait a moment...'))
   })
 
-  const forkHook = forkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
+  // const forkHook = forkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
 
-  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues): Issue[] => {
-    if (issues.length) {
-      clearConsole()
-    }
-    return []
-  })
+  // forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues): Issue[] => {
+  //   if (issues.length) {
+  //     clearConsole()
+  //   }
+  //   return []
+  // })
 
   compiler.hooks.done.tap('done', (stats) => {
     const statsData = stats.toJson({
@@ -101,7 +101,7 @@ function createCompiler(opts: {
       printInstructions({ appName, urls, port })
     }
 
-    isFirstCompile = false
+    // isFirstCompile = false
 
     if (messages.errors.length) {
       if (messages.errors.length > 1) {
