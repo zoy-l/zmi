@@ -13,7 +13,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
+    "@babel/core": "^7.12.7",
     "babel-jest": "^26.6.3",
     "core-js": "^3.7.0",
     "identity-obj-proxy": "^3.0.0",

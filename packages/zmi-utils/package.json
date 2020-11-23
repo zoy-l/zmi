@@ -11,7 +11,7 @@
     "@types/mkdirp": "^1.0.1",
     "@types/mustache": "^4.0.1",
     "@types/resolve": "^1.17.1",
-    "@types/yargs": "^15.0.7",
+    "@types/yargs": "^15.0.10",
     "@types/yargs-parser": "^15.0.0",
     "address": "^1.1.2",
     "chalk": "^4.1.0",
@@ -27,7 +27,7 @@
     "portfinder": "^1.0.28",
     "resolve": "^1.19.0",
     "url": "^0.11.0",
-    "yargs": "^16.0.3",
+    "yargs": "^16.1.1",
     "yargs-parser": "^20.2.4"
   }
 }
