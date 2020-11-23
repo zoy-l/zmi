@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "jsx": "preserve",
+    "strict": true,
     "allowJs": false,
+    "jsx": "preserve",
+    "target": "esnext",
+    "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
     "suppressImplicitAnyIndexErrors": true,
-    "declaration": true
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["packages"],
   "exclude": ["dist", "node_modules", "**/*.spec.ts"]
