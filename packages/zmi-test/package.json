@@ -13,9 +13,9 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.7",
+    "@babel/core": "^7.12.9",
     "babel-jest": "^26.6.3",
-    "core-js": "^3.7.0",
+    "core-js": "^3.8.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-cli": "^26.6.3",

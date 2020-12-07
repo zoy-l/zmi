@@ -10,6 +10,6 @@
   "devDependencies": {
     "dotenv": "^8.2.0",
     "joi": "^17.3.0",
-    "tapable": "^2.1.1"
+    "tapable": "^2.2.0"
   }
 }
