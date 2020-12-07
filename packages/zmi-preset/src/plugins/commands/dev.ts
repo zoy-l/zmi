@@ -38,10 +38,12 @@ export default async (api: any) => {
         bundleImplementor
       } = await getBundleAndConfigs({ api, port })
 
-      const ServerOpts: IServerOpts = bundler.setupDevServer({
+      const ServerOpts = await bundler.setupDevServer({
         bundleConfigs,
         bundleImplementor
       })
+
+      ServerOpts.compiler
     }
   })
 
