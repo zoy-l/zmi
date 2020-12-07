@@ -9,18 +9,25 @@ export async function getBundleAndConfigs(options: {
 }) {
   const { api, port } = options
 
+  // Apply webpack launcher to get an instance
+  // Also used to switch between different build tools
+  // Built-in device by default
   const Bundler = await api.applyPlugins({
     type: api.ApplyPluginsType.modify,
     key: 'modifyBundler',
     initialValue: DefaultBundler
   })
 
+  // Used to get webpack instance
+  // No changes are made here, but developers may change
+  // Use built-in webpack by default
   const bundleImplementor = await api.applyPlugins({
     key: 'modifyBundleImplementor',
     type: api.ApplyPluginsType.modify,
     initialValue: undefined
   })
 
+  // Initialize the webpack launcher
   const bundler: DefaultBundler = new Bundler({
     cwd: api.cwd,
     config: api.config
@@ -30,6 +37,11 @@ export async function getBundleAndConfigs(options: {
     env: api.env,
     bundler: { id: Bundler.id, version: Bundler.version }
   }
+
+  const getArgs = (otps: Record<string, any>) => ({
+    ...otps,
+    bundlerArgs
+  })
 
   async function getConfig({ type }: { type: any }) {
     const env: Env = api.env === 'production' ? 'production' : 'development'
@@ -67,19 +79,13 @@ export async function getBundleAndConfigs(options: {
           })
         }
       },
-      args: {
-        ...bundlerArgs,
-        type
-      }
+      args: getArgs({ type })
     })
     return api.applyPlugins({
       type: api.ApplyPluginsType.modify,
       key: 'modifyBundleConfig',
       initialValue: await bundler.getConfig(getConfigOpts),
-      args: {
-        ...bundlerArgs,
-        type
-      }
+      args: getArgs({ type })
     })
   }
 
@@ -89,10 +95,7 @@ export async function getBundleAndConfigs(options: {
     initialValue: [await getConfig({ type: BundlerConfigType.csr })].filter(
       Boolean
     ),
-    args: {
-      ...bundlerArgs,
-      getConfig
-    }
+    args: getArgs({ getConfig })
   })
 
   return {
