@@ -11,7 +11,7 @@
     "zmi-build": "father-build",
     "zmi-build:watch": "father-build --watch",
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
-    "zmi-clean:modules": "lerna clean --yes",
+    "zmi-clean:modules": "lerna clean --ignore zmi-webpack --yes",
     "zmi-update:deps": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {

@@ -29,7 +29,7 @@ export default async (api: any) => {
         bundleImplementor
       })
 
-      devServer((err: Error) => {
+      devServer((err: Error | undefined) => {
         if (err) {
           return console.log(err)
         }
