@@ -1,4 +1,4 @@
-import { assert, chalk, portfinder } from '@zmi/utils'
+import { assert, chalk, portfinder, clearConsole } from '@zmi/utils'
 
 import { getBundleAndConfigs } from './BundleUtils'
 
@@ -15,22 +15,6 @@ export default async (api: any) => {
 
       port = await portfinder.getPortPromise({ port: defaultPort })
       host = process.env.HOST ?? api.config.devServer?.host ?? '0.0.0.0'
-      // const urls = prepareUrls({ host: '0.0.0.0', port })
-
-      console.log(host)
-
-      // const beforeMiddlewares = await api.applyPlugins({
-      //   key: 'addBeforeMiddewares',
-      //   type: api.ApplyPluginsType.add,
-      //   initialValue: [],
-      //   args: {}
-      // })
-      // const middlewares = await api.applyPlugins({
-      //   key: 'addMiddewares',
-      //   type: api.ApplyPluginsType.add,
-      //   initialValue: [],
-      //   args: {}
-      // })
 
       const {
         bundler,
@@ -38,12 +22,21 @@ export default async (api: any) => {
         bundleImplementor
       } = await getBundleAndConfigs({ api, port })
 
-      const ServerOpts = await bundler.setupDevServer({
+      const { devServer } = await bundler.setupDevServer({
+        port,
+        host,
         bundleConfigs,
         bundleImplementor
       })
 
-      ServerOpts.compiler
+      devServer((err: Error) => {
+        if (err) {
+          return console.log(err)
+        }
+        clearConsole()
+        console.log()
+        console.log(chalk.blue(`Speed up the server,Wait a minute...\n`))
+      })
     }
   })
 

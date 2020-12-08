@@ -1,13 +1,14 @@
-// import { portfinder, prepareUrls, clearConsole, chalk } from '@zmi/utils'
-// import webpackDevSever from 'webpack-dev-server'
+import WebpackDevServer from 'webpack-dev-server'
 import defaultWebpack from 'webpack'
 
-// import createCompiler from './createCompiler'
+import createCompiler, { prepareUrls } from './createCompiler'
 import getConfig, { IGetConfigOpts } from './getConfig'
 
 interface ISetupOpts {
-  bundleConfigs: defaultWebpack.Configuration[]
+  bundleConfigs: defaultWebpack.Configuration
   bundleImplementor?: typeof defaultWebpack
+  port: number
+  host: string
 }
 
 export default class Bundler {
@@ -25,35 +26,35 @@ export default class Bundler {
   }
 
   async setupDevServer(options: ISetupOpts) {
-    const { bundleConfigs, bundleImplementor = defaultWebpack } = options
+    const {
+      bundleConfigs,
+      bundleImplementor = defaultWebpack,
+      host,
+      port
+    } = options
 
-    const compiler = bundleImplementor(bundleConfigs)
+    const { devServer: devServerConifg } = this.config
+    const urls = prepareUrls(null, host, port)
+
+    const compiler = createCompiler({
+      config: bundleConfigs,
+      bundleImplementor,
+      appName: '',
+      urls,
+      port
+    })
+
+    // This should be webpack-dev-server types error
+    // I'm not sure, I didn't find relevant information
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const devServer = new WebpackDevServer(compiler, devServerConifg ?? {})
 
     return {
       onListening: () => {},
-      compiler
+      devServer: (callback: (err: Error | undefined) => void) => {
+        return devServer.listen(port, host, callback)
+      }
     }
-    // if (process.env.PORT) {
-    // }
-    // const port = await portfinder.getPortPromise({ port: 6060 })
-    // const urls = prepareUrls({ host: '0.0.0.0', port })
-    // // const config = await this.getConfig()
-    // const compiler = createCompiler({
-    //   port,
-    //   urls,
-    //   // config,
-    //   appName: 'app'
-    // })s
-    // const devServer = new webpackDevSever(compiler, config.devServer)
-    // devServer.listen(port, urls.localUrlForTerminal, (err) => {
-    //   if (err) {
-    //     return console.log(err)
-    //   }
-    //   clearConsole()
-
-    //   console.log()
-
-    // })
-    // return
   }
 }

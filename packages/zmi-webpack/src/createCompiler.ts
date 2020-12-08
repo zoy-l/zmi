@@ -1,32 +1,101 @@
-import webpack from 'webpack'
 // import forkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 // import { Issue } from 'fork-ts-checker-webpack-plugin/lib/issue'
 import { chalk, clearConsole } from '@zmi/utils'
+import address from 'address'
+import webpack from 'webpack'
+import url from 'url'
+
 import formatWebpackMessages from './formatWebpackMessages'
 
-const makeLine = (num: number, sign = ' ') => new Array(num).join(sign)
+interface IUrlType {
+  lanUrlForConfig: any
+  lanUrlForTerminal: string | undefined
+  localUrlForTerminal: string
+  localUrlForBrowser: string
+}
 
+const makeLine = (num: number, sign = ' ') => new Array(num).join(sign)
 const line = (interval: string, isTop: boolean) =>
   `${isTop ? '┌' : '└'}${makeLine(29, '─')}${interval}${isTop ? '┐' : '┘'}`
+const urlRe = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
-function printInstructions(opts: { appName: string; urls: any; port: number }) {
+export function prepareUrls(
+  protocol: string | null | undefined = 'http',
+  host: string,
+  port: number,
+  pathname = '/'
+) {
+  const formatUrl = (hostname: string) =>
+    url.format({
+      protocol,
+      hostname,
+      port,
+      pathname
+    })
+  const prettyPrintUrl = (hostname: string) =>
+    url.format({
+      protocol,
+      hostname,
+      port: chalk.bold(port),
+      pathname
+    })
+
+  const isUnspecifiedHost = host === '0.0.0.0' || host === '::'
+
+  let prettyHost
+  let lanUrlForConfig
+  let lanUrlForTerminal
+
+  if (isUnspecifiedHost) {
+    prettyHost = 'localhost'
+    try {
+      lanUrlForConfig = address.ip()
+      if (lanUrlForConfig) {
+        if (urlRe.test(lanUrlForConfig)) {
+          lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig)
+        } else {
+          lanUrlForConfig = undefined
+        }
+      }
+    } catch (_e) {
+      // ignored
+    }
+  } else {
+    prettyHost = host
+  }
+
+  const localUrlForTerminal = prettyPrintUrl(prettyHost)
+  const localUrlForBrowser = formatUrl(prettyHost)
+
+  return {
+    lanUrlForConfig,
+    lanUrlForTerminal,
+    localUrlForTerminal,
+    localUrlForBrowser
+  }
+}
+
+function printInstructions(opts: {
+  appName: string
+  urls: IUrlType
+  port: number
+}) {
   const { appName, urls, port } = opts
+  const { yellow, cyan } = chalk
+  const { log } = console
 
-  console.log('📦  Compiled successfully! ')
-  console.log()
+  log('📦  Compiled successfully! ')
+  log()
 
   const interval = makeLine(appName.length + 6, '─')
+  const portMakeLine = makeLine(appName.length - 3)
 
-  console.log(
+  log(
     [
       line(interval, true),
       // devConifg.target !== 'web' &&
-      `│ Running metro bundler on Port: ${chalk.yellow.bold(port)} ${makeLine(
-        appName.length - 3
-      )}│`,
-
-      `│ You can now view your Project: ${chalk.yellow.bold(appName)} │`,
-
+      `│ Running metro bundler on Port: ${yellow(port)} ${portMakeLine}│`,
+      `│ You can now view your Project: ${yellow(appName)} │`,
       line(interval, false)
     ]
       .filter(Boolean)
@@ -35,39 +104,35 @@ function printInstructions(opts: { appName: string; urls: any; port: number }) {
 
   // if (devConifg.target === 'web') {
   if (urls.lanUrlForTerminal) {
-    console.log('|')
-    console.log(
-      `|- Localhost: ${chalk.cyan(`http://${urls.localUrlForTerminal}`)}`
-    )
-    console.log('|')
-    console.log(`|- Network: ${chalk.cyan(`http://${urls.lanUrlForTerminal}`)}`)
+    log('|')
+    log(`|- Localhost: ${cyan(urls.localUrlForTerminal)}`)
+    log('|')
+    log(`|- Network: ${cyan(urls.lanUrlForTerminal)}`)
   } else {
-    console.log(
-      `|- Localhost: ${chalk.cyan(`http://${urls.localUrlForTerminal}`)}`
-    )
+    log(`|- Localhost: ${cyan(urls.localUrlForTerminal)}`)
   }
   // }
-
-  console.log()
+  log()
 }
 
 function createCompiler(opts: {
   appName: string
-  config: any
-  urls: any
+  config: webpack.Configuration
+  urls: IUrlType
   port: number
+  bundleImplementor: typeof webpack
 }) {
-  const { appName, config, urls, port } = opts
+  const { appName, config, urls, port, bundleImplementor } = opts
+  const { log } = console
 
-  // const { error, process: pack, warning } = compilerEndStaticText
-  let compiler
+  let compiler: webpack.Compiler
 
   try {
-    compiler = webpack(config)
+    compiler = bundleImplementor(config)
   } catch (err) {
-    console.log(chalk.red('❌ Compilation failed.'))
-    console.log()
-    console.log(err.message || err)
+    log(chalk.red('❌ Compilation failed.'))
+    log()
+    log(err.message ?? err)
     process.exit(1)
   }
 
@@ -75,7 +140,7 @@ function createCompiler(opts: {
 
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
-    console.log(chalk.cyan('🎯 Accelerating compilation ,Wait a moment...'))
+    log(chalk.cyan('🎯 Accelerating compilation ,Wait a moment...'))
   })
 
   // const forkHook = forkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
@@ -107,14 +172,15 @@ function createCompiler(opts: {
       if (messages.errors.length > 1) {
         messages.errors.length = 1
       }
-      console.log(chalk.red('❌ Compilation failed.\n'))
-      console.log(chalk.red(messages.errors.join('\n\n')))
+      log(chalk.red('❌ Compilation failed.\n'))
+      log(chalk.red(messages.errors.join('\n\n')))
       return
     }
+
     if (messages.warnings.length) {
-      console.log(chalk.yellow(`🚸 Compile warning.\n`))
-      console.log(messages.warnings.join('\n\n'))
-      console.log()
+      log(chalk.yellow(`🚸 Compile warning.\n`))
+      log(messages.warnings.join('\n\n'))
+      log()
     }
   })
 
