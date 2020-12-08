@@ -238,6 +238,8 @@ export default class Service extends EventEmitter {
       })
     })
 
+    debugger
+
     this.setStage(ServiceStage.pluginReady)
     await this.applyPlugins({
       key: 'onPluginReady',
@@ -323,7 +325,9 @@ export default class Service extends EventEmitter {
         // The plugin Method has the highest weight, followed by Service, and finally plugin API
         // Because pluginMethods needs to be available in the register phase
         // The latest update must be dynamically obtained through proxy to achieve the effect of registering and using
-        return this.pluginMethods[prop] ?? ServiceAttribute.includes(prop)
+        return this.pluginMethods[prop]
+          ? this.pluginMethods[prop]
+          : ServiceAttribute.includes(prop)
           ? typeof this[prop] === 'function'
             ? this[prop].bind(this)
             : this[prop]
@@ -391,6 +395,7 @@ export default class Service extends EventEmitter {
           `applyPlugin failed, type is not defined or is not matched, got "${type}".`
         )
     }
+
     return TypeSeriesWater.promise(
       hookArgs[EnumApplyPlugins[typeIndex]]
     ) as Promise<any>

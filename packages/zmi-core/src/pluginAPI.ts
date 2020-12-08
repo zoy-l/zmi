@@ -123,6 +123,7 @@ export default class PluginAPI {
       `api.register() failed, hook.fn must supplied and should be function, but got ${hook.fn}.`,
       typeof hook.fn === 'function'
     )
+
     const { hooksByPluginId } = this.service
     hooksByPluginId[this.id] = (hooksByPluginId[this.id] ?? []).concat(hook)
   }

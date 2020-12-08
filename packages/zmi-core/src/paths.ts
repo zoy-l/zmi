@@ -15,7 +15,7 @@ function isDirectoryAndExist(path: string) {
 }
 
 function normalizeWithWinPath<T extends Record<string, string>>(obj: T) {
-  return lodash.mapValues(obj, (value) => winPath(value))
+  return lodash.mapValues(obj, (value: string) => winPath(value))
 }
 
 export default function servicePath(options: IServicePath): IServicePaths {
