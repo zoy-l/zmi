@@ -81,6 +81,7 @@ export async function getBundleAndConfigs(options: {
       },
       args: getArgs({ type })
     })
+
     return api.applyPlugins({
       type: api.ApplyPluginsType.modify,
       key: 'modifyBundleConfig',
@@ -97,6 +98,7 @@ export async function getBundleAndConfigs(options: {
     ),
     args: getArgs({ getConfig })
   })
+  debugger
 
   return {
     bundleImplementor,

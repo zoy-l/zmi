@@ -65,7 +65,7 @@ export default class RuleCss {
           }, config.styleLoader)
         )
     },(WConfig)=>{
-  
+
       if (!config.styleLoader) {
         WConfig
           .use('extract-css-loader')

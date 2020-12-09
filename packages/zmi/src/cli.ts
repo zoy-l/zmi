@@ -48,6 +48,7 @@ launchDevice(dyo).then(({ args, command }) => {
         })
         break
     }
+
   } catch (err) {
     console.log(chalk.red(err.message))
     console.log(err.stack)

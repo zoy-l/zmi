@@ -62,7 +62,11 @@ export default async function getConfig(opts: IGetConfigOpts) {
   const { devtool } = config
 
   webpackConfig.devtool(
-    isDev ? devtool !== false || devtool || 'cheap-module-source-map' : devtool
+    !isDev
+      ? devtool
+      : devtool === false
+      ? false
+      : devtool ?? 'cheap-module-source-map'
   )
 
   const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
