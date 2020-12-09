@@ -1,3 +1,4 @@
 /node_modules
 /packages/*/lib
 /packages/*/node_modules
+/examples/*/node_modules
