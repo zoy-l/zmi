@@ -1,4 +1,5 @@
 import { deepmerge } from '@zmi/utils'
+import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import Config from 'webpack-chain'
 
 interface IOpts {
@@ -62,24 +63,35 @@ export default class RuleCss {
         .options(
           deepmerge({
             base: 0
-          }, config.styleLoader)
+          }, config.styleLoader ?? {})
         )
     },(WConfig)=>{
-
       if (!config.styleLoader) {
         WConfig
           .use('extract-css-loader')
-          // .loader(
-          //   miniCSSExtractPluginLoaderPath ||
-          //     require('../../mini-css-extract-plugin/dist/index').default
-          //       .loader,
-          // )
-          // .options({
-          //   publicPath: './',
-          //   hmr: isDev,
-          // });
+          .loader(miniCssExtractPlugin.loader)
+          .options({
+            publicPath: './',
+            hmr: isDev,
+          });
       }
     })
+
+    // prettier-ignore
+    rule.use('css-loader')
+      .loader(require.resolve('css-loader'))
+      .options(
+        deepmerge(
+          { importLoaders: 1,
+            ...(isCSSModules
+              ? {modules: {
+                  localIdentName: '[local]___[hash:base64:5]'
+                }}
+              : {})
+          },
+          config.cssLoader ?? {}
+        )
+      )
 
     rule.when(
       isDev && isCSSModules && config.cssModulesTypescriptLoader,
