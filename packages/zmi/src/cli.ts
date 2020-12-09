@@ -6,7 +6,6 @@ import Service from './Service'
 import fork from './fork'
 
 launchDevice(dyo).then(({ args, command }) => {
-  debugger
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
 
   try {

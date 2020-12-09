@@ -238,8 +238,6 @@ export default class Service extends EventEmitter {
       })
     })
 
-    debugger
-
     this.setStage(ServiceStage.pluginReady)
     await this.applyPlugins({
       key: 'onPluginReady',
@@ -395,7 +393,7 @@ export default class Service extends EventEmitter {
     }
 
     return TypeSeriesWater.promise(
-      hookArgs[EnumApplyPlugins[typeIndex]]
+      hookArgs[EnumApplyPlugins[type]]
     ) as Promise<any>
   }
 
@@ -459,6 +457,11 @@ export default class Service extends EventEmitter {
   runCommand({ command, args }: IRun) {
     // If type alias is set
     // Need to find the actual command
+
+    if (command === 'examples/normal') {
+      command = 'dev'
+    }
+
     const event =
       typeof this.commands[command] === 'string'
         ? this.commands[this.commands[command] as string]

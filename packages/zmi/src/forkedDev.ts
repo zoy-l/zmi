@@ -10,7 +10,7 @@ launchDevice().then(({ args }) => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
   try {
     process.env.NODE_ENV = 'development'
-    debugger
+
     const service = new Service({})
 
     service.run({
