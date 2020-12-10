@@ -15,7 +15,8 @@ import {
   readdirSync,
   existsSync,
   lstatSync,
-  statSync
+  statSync,
+  PathLike
 } from 'fs'
 
 export interface IOpts {
@@ -53,7 +54,7 @@ export default class Generator {
     )
 
     if (appName) {
-      let IappName = appName
+      let IappName = appName as PathLike
 
       // eslint-disable-next-line no-constant-condition
       while (1) {

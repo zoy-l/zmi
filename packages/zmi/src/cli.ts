@@ -2,7 +2,7 @@ import { launchDevice, chalk, dyo, clearConsole, isWin } from '@zmi/utils'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'
-import Service from './Service'
+import Service from './service'
 import fork from './fork'
 
 launchDevice(dyo).then(({ args, command }) => {
@@ -48,7 +48,6 @@ launchDevice(dyo).then(({ args, command }) => {
         })
         break
     }
-
   } catch (err) {
     console.log(chalk.red(err.message))
     console.log(err.stack)
