@@ -34,7 +34,7 @@ export default class Bundler {
     } = options
 
     const { devServer: devServerConifg } = this.config
-    const urls = prepareUrls(null, host, port)
+    const urls = prepareUrls({ host, port })
 
     const compiler = createCompiler({
       config: bundleConfigs,

@@ -170,8 +170,6 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   let ret = webpackConfig.toConfig()
 
-  console.log(ret)
-
   // && type === BundlerConfigType.csr
   if (process.env.SPEED_MEASURE) {
     const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')

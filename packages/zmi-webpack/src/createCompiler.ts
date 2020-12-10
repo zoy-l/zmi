@@ -14,17 +14,20 @@ interface IUrlType {
   localUrlForBrowser: string
 }
 
+interface IPrepareUrlOpts {
+  protocol?: 'http' | 'https'
+  host: string
+  port: string | number
+  pathname?: string
+}
+
 const makeLine = (num: number, sign = ' ') => new Array(num).join(sign)
 const line = (interval: string, isTop: boolean) =>
   `${isTop ? '┌' : '└'}${makeLine(29, '─')}${interval}${isTop ? '┐' : '┘'}`
 const urlRe = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
-export function prepareUrls(
-  protocol: string | null | undefined = 'http',
-  host: string,
-  port: number,
-  pathname = '/'
-) {
+export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
+  const { protocol = 'http', host, port, pathname = '/' } = prepareUrlOptions
   const formatUrl = (hostname: string) =>
     url.format({
       protocol,
