@@ -8,26 +8,26 @@ import path from 'path'
 import RuleCss from './ruleCss'
 
 export interface IGetConfigOpts {
+  type: any
   cwd: string
   config: any
-  type: any
-  env: 'development' | 'production'
+  hot?: boolean
+  port?: number
+  targets?: any
+  browserslist?: any
   entry?: {
     [key: string]: string
   }
-  hot?: boolean
-  port?: number
+  __disableTerserForTest?: boolean
+  env: 'development' | 'production'
+  miniCSSExtractPluginPath?: string
   babelOpts?: Record<string, unknown>
+  miniCSSExtractPluginLoaderPath?: string
   babelOptsForDep?: Record<string, unknown>
-  targets?: any
-  browserslist?: any
   bundleImplementor?: typeof defaultWebpack
+  chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
   modifyBabelOpts?: (opts: Record<string, unknown>) => Promise<any>
   modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
-  chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
-  miniCSSExtractPluginPath?: string
-  miniCSSExtractPluginLoaderPath?: string
-  __disableTerserForTest?: boolean
 }
 
 export default async function getConfig(opts: IGetConfigOpts) {
@@ -37,6 +37,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     cwd,
     hot,
     type,
+    entry = {},
     bundleImplementor = defaultWebpack,
     miniCSSExtractPluginLoaderPath
   } = opts
@@ -71,6 +72,14 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
   const useHash = config.hash && isProd
+
+  webpackConfig.when(!!entry, (WConfig) => {
+    Object.keys(entry).forEach((key) => {
+      const entryPoint = WConfig.entry(key)
+
+      entryPoint.add(entry[key])
+    })
+  })
 
   webpackConfig.output
     .path(appOutputPath)
@@ -168,7 +177,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   // webpackConfig.externals
 
-  let ret = webpackConfig.toConfig()
+  let WTarget = webpackConfig.toConfig()
 
   // && type === BundlerConfigType.csr
   if (process.env.SPEED_MEASURE) {
@@ -179,8 +188,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
         ? { outputFormat: 'human', outputTarget: console.log }
         : { outputFormat: 'json', outputTarget: path.join(process.cwd(), 'speed-measure.json')}
     const smp = new SpeedMeasurePlugin(smpOption)
-    ret = smp.wrap(ret)
+    WTarget = smp.wrap(WTarget)
   }
 
-  return ret
+  return WTarget
 }

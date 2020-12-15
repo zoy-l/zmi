@@ -52,9 +52,8 @@ export default class Bundler {
 
     return {
       onListening: () => {},
-      devServer: (callback: (err: Error | undefined) => void) => {
-        return devServer.listen(port, host, callback)
-      }
+      devServer: (callback: (err: Error | undefined) => void) =>
+        devServer.listen(port, host, callback)
     }
   }
 }
