@@ -51,7 +51,7 @@ export default class Bundler {
     const devServer = new WebpackDevServer(compiler, devServerConifg ?? {})
 
     return {
-      onListening: () => {},
+      onListening: () => { },
       devServer: (callback: (err: Error | undefined) => void) =>
         devServer.listen(port, host, callback)
     }
