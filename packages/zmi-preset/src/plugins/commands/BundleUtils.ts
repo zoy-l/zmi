@@ -54,7 +54,7 @@ export async function getBundleAndConfigs(options: {
         type,
         port,
         entry: {
-          zmi: path.join(api.paths.appSrcPath!, 'zmi.ts')
+          zmi: path.join(api.paths.appSrcPath!, 'zmi.tsx')
         },
         hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
         bundleImplementor,
@@ -97,12 +97,9 @@ export async function getBundleAndConfigs(options: {
   const bundleConfigs = await api.applyPlugins({
     type: api.ApplyPluginsType.modify,
     key: 'modifyBundleConfigs',
-    initialValue: [await getConfig({ type: BundlerConfigType.csr })].filter(
-      Boolean
-    ),
+    initialValue: await getConfig({ type: BundlerConfigType.csr }),
     args: getArgs({ getConfig })
   })
-  debugger
 
   return {
     bundleImplementor,

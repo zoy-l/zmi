@@ -22,22 +22,13 @@ export default async (api: any) => {
         bundleImplementor
       } = await getBundleAndConfigs({ api, port })
 
-      const { DevServer, compiler } = await bundler.setupDevServer({
+      const devServer = await bundler.setupDevServer({
         port,
         host,
         bundleConfigs,
         bundleImplementor,
-        appName: api.pkg?.name
+        appName: api.pkg.name
       })
-      const { devServerConfig } = api.config
-
-      const devServer = new DevServer(
-        compiler,
-        Object.assign(devServerConfig, {
-          clientLogLevel: 'silent',
-          logLevel: 'silent'
-        })
-      )
 
       devServer.listen(port, host, (err: Error | undefined) => {
         if (err) {

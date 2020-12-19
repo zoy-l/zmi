@@ -1,8 +1,10 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+import ProgressBarPlugin from 'progress-bar-webpack-plugin'
+import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
+import { chalk, clearConsole, paths } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
-import { paths } from '@zmi/utils'
 import path from 'path'
 
 import RuleCss from './ruleCss'
@@ -35,8 +37,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
     env,
     config,
     cwd,
-    hot,
+    hot = true,
     type,
+    port,
     entry = {},
     bundleImplementor = defaultWebpack,
     miniCSSExtractPluginLoaderPath
@@ -66,8 +69,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     !isDev
       ? devtool
       : devtool === false
-        ? false
-        : devtool ?? 'cheap-module-source-map'
+      ? false
+      : devtool ?? 'cheap-module-source-map'
   )
   webpackConfig.mode(env)
 
@@ -174,7 +177,23 @@ export default async function getConfig(opts: IGetConfigOpts) {
     })
   })
 
-  webpackConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin)
+  webpackConfig
+    .plugin('ForkTsChecker')
+    .use(ForkTsCheckerWebpackPlugin, [{ async: false }])
+  webpackConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
+    {
+      total: 15,
+      summary: false,
+      complete: '▇',
+      format: `🚧  ${chalk.cyan.bold(':bar ')}${chalk.cyan.bold(
+        ':percent'
+      )}  ${chalk.grey.bold('( :elapseds )')}`,
+      customSummary: (time) => {
+        clearConsole()
+        console.log(chalk.blue.bold(`🎯 Compiled time ${time} \n`))
+      }
+    }
+  ])
 
   // webpackConfig.externals
 
@@ -182,14 +201,25 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   // && type === BundlerConfigType.csr
   if (process.env.SPEED_MEASURE) {
-    const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
-    // prettier-ignore
     // https://github.com/stephencookdev/speed-measure-webpack-plugin
-    const smpOption = process.env.SPEED_MEASURE === 'CONSOLE'
-      ? { outputFormat: 'human', outputTarget: console.log }
-      : { outputFormat: 'json', outputTarget: path.join(process.cwd(), 'speed-measure.json') }
-    const smp = new SpeedMeasurePlugin(smpOption)
+    const smp = new SpeedMeasurePlugin(
+      process.env.SPEED_MEASURE === 'CONSOLE'
+        ? { outputFormat: 'human', outputTarget: console.log }
+        : {
+            outputFormat: 'json',
+            outputTarget: path.join(process.cwd(), 'speed-measure.json')
+          }
+    )
     WTarget = smp.wrap(WTarget)
+  }
+
+  WTarget.devServer = {
+    hot,
+    port,
+    clientLogLevel: 'silent',
+    noInfo: true,
+    inline: true,
+    stats: 'none'
   }
 
   return WTarget

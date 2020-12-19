@@ -19,6 +19,7 @@ export default function mergeConfig<
   U extends Record<string, any>
 >(defaultConfig: T, ...configs: (AnyConfig<T, U> | null | undefined)[]) {
   const ret = { ...defaultConfig } as Partial<CalculatedConfig<T, U>>
+
   configs.forEach((config) => {
     if (!config) return
     ;(Object.keys(config) as (keyof typeof config)[]).forEach((key) => {

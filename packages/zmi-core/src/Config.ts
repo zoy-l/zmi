@@ -119,15 +119,15 @@ export default class Config {
     this.configFile = configFile
 
     let envConfigFile
-    if (process.env.LIM_ENV) {
-      // environment variable config file `.env.LIM_ENV` and remove ext
+    if (process.env.ZMI_ENV) {
+      // environment variable config file `.env.ZMI_ENV` and remove ext
       // Because it is synthesized according to the base file
       // local may be `(j|t)s` file
       // If there is no configFile, the default is `.zmirc`
       // Set here to `.ts` it has no practical effect, just a placeholder
       const envConfigFileName = this.addAffix(
         configFile ?? '.zmirc.ts',
-        process.env.LIM_ENV,
+        process.env.ZMI_ENV,
         !!configFile
       )
 
@@ -146,13 +146,15 @@ export default class Config {
     }
 
     // check the authenticity of documents
-    const files = [configFile, envConfigFile].filter((file) => {
-      if (file) {
-        const real = path.join(this.cwd, file)
-        return fs.existsSync(real) && real
-      }
-      return false
-    }) as string[]
+    const files = [configFile, envConfigFile]
+      .map((file) => {
+        if (file) {
+          const real = path.join(this.cwd, file)
+          return fs.existsSync(real) && real
+        }
+        return false
+      })
+      .filter(Boolean) as string[]
 
     if (files.length) {
       // handling circular references
@@ -191,6 +193,7 @@ export default class Config {
     let newConfig = {}
 
     // TODO: Refined processing, such as processing dotted config key
+
     this.requireConfigs(configs).forEach((config) => {
       newConfig = deepmerge(newConfig, config)
     })

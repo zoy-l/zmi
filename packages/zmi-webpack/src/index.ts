@@ -30,12 +30,13 @@ export default class Bundler {
     const {
       bundleConfigs,
       bundleImplementor = defaultWebpack,
+      appName = 'zmi-project',
       host,
-      port,
-      appName
+      port
     } = options
 
     const urls = prepareUrls({ host, port })
+    const { devServer: devServerConfig } = bundleConfigs
 
     const compiler = createCompiler({
       config: bundleConfigs,
@@ -45,9 +46,8 @@ export default class Bundler {
       port
     })
 
-    return {
-      compiler,
-      DevServer: WebpackDevServer
-    }
+    const devServer = new WebpackDevServer(compiler, devServerConfig)
+
+    return devServer
   }
 }

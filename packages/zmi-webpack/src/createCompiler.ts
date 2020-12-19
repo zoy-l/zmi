@@ -1,5 +1,3 @@
-// import forkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-// import { Issue } from 'fork-ts-checker-webpack-plugin/lib/issue'
 import { chalk, clearConsole } from '@zmi/utils'
 import address from 'address'
 import webpack from 'webpack'
@@ -87,35 +85,31 @@ function printInstructions(opts: {
   const { yellow, cyan } = chalk
   const { log } = console
 
-  log('📦  Compiled successfully! ')
+  log('📦 Compiled successfully! ')
   log()
 
-  const interval = makeLine(appName.length + 6, '─')
-  const portMakeLine = makeLine(appName.length - 3)
+  const interval = makeLine(appName.length + 7, '─')
+  const extraMakeLine = (num: number) => makeLine(appName.length - num)
+  // devConifg.target !== 'web' &&
 
   log(
     [
       line(interval, true),
-      // devConifg.target !== 'web' &&
-      `│ Running metro bundler on Port: ${yellow(port)} ${portMakeLine}│`,
-      `│ You can now view your Project: ${yellow(appName)} │`,
-      line(interval, false)
+      `│ Running metro bundler on Port: ${yellow(port)} ${extraMakeLine(2)}│`,
+      `│ You can now view your Project: ${yellow(appName)}  │`
     ]
       .filter(Boolean)
       .join('\n')
   )
 
-  // if (devConifg.target === 'web') {
   if (urls.lanUrlForTerminal) {
-    log('|')
-    log(`|- Localhost: ${cyan(urls.localUrlForTerminal)}`)
-    log('|')
-    log(`|- Network: ${cyan(urls.lanUrlForTerminal)}`)
+    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(0)}|`)
+    log(`│ Network:   ${cyan(urls.lanUrlForTerminal)} ${extraMakeLine(5)}|`)
   } else {
-    log(`|- Localhost: ${cyan(urls.localUrlForTerminal)}`)
+    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(1)}|`)
   }
-  // }
-  log()
+
+  log(line(interval, false))
 }
 
 function createCompiler(opts: {
@@ -138,8 +132,6 @@ function createCompiler(opts: {
     log(err.message ?? err)
     process.exit(1)
   }
-
-  // let isFirstCompile = true
 
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
