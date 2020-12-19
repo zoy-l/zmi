@@ -9,6 +9,7 @@ interface ISetupOpts {
   bundleImplementor?: typeof defaultWebpack
   port: number
   host: string
+  appName: string
 }
 
 export default class Bundler {
@@ -30,30 +31,23 @@ export default class Bundler {
       bundleConfigs,
       bundleImplementor = defaultWebpack,
       host,
-      port
+      port,
+      appName
     } = options
 
-    const { devServer: devServerConifg = {} } = this.config
     const urls = prepareUrls({ host, port })
 
     const compiler = createCompiler({
       config: bundleConfigs,
       bundleImplementor,
-      appName: '',
+      appName,
       urls,
       port
     })
 
-    // This should be webpack-dev-server types error
-    // I'm not sure, I didn't find relevant information
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const devServer = new WebpackDevServer(compiler, devServerConifg)
-
     return {
-      onListening: () => {},
-      devServer: (callback: (err: Error | undefined) => void) =>
-        devServer.listen(port, host, callback)
+      compiler,
+      DevServer: WebpackDevServer
     }
   }
 }
