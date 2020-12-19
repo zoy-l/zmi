@@ -1,5 +1,6 @@
 import { BundlerConfigType } from '@zmi/types'
 import DefaultBundler from '@zmi/webpack'
+import path from 'path'
 
 type Env = 'development' | 'production'
 
@@ -7,8 +8,9 @@ export async function getBundleAndConfigs(options: {
   api: any
   port?: number
 }) {
-  const { api, port } = options
 
+  const { api, port } = options
+  console.log(api.paths);
   // Apply webpack launcher to get an instance
   // Also used to switch between different build tools
   // Built-in device by default
@@ -52,6 +54,9 @@ export async function getBundleAndConfigs(options: {
         env,
         type,
         port,
+        entry: {
+          zmi: path.join(api.paths.appSrcPath!, 'zmi.ts'),
+        },
         hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
         bundleImplementor,
         async modifyBabelOpts(opts: any) {

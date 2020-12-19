@@ -66,9 +66,10 @@ export default async function getConfig(opts: IGetConfigOpts) {
     !isDev
       ? devtool
       : devtool === false
-      ? false
-      : devtool ?? 'cheap-module-source-map'
+        ? false
+        : devtool ?? 'cheap-module-source-map'
   )
+  webpackConfig.mode(env)
 
   const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
   const useHash = config.hash && isProd
@@ -185,8 +186,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     // prettier-ignore
     // https://github.com/stephencookdev/speed-measure-webpack-plugin
     const smpOption = process.env.SPEED_MEASURE === 'CONSOLE'
-        ? { outputFormat: 'human', outputTarget: console.log }
-        : { outputFormat: 'json', outputTarget: path.join(process.cwd(), 'speed-measure.json')}
+      ? { outputFormat: 'human', outputTarget: console.log }
+      : { outputFormat: 'json', outputTarget: path.join(process.cwd(), 'speed-measure.json') }
     const smp = new SpeedMeasurePlugin(smpOption)
     WTarget = smp.wrap(WTarget)
   }

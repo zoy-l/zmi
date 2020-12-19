@@ -100,12 +100,8 @@ function formatMessage(message: string) {
 }
 
 function formatWebpackMessages(json: { errors: string[]; warnings: string[] }) {
-  const formattedErrors = json.errors.map(function (message) {
-    return formatMessage(message)
-  })
-  const formattedWarnings = json.warnings.map(function (message) {
-    return formatMessage(message)
-  })
+  const formattedErrors = json.errors.map((message) => formatMessage(message))
+  const formattedWarnings = json.warnings.map((message) => formatMessage(message))
   const result = { errors: formattedErrors, warnings: formattedWarnings }
   if (result.errors.some(isLikelyASyntaxError)) {
     // If there are any syntax errors, show just them.

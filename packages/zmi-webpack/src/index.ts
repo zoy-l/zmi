@@ -33,7 +33,7 @@ export default class Bundler {
       port
     } = options
 
-    const { devServer: devServerConifg } = this.config
+    const { devServer: devServerConifg = {} } = this.config
     const urls = prepareUrls({ host, port })
 
     const compiler = createCompiler({
@@ -48,10 +48,10 @@ export default class Bundler {
     // I'm not sure, I didn't find relevant information
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const devServer = new WebpackDevServer(compiler, devServerConifg ?? {})
+    const devServer = new WebpackDevServer(compiler, devServerConifg)
 
     return {
-      onListening: () => { },
+      onListening: () => {},
       devServer: (callback: (err: Error | undefined) => void) =>
         devServer.listen(port, host, callback)
     }

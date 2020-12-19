@@ -319,16 +319,16 @@ export default class Service extends EventEmitter {
     })
 
     return new Proxy(pluginAPI, {
-      get: (target, prop: string) => {
+      get: (target, prop: string) =>
         // The plugin Method has the highest weight, followed by Service, and finally plugin API
         // Because pluginMethods needs to be available in the register phase
         // The latest update must be dynamically obtained through proxy to achieve the effect of registering and using
-        return this.pluginMethods[prop] ?? ServiceAttribute.includes(prop)
+        this.pluginMethods[prop] ?? ServiceAttribute.includes(prop)
           ? typeof this[prop] === 'function'
             ? this[prop].bind(this)
             : this[prop]
           : target[prop]
-      }
+
     })
   }
 
@@ -377,9 +377,7 @@ export default class Service extends EventEmitter {
         })
         break
       case modify:
-        TypeSeriesWaterApply((hook) => async (memo) => {
-          return hook.fn(memo, args)
-        })
+        TypeSeriesWaterApply((hook) => async (memo) => hook.fn(memo, args))
         break
       case event:
         TypeSeriesWaterApply((hook) => async () => {
@@ -428,9 +426,7 @@ export default class Service extends EventEmitter {
 
   hasPlugins(pluginIds: string[]) {
     // exposed to the outside for inspection
-    return pluginIds.every((pluginId) => {
-      return this.plugins[pluginId] && this.isPluginEnable(pluginId)
-    })
+    return pluginIds.every((pluginId) => this.plugins[pluginId] && this.isPluginEnable(pluginId))
   }
 
   resolvePackage() {

@@ -6,11 +6,11 @@ interface IOpts {
 }
 
 export default function ({ config, type }: IOpts) {
-  let targets: any = config.targets ?? {}
+  let targets = config.targets ?? {}
 
+  // filter false and 0 targets
   targets = Object.keys(targets)
     .filter((key) => {
-      // filter false and 0 targets
       if (targets[key] === false) return false
       if (type === BundlerConfigType.ssr) return key === 'node'
       return key !== 'node'
@@ -22,9 +22,7 @@ export default function ({ config, type }: IOpts) {
 
   const browserslist =
     targets.browsers ??
-    Object.keys(targets).map((key) => {
-      return `${key} >= ${targets[key] === true ? '0' : targets[key]}`
-    })
+    Object.keys(targets).map((key) => `${key} >= ${targets[key] === true ? '0' : targets[key]}`)
 
   return {
     targets,

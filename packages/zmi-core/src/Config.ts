@@ -17,8 +17,8 @@ import fs from 'fs'
 
 const possibleConfigPaths = [
   process.env.LIM_CONFIG_PATH,
-  '.limrc.ts',
-  '.limrc.js'
+  '.zmirc.ts',
+  '.zmirc.js'
 ].filter(Boolean) as string[]
 
 export default class Config {
@@ -63,9 +63,9 @@ export default class Config {
 
     const userConfig = this.getUserConfig()
 
-    const userConfigKeys = Object.keys(userConfig).filter((key) => {
-      return userConfig[key] !== false
-    })
+    const userConfigKeys = Object.keys(userConfig).filter(
+      (key) => userConfig[key] !== false
+    )
 
     // get config
     Object.keys(plugins).forEach((pluginId) => {
@@ -123,10 +123,10 @@ export default class Config {
       // environment variable config file `.env.LIM_ENV` and remove ext
       // Because it is synthesized according to the base file
       // local may be `(j|t)s` file
-      // If there is no configFile, the default is `.limrc`
+      // If there is no configFile, the default is `.zmirc`
       // Set here to `.ts` it has no practical effect, just a placeholder
       const envConfigFileName = this.addAffix(
-        configFile ?? '.limrc.ts',
+        configFile ?? '.zmirc.ts',
         process.env.LIM_ENV,
         !!configFile
       )
@@ -141,7 +141,7 @@ export default class Config {
       !envConfigFile &&
         assert([
           `get user config failed, ${envConfigFile} does not exist, `,
-          `but process.env.LIM_ENV is set to ${process.env.LIM_ENV}.`
+          `but process.env.ZMI_ENV is set to ${process.env.ZMI_ENV}.`
         ])
     }
 
@@ -157,9 +157,10 @@ export default class Config {
     if (files.length) {
       // handling circular references
       // clear require cache
-      const requireDeps = files.reduce((memo: string[], file) => {
-        return memo.concat(parseRequireDeps(file))
-      }, [])
+      const requireDeps = files.reduce(
+        (memo: string[], file) => memo.concat(parseRequireDeps(file)),
+        []
+      )
       requireDeps.forEach(clearModule)
 
       // Just-in-time compilation at runtime
