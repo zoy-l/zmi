@@ -1,7 +1,7 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
+import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import { chalk, clearConsole, paths } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'

@@ -1,3 +1,4 @@
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { chalk, clearConsole } from '@zmi/utils'
 import address from 'address'
 import webpack from 'webpack'
@@ -6,23 +7,23 @@ import url from 'url'
 import formatWebpackMessages from './formatWebpackMessages'
 
 interface IUrlType {
-  lanUrlForConfig: any
   lanUrlForTerminal: string | undefined
   localUrlForTerminal: string
   localUrlForBrowser: string
+  lanUrlForConfig: any
 }
 
 interface IPrepareUrlOpts {
   protocol?: 'http' | 'https'
-  host: string
   port: string | number
   pathname?: string
+  host: string
 }
 
 const makeLine = (num: number, sign = ' ') => new Array(num).join(sign)
 const line = (interval: string, isTop: boolean) =>
   `${isTop ? '┌' : '└'}${makeLine(29, '─')}${interval}${isTop ? '┐' : '┘'}`
-const urlRe = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
+const urlRegex = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
 export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
   const { protocol = 'http', host, port, pathname = '/' } = prepareUrlOptions
@@ -52,13 +53,13 @@ export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
     try {
       lanUrlForConfig = address.ip()
       if (lanUrlForConfig) {
-        if (urlRe.test(lanUrlForConfig)) {
+        if (urlRegex.test(lanUrlForConfig)) {
           lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig)
         } else {
           lanUrlForConfig = undefined
         }
       }
-    } catch (_e) {
+    } catch {
       // ignored
     }
   } else {
@@ -82,42 +83,42 @@ function printInstructions(opts: {
   port: number
 }) {
   const { appName, urls, port } = opts
-  const { yellow, cyan } = chalk
+  const { yellow, cyan, blue } = chalk
   const { log } = console
 
-  log('📦 Compiled successfully! ')
+  log(blue('📦 Compiled successfully! '))
   log()
 
   const interval = makeLine(appName.length + 7, '─')
-  const extraMakeLine = (num: number) => makeLine(appName.length - num)
+  const extraMakeLine = (num: number, sign?: string) =>
+    makeLine(appName.length - num, sign)
   // devConifg.target !== 'web' &&
 
   log(
     [
       line(interval, true),
       `│ Running metro bundler on Port: ${yellow(port)} ${extraMakeLine(2)}│`,
-      `│ You can now view your Project: ${yellow(appName)}  │`
-    ]
-      .filter(Boolean)
-      .join('\n')
+      `│ You can now view your Project: ${yellow(appName)}  │`,
+      `├────────────────────────────────${extraMakeLine(-2, '─')}─┤`
+    ].join('\n')
   )
 
   if (urls.lanUrlForTerminal) {
-    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(0)}|`)
-    log(`│ Network:   ${cyan(urls.lanUrlForTerminal)} ${extraMakeLine(5)}|`)
+    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(0)}│`)
+    log(`│ Network:   ${cyan(urls.lanUrlForTerminal)} ${extraMakeLine(5)}│`)
   } else {
-    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(1)}|`)
+    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(1)}│`)
   }
 
   log(line(interval, false))
 }
 
 function createCompiler(opts: {
-  appName: string
+  bundleImplementor: typeof webpack
   config: webpack.Configuration
+  appName: string
   urls: IUrlType
   port: number
-  bundleImplementor: typeof webpack
 }) {
   const { appName, config, urls, port, bundleImplementor } = opts
   const { log } = console
@@ -138,14 +139,13 @@ function createCompiler(opts: {
     log(chalk.cyan('🎯 Accelerating compilation ,Wait a moment...'))
   })
 
-  // const forkHook = forkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
-
-  // forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues): Issue[] => {
-  //   if (issues.length) {
-  //     clearConsole()
-  //   }
-  //   return []
-  // })
+  const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
+  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues) => {
+    if (issues.length) {
+      //
+    }
+    return issues
+  })
 
   compiler.hooks.done.tap('done', (stats) => {
     const statsData = stats.toJson({

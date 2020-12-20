@@ -1,6 +1,9 @@
-// import React from 'react'
-// import { render } from 'react-dom'
+import React from 'react'
+import { render } from 'react-dom'
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   render(<div>hello zmi</div>, document.getElementById('root'))
-// })
+render(
+  <React.StrictMode>
+    <div>hello zmi</div>
+  </React.StrictMode>,
+  document.getElementById('root')
+)
