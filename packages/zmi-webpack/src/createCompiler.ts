@@ -31,13 +31,6 @@ export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
       port,
       pathname
     })
-  const prettyPrintUrl = (hostname: string) =>
-    url.format({
-      protocol,
-      hostname,
-      port,
-      pathname
-    })
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::'
 
@@ -51,7 +44,7 @@ export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
       lanUrlForConfig = address.ip()
       if (lanUrlForConfig) {
         if (urlRegex.test(lanUrlForConfig)) {
-          lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig)
+          lanUrlForTerminal = formatUrl(lanUrlForConfig)
         } else {
           lanUrlForConfig = undefined
         }
@@ -63,14 +56,12 @@ export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
     prettyHost = host
   }
 
-  const localUrlForTerminal = prettyPrintUrl(prettyHost)
-  const localUrlForBrowser = formatUrl(prettyHost)
+  const localUrlForTerminal = formatUrl(prettyHost)
 
   return {
     lanUrlForConfig,
     lanUrlForTerminal,
-    localUrlForTerminal,
-    localUrlForBrowser
+    localUrlForTerminal
   }
 }
 

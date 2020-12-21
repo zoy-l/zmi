@@ -63,21 +63,10 @@ export default async (api: any) => {
     }
   })
 
-  // api.registerMethod({
-  //   name: 'getServer',
-  //   fn() {
-  //     assert(
-  //       `api.getServer() is only valid in development.`,
-  //       api.env === 'development'
-  //     )
-  //     return server
-  //   }
-  // })
-
   api.registerMethod({
     name: 'restartServer',
     fn() {
-      console.log(chalk.gray(`Try to restart dev server...`))
+      console.log(chalk.gray(`🎯 Try to restart dev server...`))
       // destroy()
       process.send?.({ type: 'RESTART' })
     }
