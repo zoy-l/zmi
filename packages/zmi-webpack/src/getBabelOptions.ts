@@ -1,7 +1,3 @@
-import { winPath } from '@zmi/utils'
-import path from 'path'
-import fs from 'fs'
-
 type env = 'development' | 'production'
 
 interface IOpts {
@@ -10,19 +6,13 @@ interface IOpts {
   targets?: Record<string, unknown>
 }
 
-function getBasicBabelLoaderOpts({ cwd }: { cwd: string }) {
-  const prefix = fs.existsSync(path.join(cwd, 'src'))
-    ? path.join(cwd, 'src')
-    : cwd
+function getBasicBabelLoaderOpts() {
   return {
     // Tell babel to guess the type, instead assuming all files are modules
     // https://github.com/webpack/webpack/issues/4039#issuecomment-419284940
     sourceType: 'unambiguous',
     babelrc: false,
-    cacheDirectory:
-      process.env.BABEL_CACHE !== 'none'
-        ? winPath(`${prefix}/.umi/.cache/babel-loader`)
-        : false
+    cacheDirectory: process.env.BABEL_CACHE !== 'none'
   }
 }
 
@@ -40,16 +30,14 @@ export function getBabelPresetOpts(opts: IOpts) {
 }
 
 export function getBabelOpts({
-  cwd,
   config,
   presetOpts
 }: {
-  cwd: string
   config: any
   presetOpts: Record<string, unknown>
 }) {
   return {
-    ...getBasicBabelLoaderOpts({ cwd }),
+    ...getBasicBabelLoaderOpts(),
     presets: [
       [require.resolve('@zmi/babel-preset/app'), presetOpts],
       ...(config.extraBabelPresets ?? [])
@@ -58,17 +46,9 @@ export function getBabelOpts({
   }
 }
 
-export function getBabelDepsOpts({
-  env,
-  cwd,
-  config
-}: {
-  env: env
-  cwd: string
-  config: any
-}) {
+export function getBabelDepsOpts({ env, config }: { env: env; config: any }) {
   return {
-    ...getBasicBabelLoaderOpts({ cwd }),
+    ...getBasicBabelLoaderOpts(),
     presets: [
       [
         require.resolve('@zmi/babel-preset/dependency'),

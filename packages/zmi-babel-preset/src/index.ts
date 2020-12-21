@@ -132,38 +132,13 @@ export default (_context: never, options: Ioptions) => {
       options.dynamicImportNode && [
         require.resolve('babel-plugin-dynamic-import-node')
       ],
-      // options.autoCSSModules && [
-      //   require.resolve('@umijs/babel-plugin-auto-css-modules')
-      // ],
-      // options.svgr && [
-      //   require.resolve('babel-plugin-named-asset-import'),
-      //   {
-      //     loaderMap: {
-      //       svg: {
-      //         ReactComponent: `${require.resolve(
-      //           '@svgr/webpack'
-      //         )}?-svgo,+titleProp,+ref![path]`
-      //       }
-      //     }
-      //   }
-      // ],
       ...(options.import
-        ? options.import.map((importoptions) => {
-            return [
-              require.resolve('babel-plugin-import'),
-              importoptions,
-              importoptions.libraryName
-            ]
-          })
+        ? options.import.map((importoptions) => [
+            require.resolve('babel-plugin-import'),
+            importoptions,
+            importoptions.libraryName
+          ])
         : [])
-      // options.importToAwaitRequire && [
-      //   require.resolve('@umijs/babel-plugin-import-to-await-require'),
-      //   options.importToAwaitRequire
-      // ],
-      // options.lockCoreJS3 && [
-      //   require.resolve('@umijs/babel-plugin-lock-core-js-3'),
-      //   options.lockCoreJS3
-      // ]
     ].filter(Boolean)
   }
 

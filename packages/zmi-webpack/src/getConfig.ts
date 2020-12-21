@@ -8,6 +8,8 @@ import defaultWebpack from 'webpack'
 import path from 'path'
 
 import RuleCss from './ruleCss'
+import { getBabelOpts, getBabelPresetOpts } from './getBabelOptions'
+import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 
 export interface IGetConfigOpts {
   type: any
@@ -44,6 +46,10 @@ export default async function getConfig(opts: IGetConfigOpts) {
     bundleImplementor = defaultWebpack,
     miniCSSExtractPluginLoaderPath
   } = opts
+  const { targets } = getTargetsAndBrowsersList({
+    config,
+    type
+  })
 
   const isDev = env === 'development'
   const isProd = env === 'production'
@@ -97,6 +103,17 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .add(paths('../../node_modules'))
     .end()
 
+  const presetOpts = getBabelPresetOpts({
+    config,
+    env,
+    targets
+  })
+
+  const babelOpts = getBabelOpts({
+    config,
+    presetOpts
+  })
+
   webpackConfig.module
     .rule('js')
     .test(/\.(js|mjs|jsx|ts|tsx)$/)
@@ -105,20 +122,21 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .exclude.add(/node_modules/)
     .end()
     .use('babel-loader')
-    .loader(require.resolve('babel-loader'))
+    .loader('babel-loader')
+    .options(babelOpts)
 
   webpackConfig.module
     .rule('images')
     .test(/\.(png|jpe?g|gif|webp|ico)(\?.*)?$/)
     .use('url-loader')
-    .loader(require.resolve('url-loader'))
+    .loader('url-loader')
     .options({})
 
   webpackConfig.module
     .rule('svg')
     .test(/\.(svg)(\?.*)?$/)
     .use('file-loader')
-    .loader(require.resolve('file-loader'))
+    .loader('file-loader')
     .options({
       name: 'static/[name].[hash:8].[ext]',
       esModule: false
@@ -128,7 +146,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .rule('fonts')
     .test(/\.(eot|woff|woff2|ttf)(\?.*)?$/)
     .use('file-loader')
-    .loader(require.resolve('file-loader'))
+    .loader('file-loader')
     .options({
       name: 'static/[name].[hash:8].[ext]',
       esModule: false
@@ -138,7 +156,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .rule('plaintext')
     .test(/\.(txt|text|md)$/)
     .use('raw-loader')
-    .loader(require.resolve('raw-loader'))
+    .loader('raw-loader')
 
   if (opts.chainWebpack) {
     webpackConfig = await opts.chainWebpack(webpackConfig, {
