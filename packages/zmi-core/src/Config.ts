@@ -193,7 +193,6 @@ export default class Config {
     let newConfig = {}
 
     // TODO: Refined processing, such as processing dotted config key
-
     this.requireConfigs(configs).forEach((config) => {
       newConfig = deepmerge(newConfig, config)
     })

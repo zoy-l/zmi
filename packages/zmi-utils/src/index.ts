@@ -4,6 +4,7 @@ import portfinder from 'portfinder'
 import deepmerge from 'deepmerge'
 import mustache from 'mustache'
 import inquirer from 'inquirer'
+import cheerio from 'cheerio'
 import resolve from 'resolve'
 import mkdirp from 'mkdirp'
 import lodash from 'lodash'
@@ -35,6 +36,7 @@ export {
   clearModule,
   NodeEnv,
   ArgsType,
+  cheerio,
   winPath,
   pkgUp,
   lodash,

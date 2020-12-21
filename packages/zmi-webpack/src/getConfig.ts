@@ -237,7 +237,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     clientLogLevel: 'silent',
     noInfo: true,
     inline: true,
-    stats: 'none'
+    stats: 'none',
+    contentBase: paths('dist')
   }
 
   return WTarget
