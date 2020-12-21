@@ -11,5 +11,8 @@
     "dotenv": "^8.2.0",
     "joi": "^17.3.0",
     "tapable": "^2.2.0"
+  },
+  "dependencies": {
+    "@zmi/utils": "1.0.0"
   }
 }

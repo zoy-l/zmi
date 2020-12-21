@@ -20,9 +20,6 @@ interface IPrepareUrlOpts {
   host: string
 }
 
-const makeLine = (num: number, sign = ' ') => new Array(num).join(sign)
-const line = (interval: string, isTop: boolean) =>
-  `${isTop ? '┌' : '└'}${makeLine(29, '─')}${interval}${isTop ? '┐' : '┘'}`
 const urlRegex = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
 export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
@@ -38,7 +35,7 @@ export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
     url.format({
       protocol,
       hostname,
-      port: chalk.bold(port),
+      port,
       pathname
     })
 
@@ -89,28 +86,42 @@ function printInstructions(opts: {
   log(blue('📦 Compiled successfully! '))
   log()
 
-  const interval = makeLine(appName.length + 7, '─')
-  const extraMakeLine = (num: number, sign?: string) =>
-    makeLine(appName.length - num, sign)
   // devConifg.target !== 'web' &&
-
+  // After `chalk` changes the color, the length of the string is not accurate
+  // needs to be calculated manually
+  const appNameLine = `│ You can now view your Project: ${yellow(appName)}  │`
+  const appNameLineLength = 36 + appName.length
   log(
     [
-      line(interval, true),
-      `│ Running metro bundler on Port: ${yellow(port)} ${extraMakeLine(2)}│`,
-      `│ You can now view your Project: ${yellow(appName)}  │`,
-      `├────────────────────────────────${extraMakeLine(-2, '─')}─┤`
+      '┌'.padEnd(appNameLineLength - 1, '─') + '┐',
+      `│ Running metro bundler on Port: ${yellow(
+        `${port}`.padEnd(appNameLineLength - 34)
+      )}│`,
+      appNameLine,
+      '├'.padEnd(appNameLineLength - 1, '─') + '┤'
     ].join('\n')
   )
 
   if (urls.lanUrlForTerminal) {
-    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(0)}│`)
-    log(`│ Network:   ${cyan(urls.lanUrlForTerminal)} ${extraMakeLine(5)}│`)
+    log(
+      `│ Localhost: ${cyan(
+        urls.localUrlForTerminal.padEnd(appNameLineLength - 14)
+      )}│`
+    )
+    log(
+      `│ Network:   ${cyan(
+        urls.lanUrlForTerminal.padEnd(appNameLineLength - 14)
+      )}│`
+    )
   } else {
-    log(`│ Localhost: ${cyan(urls.localUrlForTerminal)} ${extraMakeLine(1)}│`)
+    log(
+      `│ Localhost: ${cyan(
+        urls.localUrlForTerminal.padEnd(appNameLineLength - 14)
+      )}`
+    )
   }
 
-  log(line(interval, false))
+  log('└'.padEnd(appNameLineLength - 1, '─') + '┘')
 }
 
 function createCompiler(opts: {
