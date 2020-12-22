@@ -9,7 +9,6 @@ import formatWebpackMessages from './formatWebpackMessages'
 interface IUrlType {
   lanUrlForTerminal: string | undefined
   localUrlForTerminal: string
-  localUrlForBrowser: string
   lanUrlForConfig: any
 }
 
@@ -138,7 +137,8 @@ function createCompiler(opts: {
 
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
-    log(chalk.cyan('🎯 Accelerating compilation ,Wait a moment...'))
+    log(chalk.cyan('Accelerating compilation ,Wait a moment...'))
+    log()
   })
 
   const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)

@@ -2,6 +2,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { chalk, clearConsole, paths } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
@@ -185,6 +186,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
       }])
   })
 
+  webpackConfig.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin)
+
   webpackConfig.when(config.externals, (WConfig) => {
     WConfig.externals(config.externals)
   })
@@ -238,7 +241,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     noInfo: true,
     inline: true,
     stats: 'none',
-    contentBase: paths('dist')
+    contentBase: '/'
   }
 
   return WTarget

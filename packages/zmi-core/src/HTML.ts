@@ -1,16 +1,21 @@
 import { existsSync, readFileSync } from 'fs'
-import { cheerio } from '@zmi/utils'
+import { cheerio, assert } from '@zmi/utils'
 import prettier from 'prettier'
 import { join } from 'path'
-import assert from 'assert'
 import ejs from 'ejs'
 
 import { IOpts, IGetContentArgs, IScript } from './types'
 import { IConfig } from './Service'
 
 class Html {
+  /**
+   * @desc user config
+   */
   config: IConfig
 
+  /**
+   * @desc Template path
+   */
   tplPath?: string
 
   constructor(opts: IOpts) {
@@ -48,7 +53,7 @@ class Html {
     }
     const file = opts.file.charAt(0) === '/' ? opts.file.slice(1) : opts.file
     if (this.config.exportStatic?.dynamicRoot) {
-      return `${this.getRelPathToPublicPath(opts.path || '/')}${file}`
+      return `${this.getRelPathToPublicPath(opts.path ?? '/')}${file}`
     }
     return `${this.config.publicPath}${file}`
   }
@@ -90,13 +95,14 @@ class Html {
       jsFiles = [],
       styles = [],
       metas = [],
-      links = []
+      links = [],
+      modifyHTML
     } = args
 
     if (tplPath) {
       assert(
-        existsSync(tplPath),
-        `getContent() failed, tplPath of ${tplPath} not exists.`
+        `getContent() failed, tplPath of ${tplPath} not exists.`,
+        existsSync(tplPath)
       )
     }
     const tpl = readFileSync(
@@ -173,10 +179,10 @@ class Html {
     })
 
     // root element
-    const mountElementId = this.config.mountElementId || 'root'
+    const mountElementId = this.config.mountElementId ?? 'root'
     if (!$(`#${mountElementId}`).length) {
       const bodyEl = $('body')
-      assert(bodyEl.length, `<body> not found in html template.`)
+      assert('<body> not found in html template.', bodyEl.length)
       bodyEl.append(`<div id="${mountElementId}"></div>`)
     }
 
@@ -194,8 +200,8 @@ class Html {
       $('body').append(`<script src="${this.getAsset({ file })}"></script>`)
     })
 
-    if (args.modifyHTML) {
-      $ = await args.modifyHTML($)
+    if (modifyHTML) {
+      $ = await modifyHTML($)
     }
 
     html = $.html()

@@ -2,6 +2,7 @@ import * as utils from '@zmi/utils'
 
 import { ICommand, IHook, IPluginConfig, EnumEnableBy } from './types'
 import Service from './Service'
+import Html from './Html'
 
 export interface IPluginAPIOptions {
   id: string
@@ -43,11 +44,17 @@ export default class PluginAPI {
    */
   utils: typeof utils
 
+  /**
+   * @desc Html generated
+   */
+  Html: typeof Html
+
   constructor(options: IPluginAPIOptions) {
     this.service = options.service
     this.id = options.id
     this.key = options.key
     this.utils = utils
+    this.Html = Html
   }
 
   describe({ id, key, config, enableBy }: IDescribe = {}) {

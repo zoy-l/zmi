@@ -2,6 +2,8 @@ import { BundlerConfigType } from '@zmi/types'
 import DefaultBundler from '@zmi/webpack'
 import path from 'path'
 
+import { getHtmlGenerator } from './generateHtml'
+
 type Env = 'development' | 'production'
 
 export async function getBundleAndConfigs(options: {
@@ -9,6 +11,12 @@ export async function getBundleAndConfigs(options: {
   port?: number
 }) {
   const { api, port } = options
+
+  const Html = getHtmlGenerator(api)
+
+  const defaultContent = await Html.getContent({
+    chunks: sharedMap.get('chunks')
+  })
 
   // Apply webpack launcher to get an instance
   // Also used to switch between different build tools
@@ -58,6 +66,7 @@ export async function getBundleAndConfigs(options: {
         },
         hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
         bundleImplementor,
+        generateHtml: getHtmlGenerator(api),
         async modifyBabelOpts(opts: any) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
