@@ -4,7 +4,7 @@ import Config from 'webpack-chain'
 
 interface IOpts {
   type: any
-  webpackConfig: any
+  webpackConfig: Config
   config: any
   isDev: boolean
   disableCompress?: boolean

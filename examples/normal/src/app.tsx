@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import styles from './index.css'
 
 const App = () => {
   const [num, setNum] = useState(0)
