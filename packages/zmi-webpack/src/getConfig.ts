@@ -101,6 +101,13 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .chunkFilename(useHash ? '[name].[contenthash:8].js' : '[name].js')
     .publicPath(config.publicPath)
 
+  webpackConfig.resolve.extensions.merge([
+    '.js',
+    '.jsx',
+    '.json',
+    '.ts',
+    '.tsx'
+  ])
   // To be verified .set('symlinks', true)
   webpackConfig.resolve.modules
     .add('node_modules')
@@ -115,7 +122,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   const babelOpts = getBabelOpts({
     config,
-    presetOpts
+    presetOpts,
+    hot
   })
 
   webpackConfig.module

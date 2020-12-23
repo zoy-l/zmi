@@ -31,10 +31,12 @@ export function getBabelPresetOpts(opts: IOpts) {
 
 export function getBabelOpts({
   config,
-  presetOpts
+  presetOpts,
+  hot
 }: {
   config: any
   presetOpts: Record<string, unknown>
+  hot: boolean
 }) {
   return {
     ...getBasicBabelLoaderOpts(),
@@ -42,7 +44,10 @@ export function getBabelOpts({
       [require.resolve('@zmi/babel-preset/app'), presetOpts],
       ...(config.extraBabelPresets ?? [])
     ],
-    plugins: [...(config.extraBabelPlugins ?? [])].filter(Boolean)
+    plugins: [
+      ...(config.extraBabelPlugins ?? []),
+      hot && 'react-refresh/babel'
+    ].filter(Boolean)
   }
 }
 
