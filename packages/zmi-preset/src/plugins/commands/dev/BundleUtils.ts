@@ -12,11 +12,9 @@ export async function getBundleAndConfigs(options: {
 }) {
   const { api, port } = options
 
-  const Html = getHtmlGenerator(api)
+  const Html = getHtmlGenerator({ api })
 
-  const defaultContent = await Html.getContent({
-    chunks: sharedMap.get('chunks')
-  })
+  const htmlContent = await Html.getContent()
 
   // Apply webpack launcher to get an instance
   // Also used to switch between different build tools
@@ -66,7 +64,7 @@ export async function getBundleAndConfigs(options: {
         },
         hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
         bundleImplementor,
-        generateHtml: getHtmlGenerator(api),
+        htmlContent,
         async modifyBabelOpts(opts: any) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,

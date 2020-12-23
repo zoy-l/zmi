@@ -48,9 +48,11 @@ export function chunksToFiles(opts: {
 
 export function getHtmlGenerator({ api }: { api: any }): any {
   function getDocumentTplPath() {
-    const docPath = path.join(api.paths.absPagesPath!, 'document.ejs')
+    const docPath = path.join(api.paths.appPagesPath!, 'document.ejs')
     return fs.existsSync(docPath) ? docPath : ''
   }
+
+  // console.log(api.paths)
 
   class Html extends api.Html {
     constructor() {
@@ -60,70 +62,42 @@ export function getHtmlGenerator({ api }: { api: any }): any {
       })
     }
 
-    async getContent(args: any): Promise<string> {
+    async getContent(): Promise<string> {
       async function applyPlugins(opts: { initialState?: any[]; key: string }) {
         return api.applyPlugins({
           key: opts.key,
           type: api.ApplyPluginsType.add,
-          initialValue: opts.initialState ?? [],
-          args: {
-            route: args.route
-          }
+          initialValue: opts.initialState ?? []
         })
       }
 
-      let routerBaseStr = JSON.stringify(api.config.base)
-      let publicPathStr = JSON.stringify(api.config.publicPath)
+      // let publicPathStr = JSON.stringify(api.config.publicPath)
 
-      if (api.config.exportStatic?.dynamicRoot) {
-        routerBaseStr = `location.pathname.split('/').slice(0, -${
-          args.route.path!.split('/').length - 1
-        }).concat('').join('/')`
-        publicPathStr = `location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + window.routerBase`
-      }
+      // if (api.config.exportStatic?.dynamicRoot) {
+      //   publicPathStr = `location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + window.routerBase`
+      // }
 
-      publicPathStr = await api.applyPlugins({
-        key: 'modifyPublicPathStr',
-        type: api.ApplyPluginsType.modify,
-        initialValue: publicPathStr,
-        args: {
-          route: args.route
-        }
-      })
+      // publicPathStr = await api.applyPlugins({
+      //   key: 'modifyPublicPathStr',
+      //   type: api.ApplyPluginsType.modify,
+      //   initialValue: publicPathStr
+      // })
 
-      const htmlChunks = await api.applyPlugins({
-        key: 'modifyHTMLChunks',
-        type: api.ApplyPluginsType.modify,
-        initialValue: api.config.chunks ?? ['zmi'],
-        args: {
-          chunks: args.chunks
-        }
-      })
-      const { cssFiles, jsFiles, headJSFiles } = chunksToFiles({
-        htmlChunks,
-        chunks: args.chunks,
-        noChunk: args.noChunk
-      })
+      // const htmlChunks = await api.applyPlugins({
+      //   key: 'modifyHTMLChunks',
+      //   type: api.ApplyPluginsType.modify,
+      //   initialValue: api.config.chunks ?? ['zmi']
+      // })
+      // const { cssFiles, jsFiles, headJSFiles } = chunksToFiles({
+      //   htmlChunks
+      // })
 
       return super.getContent({
-        cssFiles,
-        headJSFiles,
-        jsFiles,
+        // cssFiles,
+        // headJSFiles,
+        // jsFiles,
         headScripts: await applyPlugins({
-          key: 'addHTMLHeadScripts',
-          initialState: [
-            // routerBase 只在部署路径不固定时才会用到，exportStatic.dynamicRoot
-            // UPDATE: 内部 render 会依赖 routerBase，先始终生成
-            api.config.exportStatic?.dynamicRoot && {
-              content: `window.routerBase = ${routerBaseStr};`
-            },
-            // html 里的 publicPath
-            // 只在设置了 runtimePublicPath 或 exportStatic?.dynamicRoot 时才会用到
-            // 设置了 exportStatic?.dynamicRoot 时会自动设置 runtimePublicPath
-            api.config.runtimePublicPath && {
-              content: `window.publicPath = ${publicPathStr};`
-            }
-          ].filter(Boolean)
+          key: 'addHTMLHeadScripts'
         }),
         links: await applyPlugins({
           key: 'addHTMLLinks'

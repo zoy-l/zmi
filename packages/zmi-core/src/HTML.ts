@@ -86,8 +86,8 @@ class Html {
   }
 
   async getContent(args: IGetContentArgs): Promise<string> {
-    const { tplPath = this.tplPath } = args
     const {
+      tplPath = this.tplPath,
       headJSFiles = [],
       headScripts = [],
       cssFiles = [],

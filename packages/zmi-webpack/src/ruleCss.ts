@@ -1,5 +1,5 @@
-import { deepmerge } from '@zmi/utils'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
+import { deepmerge } from '@zmi/utils'
 import Config from 'webpack-chain'
 
 interface IOpts {
@@ -72,7 +72,6 @@ export default class RuleCss {
           .loader(miniCssExtractPlugin.loader)
           .options({
             publicPath: './',
-            hmr: isDev,
           });
       }
     })

@@ -2,6 +2,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
+import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { chalk, clearConsole, paths } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
@@ -20,6 +21,7 @@ export interface IGetConfigOpts {
   port?: number
   targets?: any
   browserslist?: any
+  htmlContent: string
   entry?: {
     [key: string]: string
   }
@@ -43,6 +45,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     hot = true,
     type,
     port,
+    htmlContent,
     entry = {},
     bundleImplementor = defaultWebpack,
     miniCSSExtractPluginLoaderPath
@@ -175,6 +178,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
   })
 
+  webpackConfig.plugin('extract-css').use(miniCssExtractPlugin)
+
   // IgnorePlugin ignores localized content when packaging
   // https://www.webpackjs.com/plugins/ignore-plugin/
   // prettier-ignore
@@ -186,7 +191,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
       }])
   })
 
-  webpackConfig.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin)
+  webpackConfig
+    .plugin('HtmlWebpackPlugin')
+    .use(HtmlWebpackPlugin, [{ templateContent: htmlContent }])
 
   webpackConfig.when(config.externals, (WConfig) => {
     WConfig.externals(config.externals)
