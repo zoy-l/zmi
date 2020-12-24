@@ -11,8 +11,6 @@ export default function (api: any) {
     'addHTMLScripts'
   ]
   presetApiMethods.forEach((name) => {
-    debugger
-
     api.registerMethod({ name })
   })
 }

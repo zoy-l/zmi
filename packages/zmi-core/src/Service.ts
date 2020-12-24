@@ -300,7 +300,7 @@ export default class Service extends EventEmitter {
     // It represents a collection of plugins added to the top of extraPlugins
     // Path verification pathToRegister has been done
     if (Array.isArray(plugins)) {
-      plugins.forEach((path) => {
+      plugins.reverse().forEach((path) => {
         this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
       })
 
@@ -323,11 +323,12 @@ export default class Service extends EventEmitter {
         // The plugin Method has the highest weight, followed by Service, and finally plugin API
         // Because pluginMethods needs to be available in the register phase
         // The latest update must be dynamically obtained through proxy to achieve the effect of registering and using
-        this.pluginMethods[prop] ?? ServiceAttribute.includes(prop)
+        this.pluginMethods[prop] ??
+        (ServiceAttribute.includes(prop)
           ? typeof this[prop] === 'function'
             ? this[prop].bind(this)
             : this[prop]
-          : target[prop]
+          : target[prop])
     })
   }
 
