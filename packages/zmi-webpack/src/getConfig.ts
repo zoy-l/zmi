@@ -3,7 +3,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
-import { chalk, clearConsole, paths } from '@zmi/utils'
+import { chalk, paths } from '@zmi/utils'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
@@ -231,8 +231,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
         ':percent'
       )}  ${chalk.grey.bold('( :elapseds )')}`,
       customSummary: (time) => {
-        clearConsole()
-        console.log(chalk.blue.bold(`🎯 Compiled time ${time} \n`))
+        console.log(
+          chalk.blue.bold(`🎯 Successfully! Compiled time ${time} \n`)
+        )
       }
     }
   ])

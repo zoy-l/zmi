@@ -70,11 +70,8 @@ function printInstructions(opts: {
   port: number
 }) {
   const { appName, urls, port } = opts
-  const { yellow, cyan, blue } = chalk
+  const { yellow, cyan } = chalk
   const { log } = console
-
-  log(blue('📦 Compiled successfully! '))
-  log()
 
   // devConifg.target !== 'web' &&
   // After `chalk` changes the color, the length of the string is not accurate
@@ -142,12 +139,15 @@ function createCompiler(opts: {
   })
 
   const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
-  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues: string | any[]) => {
-    if (issues.length) {
-      //
+  forkHook.issues.tap(
+    'ForkTsCheckerWebpackPlugin',
+    (issues: string | any[]) => {
+      if (issues.length) {
+        //
+      }
+      return issues
     }
-    return issues
-  })
+  )
 
   compiler.hooks.done.tap('done', (stats) => {
     const statsData = stats.toJson({
@@ -160,6 +160,7 @@ function createCompiler(opts: {
     const isSuccessful = !messages.errors.length && !messages.warnings.length
 
     if (isSuccessful) {
+      clearConsole()
       printInstructions({ appName, urls, port })
     }
 
