@@ -122,6 +122,9 @@ export default (_context: never, options: Ioptions) => {
           ...toObject(options.transformRuntime)
         }
       ],
+      options.autoCSSModules && [
+        require.resolve('@zmi/css-modules')
+      ],
       options.reactRemovePropTypes && [
         require.resolve('babel-plugin-transform-react-remove-prop-types'),
         {

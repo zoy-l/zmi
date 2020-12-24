@@ -6,6 +6,7 @@ export default {
     'zmi-utils',
     'zmi-types',
     'zmi-babel-preset',
+    'zmi-css-modules',
     'zmi-create-app',
     'zmi',
     'zmi-core',

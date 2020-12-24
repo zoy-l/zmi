@@ -76,6 +76,13 @@ export default class RuleCss {
       }
     })
 
+    // && config.cssModulesTypescriptLoader
+    rule.when(isDev && isCSSModules, (WConfig) => {
+      WConfig.use('css-modules-typescript-loader')
+        .loader(require.resolve('css-modules-typescript-loader'))
+        .options(config.cssModulesTypescriptLoader ?? { mode: 'emit' })
+    })
+
     // prettier-ignore
     rule.use('css-loader')
       .loader(require.resolve('css-loader'))
@@ -91,15 +98,6 @@ export default class RuleCss {
           config.cssLoader ?? {}
         )
       )
-
-    rule.when(
-      isDev && isCSSModules && config.cssModulesTypescriptLoader,
-      (WConfig) => {
-        WConfig.use('css-modules-typescript-loader')
-          .loader(require.resolve('css-modules-typescript-loader'))
-          .options(config.cssModulesTypescriptLoader)
-      }
-    )
 
     rule.when(!!loader, (WConfig) => {
       WConfig.use(loader!)
