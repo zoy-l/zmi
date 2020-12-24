@@ -142,7 +142,7 @@ function createCompiler(opts: {
   })
 
   const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
-  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues) => {
+  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues: string | any[]) => {
     if (issues.length) {
       //
     }
