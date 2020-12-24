@@ -1,5 +1,6 @@
 import yargsParser from 'yargs-parser'
 import clearModule from 'clear-module'
+import babelTypes from '@babel/types'
 import portfinder from 'portfinder'
 import deepmerge from 'deepmerge'
 import mustache from 'mustache'
@@ -30,6 +31,7 @@ import paths from './paths'
 const isWin = process.platform === 'win32'
 
 export {
+  babelTypes,
   isLerna,
   parseRequireDeps,
   getFile,

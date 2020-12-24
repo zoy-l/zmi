@@ -1,22 +1,18 @@
+import { NodePath } from '@babel/traverse'
+import { babelTypes } from '@zmi/utils'
 import { extname } from 'path'
 
-export interface IOpts {
-  flag?: string
-}
-
-const CSS_EXTNAMES = ['.css', '.less', '.sass', '.scss', '.stylus', '.styl']
+const cssExtenders = ['.css', '.less', '.sass', '.scss', '.stylus', '.styl']
 
 export default function () {
   return {
     visitor: {
-      ImportDeclaration(path: any, state: any) {
-        const {
-          specifiers,
-          source,
-          source: { value }
-        } = path.node
-        if (specifiers.length && CSS_EXTNAMES.includes(extname(value))) {
-          source.value = `${value}?${state.flag || 'modules'}`
+      ImportDeclaration(path: NodePath<babelTypes.ImportDeclaration>) {
+        const { specifiers, source } = path.node
+        const { value } = source
+
+        if (specifiers.length && cssExtenders.includes(extname(value))) {
+          source.value = `${value}?modules`
         }
       }
     }

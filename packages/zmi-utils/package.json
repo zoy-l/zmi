@@ -31,5 +31,8 @@
     "url": "^0.11.0",
     "yargs": "^16.2.0",
     "yargs-parser": "^20.2.4"
+  },
+  "dependencies": {
+    "@babel/types": "^7.12.12"
   }
 }
