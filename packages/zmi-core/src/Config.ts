@@ -67,13 +67,10 @@ export default class Config {
       (key) => userConfig[key] !== false
     )
 
-    debugger
     // get config
     Object.keys(plugins).forEach((pluginId) => {
       const { key, config = {} } = plugins[pluginId]
       const value = userConfig[key]
-
-      debugger
 
       // recognize as key if have `schema` config
       // disabled when `value` is false

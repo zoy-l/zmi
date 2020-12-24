@@ -6,7 +6,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7.12.1",
-    "@babel/plugin-proposal-decorators": "7.12.1",
+    "@babel/plugin-proposal-decorators": "7.12.12",
     "@babel/plugin-proposal-do-expressions": "7.12.1",
     "@babel/plugin-proposal-export-default-from": "7.12.1",
     "@babel/plugin-proposal-function-bind": "7.12.1",

@@ -13,7 +13,7 @@
     "@types/mustache": "^4.1.0",
     "@types/resolve": "^1.17.1",
     "@types/yargs": "^15.0.12",
-    "@types/yargs-parser": "^15.0.0",
+    "@types/yargs-parser": "^20.2.0",
     "address": "^1.1.2",
     "chalk": "^4.1.0",
     "cheerio": "^1.0.0-rc.3",
