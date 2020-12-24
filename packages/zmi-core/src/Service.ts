@@ -328,7 +328,6 @@ export default class Service extends EventEmitter {
             ? this[prop].bind(this)
             : this[prop]
           : target[prop]
-
     })
   }
 
@@ -426,7 +425,9 @@ export default class Service extends EventEmitter {
 
   hasPlugins(pluginIds: string[]) {
     // exposed to the outside for inspection
-    return pluginIds.every((pluginId) => this.plugins[pluginId] && this.isPluginEnable(pluginId))
+    return pluginIds.every(
+      (pluginId) => this.plugins[pluginId] && this.isPluginEnable(pluginId)
+    )
   }
 
   resolvePackage() {

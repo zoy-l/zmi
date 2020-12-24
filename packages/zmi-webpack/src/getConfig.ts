@@ -3,15 +3,15 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
-import { chalk, paths } from '@zmi/utils'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { chalk, paths } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
 import path from 'path'
 
-import RuleCss from './ruleCss'
 import { getBabelOpts, getBabelPresetOpts } from './getBabelOptions'
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
+import RuleCss from './ruleCss'
 
 export interface IGetConfigOpts {
   type: any

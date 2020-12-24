@@ -3,9 +3,16 @@ export default function (api: any) {
     'onExit',
     'onBuildComplete',
     'onDevCompileDone',
-    'chainWebpack'
+    'chainWebpack',
+    'addHTMLMetas',
+    'addHTMLLinks',
+    'addHTMLStyles',
+    'addHTMLHeadScripts',
+    'addHTMLScripts'
   ]
   presetApiMethods.forEach((name) => {
+    debugger
+
     api.registerMethod({ name })
   })
 }

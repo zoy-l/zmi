@@ -1,6 +1,6 @@
+import { assert, lodash } from '@zmi/utils'
 import path from 'path'
 import fs from 'fs'
-import { assert, lodash } from '@zmi/utils'
 
 export function chunksToFiles(opts: {
   htmlChunks: (string | Record<string, unknown>)[]
@@ -9,7 +9,6 @@ export function chunksToFiles(opts: {
 }): any {
   let chunksMap = {}
   if (opts.chunks) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     chunksMap = opts.chunks.reduce((memo, chunk) => {
       const key = chunk.name || chunk.id
       if (key && chunk.files) {

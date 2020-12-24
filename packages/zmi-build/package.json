@@ -3,14 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.12.7",
+    "rollup": "^2.35.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
     "chokidar": "^3.4.3",
     "gulp-less": "^4.0.1",
     "gulp-typescript": "^6.0.0-alpha.1",
     "through2": "^4.0.2",
     "vinyl-fs": "^3.0.3"
-  },
-  "peerDependencies": {
-    "typescript": "4.x"
   }
 }

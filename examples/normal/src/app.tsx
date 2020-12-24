@@ -7,7 +7,7 @@ const App = () => {
     <div
       className={styles.hello}
       onClick={() => {
-        setNum(num - 3)
+        setNum(num - 5)
       }}
     >
       {num}
