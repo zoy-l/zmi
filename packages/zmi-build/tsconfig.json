@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "target": "esnext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "outDir": "./lib",
+    "rootDir": "./src"
+  },
+  "include": ["./src"],
+  "exclude": ["../../node_modules"]
+}

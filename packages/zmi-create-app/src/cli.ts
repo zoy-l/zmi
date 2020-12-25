@@ -1,4 +1,4 @@
-import { yargsParser } from '../../zmi-utils/lib'
+import { yargsParser } from '@zmi/utils'
 import run from '.'
 
 const args = yargsParser(process.argv.slice(2), {
@@ -9,10 +9,8 @@ const args = yargsParser(process.argv.slice(2), {
   boolean: ['version']
 })
 
-const pkg = require('../package')
-
 if (args.version && !args._[0]) {
-  const { name, version } = pkg
+  const { name, version } = require('../package')
   console.log(`${name}@${version}`)
 } else {
   run({ cwd: process.cwd(), args })

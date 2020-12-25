@@ -9,14 +9,14 @@ import loadDotEnv from './withEnv'
 import Config from './Config'
 import paths from './paths'
 import {
-  IPlugin,
-  IHook,
-  ICommand,
-  IPackage,
   EnumApplyPlugins,
+  IServicePaths,
   EnumEnableBy,
   ServiceStage,
-  IServicePaths
+  IPackage,
+  ICommand,
+  IPlugin,
+  IHook
 } from './types'
 
 interface IRun {
@@ -299,6 +299,7 @@ export default class Service extends EventEmitter {
     // If it is an Array
     // It represents a collection of plugins added to the top of extraPlugins
     // Path verification pathToRegister has been done
+    // `Reverse` to ensure the order of plugins
     if (Array.isArray(plugins)) {
       plugins.reverse().forEach((path) => {
         this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
@@ -390,9 +391,7 @@ export default class Service extends EventEmitter {
         )
     }
 
-    return TypeSeriesWater.promise(
-      hookArgs[EnumApplyPlugins[type]]
-    ) as Promise<any>
+    return TypeSeriesWater.promise(hookArgs[type]) as Promise<any>
   }
 
   registerPlugin(plugin: IPlugin) {
@@ -455,10 +454,6 @@ export default class Service extends EventEmitter {
   runCommand({ command, args }: IRun) {
     // If type alias is set
     // Need to find the actual command
-
-    if (command === 'examples/normal') {
-      command = 'dev'
-    }
 
     const event =
       typeof this.commands[command] === 'string'
