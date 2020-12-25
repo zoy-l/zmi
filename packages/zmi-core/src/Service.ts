@@ -356,7 +356,7 @@ export default class Service extends EventEmitter {
       func: (hook: IHook) => (...Args: any[]) => Promise<any>
     ) => {
       hooks.forEach((hook) => {
-        if (!this.isPluginEnable(hook.pluginId!)) {
+        if (this.isPluginEnable(hook.pluginId!)) {
           TypeSeriesWater.tapPromise({
             name: hook.pluginId ?? `$${hook.key}`,
             stage: hook.stage ?? 0,

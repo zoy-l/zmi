@@ -227,13 +227,11 @@ export default async function getConfig(opts: IGetConfigOpts) {
       total: 15,
       summary: false,
       complete: '▇',
-      format: `🚧  ${chalk.cyan.bold(':bar ')}${chalk.cyan.bold(
+      format: `🚧  ${chalk.cyan(':bar ')}${chalk.cyan(
         ':percent'
-      )}  ${chalk.grey.bold('( :elapseds )')}`,
+      )}  ${chalk.grey('( :elapseds )')}`,
       customSummary: (time) => {
-        console.log(
-          chalk.blue.bold(`🎯 Successfully! Compiled time ${time} \n`)
-        )
+        console.log(chalk.blue(`🎯 Successfully! Compiled time ${time} \n`))
       }
     }
   ])
