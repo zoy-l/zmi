@@ -1,15 +1,14 @@
 import babel from '@babel/core'
-import * as yargsParser from 'yargs-parser'
-import * as vinylFs from 'vinyl-fs'
-import * as fs from 'fs'
-import * as path from 'path'
-import * as rimraf from 'rimraf'
-import * as through from 'through2'
-import * as chokidar from 'chokidar'
+import yargsParser from 'yargs-parser'
+import vinylFs from 'vinyl-fs'
+import fs from 'fs'
+import path from 'path'
+import rimraf from 'rimraf'
+import through from 'through2'
+import chokidar from 'chokidar'
 
 // import { conversion } from './utils'
-console.log(yargsParser);
-
+console.log(yargsParser)
 
 function getBabelConfig() {
   const targets = { node: 8 }
