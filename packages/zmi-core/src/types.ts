@@ -55,7 +55,7 @@ export interface IPlugin {
 
 export interface IHook {
   key: string
-  fn: (args?: { args: yargs.Arguments }, option?: any) => Promise<any> | void
+  fn: (args?: { args: any }, option?: any) => Promise<any> | void
   pluginId?: string
   before?: string
   stage?: number
