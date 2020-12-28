@@ -212,7 +212,7 @@ class Html {
         parser: 'html'
       })
     } catch {
-      // empty
+      // ig-ignore
     }
 
     return html
