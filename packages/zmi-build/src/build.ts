@@ -1,11 +1,11 @@
-import babel from '@babel/core'
 import yargsParser from 'yargs-parser'
-import vinylFs from 'vinyl-fs'
-import fs from 'fs'
-import path from 'path'
-import rimraf from 'rimraf'
-import through from 'through2'
 import chokidar from 'chokidar'
+import babel from '@babel/core'
+import vinylFs from 'vinyl-fs'
+import through from 'through2'
+import rimraf from 'rimraf'
+import path from 'path'
+import fs from 'fs'
 
 // import { conversion } from './utils'
 console.log(yargsParser)
@@ -39,6 +39,7 @@ function transform(opts: { content: any; path: any; root: any }) {
   //     `${slash(path).replace(`${cwd}/`, '')}`
   //   )
   // )
+
   return babel.transform(content, {
     ...babelConfig,
     filename: path

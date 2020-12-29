@@ -15,7 +15,6 @@
     "zmi-update:deps": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {
-    "@babel/register": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@octokit/core": "^3.2.4",
     "@types/jest": "^26.0.19",

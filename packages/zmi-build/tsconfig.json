@@ -3,12 +3,13 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "target": "esnext",
-    "module": "CommonJS",
+    "module": "es6",
     "moduleResolution": "node",
     "allowJs": true,
     "outDir": "./lib",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "skipLibCheck": true
   },
-  "include": ["./src"],
-  "exclude": ["../../node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
