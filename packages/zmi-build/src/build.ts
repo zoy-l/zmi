@@ -1,16 +1,17 @@
 import yargsParser from 'yargs-parser'
+import gulpPlumber from 'gulp-plumber'
+import glupTs from 'gulp-typescript'
 import * as babel from '@babel/core'
 import chokidar from 'chokidar'
-import glupTs from 'gulp-typescript'
-import gulpPlumber from 'gulp-plumber'
+import through from 'through2'
 import vinylFs from 'vinyl-fs'
 import gulpIf from 'gulp-if'
-import through from 'through2'
 import rimraf from 'rimraf'
+import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
 
-// import { conversion } from './utils'
+import { colorLog } from './utils'
 
 function getBabelConfig() {
   const targets = { node: 8 }
@@ -37,15 +38,14 @@ function getBabelConfig() {
   }
 }
 
-function transform(opts: { content: any; path: any; root: any }) {
-  const { content, path } = opts
+function transform(opts: { content: any; path: string; root: any }) {
+  const { content, path, root } = opts
 
   const babelConfig = getBabelConfig()
-  // log.transform(
-  //   chalk[isBrowser ? 'yellow' : 'blue'](
-  //     `${slash(path).replace(`${cwd}/`, '')}`
-  //   )
-  // )
+
+  console.log(
+    colorLog(`Transform to ${'cjs'} for ${chalk.blue(path.replace(root, ''))}`)
+  )
 
   return babel.transformSync(content, {
     ...babelConfig,
