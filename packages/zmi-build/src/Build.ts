@@ -12,7 +12,7 @@ import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
 
-import { colorLog, conversion } from './utils'
+import { colorLog, conversion, eventColor } from './utils'
 
 interface IBuild {
   cwd: string
@@ -78,6 +78,10 @@ export default class Build {
     return /\.js$/.test(path) && !path.endsWith('.d.ts')
   }
 
+  isTsFile(path: string) {
+    return /\.tsx?$/.test(path) && !path.endsWith('.d.ts')
+  }
+
   transform(opts: { content: string; path: string }) {
     const { content, path } = opts
 
@@ -97,18 +101,21 @@ export default class Build {
       })
       .pipe(gulpPlumber())
       .pipe(
-        glupTs({
-          allowSyntheticDefaultImports: true,
-          declaration: true,
-          module: 'esnext',
-          target: 'esnext',
-          moduleResolution: 'node',
-          typeRoots: []
-        })
+        gulpIf(
+          (file) => this.isTsFile(file.path),
+          glupTs({
+            allowSyntheticDefaultImports: true,
+            declaration: true,
+            module: 'esnext',
+            target: 'esnext',
+            moduleResolution: 'node',
+            typeRoots: []
+          })
+        )
       )
       .pipe(
         gulpIf(
-          (file: { path: string }) => this.isTransform(file.path),
+          (file) => this.isTransform(file.path),
           through.obj((chunk, _enc, callback) => {
             const fileType = ['.js', '.ts']
 
@@ -130,7 +137,7 @@ export default class Build {
               chunk.path = chunk.path.replace(path.extname(chunk.path), '.js')
             }
             callback(null, chunk)
-          })
+          }) as NodeJS.ReadWriteStream
         )
       )
       .pipe(vinylFs.dest(this.targetPath))
@@ -163,7 +170,8 @@ export default class Build {
     this.srcPath = path.join(dir, 'src')
     this.targetPath = path.join(dir, 'lib')
 
-    rimraf.sync(path.join(this.cwd, path.join(dir, 'lib')))
+    this.logInfo({ msg: chalk.gray(`Clean lib directory`) })
+    rimraf.sync(path.join(dir, 'lib'))
 
     return new Promise<void>((resolve) => {
       const patterns = [
@@ -201,11 +209,21 @@ export default class Build {
           watcher.on('all', (event, fullPath) => {
             const relPath = fullPath.replace(this.srcPath, '')
             this.logInfo({
-              msg: `[${event}] ${conversion(
+              msg: `${eventColor(event)} ${conversion(
                 path.join(this.srcPath, relPath)
               ).replace(`${this.cwd}/`, '')}`
             })
-            if (!fs.existsSync(fullPath)) return
+
+            if (!fs.existsSync(fullPath)) {
+              const fullLibPath = fullPath.replace('src', 'lib')
+              rimraf.sync(fullLibPath)
+              this.logInfo({
+                msg: `${chalk.red('Delete')} for ${chalk.blue(
+                  conversion(fullLibPath).replace(`${this.cwd}/`, '')
+                )}`
+              })
+              return
+            }
             if (fs.statSync(fullPath).isFile()) {
               if (!files.includes(fullPath)) files.push(fullPath)
               debouncedCompileFiles()
