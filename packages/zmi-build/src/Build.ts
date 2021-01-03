@@ -12,7 +12,7 @@ import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
 
-import { colorLog, conversion, eventColor } from './utils'
+import { colorLog, conversion, eventColor, clearConsole } from './utils'
 
 interface IBuild {
   cwd: string
@@ -36,12 +36,6 @@ export default class Build {
     this.cwd = options.cwd
     this.isLerna = fs.existsSync(path.join(options.cwd, 'lerna.json'))
     this.watch = options.watch
-
-    if (this.isLerna) {
-      this.dirs = fs
-        .readdirSync(path.join(this.cwd, 'packages'))
-        .filter((dir) => dir.charAt(0) !== '.')
-    }
   }
 
   logInfo({ pkg, msg }: { pkg?: string; msg: string }) {
@@ -74,12 +68,8 @@ export default class Build {
     }
   }
 
-  isTransform(path: string) {
-    return /\.js$/.test(path) && !path.endsWith('.d.ts')
-  }
-
   isTsFile(path: string) {
-    return /\.tsx?$/.test(path) && !path.endsWith('.d.ts')
+    return /\.ts?$/.test(path) && !path.endsWith('.d.ts')
   }
 
   transform(opts: { content: string; path: string }) {
@@ -99,10 +89,26 @@ export default class Build {
       .src(src, {
         base: this.srcPath
       })
-      .pipe(gulpPlumber())
+      .pipe(gulpPlumber(() => {}))
       .pipe(
         gulpIf(
-          (file) => this.isTsFile(file.path),
+          (file) => {
+            const fileType = ['.js', '.ts']
+
+            if (
+              fileType.includes(path.extname(file.path)) &&
+              !file.path.endsWith('.d.ts')
+            ) {
+              this.logInfo({
+                pkg,
+                msg: `➜ Transform for ${chalk.blue(
+                  file.path.replace(this.srcPath.replace('src', ''), '')
+                )}`
+              })
+            }
+
+            return this.isTsFile(file.path)
+          },
           glupTs({
             allowSyntheticDefaultImports: true,
             declaration: true,
@@ -115,27 +121,17 @@ export default class Build {
       )
       .pipe(
         gulpIf(
-          (file) => this.isTransform(file.path),
+          (file) => !file.path.endsWith('.d.ts'),
           through.obj((chunk, _enc, callback) => {
-            const fileType = ['.js', '.ts']
+            chunk.contents = Buffer.from(
+              this.transform({
+                content: chunk.contents,
+                path: chunk.path
+              }) as string
+            )
 
-            if (fileType.includes(path.extname(chunk.path))) {
-              chunk.contents = Buffer.from(
-                this.transform({
-                  content: chunk.contents,
-                  path: chunk.path
-                }) as string
-              )
+            chunk.path = chunk.path.replace(path.extname(chunk.path), '.js')
 
-              this.logInfo({
-                pkg,
-                msg: `Transform for ${chalk.blue(
-                  chunk.path.replace(this.srcPath.replace('src', ''), '')
-                )}`
-              })
-
-              chunk.path = chunk.path.replace(path.extname(chunk.path), '.js')
-            }
             callback(null, chunk)
           }) as NodeJS.ReadWriteStream
         )
@@ -186,11 +182,11 @@ export default class Build {
       this.createStream(patterns, pkg).on('end', () => {
         if (this.watch) {
           this.logInfo({
-            msg: chalk.magenta(
-              `Start watching ${conversion(this.srcPath).replace(
+            msg: chalk.black.bgBlue(
+              ` Start watching ${conversion(this.srcPath).replace(
                 `${this.cwd}/`,
                 ''
-              )} directory...`
+              )} directory... \n`
             )
           })
 
@@ -217,11 +213,6 @@ export default class Build {
             if (!fs.existsSync(fullPath)) {
               const fullLibPath = fullPath.replace('src', 'lib')
               rimraf.sync(fullLibPath)
-              this.logInfo({
-                msg: `${chalk.red('Delete')} for ${chalk.blue(
-                  conversion(fullLibPath).replace(`${this.cwd}/`, '')
-                )}`
-              })
               return
             }
             if (fs.statSync(fullPath).isFile()) {
@@ -240,7 +231,8 @@ export default class Build {
   }
 
   async step() {
-    if (this.isLerna && this.dirs?.length) {
+    clearConsole()
+    if (this.isLerna) {
       await this.compileLerna()
     } else {
       await this.compile(this.cwd)
