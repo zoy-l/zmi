@@ -7,7 +7,6 @@ import vinylFs from 'vinyl-fs'
 import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
 import assert from 'assert'
-import lodash from 'lodash'
 import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
@@ -101,7 +100,7 @@ export default class Build {
             ) {
               this.logInfo({
                 pkg,
-                msg: `➜ Transform for ${chalk.blue(
+                msg: `${chalk.green('➜')} Transform for ${chalk.blue(
                   file.path.replace(this.srcPath.replace('src', ''), '')
                 )}`
               })
@@ -191,16 +190,13 @@ export default class Build {
           })
 
           const watcher = chokidar.watch(patterns, {
-            ignoreInitial: true
+            ignoreInitial: true,
+            awaitWriteFinish: {
+              stabilityThreshold: 600
+            }
           })
 
           const files: string[] = []
-
-          const debouncedCompileFiles = lodash.debounce(() => {
-            while (files.length) {
-              this.createStream(files.pop()!)
-            }
-          }, 1000)
 
           watcher.on('all', (event, fullPath) => {
             const relPath = fullPath.replace(this.srcPath, '')
@@ -217,7 +213,9 @@ export default class Build {
             }
             if (fs.statSync(fullPath).isFile()) {
               if (!files.includes(fullPath)) files.push(fullPath)
-              debouncedCompileFiles()
+              while (files.length) {
+                this.createStream(files.pop()!)
+              }
             }
           })
           process.once('SIGINT', () => {
