@@ -8,6 +8,7 @@ import vinylFs from 'vinyl-fs'
 import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
 import chalk from 'chalk'
+import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
 
@@ -42,7 +43,7 @@ export default class Build {
   }
 
   logInfo({ pkg, msg }: { pkg?: string; msg: string }) {
-    console.log(`${pkg ? `${colorLog(`${pkg}`)}: ` : ''}${msg}`)
+    console.log(`${pkg ? `${colorLog(pkg)}: ` : ''}${msg}`)
   }
 
   getBabelConfig() {
@@ -75,12 +76,18 @@ export default class Build {
     return /\.js$/.test(path) && !path.endsWith('.d.ts')
   }
 
-  transform(opts: { content: any; path: string; root: string }) {
-    const { content, path, root } = opts
+  transform(opts: {
+    content: string
+    path: string
+    root: string
+    pkg: string | undefined
+  }) {
+    const { content, path, root, pkg } = opts
 
     const babelConfig = this.getBabelConfig()
 
     this.logInfo({
+      pkg,
       msg: `Transform to ${'cjs'} for ${chalk.blue(path.replace(root, ''))}`
     })
 
@@ -91,7 +98,7 @@ export default class Build {
     })?.code
   }
 
-  createStream(dir: string) {
+  createStream(dir: string, pkg: string | undefined) {
     const srcDir = path.join(dir, 'src')
 
     return vinylFs
@@ -123,8 +130,9 @@ export default class Build {
                 this.transform({
                   content: chunk.contents,
                   path: chunk.path,
-                  root: path.join(this.cwd, dir)
-                }) as any
+                  root: path.join(this.cwd, dir),
+                  pkg
+                }) as string
               )
               chunk.path = chunk.path.replace(path.extname(chunk.path), '.js')
             }
@@ -139,27 +147,33 @@ export default class Build {
     let pkgs = fs.readdirSync(path.join(this.cwd, 'packages'))
 
     pkgs = pkgs.reduce((memo, pkg) => {
-      console.log(pkg)
-      memo = memo.concat(pkg)
+      const pkgPath = path.join(this.cwd, 'packages', pkg)
+      if (fs.statSync(pkgPath).isDirectory()) {
+        memo = memo.concat(pkg)
+      }
       return memo
     }, [] as string[])
 
-    while (pkgs.length) {
-      this.compile(pkgs.shift()!)
+    for (const pkg of pkgs) {
+      const pkgPath = path.join(this.cwd, 'packages', pkg)
+      assert(
+        fs.existsSync(path.join(pkgPath, 'package.json')),
+        `package.json not found in packages/${pkg}`
+      )
+      process.chdir(pkgPath)
+      this.compile(pkgPath, pkg)
     }
   }
 
-  compile(dir: string) {
+  compile(dir: string, pkg?: string) {
     rimraf.sync(path.join(this.cwd, path.join(dir, 'lib')))
 
-    const stream = this.createStream(dir)
+    const stream = this.createStream(dir, pkg)
   }
 
   step() {
     if (this.isLerna && this.dirs) {
-      this.dirs.forEach((pkg) => {
-        this.compileLerna(`./packages/${pkg}`)
-      })
+      this.compileLerna()
     } else {
       this.compile('./')
     }

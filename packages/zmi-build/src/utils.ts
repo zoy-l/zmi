@@ -29,7 +29,7 @@ const colors = [
 let index = 0
 const cache = {}
 
-export function colorLog(pkg: string | number) {
+export function colorLog(pkg: string) {
   if (!cache[pkg]) {
     const color = colors[index]
     const str = chalk[color].bold(pkg)
