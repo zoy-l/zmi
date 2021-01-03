@@ -1,4 +1,3 @@
-import yargsParser from 'yargs-parser'
 import gulpPlumber from 'gulp-plumber'
 import * as babel from '@babel/core'
 import glupTs from 'gulp-typescript'
@@ -230,11 +229,3 @@ export default class Build {
     }
   }
 }
-
-const args = yargsParser(process.argv.slice(2))
-const watch = args.w ?? args.watch
-const cwd = process.cwd()
-
-const d = new Build({ cwd, watch })
-
-d.step()

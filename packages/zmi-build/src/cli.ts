@@ -1,13 +1,17 @@
 import yargsParser from 'yargs-parser'
-import Build from './build'
+import chalk from 'chalk'
+
+import Build from './Build'
 
 const args = yargsParser(process.argv.slice(2))
 
-switch (args._[0]) {
-  case 'build':
-  case 'rollup':
-    require(`./src/${args._}`)
-    break
-  default:
-    throw new Error(`Unknown command ${args._}`)
+if (!args._[0] || args.w || args.watch) {
+  const watch = args.w ?? args.watch
+  const cwd = process.cwd()
+
+  const build = new Build({ cwd, watch })
+
+  build.step()
+} else {
+  throw new Error(chalk.red(`Unknown command '${args._}'`))
 }
