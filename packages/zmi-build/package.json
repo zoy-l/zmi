@@ -7,7 +7,7 @@
     "@types/gulp-plumber": "^0.0.32"
   },
   "scripts": {
-    "compile": "node -r ./compile.js ./src/builds.ts --watch"
+    "compile": "node -r ./compile.js ./src/build.ts --watch"
   },
   "dependencies": {
     "@babel/core": "^7.12.10",

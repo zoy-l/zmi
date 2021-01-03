@@ -13,7 +13,7 @@ import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
 
-import { colorLog } from './utils'
+import { colorLog, conversion } from './utils'
 
 interface IBuild {
   cwd: string
@@ -166,8 +166,6 @@ export default class Build {
 
     rimraf.sync(path.join(this.cwd, path.join(dir, 'lib')))
 
-    // const stream = this.createStream(dir, pkg)
-
     return new Promise<void>((resolve) => {
       const patterns = [
         path.join(this.srcPath, '**/*'),
@@ -180,7 +178,14 @@ export default class Build {
       ]
       this.createStream(patterns, pkg).on('end', () => {
         if (this.watch) {
-          this.logInfo({ msg: '' })
+          this.logInfo({
+            msg: chalk.magenta(
+              `Start watching ${conversion(this.srcPath).replace(
+                `${this.cwd}/`,
+                ''
+              )} directory...`
+            )
+          })
 
           const watcher = chokidar.watch(patterns, {
             ignoreInitial: true
@@ -197,9 +202,9 @@ export default class Build {
           watcher.on('all', (event, fullPath) => {
             const relPath = fullPath.replace(this.srcPath, '')
             this.logInfo({
-              msg: `[${event}] ${path
-                .join(this.srcPath, relPath)
-                .replace(`${this.cwd}/`, '')}`
+              msg: `[${event}] ${conversion(
+                path.join(this.srcPath, relPath)
+              ).replace(`${this.cwd}/`, '')}`
             })
             if (!fs.existsSync(fullPath)) return
             if (fs.statSync(fullPath).isFile()) {
@@ -218,7 +223,7 @@ export default class Build {
   }
 
   async step() {
-    if (this.isLerna && this.dirs) {
+    if (this.isLerna && this.dirs?.length) {
       await this.compileLerna()
     } else {
       await this.compile(this.cwd)

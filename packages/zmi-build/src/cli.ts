@@ -1,11 +1,7 @@
 import yargsParser from 'yargs-parser'
+import Build from './build'
 
 const args = yargsParser(process.argv.slice(2))
-
-if (args.v || args.version) {
-  console.log(require('./package').version)
-  process.exit(0)
-}
 
 switch (args._[0]) {
   case 'build':

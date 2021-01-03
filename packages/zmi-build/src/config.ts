@@ -1,1 +1,1 @@
-const CONFIG_FILES = ['.zmirc.js', '.zmirc.ts']
+// const CONFIG_FILES = ['.zmirc.js', '.zmirc.ts']
