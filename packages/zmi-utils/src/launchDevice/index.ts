@@ -11,8 +11,8 @@ export const defaultYargsOptions = {
 
 export default (
   opts?: yargsParser.Options
-): Promise<{ args: yargs.Arguments; command: string }> => {
-  return new Promise((resolve, reject) => {
+): Promise<{ args: yargs.Arguments; command: string }> =>
+  new Promise((resolve, reject) => {
     try {
       const args = yargsParser(process.argv.slice(2), opts)
       resolve({ args, command: args._[0] })
@@ -20,4 +20,3 @@ export default (
       reject(err)
     }
   })
-}
