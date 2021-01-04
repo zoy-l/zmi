@@ -6,12 +6,14 @@ import through from 'through2'
 import vinylFs from 'vinyl-fs'
 import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
+import { merge } from 'lodash'
 import assert from 'assert'
 import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
 
 import { colorLog, conversion, eventColor, clearConsole } from './utils'
+import config from './config'
 
 interface IBuild {
   cwd: string
@@ -31,6 +33,10 @@ export default class Build {
 
   targetPath!: string
 
+  rootConfig = {}
+
+  bundleOpts: any
+
   constructor(options: IBuild) {
     this.cwd = options.cwd
     this.isLerna = fs.existsSync(path.join(options.cwd, 'lerna.json'))
@@ -42,20 +48,23 @@ export default class Build {
   }
 
   getBabelConfig() {
+    const { target } = this.bundleOpts
+    const isBrowser = target === 'browser'
+
     return {
       presets: [
         [
           '@babel/preset-env',
           {
-            targets: {
-              node: 8
-            }
+            targets: isBrowser
+              ? { browsers: ['>0.2%', 'not ie 11', 'not op_mini all'] }
+              : { node: 8 }
           }
         ]
       ],
       plugins: [
-        '@babel/plugin-transform-modules-commonjs',
-        ['@babel/plugin-proposal-export-default-from', { lazy: true }],
+        ['@babel/plugin-transform-modules-commonjs', { lazy: true }],
+        '@babel/plugin-proposal-export-default-from',
         '@babel/plugin-proposal-do-expressions',
         '@babel/plugin-proposal-export-namespace-from',
         '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -67,8 +76,12 @@ export default class Build {
     }
   }
 
-  isTsFile(path: string) {
-    return /\.ts?$/.test(path) && !path.endsWith('.d.ts')
+  getBundleOpts(cwd: string) {
+    const userConfig = config(cwd)
+
+    const bundleOpts = merge(this.rootConfig, userConfig)
+
+    return bundleOpts
   }
 
   transform(opts: { content: string; path: string }) {
@@ -106,7 +119,7 @@ export default class Build {
               })
             }
 
-            return this.isTsFile(file.path)
+            return /\.ts?$/.test(file.path) && !file.path.endsWith('.d.ts')
           },
           glupTs({
             allowSyntheticDefaultImports: true,
@@ -139,9 +152,16 @@ export default class Build {
   }
 
   async compileLerna() {
-    let pkgs = fs.readdirSync(path.join(this.cwd, 'packages'))
+    let userPkgs = fs.readdirSync(path.join(this.cwd, 'packages'))
+    const userConifg = config(this.cwd)
 
-    pkgs = pkgs.reduce((memo, pkg) => {
+    if (userConifg.pkgs) {
+      userPkgs = userConifg.pkgs
+    }
+
+    this.rootConfig = userConifg
+
+    userPkgs = userPkgs.reduce((memo, pkg) => {
       const pkgPath = path.join(this.cwd, 'packages', pkg)
       if (fs.statSync(pkgPath).isDirectory()) {
         memo = memo.concat(pkg)
@@ -149,7 +169,7 @@ export default class Build {
       return memo
     }, [] as string[])
 
-    for (const pkg of pkgs) {
+    for (const pkg of userPkgs) {
       const pkgPath = path.join(this.cwd, 'packages', pkg)
       assert(
         fs.existsSync(path.join(pkgPath, 'package.json')),
@@ -164,6 +184,8 @@ export default class Build {
   compile(dir: string, pkg?: string) {
     this.srcPath = path.join(dir, 'src')
     this.targetPath = path.join(dir, 'lib')
+
+    this.bundleOpts = this.getBundleOpts(dir)
 
     this.logInfo({ msg: chalk.gray(`Clean lib directory`) })
     rimraf.sync(path.join(dir, 'lib'))
