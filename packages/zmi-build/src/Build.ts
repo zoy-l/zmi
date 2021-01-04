@@ -176,7 +176,7 @@ export default class Build {
         `package.json not found in packages/${pkg}`
       )
       process.chdir(pkgPath)
-      // eslint-disable-next-line no-await-in-loop
+
       await this.compile(pkgPath, pkg)
     }
   }
