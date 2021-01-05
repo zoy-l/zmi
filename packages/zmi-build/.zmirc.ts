@@ -1,3 +1,7 @@
 export default {
-  target: 'node'
+  moduleType: 'cjs',
+  moduleOptions: {
+    minify: true,
+    mjs: true
+  }
 }

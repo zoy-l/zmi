@@ -1,40 +1,20 @@
-export interface ICjs {
-  minify?: boolean
-  lazy?: boolean
-}
-
-interface IEsm {
-  mjs?: boolean
-  minify?: boolean
-}
-
-interface IUmd {
-  minFile?: boolean
-  sourcemap?: boolean
-}
-
 export interface IBundleOptions {
-  esm?: IEsm | false
-  cjs?: ICjs | false
-  umd?: IUmd | false
+  moduleOptions?: {
+    minFile?: boolean
+    sourcemap?: boolean
+    mjs?: boolean
+    minify?: boolean
+    lazy?: boolean
+  }
+  moduleType?: 'esm' | 'cjs'
   extraBabelPlugins?: any[]
   extraBabelPresets?: any[]
   extraPostCSSPlugins?: any[]
-  runtimeHelpers?: boolean
   target?: 'node' | 'browser'
-  browserFiles?: {
-    [value: string]: any
-  }
-  nodeFiles?: {
-    [value: string]: any
-  }
+  browserFiles?: string[]
+  nodeFiles?: string[]
   nodeVersion?: number
   disableTypeCheck?: boolean
-  typescriptOpts?: {
-    [value: string]: any
-  }
-  nodeResolveOpts?: {
-    [value: string]: any
-  }
+  typescriptOpts?: Record<string, any>
   pkgs?: string[]
 }

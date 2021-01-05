@@ -13,6 +13,7 @@ import path from 'path'
 import fs from 'fs'
 
 import { colorLog, conversion, eventColor, clearConsole } from './utils'
+import type { IBundleOptions } from './types'
 import config from './config'
 
 interface IBuild {
@@ -35,7 +36,7 @@ export default class Build {
 
   rootConfig = {}
 
-  bundleOpts: any
+  bundleOpts: IBundleOptions = {}
 
   constructor(options: IBuild) {
     this.cwd = options.cwd
@@ -48,7 +49,13 @@ export default class Build {
   }
 
   getBabelConfig() {
-    const { target } = this.bundleOpts
+    const {
+      target,
+      nodeVersion,
+      moduleType,
+      moduleOptions = {}
+    } = this.bundleOpts
+
     const isBrowser = target === 'browser'
 
     return {
@@ -58,12 +65,17 @@ export default class Build {
           {
             targets: isBrowser
               ? { browsers: ['>0.2%', 'not ie 11', 'not op_mini all'] }
-              : { node: 8 }
+              : { node: nodeVersion ?? 8 },
+            modules: moduleType === 'esm' ? false : 'auto'
           }
         ]
       ],
       plugins: [
-        ['@babel/plugin-transform-modules-commonjs', { lazy: true }],
+        moduleType === 'cjs' &&
+          !isBrowser && [
+            '@babel/plugin-transform-modules-commonjs',
+            { lazy: moduleOptions?.lazy ?? true }
+          ],
         '@babel/plugin-proposal-export-default-from',
         '@babel/plugin-proposal-do-expressions',
         '@babel/plugin-proposal-export-namespace-from',
@@ -72,7 +84,7 @@ export default class Build {
         '@babel/plugin-syntax-dynamic-import',
         ['@babel/plugin-proposal-decorators', { legacy: true }],
         ['@babel/plugin-proposal-class-properties', { loose: true }]
-      ]
+      ].filter(Boolean) as (string | any[])[]
     }
   }
 
