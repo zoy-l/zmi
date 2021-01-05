@@ -46,13 +46,14 @@ export function colorLog(pkg: string) {
 export function eventColor(
   eventType: 'unlink' | 'add' | 'change' | 'addDir' | 'unlinkDir'
 ) {
+  const { black } = chalk
   return {
-    unlink: chalk.black.bgRed(` ${eventType} `),
-    add: chalk.black.bgGreen(` ${eventType} `),
-    change: chalk.black.bgYellow(` ${eventType} `),
-    unlinkDir: chalk.black.bgRed(` ${eventType} `),
-    addDir: chalk.black.bgGreen(` ${eventType} `)
-  }[eventType]
+    unlink: black.bgRed,
+    add: black.bgGreen,
+    change: black.bgYellow,
+    unlinkDir: black.bgRed,
+    addDir: black.bgGreen
+  }[eventType](` ${eventType} `)
 }
 
 export function clearConsole() {
