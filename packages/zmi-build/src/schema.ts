@@ -17,5 +17,7 @@ export default Joi.object({
   extraPostCSSPlugins: Joi.array().items(Joi.any()),
   typescriptOpts: Joi.object(),
   nodeFiles: Joi.array().items(Joi.string()),
-  browserFiles: Joi.array().items(Joi.string())
+  browserFiles: Joi.array().items(Joi.string()),
+  entry: Joi.string().default('src'),
+  output: Joi.string().default('lib')
 })

@@ -10,8 +10,8 @@ export default {
     'zmi-babel-preset',
     'zmi-css-modules',
     'zmi-create-app',
-    'zmi',
     'zmi-core',
+    'zmi',
     'zmi-preset',
     'zmi-test',
     'zmi-webpack'

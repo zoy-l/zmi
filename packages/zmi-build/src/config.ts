@@ -1,9 +1,10 @@
-import fs from 'fs'
 import path from 'path'
+import fs from 'fs'
 
-import schema from './schema'
-import { conversion } from './utils'
 import getBabelConfig from './getBabelConifg'
+import { IBundleOptions } from './types'
+import { conversion } from './utils'
+import schema from './schema'
 
 export const CONFIG_FILES = ['.zmirc.ts', '.zmirc.js']
 
@@ -31,13 +32,24 @@ export default function (cwd: string) {
 
   if (configFile) {
     registerBabel({ cwd, only: configFile })
-    const userConfig = isDefault(require(path.join(cwd, configFile)))
+    const userConfig = isDefault(
+      require(path.join(cwd, configFile))
+    ) as IBundleOptions
     const { error } = schema.validate(userConfig)
 
     if (error) {
       throw new Error(`Invalid options in ${error.message}`)
     }
+
+    if (!userConfig.entry) {
+      userConfig.entry = 'src'
+    }
+
+    if (!userConfig.output) {
+      userConfig.output = 'lib'
+    }
+
     return userConfig
   }
-  return {}
+  return { entry: 'src', output: 'lib' }
 }

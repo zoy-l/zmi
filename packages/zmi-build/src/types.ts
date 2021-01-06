@@ -18,4 +18,6 @@ export interface IBundleOptions {
   disableTypeCheck?: boolean
   typescriptOpts?: Record<string, any>
   pkgs?: string[]
+  entry?: string
+  output?: string
 }

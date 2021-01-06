@@ -1,6 +1,8 @@
 import type { IBundleOptions } from './types'
 
-export default function getBabelConfig(bundleOpts: IBundleOptions) {
+export default function getBabelConfig(
+  bundleOpts: Omit<IBundleOptions, 'entry' | 'output'>
+) {
   const {
     target,
     nodeVersion,
