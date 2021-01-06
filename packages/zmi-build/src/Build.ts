@@ -29,19 +29,11 @@ export default class Build {
 
   isLerna: boolean
 
-  dirs?: string[]
-
   watch: boolean
-
-  srcPath!: string
-
-  targetPath!: string
 
   rootConfig = {}
 
   bundleOpts: IBundleOptions = {}
-
-  pkgPath: string | undefined
 
   tsConifgError: Diagnostic | undefined
 
@@ -75,11 +67,17 @@ export default class Build {
     })?.code
   }
 
-  createStream(src: string[] | string, pkg?: string) {
-    const { moduleType, entry } = this.bundleOpts
-    const { tsConfig, error } = getTSConfig(this.cwd, this.pkgPath)
-
-    console.log(this.targetPath)
+  createStream({
+    src,
+    pkg,
+    dir
+  }: {
+    src: string[] | string
+    pkg?: string
+    dir: string
+  }) {
+    const { moduleType, entry, output } = this.bundleOpts
+    const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
 
     if (error) {
       this.tsConifgError = error
@@ -87,7 +85,7 @@ export default class Build {
 
     return vinylFs
       .src(src, {
-        base: this.srcPath,
+        base: path.join(dir, entry!),
         allowEmpty: true
       })
       .pipe(gulpPlumber(() => {}))
@@ -104,7 +102,7 @@ export default class Build {
               msg: `${chalk.green('➜')} Transform to ${chalk.yellow(
                 moduleType
               )} for ${chalk.blue(
-                `${entry}${file.path.replace(this.srcPath, '')}`
+                `${entry}${file.path.replace(path.join(dir, entry!), '')}`
               )}`
             })
           }
@@ -129,7 +127,7 @@ export default class Build {
           }) as NodeJS.ReadWriteStream
         )
       )
-      .pipe(vinylFs.dest(this.targetPath))
+      .pipe(vinylFs.dest(path.join(dir, output!)))
   }
 
   async compileLerna() {
@@ -170,35 +168,28 @@ export default class Build {
       output: string
     }
 
-    this.srcPath = path.join(dir, entry)
-    this.targetPath = path.join(dir, output)
-
-    console.log(this.srcPath, this.targetPath)
-
-    if (this.isLerna) {
-      this.pkgPath = dir
-    }
-
     this.logInfo({ pkg, msg: chalk.gray(`➜ Clean ${output} directory`) })
     rimraf.sync(path.join(dir, output))
 
     return new Promise<void>((resolve) => {
+      const srcPath = path.join(dir, entry)
+
       const patterns = [
-        path.join(this.srcPath, '**/*'),
-        `!${path.join(this.srcPath, '**/*.mdx')}`,
-        `!${path.join(this.srcPath, '**/*.md')}`,
-        `!${path.join(this.srcPath, '**/demos{,/**}')}`,
-        `!${path.join(this.srcPath, '**/fixtures{,/**}')}`,
-        `!${path.join(this.srcPath, '**/__test__{,/**}')}`,
-        `!${path.join(this.srcPath, '**/*.+(test|e2e|spec).+(js|jsx|ts|tsx)')}`
+        path.join(srcPath, '**/*'),
+        `!${path.join(srcPath, '**/*.mdx')}`,
+        `!${path.join(srcPath, '**/*.md')}`,
+        `!${path.join(srcPath, '**/demos{,/**}')}`,
+        `!${path.join(srcPath, '**/fixtures{,/**}')}`,
+        `!${path.join(srcPath, '**/__test__{,/**}')}`,
+        `!${path.join(srcPath, '**/*.+(test|e2e|spec).+(js|jsx|ts|tsx)')}`
       ]
-      this.createStream(patterns, pkg).on('end', () => {
+      this.createStream({ src: patterns, pkg, dir }).on('end', () => {
         if (this.watch) {
           this.logInfo({
             pkg,
             msg: chalk.blue(
               `➜ Start watching ${
-                pkg ?? conversion(this.srcPath).replace(`${this.cwd}/`, '')
+                pkg ?? conversion(srcPath).replace(`${this.cwd}/`, '')
               } directory...`
             )
           })
@@ -221,12 +212,11 @@ export default class Build {
           const files: string[] = []
 
           watcher.on('all', (event, fullPath) => {
-            console.log(fullPath)
+            const relPath = fullPath.replace(srcPath, '')
 
-            const relPath = fullPath.replace(this.srcPath, '')
             this.logInfo({
               msg: `${eventColor(event)} ${conversion(
-                path.join(this.srcPath, relPath)
+                path.join(srcPath, relPath)
               ).replace(`${this.cwd}/`, '')}`
             })
 
@@ -238,7 +228,7 @@ export default class Build {
             if (fs.statSync(fullPath).isFile()) {
               if (!files.includes(fullPath)) files.push(fullPath)
               while (files.length) {
-                this.createStream(files.pop()!)
+                this.createStream({ src: files.pop()!, dir })
               }
             }
           })
