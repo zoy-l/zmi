@@ -13,6 +13,7 @@ import path from 'path'
 import fs from 'fs'
 
 import { colorLog, conversion, eventColor, clearConsole } from './utils'
+import getBabelConfig from './getBabelConifg'
 import type { IBundleOptions } from './types'
 import config from './config'
 
@@ -48,46 +49,6 @@ export default class Build {
     console.log(`${pkg ? `${colorLog(pkg)}: ` : ''}${msg}`)
   }
 
-  getBabelConfig() {
-    const {
-      target,
-      nodeVersion,
-      moduleType,
-      moduleOptions = {}
-    } = this.bundleOpts
-
-    const isBrowser = target === 'browser'
-
-    return {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            targets: isBrowser
-              ? { browsers: ['>0.2%', 'not ie 11', 'not op_mini all'] }
-              : { node: nodeVersion ?? 8 },
-            modules: moduleType === 'esm' ? false : 'auto'
-          }
-        ]
-      ],
-      plugins: [
-        moduleType === 'cjs' &&
-          !isBrowser && [
-            '@babel/plugin-transform-modules-commonjs',
-            { lazy: moduleOptions?.lazy ?? true }
-          ],
-        '@babel/plugin-proposal-export-default-from',
-        '@babel/plugin-proposal-do-expressions',
-        '@babel/plugin-proposal-export-namespace-from',
-        '@babel/plugin-proposal-nullish-coalescing-operator',
-        '@babel/plugin-proposal-optional-chaining',
-        '@babel/plugin-syntax-dynamic-import',
-        ['@babel/plugin-proposal-decorators', { legacy: true }],
-        ['@babel/plugin-proposal-class-properties', { loose: true }]
-      ].filter(Boolean) as (string | any[])[]
-    }
-  }
-
   getBundleOpts(cwd: string) {
     const userConfig = config(cwd)
 
@@ -99,7 +60,7 @@ export default class Build {
   transform(opts: { content: string; path: string }) {
     const { content, path } = opts
 
-    const babelConfig = this.getBabelConfig()
+    const babelConfig = getBabelConfig(this.bundleOpts)
 
     return babel.transformSync(content, {
       ...babelConfig,
@@ -109,6 +70,8 @@ export default class Build {
   }
 
   createStream(src: string[] | string, pkg?: string) {
+    const { moduleType } = this.bundleOpts
+
     return vinylFs
       .src(src, {
         base: this.srcPath
@@ -125,27 +88,29 @@ export default class Build {
             ) {
               this.logInfo({
                 pkg,
-                msg: `${chalk.green('➜')} Transform for ${chalk.blue(
-                  file.path.replace(this.srcPath.replace('src', ''), '')
+                msg: `${chalk.green('➜')} Transform to ${chalk.yellow(
+                  moduleType
+                )} for ${chalk.blue(
+                  `src${file.path.replace(this.srcPath, '')}`
                 )}`
               })
             }
 
-            return /\.ts?$/.test(file.path) && !file.path.endsWith('.d.ts')
+            return /\.ts$/.test(file.path) && !file.path.endsWith('.d.ts')
           },
           glupTs({
             allowSyntheticDefaultImports: true,
+            // skipLibCheck: true,
             declaration: true,
             module: 'esnext',
             target: 'esnext',
-            moduleResolution: 'node',
-            typeRoots: []
+            moduleResolution: 'node'
           })
         )
       )
       .pipe(
         gulpIf(
-          (file) => !file.path.endsWith('.d.ts'),
+          (file) => /\.js?$/.test(file.path) && !file.path.endsWith('.d.ts'),
           through.obj((chunk, _enc, callback) => {
             chunk.contents = Buffer.from(
               this.transform({
@@ -196,7 +161,6 @@ export default class Build {
   compile(dir: string, pkg?: string) {
     this.srcPath = path.join(dir, 'src')
     this.targetPath = path.join(dir, 'lib')
-
     this.bundleOpts = this.getBundleOpts(dir)
 
     this.logInfo({ msg: chalk.gray(`Clean lib directory`) })

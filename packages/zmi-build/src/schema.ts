@@ -11,6 +11,7 @@ export default Joi.object({
     lazy: Joi.boolean(),
     mjs: Joi.boolean()
   }),
+  runtimeHelpers: Joi.boolean(),
   extraBabelPlugins: Joi.array().items(Joi.any()),
   extraBabelPresets: Joi.array().items(Joi.any()),
   extraPostCSSPlugins: Joi.array().items(Joi.any()),

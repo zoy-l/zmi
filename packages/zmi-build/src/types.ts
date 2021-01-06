@@ -14,6 +14,7 @@ export interface IBundleOptions {
   browserFiles?: string[]
   nodeFiles?: string[]
   nodeVersion?: number
+  runtimeHelpers?: boolean
   disableTypeCheck?: boolean
   typescriptOpts?: Record<string, any>
   pkgs?: string[]
