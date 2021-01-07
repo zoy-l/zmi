@@ -8,8 +8,8 @@
     "debug": "node --inspect-brk packages/zmi/bin/zmi.js",
     "test": "zmi-test",
     "zmi-bootstrap": "lerna bootstrap",
-    "zmi-build": "father-build",
-    "zmi-build:watch": "nerd --watch",
+    "zmi-nerd": "nerd",
+    "zmi-nerd:watch": "nerd --watch",
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
     "zmi-link:nerd": "cd packages/zmi-nerd && yarn link && cd -",
     "zmi-clean:modules": "lerna clean --ignore @zmi/webpack --yes",
@@ -18,9 +18,8 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@octokit/core": "^3.2.4",
-    "@types/jest": "^26.0.19",
+    "@types/jest": "^26.0.20",
     "@zmi/test": "1.0.0",
-    "father-build": "^1.18.6",
     "lerna": "^3.22.1",
     "typescript": "^4.1.3"
   }

@@ -46,18 +46,15 @@ export default (_context: never, options: Ioptions) => {
   const preset = {
     presets: [
       options.env && [
-        require('@babel/preset-env').default,
+        '@babel/preset-env',
         {
           ...mergeConfig(defaultEnvConfig, toObject(options.env)),
           debug: options.debug
         }
       ],
-      options.react && [
-        require('@babel/preset-react').default,
-        toObject(options.react)
-      ],
+      options.react && ['@babel/preset-react', toObject(options.react)],
       options.typescript && [
-        require('@babel/preset-typescript').default,
+        '@babel/preset-typescript',
         {
           // https://babeljs.io/docs/en/babel-plugin-transform-typescript#impartial-namespace-support
           allowNamespaces: true
@@ -67,48 +64,34 @@ export default (_context: never, options: Ioptions) => {
     plugins: [
       // https://github.com/webpack/webpack/issues/10227
       // test?.any
-      [
-        require('@babel/plugin-proposal-optional-chaining').default,
-        { loose: false }
-      ],
+      ['@babel/plugin-proposal-optional-chaining', { loose: false }],
       // https://github.com/webpack/webpack/issues/10227
       // test ?? []
-      [
-        require('@babel/plugin-proposal-nullish-coalescing-operator').default,
-        { loose: false }
-      ],
-      require('@babel/plugin-syntax-top-level-await').default,
+      ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: false }],
+      '@babel/plugin-syntax-top-level-await',
       // Necessary to include regardless of the environment because
       // in practice some other transforms (such as object-rest-spread)
       // don't work without it: https://github.com/babel/babel/issues/7215
       // {...} [...]
-      [
-        require('@babel/plugin-transform-destructuring').default,
-        { loose: false }
-      ],
+      ['@babel/plugin-transform-destructuring', { loose: false }],
       // https://www.npmjs.com/package/babel-plugin-transform-typescript-metadata#usage
       // should be placed before @babel/plugin-proposal-decorators.
       // @Inject()
-      options.typescript && [
-        require.resolve('babel-plugin-transform-typescript-metadata')
-      ],
-      [require('@babel/plugin-proposal-decorators').default, { legacy: true }],
+      options.typescript && ['babel-plugin-transform-typescript-metadata'],
+      ['@babel/plugin-proposal-decorators', { legacy: true }],
+      ['@babel/plugin-proposal-class-properties', { loose: true }],
+      '@babel/plugin-proposal-export-default-from',
       [
-        require('@babel/plugin-proposal-class-properties').default,
-        { loose: true }
-      ],
-      require('@babel/plugin-proposal-export-default-from').default,
-      [
-        require('@babel/plugin-proposal-pipeline-operator').default,
+        '@babel/plugin-proposal-pipeline-operator',
         {
           proposal: 'minimal'
         }
       ],
-      require('@babel/plugin-proposal-do-expressions').default,
-      require('@babel/plugin-proposal-function-bind').default,
-      require('@babel/plugin-proposal-logical-assignment-operators').default,
+      '@babel/plugin-proposal-do-expressions',
+      '@babel/plugin-proposal-function-bind',
+      '@babel/plugin-proposal-logical-assignment-operators',
       options.transformRuntime && [
-        require('@babel/plugin-transform-runtime').default,
+        '@babel/plugin-transform-runtime',
         {
           version: require('@babel/runtime/package.json').version,
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime#absoluteruntime
@@ -122,19 +105,15 @@ export default (_context: never, options: Ioptions) => {
           ...toObject(options.transformRuntime)
         }
       ],
-      options.autoCSSModules && [
-        require.resolve('@zmi/css-modules')
-      ],
+      options.autoCSSModules && [require.resolve('@zmi/css-modules')],
       options.reactRemovePropTypes && [
-        require.resolve('babel-plugin-transform-react-remove-prop-types'),
+        'babel-plugin-transform-react-remove-prop-types',
         {
           removeImport: true
         }
       ],
       // import(...)
-      options.dynamicImportNode && [
-        require.resolve('babel-plugin-dynamic-import-node')
-      ],
+      options.dynamicImportNode && ['babel-plugin-dynamic-import-node'],
       ...(options.import
         ? options.import.map((importoptions) => [
             require.resolve('babel-plugin-import'),

@@ -24,7 +24,7 @@
     "fork-ts-checker-webpack-plugin": "^6.0.7",
     "less": "^3.13.0",
     "less-loader": "^7.2.1",
-    "postcss": "^8.2.2",
+    "postcss": "^8.2.3",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^4.1.0",
     "postcss-preset-env": "^6.7.0",
