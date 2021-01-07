@@ -1,17 +1,27 @@
 import type { IBundleOptions } from './types'
 
 export default function getBabelConfig(
-  bundleOpts: Omit<IBundleOptions, 'entry' | 'output'>
+  bundleOpts: Omit<IBundleOptions, 'entry' | 'output'>,
+  path?: string
 ) {
   const {
     target,
     nodeVersion,
     moduleType,
     runtimeHelpers,
-    moduleOptions = {}
+    nodeFiles,
+    browserFiles,
+    extraBabelPlugins = [],
+    extraBabelPresets = []
   } = bundleOpts
 
-  const isBrowser = target === 'browser'
+  let isBrowser = target === 'browser'
+
+  if (path) {
+    if (isBrowser) {
+      if (nodeFiles && nodeFiles.includes(path)) isBrowser = false
+    } else if (browserFiles && browserFiles.includes(path)) isBrowser = true
+  }
 
   return {
     presets: [
@@ -23,13 +33,14 @@ export default function getBabelConfig(
             : { node: nodeVersion ?? 8 },
           modules: moduleType === 'esm' ? false : 'auto'
         }
-      ]
+      ],
+      ...extraBabelPresets
     ] as (string | any[])[],
     plugins: [
       moduleType === 'cjs' &&
         !isBrowser && [
           '@babel/plugin-transform-modules-commonjs',
-          { lazy: moduleOptions?.lazy ?? true }
+          { lazy: true }
         ],
       '@babel/plugin-proposal-export-default-from',
       '@babel/plugin-proposal-do-expressions',
@@ -45,7 +56,8 @@ export default function getBabelConfig(
           useESModules: isBrowser && moduleType === 'esm',
           version: require('@babel/runtime/package.json').version
         }
-      ]
+      ],
+      ...extraBabelPlugins
     ].filter(Boolean) as (string | any[])[]
   }
 }

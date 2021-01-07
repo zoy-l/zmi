@@ -1,21 +1,16 @@
 export interface IBundleOptions {
-  moduleOptions?: {
-    lazy?: boolean
-  }
   moduleType?: 'esm' | 'cjs'
   extraBabelPlugins?: any[]
   extraBabelPresets?: any[]
-  extraPostCSSPlugins?: any[]
   target?: 'node' | 'browser'
   browserFiles?: string[]
   nodeFiles?: string[]
   nodeVersion?: number
   runtimeHelpers?: boolean
-  disableTypeCheck?: boolean
-  typescriptOpts?: Record<string, any>
   pkgs?: string[]
   entry?: string
   output?: string
+  lessOptions?: Omit<Less.Options, 'sourceMap' | 'compress' | 'filename'>
 }
 
 export interface IBundleOpt extends IBundleOptions {

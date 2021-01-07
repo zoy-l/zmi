@@ -25,7 +25,7 @@ function registerBabel({ cwd, only }: { cwd: string; only: string }) {
   })
 }
 
-export default function (cwd: string) {
+export default function (cwd: string): IBundleOptions {
   const configFile = CONFIG_FILES.find((file) =>
     fs.existsSync(path.join(cwd, file))
   )

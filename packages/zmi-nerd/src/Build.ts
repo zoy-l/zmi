@@ -2,6 +2,7 @@ import { Diagnostic } from 'typescript'
 import gulpPlumber from 'gulp-plumber'
 import * as babel from '@babel/core'
 import glupTs from 'gulp-typescript'
+import gulpLess from 'gulp-less'
 import chokidar from 'chokidar'
 import through from 'through2'
 import vinylFs from 'vinyl-fs'
@@ -10,6 +11,7 @@ import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
 import assert from 'assert'
 import chalk from 'chalk'
+
 import path from 'path'
 import fs from 'fs'
 
@@ -55,7 +57,7 @@ export default class Build {
   transform(opts: { content: string; path: string; bundleOpts: IBundleOpt }) {
     const { content, path, bundleOpts } = opts
 
-    const babelConfig = getBabelConfig(bundleOpts)
+    const babelConfig = getBabelConfig(bundleOpts, path)
 
     return babel.transformSync(content, {
       ...babelConfig,
@@ -75,7 +77,7 @@ export default class Build {
     src: string[] | string
     bundleOpts: IBundleOpt
   }) {
-    const { moduleType, entry, output } = bundleOpts
+    const { moduleType, entry, output, lessOptions } = bundleOpts
     const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
     const basePath = path.join(dir, entry)
 
@@ -88,6 +90,7 @@ export default class Build {
         base: basePath,
         allowEmpty: true
       })
+
       .pipe(
         gulpIf(
           () => this.watch,
@@ -98,6 +101,12 @@ export default class Build {
         gulpIf(
           ({ path }) => /\.ts$/.test(path) && !path.endsWith('.d.ts'),
           glupTs(tsConfig)
+        )
+      )
+      .pipe(
+        gulpIf(
+          ({ path }) => !!lessOptions && /\.less$/.test(path),
+          gulpLess(lessOptions)
         )
       )
       .pipe(
