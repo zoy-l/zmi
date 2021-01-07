@@ -182,7 +182,6 @@ export default class Build {
 
     return new Promise<void>((resolve) => {
       const srcPath = path.join(dir, entry)
-
       const patterns = [
         path.join(srcPath, '**/*'),
         `!${path.join(srcPath, '**/*.mdx')}`,
@@ -204,8 +203,13 @@ export default class Build {
           })
 
           if (this.tsConifgError) {
+            let { messageText } = this.tsConifgError
+            if (this.tsConifgError.code === 5012) {
+              messageText =
+                'The tsconfig.json file is not found, the default configuration will be used'
+            }
             this.logInfo({
-              msg: chalk.red(`❗${this.tsConifgError.messageText}\n`)
+              msg: chalk.red(`❗${messageText}\n`)
             })
           }
 
