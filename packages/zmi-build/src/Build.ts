@@ -15,7 +15,7 @@ import fs from 'fs'
 
 import { colorLog, conversion, eventColor, clearConsole } from './utils'
 import getBabelConfig from './getBabelConifg'
-import type { IBundleOptions } from './types'
+import type { IBundleOpt } from './types'
 import getTSConfig from './getTsConifg'
 import config from './config'
 
@@ -33,8 +33,6 @@ export default class Build {
 
   rootConfig = {}
 
-  bundleOpts: IBundleOptions = {}
-
   tsConifgError: Diagnostic | undefined
 
   constructor(options: IBuild) {
@@ -48,17 +46,16 @@ export default class Build {
   }
 
   getBundleOpts(cwd: string) {
-    const userConfig = config(cwd)
-
+    const userConfig = config(cwd) as IBundleOpt
     const bundleOpts = merge(this.rootConfig, userConfig)
 
     return bundleOpts
   }
 
-  transform(opts: { content: string; path: string }) {
-    const { content, path } = opts
+  transform(opts: { content: string; path: string; bundleOpts: IBundleOpt }) {
+    const { content, path, bundleOpts } = opts
 
-    const babelConfig = getBabelConfig(this.bundleOpts)
+    const babelConfig = getBabelConfig(bundleOpts)
 
     return babel.transformSync(content, {
       ...babelConfig,
@@ -70,14 +67,17 @@ export default class Build {
   createStream({
     src,
     pkg,
-    dir
+    dir,
+    bundleOpts
   }: {
-    src: string[] | string
     pkg?: string
     dir: string
+    src: string[] | string
+    bundleOpts: IBundleOpt
   }) {
-    const { moduleType, entry, output } = this.bundleOpts
+    const { moduleType, entry, output } = bundleOpts
     const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
+    const basePath = path.join(dir, entry)
 
     if (error) {
       this.tsConifgError = error
@@ -85,41 +85,41 @@ export default class Build {
 
     return vinylFs
       .src(src, {
-        base: path.join(dir, entry!),
+        base: basePath,
         allowEmpty: true
       })
-      .pipe(gulpPlumber(() => {}))
       .pipe(
-        gulpIf((file) => {
-          const fileType = ['.js', '.ts']
-
-          if (
-            fileType.includes(path.extname(file.path)) &&
-            !file.path.endsWith('.d.ts')
-          ) {
-            this.logInfo({
-              pkg,
-              msg: `${chalk.green('➜')} Transform to ${chalk.yellow(
-                moduleType
-              )} for ${chalk.blue(
-                `${entry}${file.path.replace(path.join(dir, entry!), '')}`
-              )}`
-            })
-          }
-
-          return /\.ts$/.test(file.path) && !file.path.endsWith('.d.ts')
-        }, glupTs(tsConfig))
+        gulpIf(
+          () => this.watch,
+          gulpPlumber(() => {})
+        )
       )
       .pipe(
         gulpIf(
-          (file) => /\.js?$/.test(file.path) && !file.path.endsWith('.d.ts'),
+          ({ path }) => /\.ts$/.test(path) && !path.endsWith('.d.ts'),
+          glupTs(tsConfig)
+        )
+      )
+      .pipe(
+        gulpIf(
+          ({ path }) => /\.js?$/.test(path) && !path.endsWith('.d.ts'),
           through.obj((chunk, _enc, callback) => {
             chunk.contents = Buffer.from(
               this.transform({
                 content: chunk.contents,
-                path: chunk.path
+                path: chunk.path,
+                bundleOpts
               }) as string
             )
+
+            this.logInfo({
+              pkg,
+              msg: `${chalk.green('➜')} Transform to ${chalk.yellow(
+                moduleType === 'cjs' ? 'Commonjs' : 'ES Module'
+              )} for ${chalk.blue(
+                `${entry}${chunk.path.replace(basePath, '')}`
+              )}`
+            })
 
             chunk.path = chunk.path.replace(path.extname(chunk.path), '.js')
 
@@ -127,7 +127,7 @@ export default class Build {
           }) as NodeJS.ReadWriteStream
         )
       )
-      .pipe(vinylFs.dest(path.join(dir, output!)))
+      .pipe(vinylFs.dest(path.join(dir, output)))
   }
 
   async compileLerna() {
@@ -161,15 +161,15 @@ export default class Build {
   }
 
   compile(dir: string, pkg?: string) {
-    this.bundleOpts = this.getBundleOpts(dir)
+    const bundleOpts = this.getBundleOpts(dir)
 
-    const { entry, output } = this.bundleOpts as IBundleOptions & {
-      entry: string
-      output: string
-    }
+    const { entry, output } = bundleOpts
 
     this.logInfo({ pkg, msg: chalk.gray(`➜ Clean ${output} directory`) })
     rimraf.sync(path.join(dir, output))
+
+    const createStream = (src: string | string[]) =>
+      this.createStream({ src, pkg, dir, bundleOpts })
 
     return new Promise<void>((resolve) => {
       const srcPath = path.join(dir, entry)
@@ -183,7 +183,7 @@ export default class Build {
         `!${path.join(srcPath, '**/__test__{,/**}')}`,
         `!${path.join(srcPath, '**/*.+(test|e2e|spec).+(js|jsx|ts|tsx)')}`
       ]
-      this.createStream({ src: patterns, pkg, dir }).on('end', () => {
+      createStream(patterns).on('end', () => {
         if (this.watch) {
           this.logInfo({
             pkg,
@@ -196,9 +196,7 @@ export default class Build {
 
           if (this.tsConifgError) {
             this.logInfo({
-              msg: chalk.red(
-                `❗ no such file tsconfig.json will use the default configuration!\n`
-              )
+              msg: chalk.red(`❗${this.tsConifgError.messageText}\n`)
             })
           }
 
@@ -228,7 +226,7 @@ export default class Build {
             if (fs.statSync(fullPath).isFile()) {
               if (!files.includes(fullPath)) files.push(fullPath)
               while (files.length) {
-                this.createStream({ src: files.pop()!, dir })
+                createStream(files.pop()!)
               }
             }
           })

@@ -1,9 +1,5 @@
 export interface IBundleOptions {
   moduleOptions?: {
-    minFile?: boolean
-    sourcemap?: boolean
-    mjs?: boolean
-    minify?: boolean
     lazy?: boolean
   }
   moduleType?: 'esm' | 'cjs'
@@ -20,4 +16,9 @@ export interface IBundleOptions {
   pkgs?: string[]
   entry?: string
   output?: string
+}
+
+export interface IBundleOpt extends IBundleOptions {
+  entry: string
+  output: string
 }

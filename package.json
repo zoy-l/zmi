@@ -9,7 +9,7 @@
     "test": "zmi-test",
     "zmi-bootstrap": "lerna bootstrap",
     "zmi-build": "father-build",
-    "zmi-build:watch": "father-build --watch",
+    "zmi-build:watch": "zmi-build --watch",
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
     "zmi-link:build": "cd packages/zmi-build && yarn link && cd -",
     "zmi-clean:modules": "lerna clean --ignore @zmi/webpack --yes",

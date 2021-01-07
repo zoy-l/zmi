@@ -12,7 +12,7 @@
     "@types/vinyl-fs": "^2.4.11"
   },
   "scripts": {
-    "compile": "BABEL_DISABLE_CACHE=1 node -r ./compile.js ./src/cli.ts --watch"
+    "compile": "BABEL_CACHE_PATH='./.cache/babel.cache.json' node -r ./compile.js ./src/cli.ts --watch"
   },
   "dependencies": {
     "@babel/core": "^7.12.10",
@@ -27,7 +27,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
     "@babel/register": "^7.12.10",
-    "chokidar": "^3.4.3",
+    "chokidar": "^3.5.0",
     "gulp-if": "^3.0.0",
     "gulp-less": "^4.0.1",
     "gulp-plumber": "^1.2.1",

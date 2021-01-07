@@ -5,11 +5,9 @@ export default Joi.object({
   disableTypeCheck: Joi.boolean(),
   nodeVersion: Joi.number(),
   target: Joi.string().valid('node', 'browser'),
-  moduleType: Joi.string().valid('ems', 'cjs'),
+  moduleType: Joi.string().valid('esm', 'cjs'),
   moduleOptions: Joi.object({
-    minify: Joi.boolean(),
-    lazy: Joi.boolean(),
-    mjs: Joi.boolean()
+    lazy: Joi.boolean()
   }),
   runtimeHelpers: Joi.boolean(),
   extraBabelPlugins: Joi.array().items(Joi.any()),
