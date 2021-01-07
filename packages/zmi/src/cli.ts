@@ -1,5 +1,5 @@
 import { launchDevice, chalk, dyo, clearConsole, isWin } from '@zmi/utils'
-import readline from 'readline'
+import * as readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'
 import Service from './service'

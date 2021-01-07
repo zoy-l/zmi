@@ -30,6 +30,7 @@
     "@types/gulp-less": "^0.0.31",
     "@types/less": "^3.0.2",
     "chokidar": "^3.5.0",
+    "esbuild": "^0.8.31",
     "gulp-if": "^3.0.0",
     "gulp-less": "^4.0.1",
     "gulp-plumber": "^1.2.1",

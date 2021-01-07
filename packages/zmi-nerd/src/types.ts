@@ -1,4 +1,5 @@
 export interface IBundleOptions {
+  esBuild?: true
   moduleType?: 'esm' | 'cjs'
   extraBabelPlugins?: any[]
   extraBabelPresets?: any[]
@@ -7,6 +8,7 @@ export interface IBundleOptions {
   nodeFiles?: string[]
   nodeVersion?: number
   runtimeHelpers?: boolean
+  disableTypes?: boolean
   pkgs?: string[]
   entry?: string
   output?: string

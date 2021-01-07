@@ -1,4 +1,6 @@
 export default {
+  esBuild: true,
   moduleType: 'cjs',
-  target: 'node'
+  target: 'node',
+  disableTypes: true
 }

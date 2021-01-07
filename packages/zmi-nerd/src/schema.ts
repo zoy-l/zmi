@@ -13,5 +13,7 @@ export default Joi.object({
   browserFiles: Joi.array().items(Joi.string()),
   entry: Joi.string(),
   output: Joi.string(),
-  lessOptions: Joi.object()
+  lessOptions: Joi.object(),
+  esBuild: Joi.boolean(),
+  disableTypes: Joi.boolean()
 })

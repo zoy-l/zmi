@@ -11,7 +11,7 @@ import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
 import assert from 'assert'
 import chalk from 'chalk'
-
+import * as Es from 'esbuild'
 import path from 'path'
 import fs from 'fs'
 
@@ -56,9 +56,21 @@ export default class Build {
 
   transform(opts: { content: string; path: string; bundleOpts: IBundleOpt }) {
     const { content, path, bundleOpts } = opts
+    const { esBuild, moduleType = 'cjs', nodeVersion } = bundleOpts
+
+    if (esBuild) {
+      const target = {
+        esm: 'chrome58',
+        cjs: `node${nodeVersion ?? 8}`
+      }
+      return Es.transformSync(content, {
+        target: target[moduleType],
+        format: moduleType,
+        treeShaking: true
+      }).code
+    }
 
     const babelConfig = getBabelConfig(bundleOpts, path)
-
     return babel.transformSync(content, {
       ...babelConfig,
       filename: path,
@@ -77,9 +89,13 @@ export default class Build {
     src: string[] | string
     bundleOpts: IBundleOpt
   }) {
-    const { moduleType, entry, output, lessOptions } = bundleOpts
+    const { moduleType, entry, output, lessOptions, disableTypes } = bundleOpts
     const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
     const basePath = path.join(dir, entry)
+
+    if (disableTypes) {
+      tsConfig.declaration = false
+    }
 
     if (error) {
       this.tsConifgError = error
@@ -126,7 +142,7 @@ export default class Build {
               msg: `${chalk.green('➜')} compile ${chalk.yellow(
                 moduleType
               )} for ${chalk.blue(
-                `${entry}${chunk.path.replace(basePath, '')}`
+                `${output}${chunk.path.replace(basePath, '')}`
               )}`
             })
 
