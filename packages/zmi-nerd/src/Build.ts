@@ -123,8 +123,8 @@ export default class Build {
 
             this.logInfo({
               pkg,
-              msg: `${chalk.green('➜')} Transform to ${chalk.yellow(
-                moduleType === 'cjs' ? 'Commonjs' : 'ES Module'
+              msg: `${chalk.green('➜')} compile ${chalk.yellow(
+                moduleType
               )} for ${chalk.blue(
                 `${entry}${chunk.path.replace(basePath, '')}`
               )}`
@@ -206,17 +206,17 @@ export default class Build {
             let { messageText } = this.tsConifgError
             if (this.tsConifgError.code === 5012) {
               messageText =
-                'The tsconfig.json file is not found, the default configuration will be used'
+                'Cannot find tsconfig.json, use the default configuration'
             }
             this.logInfo({
-              msg: chalk.red(`❗${messageText}\n`)
+              msg: chalk.yellow(`❗${messageText}\n`)
             })
           }
 
           const watcher = chokidar.watch(patterns, {
             ignoreInitial: true,
             awaitWriteFinish: {
-              stabilityThreshold: 600
+              stabilityThreshold: 800
             }
           })
 
