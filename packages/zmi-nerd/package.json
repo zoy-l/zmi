@@ -1,5 +1,5 @@
 {
-  "name": "@zmi/build",
+  "name": "@zmi/nerd",
   "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
@@ -40,6 +40,6 @@
     "yargs-parser": "^20.2.4"
   },
   "bin": {
-    "zmi-build": "./bin/zmi-build.js"
+    "nerd": "./bin/zmi-nerd.js"
   }
 }

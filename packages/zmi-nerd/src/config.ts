@@ -6,7 +6,7 @@ import { IBundleOptions } from './types'
 import { conversion } from './utils'
 import schema from './schema'
 
-export const CONFIG_FILES = ['.zmirc.ts', '.zmirc.js']
+export const CONFIG_FILES = ['.nerdrc.ts', '.nerdrc.js']
 
 function isDefault(obj: any) {
   return obj.default ?? obj
