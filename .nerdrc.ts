@@ -1,6 +1,7 @@
 export default {
   moduleType: 'cjs',
   target: 'node',
+  esBuild: true,
   pkgs: [
     'zmi-utils',
     'zmi-types',

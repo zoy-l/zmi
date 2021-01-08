@@ -12,9 +12,7 @@ export default class BabelRegister {
   register() {
     const only = lodash.uniq(
       Object.keys(this.only)
-        .reduce<string[]>((memo, key) => {
-          return memo.concat(this.only[key])
-        }, [])
+        .reduce<string[]>((memo, key) => memo.concat(this.only[key]), [])
         .map(winPath)
     )
     require('@babel/register')({

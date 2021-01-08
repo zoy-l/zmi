@@ -55,14 +55,9 @@ export default class Build {
     return bundleOpts
   }
 
-  transform(opts: { content: string; path: string; bundleOpts: IBundleOpt }) {
-    const { content, path, bundleOpts } = opts
-    const {
-      esBuild,
-      moduleType = 'cjs',
-      nodeVersion,
-      disableTypes
-    } = bundleOpts
+  transform(opts: { content: string; paths: string; bundleOpts: IBundleOpt }) {
+    const { content, paths, bundleOpts } = opts
+    const { esBuild, moduleType = 'cjs', nodeVersion } = bundleOpts
 
     if (esBuild) {
       const target = {
@@ -70,17 +65,17 @@ export default class Build {
         cjs: `node${nodeVersion ?? 8}`
       }
       return esBuildTransformSync(content, {
-        loader: disableTypes ? 'ts' : 'js',
+        loader: path.extname(paths).replace('.', '') as 'ts' | 'js',
         target: target[moduleType],
         format: moduleType,
         treeShaking: true
       }).code
     }
 
-    const babelConfig = getBabelConfig(bundleOpts, path)
+    const babelConfig = getBabelConfig(bundleOpts, paths)
     return babelTransformSync(content, {
       ...babelConfig,
-      filename: path,
+      filename: paths,
       configFile: false
     })?.code
   }
@@ -96,7 +91,7 @@ export default class Build {
     src: string[] | string
     bundleOpts: IBundleOpt
   }) {
-    const { moduleType, entry, output, lessOptions } = bundleOpts
+    const { moduleType, entry, output, lessOptions, esBuild } = bundleOpts
     const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
     const basePath = path.join(dir, entry)
 
@@ -146,16 +141,16 @@ export default class Build {
             chunk.contents = Buffer.from(
               this.transform({
                 content: chunk.contents,
-                path: chunk.path,
+                paths: chunk.path,
                 bundleOpts
               }) as string
             )
 
             this.logInfo({
               pkg,
-              msg: `${chalk.green('➜')} compile ${chalk.yellow(
-                moduleType
-              )} for ${chalk.blue(
+              msg: `${chalk.green(
+                `➜ ${esBuild ? 'esBuild' : 'babel'}`
+              )} ${chalk.yellow(moduleType)} for ${chalk.blue(
                 `${output}${chunk.path.replace(basePath, '')}`
               )}`
             })
