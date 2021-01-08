@@ -12,7 +12,8 @@ export default function getBabelConfig(
     nodeFiles,
     browserFiles,
     extraBabelPlugins = [],
-    extraBabelPresets = []
+    extraBabelPresets = [],
+    disableTypes
   } = bundleOpts
 
   let isBrowser = target === 'browser'
@@ -25,6 +26,7 @@ export default function getBabelConfig(
 
   return {
     presets: [
+      disableTypes && '@babel/preset-typescript',
       [
         '@babel/preset-env',
         {
@@ -35,7 +37,7 @@ export default function getBabelConfig(
         }
       ],
       ...extraBabelPresets
-    ] as (string | any[])[],
+    ].filter(Boolean) as (string | any[])[],
     plugins: [
       moduleType === 'cjs' &&
         !isBrowser && [

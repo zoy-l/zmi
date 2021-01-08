@@ -1,6 +1,7 @@
+import { transformSync as babelTransformSync } from '@babel/core'
+import { transformSync as esBuildTransformSync } from 'esbuild'
 import { Diagnostic } from 'typescript'
 import gulpPlumber from 'gulp-plumber'
-import * as babel from '@babel/core'
 import glupTs from 'gulp-typescript'
 import gulpLess from 'gulp-less'
 import chokidar from 'chokidar'
@@ -11,7 +12,7 @@ import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
 import assert from 'assert'
 import chalk from 'chalk'
-import * as Es from 'esbuild'
+
 import path from 'path'
 import fs from 'fs'
 
@@ -49,21 +50,27 @@ export default class Build {
 
   getBundleOpts(cwd: string) {
     const userConfig = config(cwd) as IBundleOpt
-    const bundleOpts = merge(this.rootConfig, userConfig)
+    const bundleOpts = merge(userConfig, this.rootConfig)
 
     return bundleOpts
   }
 
   transform(opts: { content: string; path: string; bundleOpts: IBundleOpt }) {
     const { content, path, bundleOpts } = opts
-    const { esBuild, moduleType = 'cjs', nodeVersion } = bundleOpts
+    const {
+      esBuild,
+      moduleType = 'cjs',
+      nodeVersion,
+      disableTypes
+    } = bundleOpts
 
     if (esBuild) {
       const target = {
         esm: 'chrome58',
         cjs: `node${nodeVersion ?? 8}`
       }
-      return Es.transformSync(content, {
+      return esBuildTransformSync(content, {
+        loader: disableTypes ? 'ts' : 'js',
         target: target[moduleType],
         format: moduleType,
         treeShaking: true
@@ -71,7 +78,7 @@ export default class Build {
     }
 
     const babelConfig = getBabelConfig(bundleOpts, path)
-    return babel.transformSync(content, {
+    return babelTransformSync(content, {
       ...babelConfig,
       filename: path,
       configFile: false
@@ -89,12 +96,16 @@ export default class Build {
     src: string[] | string
     bundleOpts: IBundleOpt
   }) {
-    const { moduleType, entry, output, lessOptions, disableTypes } = bundleOpts
+    const { moduleType, entry, output, lessOptions } = bundleOpts
     const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
     const basePath = path.join(dir, entry)
 
-    if (disableTypes) {
-      tsConfig.declaration = false
+    if (tsConfig.declaration === true) {
+      if (bundleOpts.disableTypes === true) {
+        tsConfig.declaration = false
+      }
+    } else {
+      bundleOpts.disableTypes = true
     }
 
     if (error) {
@@ -115,7 +126,10 @@ export default class Build {
       )
       .pipe(
         gulpIf(
-          ({ path }) => /\.ts$/.test(path) && !path.endsWith('.d.ts'),
+          ({ path }) =>
+            tsConfig.declaration &&
+            /\.ts$/.test(path) &&
+            !path.endsWith('.d.ts'),
           glupTs(tsConfig)
         )
       )
@@ -127,7 +141,7 @@ export default class Build {
       )
       .pipe(
         gulpIf(
-          ({ path }) => /\.js?$/.test(path) && !path.endsWith('.d.ts'),
+          ({ path }) => /\.(t|j)s?$/.test(path) && !path.endsWith('.d.ts'),
           through.obj((chunk, _enc, callback) => {
             chunk.contents = Buffer.from(
               this.transform({
