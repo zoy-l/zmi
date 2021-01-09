@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const { yargsParser, chalk, createDebug, assert } = require('@zmi/utils')
+const { yargsParser, chalk, createDebug } = require('@zmi/utils')
+const assert = require('assert')
 
 const args = yargsParser(process.argv.slice(2), {
   alias: {

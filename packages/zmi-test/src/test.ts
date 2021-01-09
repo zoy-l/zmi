@@ -1,6 +1,7 @@
 import { options as CliOptions } from 'jest-cli/build/cli/args'
-import { assert, mergeConfig } from '@zmi/utils'
+import { mergeConfig } from '@zmi/utils'
 import { runCLI } from 'jest'
+import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
 
@@ -13,6 +14,7 @@ export default async function (args: any) {
   const cwd = args.cwd ?? process.cwd()
 
   const userJestConfigFile = path.join(cwd, 'jest.config.js')
+
   const userJestConfig =
     fs.existsSync(userJestConfigFile) && require(userJestConfigFile)
 
@@ -46,5 +48,5 @@ export default async function (args: any) {
     ...argsConfig
   },[cwd])
 
-  assert(`Test with jest failed`, result.results.success)
+  assert(result.results.success, `Test with jest failed`)
 }

@@ -12,11 +12,10 @@ import gulpIf from 'gulp-if'
 import rimraf from 'rimraf'
 import assert from 'assert'
 import chalk from 'chalk'
-
 import path from 'path'
 import fs from 'fs'
 
-import { colorLog, conversion, eventColor, clearConsole } from './utils'
+import { colorLog, conversion, eventColor } from './utils'
 import getBabelConfig from './getBabelConifg'
 import type { IBundleOpt } from './types'
 import getTSConfig from './getTsConifg'
@@ -24,7 +23,7 @@ import config from './config'
 
 interface IBuild {
   cwd: string
-  watch: boolean
+  watch?: boolean
 }
 
 export default class Build {
@@ -40,7 +39,7 @@ export default class Build {
 
   constructor(options: IBuild) {
     this.cwd = options.cwd
-    this.watch = options.watch
+    this.watch = !!options.watch
     this.isLerna = fs.existsSync(path.join(options.cwd, 'lerna.json'))
   }
 
@@ -65,7 +64,7 @@ export default class Build {
         cjs: `node${nodeVersion ?? 8}`
       }
       return esBuildTransformSync(content, {
-        loader: path.extname(paths).replace('.', '') as 'ts' | 'js',
+        loader: path.extname(paths).slice(1) as 'ts' | 'js',
         target: target[moduleType],
         format: moduleType,
         treeShaking: true
@@ -92,6 +91,7 @@ export default class Build {
     bundleOpts: IBundleOpt
   }) {
     const { moduleType, entry, output, lessOptions, esBuild } = bundleOpts
+
     const { tsConfig, error } = getTSConfig(this.cwd, this.isLerna ? dir : '')
     const basePath = path.join(dir, entry)
 
@@ -112,7 +112,6 @@ export default class Build {
         base: basePath,
         allowEmpty: true
       })
-
       .pipe(
         gulpIf(
           () => this.watch,
@@ -216,6 +215,7 @@ export default class Build {
         `!${path.join(srcPath, '**/__test__{,/**}')}`,
         `!${path.join(srcPath, '**/*.+(test|e2e|spec).+(js|jsx|ts|tsx)')}`
       ]
+
       createStream(patterns).on('end', () => {
         if (this.watch) {
           this.logInfo({
@@ -258,6 +258,13 @@ export default class Build {
 
             if (!fs.existsSync(fullPath)) {
               const fullLibPath = fullPath.replace(entry, output)
+
+              if (fullLibPath.endsWith('.ts')) {
+                rimraf.sync(fullLibPath.replace('.ts', '.js'))
+                rimraf.sync(fullLibPath.replace('.ts', '.d.ts'))
+                return
+              }
+
               rimraf.sync(fullLibPath)
               return
             }
@@ -279,7 +286,6 @@ export default class Build {
   }
 
   async step() {
-    clearConsole()
     if (this.isLerna) {
       await this.compileLerna()
     } else {

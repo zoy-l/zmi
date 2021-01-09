@@ -1,4 +1,5 @@
-import { assert, isLerna as isLernaPackage } from '@zmi/utils'
+import { isLerna as isLernaPackage } from '@zmi/utils'
+import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
 
@@ -13,8 +14,8 @@ export default function defaultConfig(cwd: string, args: IZmiTestArgs) {
 
   if (hasPackage) {
     assert(
-      `You specified --package, but packages/${args.package} does not exists.`,
-      fs.existsSync(path.join(cwd, 'packages', args.package!))
+      fs.existsSync(path.join(cwd, 'packages', args.package!)),
+      `You specified --package, but packages/${args.package} does not exists.`
     )
   }
 

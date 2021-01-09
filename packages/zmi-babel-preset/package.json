@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "app.js",
+    "node.js"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7.12.1",
