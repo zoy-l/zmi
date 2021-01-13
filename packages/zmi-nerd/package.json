@@ -10,11 +10,13 @@
     "@types/gulp-plumber": "^0.0.32",
     "@types/rimraf": "^3.0.0",
     "@types/through2": "^2.0.36",
-    "@types/vinyl-fs": "^2.4.11"
+    "@types/vinyl-fs": "^2.4.11",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6"
   },
   "scripts": {
     "compile": "BABEL_CACHE_PATH='./.cache/babel.cache.json' node -r ./compile.js ./src/cli.ts",
-    "test": "zmi-test"
+    "debug": "zmi-test"
   },
   "dependencies": {
     "@zmi/test": "1.0.0",
@@ -44,9 +46,7 @@
     "through2": "^4.0.2",
     "typescript": "^4.1.3",
     "vinyl-fs": "^3.0.3",
-    "yargs-parser": "^20.2.4",
-    "fs-extra": "^9.0.1",
-    "glob": "^7.1.6"
+    "yargs-parser": "^20.2.4"
   },
   "bin": {
     "nerd-build": "./bin/zmi-nerd.js"
