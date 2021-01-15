@@ -1,6 +1,6 @@
 {
   "name": "@zmi/core",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@types/prettier": "^2.1.5",
-    "@zmi/utils": "1.0.0",
+    "@zmi/utils": "^1.0.1-alpha.0",
     "prettier": "^2.2.1"
   }
 }

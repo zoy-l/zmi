@@ -1,6 +1,6 @@
 {
   "name": "@zmi/webpack",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -45,8 +45,8 @@
     "zmi-webpack": "bin/zmi-webpack.js"
   },
   "dependencies": {
-    "@zmi/types": "1.0.0",
-    "@zmi/utils": "1.0.0",
+    "@zmi/types": "^1.0.1-alpha.0",
+    "@zmi/utils": "^1.0.1-alpha.0",
     "html-webpack-plugin": "^5.0.0-beta.1",
     "mini-css-extract-plugin": "^1.3.3"
   }
