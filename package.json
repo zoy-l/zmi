@@ -6,12 +6,11 @@
   ],
   "scripts": {
     "debug": "node --inspect-brk packages/zmi/bin/zmi.js",
-    "test": "zmi-test",
+    "test": "nerd test",
     "zmi-bootstrap": "lerna bootstrap",
     "zmi-nerd": "nerd build",
     "zmi-nerd:watch": "nerd build --watch",
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
-    "zmi-link:nerd": "cd packages/zmi-nerd && yarn link && cd -",
     "zmi-clean:modules": "lerna clean --ignore @zmi/webpack --yes",
     "zmi-update:deps": "yarn upgrade-interactive --latest"
   },

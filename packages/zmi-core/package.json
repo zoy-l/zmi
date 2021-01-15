@@ -18,5 +18,6 @@
     "@types/prettier": "^2.1.5",
     "@zmi/utils": "^1.0.1-alpha.0",
     "prettier": "^2.2.1"
-  }
+  },
+  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
 }

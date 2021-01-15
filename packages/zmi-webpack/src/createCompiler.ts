@@ -136,8 +136,12 @@ function createCompiler(opts: {
     clearConsole()
     log(chalk.cyan('Accelerating compilation ,Wait a moment...'))
     log()
+
+    return new Date()
   })
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
   forkHook.issues.tap(
     'ForkTsCheckerWebpackPlugin',
