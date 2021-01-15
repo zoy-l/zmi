@@ -11,7 +11,6 @@ export default {
     'zmi-core',
     'zmi',
     'zmi-webpack',
-    'zmi-preset',
-    'zmi-test'
+    'zmi-preset'
   ]
 }
