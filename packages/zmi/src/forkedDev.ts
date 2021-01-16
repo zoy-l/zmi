@@ -1,11 +1,6 @@
 import { chalk, launchDevice } from '@zmi/utils'
 import Service from './service'
 
-function onSignal(signal: string) {
-  console.log(signal)
-  process.exit(0)
-}
-
 launchDevice().then(({ args }) => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
   try {
@@ -18,10 +13,11 @@ launchDevice().then(({ args }) => {
       args
     })
 
-    // let closed = false
-
     Signals.forEach((signal) => {
-      process.once(signal, () => onSignal(signal))
+      process.once(signal, () => {
+        console.log(signal)
+        process.exit(0)
+      })
     })
   } catch (e) {
     console.error(chalk.red(e.message))

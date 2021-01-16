@@ -19,7 +19,7 @@ export default function start({ scriptPath }: IOpts) {
       inspectArgvIndex,
       1,
       inspectArgv.replace(/--inspect-brk=(.*)/, (match, s1) => {
-        let port
+        let port: number
         try {
           port = parseInt(s1, 10) + 1
         } catch (e) {
