@@ -37,8 +37,6 @@ export default class Bundler {
 
     const urls = prepareUrls({ host, port })
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const { devServer: devServerConfig } = bundleConfigs
 
     const compiler = createCompiler({

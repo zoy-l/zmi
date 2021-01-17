@@ -13,7 +13,7 @@
     "eslint-plugin-vue": "^7.4.1"
   },
   "devDependencies": {
-    "eslint": "^7.17.0"
+    "eslint": "^7.18.0"
   },
   "peerDependencies": {
     "typescript": "4.x"
