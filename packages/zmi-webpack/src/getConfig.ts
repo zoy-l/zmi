@@ -14,27 +14,27 @@ import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import RuleCss from './ruleCss'
 
 export interface IGetConfigOpts {
-  type: any
-  cwd: string
-  config: any
-  hot?: boolean
-  port?: number
-  targets?: any
-  browserslist?: any
-  htmlContent: string
+  modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
+  modifyBabelOpts?: (opts: Record<string, unknown>) => Promise<any>
+  chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
+  bundleImplementor?: typeof defaultWebpack
+  babelOptsForDep?: Record<string, unknown>
+  miniCSSExtractPluginLoaderPath?: string
+  babelOpts?: Record<string, unknown>
+  miniCSSExtractPluginPath?: string
+  env: 'development' | 'production'
+  __disableTerserForTest?: boolean
   entry?: {
     [key: string]: string
   }
-  __disableTerserForTest?: boolean
-  env: 'development' | 'production'
-  miniCSSExtractPluginPath?: string
-  babelOpts?: Record<string, unknown>
-  miniCSSExtractPluginLoaderPath?: string
-  babelOptsForDep?: Record<string, unknown>
-  bundleImplementor?: typeof defaultWebpack
-  chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
-  modifyBabelOpts?: (opts: Record<string, unknown>) => Promise<any>
-  modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
+  htmlContent: string
+  browserslist?: any
+  hot?: boolean
+  port?: number
+  targets?: any
+  cwd: string
+  config: any
+  type: any
 }
 
 export default async function getConfig(opts: IGetConfigOpts) {
