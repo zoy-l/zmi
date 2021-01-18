@@ -1,4 +1,3 @@
-import { yargs } from '@zmi/utils'
 import Joi from 'joi'
 
 import { IConfig } from './Service'
@@ -68,7 +67,7 @@ export interface ICommand {
   description?: string
   details?: string
   fn: {
-    ({ args }: { args: yargs.Arguments }): void
+    ({ args }: { args: any }): void
   }
 }
 

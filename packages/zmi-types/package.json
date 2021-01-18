@@ -8,5 +8,8 @@
     "index.d.ts",
     "index.js"
   ],
+  "dependencies": {
+    "@zmi/core": "^1.0.1-alpha.0"
+  },
   "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
 }
