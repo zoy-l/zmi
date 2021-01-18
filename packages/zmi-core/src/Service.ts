@@ -4,7 +4,7 @@ import { EventEmitter } from 'events'
 import path from 'path'
 
 import { resolvePlugins, pathToRegister } from './pluginUtils'
-import PluginAPI, { IPluginAPIOptions } from './pluginAPI'
+import PluginAPI, { IPluginAPIOptions } from './PluginAPI'
 import loadDotEnv from './withEnv'
 import Config from './Config'
 import paths from './paths'

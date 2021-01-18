@@ -1,4 +1,4 @@
 import Service from './Service'
-import pluginAPI from './pluginAPI'
+import pluginAPI from './PluginAPI'
 
 export { Service, pluginAPI }
