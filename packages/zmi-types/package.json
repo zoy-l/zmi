@@ -2,7 +2,7 @@
   "name": "@zmi/types",
   "version": "1.0.1-alpha.0",
   "main": "lib/index.js",
-  "types": "index",
+  "types": "lib/index.d.ts",
   "license": "MIT",
   "files": [
     "index.d.ts",

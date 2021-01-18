@@ -47,7 +47,7 @@ export default class Bundler {
       port
     })
 
-    const devServer = new WebpackDevServer(compiler as any, devServerConfig)
+    const devServer = new WebpackDevServer(compiler, devServerConfig)
 
     return devServer
   }

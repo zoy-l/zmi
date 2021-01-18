@@ -171,7 +171,12 @@ export default class Service extends EventEmitter {
   /**
    * @desc finally config
    */
-  config: IConfig | null = null
+  config!: IConfig
+
+  /**
+   * @desc extra command
+   */
+  args: any
 
   constructor(opts: IServiceOptions) {
     super()

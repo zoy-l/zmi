@@ -1,4 +1,5 @@
 import { assert, lodash } from '@zmi/utils'
+import { IApi } from '@zmi/types'
 import path from 'path'
 import fs from 'fs'
 
@@ -45,13 +46,11 @@ export function chunksToFiles(opts: {
   })
 }
 
-export function getHtmlGenerator({ api }: { api: any }): any {
+export function getHtmlGenerator({ api }: { api: IApi }): any {
   function getDocumentTplPath() {
     const docPath = path.join(api.paths.appPagesPath!, 'document.ejs')
     return fs.existsSync(docPath) ? docPath : ''
   }
-
-  // console.log(api.paths)
 
   class Html extends api.Html {
     constructor() {
@@ -91,7 +90,6 @@ export function getHtmlGenerator({ api }: { api: any }): any {
       //   htmlChunks
       // })
 
-
       return super.getContent({
         // cssFiles,
         // headJSFiles,
@@ -112,12 +110,12 @@ export function getHtmlGenerator({ api }: { api: any }): any {
           key: 'addHTMLStyles'
         }),
 
-        async modifyHTML(memo: any, args: Record<string, unknown>) {
+        async modifyHTML(memo: any, args: Record<string, any>) {
           return api.applyPlugins({
             key: 'modifyHTML',
             type: api.ApplyPluginsType.modify,
             initialValue: memo,
-            args
+            args: { args }
           })
         }
       })

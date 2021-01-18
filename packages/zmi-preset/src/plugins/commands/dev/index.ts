@@ -1,15 +1,16 @@
+import { IApi } from '@zmi/types'
 import { assert, chalk, portfinder, clearConsole } from '@zmi/utils'
 
 import { getBundleAndConfigs } from './BundleUtils'
 
-export default async (api: any) => {
+export default async (api: IApi) => {
   let port: number
   let host: string
 
   api.registerCommand({
     name: 'dev',
     description: 'start a dev server for development',
-    fn: async ({ args }: any) => {
+    fn: async ({ args }) => {
       const defaultPort =
         process.env.PORT ?? args?.port ?? api.config.devServer?.port
 
@@ -67,8 +68,7 @@ export default async (api: any) => {
     name: 'restartServer',
     fn() {
       console.log(chalk.gray(`🎯 Try to restart dev server...`))
-      // destroy()
-      process.send?.({ type: 'RESTART' })
+      process.send && process.send({ type: 'RESTART' })
     }
   })
 }
