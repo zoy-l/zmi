@@ -1,29 +1,18 @@
 import { mergeConfig } from '@zmi/utils'
 import path from 'path'
 
-interface IImportPluginoptions {
-  libraryName: string
-  libraryDirectory?: string
-  style?: boolean
-  camel2DashComponentName?: boolean
-}
 export interface Ioptions {
   typescript?: boolean
-  react?: typeof Object
+  react?: Record<string, any>
   debug?: boolean
-  env?: typeof Object
-  transformRuntime?: typeof Object
-  reactRemovePropTypes?: boolean
+  env?: Record<string, any>
+  transformRuntime?: Record<string, any>
   dynamicImportNode?: boolean
-  importToAwaitRequire?: typeof Object
   autoCSSModules?: boolean
-  svgr?: typeof Object
-  import?: IImportPluginoptions[]
-  lockCoreJS3?: typeof Object
   modify?: <T>(value: T) => T
 }
 
-function toObject<T extends Record<string, any>>(
+export function toObject<T extends Record<string, any>>(
   obj: T | boolean
 ): T | Partial<T> {
   return typeof obj === 'object' ? obj : {}
@@ -52,31 +41,18 @@ export default (_context: never, options: Ioptions) => {
           debug: options.debug
         }
       ],
-      options.react && ['@babel/preset-react', toObject(options.react)],
       options.typescript && [
         '@babel/preset-typescript',
         {
-          // https://babeljs.io/docs/en/babel-plugin-transform-typescript#impartial-namespace-support
           allowNamespaces: true
         }
       ]
     ].filter(Boolean),
     plugins: [
-      // https://github.com/webpack/webpack/issues/10227
-      // test?.any
       ['@babel/plugin-proposal-optional-chaining', { loose: false }],
-      // https://github.com/webpack/webpack/issues/10227
-      // test ?? []
       ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: false }],
       '@babel/plugin-syntax-top-level-await',
-      // Necessary to include regardless of the environment because
-      // in practice some other transforms (such as object-rest-spread)
-      // don't work without it: https://github.com/babel/babel/issues/7215
-      // {...} [...]
       ['@babel/plugin-transform-destructuring', { loose: false }],
-      // https://www.npmjs.com/package/babel-plugin-transform-typescript-metadata#usage
-      // should be placed before @babel/plugin-proposal-decorators.
-      // @Inject()
       options.typescript && ['babel-plugin-transform-typescript-metadata'],
       ['@babel/plugin-proposal-decorators', { legacy: true }],
       ['@babel/plugin-proposal-class-properties', { loose: true }],
@@ -106,21 +82,7 @@ export default (_context: never, options: Ioptions) => {
         }
       ],
       options.autoCSSModules && [require.resolve('@zmi/css-modules')],
-      options.reactRemovePropTypes && [
-        'babel-plugin-transform-react-remove-prop-types',
-        {
-          removeImport: true
-        }
-      ],
-      // import(...)
-      options.dynamicImportNode && ['babel-plugin-dynamic-import-node'],
-      ...(options.import
-        ? options.import.map((importoptions) => [
-            require.resolve('babel-plugin-import'),
-            importoptions,
-            importoptions.libraryName
-          ])
-        : [])
+      options.dynamicImportNode && ['babel-plugin-dynamic-import-node']
     ].filter(Boolean)
   }
 

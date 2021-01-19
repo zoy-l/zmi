@@ -1,13 +1,14 @@
-import { BundlerConfigType } from '@zmi/types'
+import { BundlerConfigType, IApi, IBundlerConfigType } from '@zmi/types'
 import DefaultBundler from '@zmi/webpack'
 import path from 'path'
+import fs from 'fs'
 
 import { getHtmlGenerator } from './generateHtml'
 
 type Env = 'development' | 'production'
 
 export async function getBundleAndConfigs(options: {
-  api: any
+  api: IApi
   port?: number
 }) {
   const { api, port } = options
@@ -46,11 +47,20 @@ export async function getBundleAndConfigs(options: {
   }
 
   const getArgs = (otps: Record<string, any>) => ({
-    ...otps,
-    bundlerArgs
+    args: {
+      ...otps,
+      bundlerArgs
+    }
   })
 
-  async function getConfig({ type }: { type: any }) {
+  const entryFilePath =
+    ['index.jsx', 'index.tsx', 'index.ts', 'index.js'].find((file) =>
+      fs.existsSync(path.join(api.paths.appSrcPath, file))
+    ) ?? 'index.js'
+
+  console.log(api.paths.appSrcPath, entryFilePath)
+
+  async function getConfig({ type }: { type: IBundlerConfigType }) {
     const env: Env = api.env === 'production' ? 'production' : 'development'
     const getConfigOpts = await api.applyPlugins({
       type: api.ApplyPluginsType.modify,
@@ -60,7 +70,7 @@ export async function getBundleAndConfigs(options: {
         type,
         port,
         entry: {
-          zmi: path.join(api.paths.appSrcPath!, 'zmi.tsx')
+          zmi: path.join(api.paths.appSrcPath, entryFilePath)
         },
         hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
         bundleImplementor,

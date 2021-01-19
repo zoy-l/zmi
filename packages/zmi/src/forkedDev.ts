@@ -1,4 +1,6 @@
 import { chalk, launchDevice } from '@zmi/utils'
+
+import { getCwd, getPkg } from './getRoot'
 import Service from './service'
 
 launchDevice().then(({ args }) => {
@@ -6,7 +8,10 @@ launchDevice().then(({ args }) => {
   try {
     process.env.NODE_ENV = 'development'
 
-    const service = new Service({})
+    const service = new Service({
+      cwd: getCwd(),
+      pkg: getPkg(process.cwd())
+    })
 
     service.run({
       command: 'dev',

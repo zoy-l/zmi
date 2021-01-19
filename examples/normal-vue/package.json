@@ -1,0 +1,15 @@
+{
+  "name": "normal-vue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "vue": "^3.0.5"
+  },
+  "scripts": {
+    "dev": "zmi dev"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.5"
+  }
+}

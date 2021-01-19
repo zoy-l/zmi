@@ -1,5 +1,5 @@
-import { IApi } from '@zmi/types'
 import { assert, chalk, portfinder, clearConsole } from '@zmi/utils'
+import { IApi } from '@zmi/types'
 
 import { getBundleAndConfigs } from './BundleUtils'
 
@@ -11,11 +11,16 @@ export default async (api: IApi) => {
     name: 'dev',
     description: 'start a dev server for development',
     fn: async ({ args }) => {
-      const defaultPort =
-        process.env.PORT ?? args?.port ?? api.config.devServer?.port
+      const defaultPort = [
+        process.env.PORT,
+        args?.port,
+        api.config.devServer?.port
+      ].find(Boolean)
 
       port = await portfinder.getPortPromise({ port: defaultPort })
-      host = process.env.HOST ?? api.config.devServer?.host ?? '0.0.0.0'
+      host = [process.env.HOST, api.config.devServer?.host, '0.0.0.0'].find(
+        Boolean
+      )
 
       const {
         bundler,

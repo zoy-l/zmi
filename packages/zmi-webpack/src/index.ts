@@ -9,7 +9,7 @@ interface ISetupOpts {
   bundleImplementor?: typeof defaultWebpack
   port: number
   host: string
-  appName: string
+  appName?: string
 }
 
 export default class Bundler {
@@ -30,7 +30,7 @@ export default class Bundler {
     const {
       bundleConfigs,
       bundleImplementor = defaultWebpack,
-      appName = 'zmi-project',
+      appName = 'project',
       host,
       port
     } = options

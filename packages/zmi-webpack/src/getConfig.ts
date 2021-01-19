@@ -9,8 +9,8 @@ import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
 import path from 'path'
 
-import { getBabelOpts, getBabelPresetOpts } from './getBabelOptions'
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
+import { getBabelOpts } from './getBabelOptions'
 import RuleCss from './ruleCss'
 
 export interface IGetConfigOpts {
@@ -57,6 +57,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   const isDev = env === 'development'
   const isProd = env === 'production'
+  const isReact = config.type === 'react'
+  const isVue = config.type === 'vue'
 
   let webpackConfig = new WebpackChain()
   const createCSSRule = new RuleCss({
@@ -120,15 +122,19 @@ export default async function getConfig(opts: IGetConfigOpts) {
       '.json'
     ])
 
-  const presetOpts = getBabelPresetOpts({
-    config,
-    env,
-    targets
-  })
-
   const babelOpts = getBabelOpts({
     config,
-    presetOpts,
+    presetOpts: {
+      typescript: true,
+      nodeEnv: env,
+      dynamicImportNode: !config.dynamicImport,
+      autoCSSModules: true,
+      env: {
+        targets
+      },
+      type: config.type,
+      frameOptions: config.frameOptions
+    },
     hot
   })
 
@@ -142,6 +148,27 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .use('babel-loader')
     .loader('babel-loader')
     .options(babelOpts)
+
+  webpackConfig.when(isVue, (WConfig) => {
+    WConfig.module
+      .rule('vue')
+      .test(/\.vue$/)
+      .use('vue-loader')
+      .loader('vue-loader')
+      .options({
+        hotReload: hot
+      })
+
+    // http://link.vuejs.org/feature-flags
+    webpackConfig.plugin('feature-flags').use(defaultWebpack.DefinePlugin, [
+      {
+        __VUE_OPTIONS_API__: 'true',
+        __VUE_PROD_DEVTOOLS__: 'false'
+      }
+    ])
+
+    WConfig.plugin('vue-loader').use(require('vue-loader').VueLoaderPlugin)
+  })
 
   webpackConfig.module
     .rule('images')
@@ -188,7 +215,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   // Official implementation
   // And also added in cra 4.0
   // https://github.com/pmmmwh/react-refresh-webpack-plugin
-  webpackConfig.when(isDev && !!hot, (WConfig) => {
+  webpackConfig.when(isReact && isDev && !!hot, (WConfig) => {
     WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
   })
 
@@ -222,6 +249,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   webpackConfig
     .plugin('ForkTsChecker')
     .use(ForkTsCheckerWebpackPlugin, [{ async: false }])
+
   webpackConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
     {
       total: 15,

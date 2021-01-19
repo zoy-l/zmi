@@ -1,7 +1,7 @@
-import { Service as CoreService } from '@zmi/core'
+import { Service as CoreService, IServiceOptions } from '@zmi/core'
 
 export default class Service extends CoreService {
-  constructor(opts: any) {
+  constructor(opts: IServiceOptions) {
     super({
       ...opts,
       plugins: [require.resolve('@zmi/preset')]
