@@ -12,6 +12,7 @@ import path from 'path'
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import { getBabelOpts } from './getBabelOptions'
 import RuleCss from './ruleCss'
+import VueClient from './VueClient'
 
 export interface IGetConfigOpts {
   modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
@@ -179,6 +180,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
         // happyPackMode: useThreads
       })
 
+    WConfig.plugin('vue-client').use(VueClient)
+
     WConfig.plugin('vue-loader').use(require('vue-loader').VueLoaderPlugin)
   })
 
@@ -317,13 +320,12 @@ export default async function getConfig(opts: IGetConfigOpts) {
     hot,
     port,
     clientLogLevel: 'silent',
+    compress: isDev,
     noInfo: true,
     inline: true,
     stats: 'none',
     contentBase: '/'
   }
-
-  console.log(WTarget)
 
   return WTarget
 }

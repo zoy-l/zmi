@@ -12,7 +12,7 @@ export default defineComponent({
 
   data() {
     return {
-      msg: 'hello vue 4'
+      msg: 'hello vue 3'
     }
   },
   methods: {
