@@ -1,6 +1,7 @@
 <template>
   <div>
     {{ msg }}
+    <Hello />
   </div>
 </template>
 
@@ -12,9 +13,10 @@ export default defineComponent({
 
   data() {
     return {
-      msg: 'hello vue 2'
+      msg: 'hello vue 3'
     }
   },
+
   methods: {
     hello(a: number) {
       console.log(a)

@@ -1,3 +1,4 @@
+<script lang="tsx">
 import Home from './home.vue'
 import { defineComponent } from 'vue'
 
@@ -5,7 +6,7 @@ export default defineComponent({
   name: 'hello world',
   data() {
     return {
-      tsx: 'hello tsx'
+      tsx: 'hello vue tsx'
     }
   },
 
@@ -22,3 +23,5 @@ export default defineComponent({
     )
   }
 })
+</script>
+

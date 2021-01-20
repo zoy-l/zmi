@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@vuedx/typescript-plugin-vue": "^0.6.0",
     "vue": "^3.0.5"
   },
   "scripts": {

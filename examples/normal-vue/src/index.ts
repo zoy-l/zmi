@@ -1,4 +1,4 @@
 import { createApp } from 'vue'
-import App from './hello'
+import App from './tsx.vue'
 
 createApp(App).mount('#root')
