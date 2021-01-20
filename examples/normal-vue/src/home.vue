@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div :class="$style.div" @click="hello">
     {{ msg }}
-    <Hello />
   </div>
 </template>
 
@@ -19,14 +18,14 @@ export default defineComponent({
 
   methods: {
     hello(a: number) {
-      console.log(a)
+      console.log(this)
     }
   }
 })
 </script>
 
-<style>
-div {
+<style module>
+.div {
   color: blue;
 }
 </style>

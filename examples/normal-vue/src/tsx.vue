@@ -1,5 +1,6 @@
 <script lang="tsx">
 import Home from './home.vue'
+import hello from './index.css'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -16,7 +17,7 @@ export default defineComponent({
 
   render() {
     return (
-      <div>
+      <div class={hello.red}>
         {this.tsx}
         <Home />
       </div>
