@@ -10,9 +10,9 @@ import defaultWebpack from 'webpack'
 import path from 'path'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
+import VueClient from './VueClientWebpackPlugin'
 import { getBabelOpts } from './getBabelOptions'
 import RuleCss from './ruleCss'
-import VueClient from './VueClient'
 
 export interface IGetConfigOpts {
   modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
@@ -293,7 +293,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
         ':percent'
       )}  ${chalk.grey('( :elapseds )')}`,
       customSummary: (time) => {
-        console.log(chalk.blue(`🎯 Successfully! Compiled time ${time} \n`))
+        console.log(chalk.blue(`🎯 Compiled time ${time} \n`))
       }
     }
   ])

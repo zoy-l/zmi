@@ -3,11 +3,11 @@ export default {
   target: 'node',
   pkgs: [
     'zmi-utils',
-    'zmi-types',
     'zmi-babel-preset',
     'zmi-css-modules',
     'zmi-create-app',
     'zmi-core',
+    'zmi-types',
     'zmi',
     'zmi-webpack',
     'zmi-preset'

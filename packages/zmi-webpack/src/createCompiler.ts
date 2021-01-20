@@ -170,9 +170,11 @@ function createCompiler(opts: {
       if (messages.errors.length > 1) {
         messages.errors.length = 1
       }
+      clearConsole()
       log('\n')
       log(chalk.red('❌ Compilation failed.\n'))
       log(chalk.red(messages.errors.join('\n\n')))
+      log()
       return
     }
 

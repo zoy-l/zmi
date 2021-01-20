@@ -1,7 +1,5 @@
 // Taken from the `react-dev-utils`
 
-import chalk from 'chalk'
-
 const friendlySyntaxErrorLabel = 'Syntax error:'
 
 function isLikelyASyntaxError(message: string | string[]) {
@@ -73,8 +71,6 @@ function formatMessage(message: string) {
     lines[1] +=
       'Run `npm install node-sass` or `yarn add node-sass` inside your workspace.'
   }
-
-  lines[0] = chalk.bgCyan(chalk.black(lines[0]))
 
   message = lines.join('\n')
   // Internal stacks are generally useless so we strip them... with the

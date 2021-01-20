@@ -8,6 +8,7 @@ export default defineComponent({
       tsx: 'hello tsx'
     }
   },
+
   components: {
     Home
   },

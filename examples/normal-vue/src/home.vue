@@ -12,7 +12,7 @@ export default defineComponent({
 
   data() {
     return {
-      msg: 'hello vue 3'
+      msg: 'hello vue 2'
     }
   },
   methods: {
@@ -25,6 +25,6 @@ export default defineComponent({
 
 <style>
 div {
-  color: red;
+  color: blue;
 }
 </style>
