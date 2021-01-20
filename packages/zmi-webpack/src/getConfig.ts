@@ -231,7 +231,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
     WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
   })
 
-  webpackConfig.plugin('extract-css').use(miniCssExtractPlugin)
+  webpackConfig.when(!isDev, (WConfig) => {
+    WConfig.plugin('extract-css').use(miniCssExtractPlugin)
+  })
 
   // IgnorePlugin ignores localized content when packaging
   // https://www.webpackjs.com/plugins/ignore-plugin/
@@ -318,9 +320,10 @@ export default async function getConfig(opts: IGetConfigOpts) {
     noInfo: true,
     inline: true,
     stats: 'none',
-
     contentBase: '/'
   }
+
+  console.log(WTarget)
 
   return WTarget
 }

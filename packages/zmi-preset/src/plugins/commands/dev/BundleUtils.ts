@@ -58,8 +58,6 @@ export async function getBundleAndConfigs(options: {
       fs.existsSync(path.join(api.paths.appSrcPath, file))
     ) ?? 'index.js'
 
-  console.log(api.paths.appSrcPath, entryFilePath)
-
   async function getConfig({ type }: { type: IBundlerConfigType }) {
     const env: Env = api.env === 'production' ? 'production' : 'development'
     const getConfigOpts = await api.applyPlugins({

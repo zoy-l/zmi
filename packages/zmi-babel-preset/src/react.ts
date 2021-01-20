@@ -4,10 +4,7 @@ export default function (_context: never, opts: Record<string, any>) {
   return {
     presets: [
       [basePreset, opts],
-      opts.type === 'react' && [
-        '@babel/preset-react',
-        toObject(opts.frameOptions)
-      ]
+      ['@babel/preset-react', toObject(opts.frameOptions)]
     ].filter(Boolean),
     plugins: [
       opts.reactRemovePropTypes && [

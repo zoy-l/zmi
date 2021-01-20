@@ -55,26 +55,28 @@ export default class RuleCss {
     const { rule, isCSSModules, loader, options } = applyLoadersOptions
     const { config, isDev } = this.options
 
-    // prettier-ignore
-    rule.when(config.styleLoader,
-    (WConfig) => {
-      WConfig.use('style-loader')
-        .loader(require.resolve('style-loader'))
-        .options(
-          deepmerge({
-            base: 0
-          }, config.styleLoader ?? {})
-        )
-    },(WConfig)=>{
-      if (!config.styleLoader) {
-        WConfig
-          .use('extract-css-loader')
+    rule.when(
+      isDev,
+      (WConfig) => {
+        WConfig.use('style-loader')
+          .loader(require.resolve('style-loader'))
+          .options(
+            deepmerge(
+              {
+                base: 0
+              },
+              config.styleLoader ?? {}
+            )
+          )
+      },
+      (WConfig) => {
+        WConfig.use('extract-css-loader')
           .loader(miniCssExtractPlugin.loader)
           .options({
-            publicPath: './',
-          });
+            publicPath: './'
+          })
       }
-    })
+    )
 
     // prettier-ignore
     rule.when(isDev && isCSSModules && config.cssModulesTypescript, (WConfig) => {

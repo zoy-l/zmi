@@ -1,5 +1,7 @@
 <template>
-  <div>{{ msg }}</div>
+  <div>
+    {{ msg }}
+  </div>
 </template>
 
 <script lang="ts">
@@ -7,9 +9,10 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',
+
   data() {
     return {
-      msg: 'hello vue 3.1'
+      msg: 'hello vue 4'
     }
   },
   methods: {
