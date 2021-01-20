@@ -49,7 +49,8 @@
     "@zmi/types": "^1.0.1-alpha.0",
     "@zmi/utils": "^1.0.1-alpha.0",
     "html-webpack-plugin": "^5.0.0-beta.1",
-    "mini-css-extract-plugin": "^1.3.4"
+    "mini-css-extract-plugin": "^1.3.4",
+    "ts-loader": "^8.0.14"
   },
   "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
 }

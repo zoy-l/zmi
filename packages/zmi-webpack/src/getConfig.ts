@@ -125,7 +125,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   const babelOpts = getBabelOpts({
     config,
     presetOpts: {
-      typescript: true,
+      typescript: !isVue,
       nodeEnv: env,
       dynamicImportNode: !config.dynamicImport,
       autoCSSModules: true,
@@ -160,12 +160,24 @@ export default async function getConfig(opts: IGetConfigOpts) {
       })
 
     // http://link.vuejs.org/feature-flags
-    webpackConfig.plugin('feature-flags').use(defaultWebpack.DefinePlugin, [
+    WConfig.plugin('feature-flags').use(defaultWebpack.DefinePlugin, [
       {
         __VUE_OPTIONS_API__: 'true',
         __VUE_PROD_DEVTOOLS__: 'false'
       }
     ])
+
+    WConfig.module
+      .rule('vue-ts')
+      .test(/\.ts$/)
+      .use('ts-loader')
+      .loader('ts-loader')
+      .options({
+        transpileOnly: true,
+        appendTsSuffixTo: ['\\.vue$']
+        // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
+        // happyPackMode: useThreads
+      })
 
     WConfig.plugin('vue-loader').use(require('vue-loader').VueLoaderPlugin)
   })
@@ -246,9 +258,26 @@ export default async function getConfig(opts: IGetConfigOpts) {
     })
   })
 
-  webpackConfig
-    .plugin('ForkTsChecker')
-    .use(ForkTsCheckerWebpackPlugin, [{ async: false }])
+  webpackConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin, [
+    {
+      async: false,
+      typescript: isVue
+        ? {
+            extensions: {
+              vue: {
+                enabled: true,
+                compiler: '@vue/compiler-sfc'
+              }
+            },
+            diagnosticOptions: {
+              semantic: true
+              // https://github.com/TypeStrong/ts-loader#happypackmode
+              // syntactic: useThreads
+            }
+          }
+        : {}
+    }
+  ])
 
   webpackConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
     {
@@ -289,6 +318,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     noInfo: true,
     inline: true,
     stats: 'none',
+
     contentBase: '/'
   }
 
