@@ -25,7 +25,7 @@ export interface IGetConfigOpts {
   miniCSSExtractPluginPath?: string
   env: 'development' | 'production'
   __disableTerserForTest?: boolean
-  entry?: Record<string, any>
+  entry: Record<string, any>
   pkg: Record<string, any>
   htmlContent: string
   browserslist?: any
@@ -47,7 +47,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     type,
     port,
     htmlContent,
-    entry = {},
+    entry,
     bundleImplementor = defaultWebpack,
     miniCSSExtractPluginLoaderPath
   } = opts

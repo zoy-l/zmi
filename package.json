@@ -21,6 +21,6 @@
     "@vue/compiler-sfc": "^3.0.5",
     "lerna": "^3.22.1",
     "typescript": "^4.1.3",
-    "zmi-nerd": "^1.0.2"
+    "zmi-nerd": "^1.0.44"
   }
 }

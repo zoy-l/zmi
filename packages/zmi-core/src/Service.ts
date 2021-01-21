@@ -52,7 +52,6 @@ const Cycle = [
 ]
 
 const ServiceAttribute = [
-  'ConfigChangeType',
   'ApplyPluginsType',
   'babelRegister',
   'applyPlugins',

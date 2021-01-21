@@ -1,79 +1,51 @@
-import { assert, chalk, portfinder, clearConsole } from '@zmi/utils'
 import { IApi } from '@zmi/types'
+import fs from 'fs'
 
-import { getBundleAndConfigs } from './BundleUtils'
-
-export default async (api: IApi) => {
-  let port: number
-  let host: string
-
+export default (api: IApi) => {
   api.registerCommand({
     name: 'dev',
-    description: 'start a dev server for development',
-    fn: async ({ args }) => {
-      const defaultPort = [
-        process.env.PORT,
-        args?.port,
-        api.config.devServer?.port
-      ].find(Boolean)
+    description: 'start dev server for development',
+    async fn({ args }) {
+      const { miniAppConfig, frameType } = api.config
+      let FrameType = frameType
 
-      port = await portfinder.getPortPromise({ port: defaultPort })
-      host = [process.env.HOST, api.config.devServer?.host, '0.0.0.0'].find(
-        Boolean
-      )
+      if (!FrameType) {
+        if (miniAppConfig) {
+          FrameType = 'miniApp'
+        } else {
+          const projectConfig = [
+            fs.existsSync(`${api.paths.appSrcPath}/project.config.json`),
+            fs.existsSync(`${api.paths.appSrcPath}/app.json`)
+          ].some(Boolean)
 
-      const {
-        bundler,
-        bundleConfigs,
-        bundleImplementor
-      } = await getBundleAndConfigs({ api, port })
+          let isWeb = false
+          if (api.pkg?.dependencies) {
+            isWeb = Object.keys(api.pkg?.dependencies).some((name) =>
+              ['react', 'vue'].includes(name)
+            )
+          }
 
-      const devServer = await bundler.setupDevServer({
-        port,
-        host,
-        bundleConfigs,
-        bundleImplementor,
-        appName: api.pkg.name
-      })
+          if (isWeb && projectConfig) {
+            throw new Error(
+              `zmi can't determine it is a 'web/miniapp' environment, please specify 'frameType'`
+            )
+          }
 
-      devServer.listen(port, host, (err: Error | undefined) => {
-        if (err) {
-          return console.log(err)
+          FrameType = projectConfig ? 'miniApp' : 'react'
         }
-        clearConsole()
-        console.log()
-        console.log(chalk.blue(`Speed up the server,Wait a minute...\n`))
-      })
-    }
-  })
+      }
 
-  api.registerMethod({
-    name: 'getPort',
-    fn() {
-      assert(
-        `api.getPort() is only valid in development.`,
-        api.env === 'development'
-      )
-      return port
-    }
-  })
-
-  api.registerMethod({
-    name: 'getHostname',
-    fn() {
-      assert(
-        `api.getHostname() is only valid in development.`,
-        api.env === 'development'
-      )
-      return host
-    }
-  })
-
-  api.registerMethod({
-    name: 'restartServer',
-    fn() {
-      console.log(chalk.gray(`🎯 Try to restart dev server...`))
-      process.send && process.send({ type: 'RESTART' })
+      switch (FrameType) {
+        case 'react':
+        case 'vue':
+          api.service.runCommand({ command: 'webDev', args })
+          break
+        case 'miniApp':
+          api.service.runCommand({ command: 'miniAppDev', args })
+          break
+        default:
+          break
+      }
     }
   })
 }

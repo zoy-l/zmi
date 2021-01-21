@@ -51,7 +51,7 @@ type ServicePluginApi = Pick<
 > &
   PluginAPI
 
-export interface IApi extends ServicePluginApi {
+export type IApi = ServicePluginApi & {
   getPort: IGetter<number>
   getHostname: IGetter<string>
   restartServer: () => void
