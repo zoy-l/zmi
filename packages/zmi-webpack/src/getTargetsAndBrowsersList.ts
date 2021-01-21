@@ -1,24 +1,26 @@
-import { BundlerConfigType } from '@zmi/types'
+import { deepmerge } from '@zmi/utils'
 
 interface IOpts {
   config: any
   type: any
 }
 
-export default function ({ config, type }: IOpts) {
-  let targets = config.targets ?? {}
+export default function ({ config }: IOpts) {
+  let targets: Record<string, any> = deepmerge(
+    { chrome: 49, firefox: 64, safari: 10, edge: 13, ios: 10 },
+    config.targets ?? {}
+  )
 
   // filter false and 0 targets
   targets = Object.keys(targets)
     .filter((key) => {
       if (targets[key] === false) return false
-      if (type === BundlerConfigType.ssr) return key === 'node'
       return key !== 'node'
     })
     .reduce((memo, key) => {
       memo[key] = targets[key]
       return memo
-    }, {} as Record<string, string | number | false>)
+    }, {})
 
   const browserslist =
     targets.browsers ??

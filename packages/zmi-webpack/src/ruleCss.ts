@@ -9,8 +9,6 @@ interface IOpts {
   isDev: boolean
   disableCompress?: boolean
   browserslist?: any
-  miniCSSExtractPluginPath?: string
-  miniCSSExtractPluginLoaderPath?: string
 }
 
 interface ICreateCSSRuleOpts {
@@ -35,6 +33,7 @@ export default class RuleCss {
   createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
     const { lang, test, loader, options } = createCSSRuleOptions
     const { webpackConfig } = this.options
+
     const rule = webpackConfig.module.rule(lang).test(test)
 
     this.applyLoaders({
@@ -53,7 +52,7 @@ export default class RuleCss {
 
   applyLoaders(applyLoadersOptions: IApplyLoadersOpts) {
     const { rule, isCSSModules, loader, options } = applyLoadersOptions
-    const { config, isDev } = this.options
+    const { config, isDev, browserslist } = this.options
 
     rule.when(
       isDev,
@@ -100,6 +99,29 @@ export default class RuleCss {
           config.cssLoader ?? {}
         )
       )
+
+    rule
+      .use('postcss')
+      .loader(require.resolve('postcss-loader'))
+      .options({
+        postcssOptions: {
+          // ident: 'postcss',
+          plugins: [
+            require.resolve('postcss-flexbugs-fixes'),
+            [
+              require.resolve('postcss-preset-env'),
+              {
+                autoprefixer: {
+                  ...(config.autoprefixer ?? {}),
+                  overrideBrowserslist: browserslist ?? {}
+                },
+                stage: 3
+              }
+            ],
+            ...(config.extraPostCSSPlugins ?? [])
+          ].filter(Boolean)
+        }
+      })
 
     rule.when(!!loader, (WConfig) => {
       WConfig.use(loader!)

@@ -9827,13 +9827,6 @@ postcss-replace-overflow-wrap@^3.0.0:
   dependencies:
     postcss "^7.0.2"
 
-postcss-safe-parser@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.npm.taobao.org/postcss-safe-parser/download/postcss-safe-parser-5.0.2.tgz#459dd27df6bc2ba64608824ba39e45dacf5e852d"
-  integrity sha1-RZ3Sffa8K6ZGCIJLo55F2s9ehS0=
-  dependencies:
-    postcss "^8.1.0"
-
 postcss-selector-matches@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/postcss-selector-matches/download/postcss-selector-matches-4.0.0.tgz#71c8248f917ba2cc93037c9637ee09c64436fcff"
@@ -9892,7 +9885,7 @@ postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.2, postcss@^7.0.32, postcss@^7.0.
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postcss@^8.1.0, postcss@^8.1.4:
+postcss@^8.1.4:
   version "8.2.1"
   resolved "https://registry.npm.taobao.org/postcss/download/postcss-8.2.1.tgz?cache=0&sync_timestamp=1607512973373&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fpostcss%2Fdownload%2Fpostcss-8.2.1.tgz#eabc5557c4558059b9d9e5b15bce7ffa9089c2a8"
   integrity sha1-6rxVV8RVgFm52eWxW85/+pCJwqg=

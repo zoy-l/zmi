@@ -20,9 +20,7 @@ export interface IGetConfigOpts {
   chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
   bundleImplementor?: typeof defaultWebpack
   babelOptsForDep?: Record<string, unknown>
-  miniCSSExtractPluginLoaderPath?: string
   babelOpts?: Record<string, unknown>
-  miniCSSExtractPluginPath?: string
   env: 'development' | 'production'
   __disableTerserForTest?: boolean
   entry: Record<string, any>
@@ -48,10 +46,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
     port,
     htmlContent,
     entry,
-    bundleImplementor = defaultWebpack,
-    miniCSSExtractPluginLoaderPath
+    bundleImplementor = defaultWebpack
   } = opts
-  const { targets } = getTargetsAndBrowsersList({
+  const { targets, browserslist } = getTargetsAndBrowsersList({
     config,
     type
   })
@@ -61,21 +58,21 @@ export default async function getConfig(opts: IGetConfigOpts) {
   let isReact
   let isVue
 
-  if (config.type) {
-    isReact = config.type === 'react'
-    isVue = config.type === 'vue'
+  if (config.frameType) {
+    isReact = config.frameType === 'react'
+    isVue = config.frameType === 'vue'
   } else {
     const dpsArr = Object.keys(pkg.dependencies)
 
     for (const dpsName of dpsArr) {
       if (dpsName === 'vue') {
         isVue = true
-        config.type = 'vue'
+        config.frameType = 'vue'
         continue
       }
 
       if (dpsName === 'react') {
-        config.type = 'react'
+        config.frameType = 'react'
         isReact = true
       }
     }
@@ -93,30 +90,20 @@ export default async function getConfig(opts: IGetConfigOpts) {
     }
   }
 
-  let webpackConfig = new WebpackChain()
+  const webpackConfig = new WebpackChain()
   const createCSSRule = new RuleCss({
     webpackConfig,
     config,
     isDev,
     type,
-    // browserslist,
-    miniCSSExtractPluginLoaderPath
+    browserslist
   })
 
-  // Set css
   createCSSRule.step()
 
-  // const disableCompress = process.env.COMPRESS === 'none'
-
-  const { devtool } = config
-
-  webpackConfig.devtool(
-    !isDev
-      ? devtool
-      : devtool === false
-      ? false
-      : devtool ?? 'cheap-module-source-map'
-  )
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  webpackConfig.devtool(isDev ? 'eval-cheap-module-source-map' : false)
   webpackConfig.mode(env)
 
   const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
@@ -165,7 +152,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
       env: {
         targets
       },
-      type: config.type,
+      type: config.frameType,
       frameOptions: config.frameOptions
     },
     hot
@@ -323,10 +310,19 @@ export default async function getConfig(opts: IGetConfigOpts) {
   ])
 
   if (opts.chainWebpack) {
-    webpackConfig = await opts.chainWebpack(webpackConfig, {
+    await opts.chainWebpack(webpackConfig, {
       createCSSRule: createCSSRule.createCSSRule,
       webpack: bundleImplementor,
       type
+    })
+  }
+
+  if (config.chainWebpack) {
+    await config.chainWebpack(webpackConfig, {
+      createCSSRule: createCSSRule.createCSSRule,
+      webpack: bundleImplementor,
+      type,
+      env
     })
   }
 
