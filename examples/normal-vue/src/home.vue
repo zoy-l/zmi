@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.div" @click="hello">
+  <div @click="hello">
     {{ msg }}
   </div>
 </template>

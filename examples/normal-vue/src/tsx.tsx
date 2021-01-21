@@ -1,10 +1,9 @@
-<script lang="tsx">
-import Home from './home.vue'
+import kda from './home.vue'
 import hello from './index.css'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'hello world',
+  name: 'tsx',
   data() {
     return {
       tsx: 'hello vue tsx'
@@ -12,17 +11,25 @@ export default defineComponent({
   },
 
   components: {
-    Home
+    kda
+  },
+
+  setup() {
+    const count = ref('hello setup')
+
+    return {
+      count
+    }
   },
 
   render() {
     return (
       <div class={hello.red}>
         {this.tsx}
-        <Home />
+        <div> {this.count}</div>
+
+        <kda class={hello.tsx} />
       </div>
     )
   }
 })
-</script>
-

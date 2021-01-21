@@ -12,18 +12,32 @@ interface ISetupOpts {
   appName?: string
 }
 
+interface IOpts {
+  cwd: string
+  config: any
+  pkg: Record<string, any>
+}
+
 export default class Bundler {
   cwd: string
 
   config: any
 
-  constructor({ cwd, config }: any) {
+  pkg = {}
+
+  constructor({ cwd, config, pkg }: IOpts) {
     this.cwd = cwd
     this.config = config
+    this.pkg = pkg
   }
 
   async getConfig(options: IGetConfigOpts) {
-    return getConfig({ ...options, cwd: this.cwd, config: this.config })
+    return getConfig({
+      ...options,
+      cwd: this.cwd,
+      config: this.config,
+      pkg: this.pkg
+    })
   }
 
   async setupDevServer(options: ISetupOpts) {

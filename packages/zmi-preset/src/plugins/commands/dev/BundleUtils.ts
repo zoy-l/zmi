@@ -38,7 +38,8 @@ export async function getBundleAndConfigs(options: {
   // Initialize the webpack launcher
   const bundler: DefaultBundler = new Bundler({
     cwd: api.cwd,
-    config: api.config
+    config: api.config,
+    pkg: api.pkg
   })
 
   const bundlerArgs = {

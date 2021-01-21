@@ -25,9 +25,8 @@ export interface IGetConfigOpts {
   miniCSSExtractPluginPath?: string
   env: 'development' | 'production'
   __disableTerserForTest?: boolean
-  entry?: {
-    [key: string]: string
-  }
+  entry?: Record<string, any>
+  pkg: Record<string, any>
   htmlContent: string
   browserslist?: any
   hot?: boolean
@@ -42,6 +41,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   const {
     env,
     config,
+    pkg,
     cwd,
     hot = true,
     type,
@@ -58,8 +58,40 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   const isDev = env === 'development'
   const isProd = env === 'production'
-  const isReact = config.type === 'react'
-  const isVue = config.type === 'vue'
+  let isReact
+  let isVue
+
+  if (config.type) {
+    isReact = config.type === 'react'
+    isVue = config.type === 'vue'
+  } else {
+    const dpsArr = Object.keys(pkg.dependencies)
+
+    for (const dpsName of dpsArr) {
+      if (dpsName === 'vue') {
+        isVue = true
+        config.type = 'vue'
+        continue
+      }
+
+      if (dpsName === 'react') {
+        config.type = 'react'
+        isReact = true
+      }
+    }
+
+    if (isVue && isReact) {
+      throw new Error(
+        'When react/vue is found in dependencies, please specify type in .zmirc:`vue` | `react`'
+      )
+    }
+
+    if (!isVue && !isReact) {
+      throw new Error(
+        'React/vue is not found in dependencies, did you forget to install dependencies ?'
+      )
+    }
+  }
 
   let webpackConfig = new WebpackChain()
   const createCSSRule = new RuleCss({
@@ -150,7 +182,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .loader('babel-loader')
     .options(babelOpts)
 
-  webpackConfig.when(isVue, (WConfig) => {
+  webpackConfig.when(!!isVue, (WConfig) => {
     WConfig.module
       .rule('vue')
       .test(/\.vue$/)
@@ -218,19 +250,11 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .use('raw-loader')
     .loader('raw-loader')
 
-  if (opts.chainWebpack) {
-    webpackConfig = await opts.chainWebpack(webpackConfig, {
-      createCSSRule: createCSSRule.createCSSRule,
-      webpack: bundleImplementor,
-      type
-    })
-  }
-
   // Turn on react fast refresh
   // Official implementation
   // And also added in cra 4.0
   // https://github.com/pmmmwh/react-refresh-webpack-plugin
-  webpackConfig.when(isReact && isDev && !!hot, (WConfig) => {
+  webpackConfig.when(!!isReact && isDev && !!hot, (WConfig) => {
     WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
   })
 
@@ -297,6 +321,14 @@ export default async function getConfig(opts: IGetConfigOpts) {
       }
     }
   ])
+
+  if (opts.chainWebpack) {
+    webpackConfig = await opts.chainWebpack(webpackConfig, {
+      createCSSRule: createCSSRule.createCSSRule,
+      webpack: bundleImplementor,
+      type
+    })
+  }
 
   // webpackConfig.externals
 

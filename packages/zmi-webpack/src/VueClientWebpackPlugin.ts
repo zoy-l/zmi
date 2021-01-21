@@ -11,7 +11,7 @@ function isSocketEntry(entry: string | string[]) {
   return socketEntries.some((socketEntry) => entry.includes(socketEntry))
 }
 
-type IEntry = (...args: any) => any
+type IEntry = (...args: any[]) => any
 
 export default class VueClient {
   apply(compiler: Compiler) {
@@ -39,7 +39,6 @@ export default class VueClient {
       )
     ]
 
-    // Single string entry point
     if (typeof originalEntry === 'string') {
       if (isSocketEntry(originalEntry)) {
         return [originalEntry, ...overlayEntries]
