@@ -7,7 +7,7 @@ export function getBabelOpts({
   presetOpts: Record<string, unknown>
   hot: boolean
 }) {
-  const { type } = presetOpts
+  const { type, isDev } = presetOpts
   return {
     presets: [
       [require.resolve('@zmi/babel-preset/app'), presetOpts],
@@ -15,7 +15,7 @@ export function getBabelOpts({
     ].filter(Boolean),
     plugins: [
       config.extraBabelPlugins,
-      type === 'react' && hot && 'react-refresh/babel'
+      type === 'react' && isDev && hot && 'react-refresh/babel'
     ].filter(Boolean),
     sourceType: 'unambiguous',
     babelrc: false

@@ -144,6 +144,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     config,
     presetOpts: {
       typescript: !isVue,
+      isDev,
+      isProd,
       nodeEnv: env,
       dynamicImportNode: !config.dynamicImport,
       autoCSSModules: true,
@@ -337,7 +339,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
       stats: 'none',
       contentBase: '/'
     },
-    config.devServer,
+    config.devServer ?? {},
     {
       before(app, server) {
         // apply in project middlewares

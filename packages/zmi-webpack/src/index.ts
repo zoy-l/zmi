@@ -1,8 +1,16 @@
 import WebpackDevServer from 'webpack-dev-server'
+import { chalk, clearConsole } from '@zmi/utils'
 import defaultWebpack from 'webpack'
+import fs from 'fs-extra'
 
 import createCompiler, { prepareUrls } from './createCompiler'
+import formatWebpackMessages from './formatWebpackMessages'
 import getConfig, { IGetConfigOpts } from './getConfig'
+
+import {
+  measureFileSizesBeforeBuild,
+  printFileSizesAfterBuild
+} from './reporterFileSize'
 
 interface ISetupOpts {
   bundleConfigs: defaultWebpack.Configuration
@@ -66,21 +74,63 @@ export default class Bundler {
     return devServer
   }
 
-  async build(
-    options: Omit<ISetupOpts, 'port' | 'host' | 'appName'>
-  ): Promise<{ stats?: defaultWebpack.Stats }> {
-    const { bundleConfigs, bundleImplementor } = options
+  async build(options: {
+    bundleConfigs: defaultWebpack.Configuration
+    bundleImplementor: typeof defaultWebpack
+    appOutputPath: string
+  }): Promise<defaultWebpack.Stats | undefined> {
+    const {
+      bundleConfigs,
+      bundleImplementor = defaultWebpack,
+      appOutputPath
+    } = options
 
-    return new Promise((resolve, reject) => {
+    const previousFileSizes = await measureFileSizesBeforeBuild(appOutputPath)
+    fs.emptyDirSync(appOutputPath)
+
+    return new Promise((resolve) => {
       const compiler = bundleImplementor(bundleConfigs)
+      clearConsole()
+      console.log(
+        chalk.redBright('Start packing, please don’t worry, officer...\n')
+      )
+
       compiler.run((err, stats) => {
-        if (err || stats?.hasErrors()) {
-          console.log(stats?.toString('errors-only'))
-          console.error(err)
-          reject(new Error('build failed'))
+        let messages
+        if (err) {
+          if (!err.message) {
+            throw new Error('build fail')
+          }
+
+          messages = formatWebpackMessages({
+            errors: [err.message],
+            warnings: []
+          })
+        } else {
+          messages = formatWebpackMessages(
+            stats?.toJson({ all: false, warnings: true, errors: true })
+          )
         }
 
-        resolve({ stats })
+        if (messages.errors.length) {
+          if (messages.errors.length > 1) {
+            messages.errors.length = 1
+          }
+          throw new Error(messages.errors.join('\n\n'))
+        }
+
+        if (messages.warnings.length) {
+          console.warn(messages.warnings.join('\n'))
+        } else {
+          clearConsole()
+          console.log(chalk.yellow(`📦 Compiled successfully !`))
+        }
+        console.log('📦 Compressed size: - Gzip \n')
+
+        printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)
+        console.log()
+
+        resolve(stats)
       })
     })
   }

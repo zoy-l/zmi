@@ -17,9 +17,11 @@ export default (api: IApi) => {
       } = await getBundleAndConfigs({ api })
 
       try {
-        const { stats } = await bundler.build({
+        const { appOutputPath } = api.paths
+        const stats = await bundler.build({
           bundleConfigs,
-          bundleImplementor
+          bundleImplementor,
+          appOutputPath
         })
 
         await api.applyPlugins({
