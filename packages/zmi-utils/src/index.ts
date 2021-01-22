@@ -26,7 +26,6 @@ import isLerna from './isLerna'
 import getFile from './getFile'
 import winPath from './winPath'
 import assert from './assert'
-import paths from './paths'
 
 const isWin = process.platform === 'win32'
 
@@ -53,7 +52,6 @@ export {
   launchDevice,
   clearConsole,
   prepareUrls,
-  paths,
   portfinder,
   yargsParser,
   chalk,

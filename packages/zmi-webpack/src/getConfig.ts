@@ -4,7 +4,8 @@ import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { chalk, paths } from '@zmi/utils'
+import WebpackDevServer from 'webpack-dev-server'
+import { chalk, deepmerge } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
 import path from 'path'
@@ -44,8 +45,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     hot = true,
     type,
     port,
-    htmlContent,
     entry,
+    htmlContent,
     bundleImplementor = defaultWebpack
   } = opts
   const { targets, browserslist } = getTargetsAndBrowsersList({
@@ -101,8 +102,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   createCSSRule.step()
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error: library type error
   webpackConfig.devtool(isDev ? 'eval-cheap-module-source-map' : false)
   webpackConfig.mode(env)
 
@@ -126,7 +126,6 @@ export default async function getConfig(opts: IGetConfigOpts) {
   // To be verified .set('symlinks', true)
   webpackConfig.resolve.modules
     .add('node_modules')
-    .add(paths('../../node_modules'))
     .end()
     .extensions.merge([
       '.web.js',
@@ -344,16 +343,26 @@ export default async function getConfig(opts: IGetConfigOpts) {
     WTarget = smp.wrap(WTarget)
   }
 
-  WTarget.devServer = {
-    hot,
-    port,
-    clientLogLevel: 'silent',
-    compress: isDev,
-    noInfo: true,
-    inline: true,
-    stats: 'none',
-    contentBase: '/'
-  }
+  WTarget.devServer = deepmerge.all([
+    {
+      hot,
+      port,
+      clientLogLevel: 'silent',
+      compress: isProd,
+      noInfo: true,
+      inline: true,
+      stats: 'none',
+      contentBase: '/'
+    },
+    config.devServer,
+    {
+      before(app, server) {
+        // apply in project middlewares
+        config.devServer?.before?.(app, server)
+      },
+      open: false
+    } as WebpackDevServer.Configuration
+  ])
 
   return WTarget
 }
