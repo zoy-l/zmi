@@ -1,6 +1,5 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import SpeedMeasurePlugin from 'speed-measure-webpack-plugin'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -325,23 +324,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     })
   }
 
-  // webpackConfig.externals
-
-  let WTarget = webpackConfig.toConfig()
-
-  // && type === BundlerConfigType.csr
-  if (process.env.SPEED_MEASURE) {
-    // https://github.com/stephencookdev/speed-measure-webpack-plugin
-    const smp = new SpeedMeasurePlugin(
-      process.env.SPEED_MEASURE === 'CONSOLE'
-        ? { outputFormat: 'human', outputTarget: console.log }
-        : {
-            outputFormat: 'json',
-            outputTarget: path.join(process.cwd(), 'speed-measure.json')
-          }
-    )
-    WTarget = smp.wrap(WTarget)
-  }
+  const WTarget = webpackConfig.toConfig()
 
   WTarget.devServer = deepmerge.all([
     {

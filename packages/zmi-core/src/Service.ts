@@ -28,7 +28,7 @@ interface IApplyPlugins {
   key: string
   type: EnumApplyPlugins
   initialValue?: any
-  args?: { args: any }
+  args?: any
 }
 
 export interface IServiceOptions {

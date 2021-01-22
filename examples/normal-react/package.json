@@ -5,7 +5,8 @@
   "license": "MIT",
   "private": "true",
   "scripts": {
-    "dev": "zmi dev"
+    "dev": "zmi dev",
+    "build": "zmi build"
   },
   "peerDependencies": {
     "zmi": "latest"

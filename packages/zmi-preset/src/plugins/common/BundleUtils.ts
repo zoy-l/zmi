@@ -5,8 +5,6 @@ import fs from 'fs'
 
 import { getHtmlGenerator } from './generateHtml'
 
-type Env = 'development' | 'production'
-
 export async function getBundleAndConfigs(options: {
   api: IApi
   port?: number
@@ -60,18 +58,17 @@ export async function getBundleAndConfigs(options: {
     ) ?? 'index.js'
 
   async function getConfig({ type }: { type: IBundlerConfigType }) {
-    const env: Env = api.env === 'production' ? 'production' : 'development'
     const getConfigOpts = await api.applyPlugins({
       type: api.ApplyPluginsType.modify,
       key: 'modifyBundleConfigOpts',
       initialValue: {
-        env,
+        env: api.env ?? process.env.NODE_ENV,
         type,
         port,
         entry: {
           zmi: path.join(api.paths.appSrcPath, entryFilePath)
         },
-        hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
+        hot: process.env.HMR !== 'none',
         bundleImplementor,
         htmlContent,
         async modifyBabelOpts(opts: any) {

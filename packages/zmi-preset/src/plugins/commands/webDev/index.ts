@@ -1,7 +1,7 @@
 import { assert, chalk, portfinder, clearConsole } from '@zmi/utils'
 import { IApi } from '@zmi/types'
 
-import { getBundleAndConfigs } from './BundleUtils'
+import { getBundleAndConfigs } from '../../common/BundleUtils'
 
 export default (api: IApi) => {
   let port: number
@@ -11,6 +11,9 @@ export default (api: IApi) => {
     name: 'webDev',
     description: 'start a webDev server for development',
     fn: async ({ args }) => {
+      api.env = 'development'
+      process.env.NODE_ENV = 'development'
+
       const defaultPort = [
         process.env.PORT,
         args?.port,

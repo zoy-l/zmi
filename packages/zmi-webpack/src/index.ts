@@ -6,7 +6,7 @@ import getConfig, { IGetConfigOpts } from './getConfig'
 
 interface ISetupOpts {
   bundleConfigs: defaultWebpack.Configuration
-  bundleImplementor?: typeof defaultWebpack
+  bundleImplementor: typeof defaultWebpack
   port: number
   host: string
   appName?: string
@@ -64,5 +64,24 @@ export default class Bundler {
     const devServer = new WebpackDevServer(compiler, devServerConfig)
 
     return devServer
+  }
+
+  async build(
+    options: Omit<ISetupOpts, 'port' | 'host' | 'appName'>
+  ): Promise<{ stats?: defaultWebpack.Stats }> {
+    const { bundleConfigs, bundleImplementor } = options
+
+    return new Promise((resolve, reject) => {
+      const compiler = bundleImplementor(bundleConfigs)
+      compiler.run((err, stats) => {
+        if (err || stats?.hasErrors()) {
+          console.log(stats?.toString('errors-only'))
+          console.error(err)
+          reject(new Error('build failed'))
+        }
+
+        resolve({ stats })
+      })
+    })
   }
 }
