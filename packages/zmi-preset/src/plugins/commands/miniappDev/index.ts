@@ -8,8 +8,9 @@ export default (api: IApi) => {
     description: 'start miniApp dev server for development',
     async fn() {
       const nerd = new Nerd({
+        customPrefix: 'miniApp',
         watch: true,
-        userConfig: api.config.miniAppConfig ?? {}
+        userConfig: api.config.miniAppConfig
       })
 
       await nerd.step()
