@@ -262,6 +262,7 @@ export default class Service extends EventEmitter {
       key: 'modifyConfig',
       type: this.ApplyPluginsType.modify,
       initialValue: this.configInstance.getConfig({
+        userConfig: this.userConfig,
         defaultConfig
       })
     })
@@ -350,9 +351,7 @@ export default class Service extends EventEmitter {
     const hooks = this.hooks[key] ?? []
 
     // tapable: https://github.com/webpack/tapable
-    const TypeSeriesWater = new AsyncSeriesWaterfallHook([
-      typeIndex !== 2 ? 'memo' : '_'
-    ])
+    const TypeSeriesWater = new AsyncSeriesWaterfallHook([typeIndex !== 2 ? 'memo' : '_'])
 
     // Add hook method into the actuator
     // Prepare for later

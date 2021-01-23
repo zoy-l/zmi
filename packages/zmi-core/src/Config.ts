@@ -54,14 +54,18 @@ export default class Config {
     }, {})
   }
 
-  getConfig({ defaultConfig }: { defaultConfig: Record<string, unknown> }) {
+  getConfig({
+    defaultConfig,
+    userConfig
+  }: {
+    defaultConfig: Record<string, any>
+    userConfig: Record<string, any>
+  }) {
     const { stage, plugins } = this.service
     assert(
       `Config.getConfig() failed, it should not be executed before plugin is ready.`,
       stage >= ServiceStage.pluginReady
     )
-
-    const userConfig = this.getUserConfig()
 
     const userConfigKeys = Object.keys(userConfig).filter(
       (key) => userConfig[key] !== false
@@ -74,7 +78,7 @@ export default class Config {
 
       // recognize as key if have `schema` config
       // disabled when `value` is false
-      if (!config.schema || !value) return
+      if (!config.schema || value === false) return
 
       const schema = config.schema(Joi)
       assert(
@@ -183,10 +187,7 @@ export default class Config {
   }
 
   requireConfigs(configFiles: string[]) {
-    return (
-      configFiles &&
-      configFiles.map((file) => compatibleWithESModule(require(file)))
-    )
+    return configFiles && configFiles.map((file) => compatibleWithESModule(require(file)))
   }
 
   mergeConfig(configs: string[]) {

@@ -24,47 +24,45 @@ export default (options: IOpts) => {
     const { lang, test, loader } = createCSSRuleOptions
     const baseRule = webpackConfig.module.rule(lang).test(test)
 
-    // prettier-ignore
     const modulesRule = baseRule.oneOf('normal-modules').resourceQuery(/module/)
     applyLoaders(modulesRule, true)
 
     const normalRule = baseRule.oneOf('normal')
     applyLoaders(normalRule, false)
 
-    // prettier-ignore
-    function applyLoaders( rule: Config.Rule<Config.Rule>, isCSSModules: boolean ) {
+    function applyLoaders(rule: Config.Rule<Config.Rule>, isCSSModules: boolean) {
       rule.when(
         isDev,
         (WConfig) => {
           WConfig.use('style-loader')
-          .loader(require.resolve('style-loader'))
-          .options(deepmerge({ base: 0 }, config.styleLoader ?? {}))
+            .loader(require.resolve('style-loader'))
+            .options(deepmerge({ base: 0 }, config.styleLoader ?? {}))
         },
         (WConfig) => {
           WConfig.use('extract-css-loader')
             .loader(miniCssExtractPlugin.loader)
-            .options({ publicPath: './' ,esModule:!isDev })
+            .options({ publicPath: './', esModule: !isDev })
         }
       )
 
-      // prettier-ignore
       rule.when(isDev && isCSSModules && config.cssModulesTypescript, (WConfig) => {
         WConfig.use('css-modules-typescript-loader')
           .loader(require.resolve('css-modules-typescript-loader'))
           .options(config.cssModulesTypescript)
       })
 
-      const cssLoaderOptions:Record<string, any> = deepmerge({
-        importLoaders: 1,
-        modules:{}
-      }, config.cssLoader ?? {})
+      // prettier-ignore
+      const cssLoaderOptions: Record<string, any> = deepmerge({
+          importLoaders: 1,
+          modules: {}
+        },config.cssLoader ?? {})
 
       if (isCSSModules) {
         cssLoaderOptions.modules = {
           localIdentName: '[local]___[hash:base64:5]',
           ...cssLoaderOptions.modules
         }
-      }else {
+      } else {
         delete cssLoaderOptions.modules
       }
 
@@ -73,22 +71,19 @@ export default (options: IOpts) => {
         .loader(require.resolve('css-loader'))
         .options(cssLoaderOptions)
 
-      rule
-        .use('postcss')
+      // prettier-ignore
+      rule.use('postcss')
         .loader(require.resolve('postcss-loader'))
         .options({
           postcssOptions: {
             plugins: [
               require.resolve('postcss-flexbugs-fixes'),
               [
-                require.resolve('postcss-preset-env'),
-                {
+                require.resolve('postcss-preset-env'),{
                   autoprefixer: {
                     ...(config.autoprefixer ?? {}),
                     overrideBrowserslist: browserslist ?? {}
-                  },
-                  stage: 3
-                }
+                  },stage: 3}
               ],
               ...(config.extraPostCSSPlugins ?? [])
             ].filter(Boolean)
@@ -103,7 +98,20 @@ export default (options: IOpts) => {
     }
   }
 
+  const { less, scss, stylus } = config.loaderOptions
+
   createCSSRule({ lang: 'css', test: /\.(css)(\?.*)?$/ })
+
+  createCSSRule({ lang: 'scss', test: /\.scss$/, loader: 'sass-loader', options: scss })
+
+  createCSSRule({ lang: 'less', test: /\.less$/, loader: 'less-loader', options: less })
+
+  createCSSRule({
+    lang: 'stylus',
+    test: /\.styl(us)?$/,
+    loader: 'stylus-loader',
+    options: stylus
+  })
 
   return createCSSRule
 }

@@ -17,10 +17,7 @@ import ruleCss from './ruleCss'
 export interface IGetConfigOpts {
   modifyBabelPresetOpts?: <T>(opts: T) => Promise<T> | T
   modifyBabelOpts?: <T>(opts: T) => Promise<T> | T
-  chainWebpack?: (
-    webpackConfig: WebpackChain,
-    args: Record<string, any>
-  ) => Promise<any>
+  chainWebpack?: (webpackConfig: WebpackChain, args: Record<string, any>) => Promise<any>
   bundleImplementor?: typeof defaultWebpack
   env: 'development' | 'production'
   entry: Record<string, any>
@@ -304,9 +301,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
       total: 15,
       summary: false,
       complete: '▇',
-      format: `🚧  ${chalk.cyan(':bar ')}${chalk.cyan(
-        ':percent'
-      )}  ${chalk.grey('( :elapseds )')}`,
+      format: `🚧  ${chalk.cyan(':bar ')}${chalk.cyan(':percent')}  ${chalk.grey(
+        '( :elapseds )'
+      )}`,
       customSummary: (time) => {
         console.log(chalk.blue(`🎯 Compiled time ${time} \n`))
       }
@@ -341,11 +338,11 @@ export default async function getConfig(opts: IGetConfigOpts) {
       stats: 'none',
       contentBase: '/'
     },
-    config.devServer ?? {},
+    config.devServer,
     {
       before(app, server) {
         // apply in project middlewares
-        config.devServer?.before?.(app, server)
+        config.devServer.before?.(app, server)
       },
       open: false
     } as WebpackDevServer.Configuration
