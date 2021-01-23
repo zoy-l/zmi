@@ -5,7 +5,6 @@ export default function (api: IApi) {
   api.describe({
     key: 'miniAppConfig',
     config: {
-      default: {},
       schema() {
         return miniAppSchema
       }

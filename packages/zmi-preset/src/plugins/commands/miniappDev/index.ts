@@ -10,7 +10,7 @@ export default (api: IApi) => {
       const nerd = new Nerd({
         customPrefix: 'miniApp',
         watch: true,
-        userConfig: api.config.miniAppConfig
+        userConfig: api.config.miniAppConfig ?? {}
       })
 
       await nerd.step()

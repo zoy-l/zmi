@@ -104,7 +104,12 @@ export default (options: IOpts) => {
 
   createCSSRule({ lang: 'scss', test: /\.scss$/, loader: 'sass-loader', options: scss })
 
-  createCSSRule({ lang: 'less', test: /\.less$/, loader: 'less-loader', options: less })
+  createCSSRule({
+    lang: 'less',
+    test: /\.less$/,
+    loader: require.resolve('less-loader'),
+    options: less
+  })
 
   createCSSRule({
     lang: 'stylus',
