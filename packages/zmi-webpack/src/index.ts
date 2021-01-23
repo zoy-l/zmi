@@ -80,20 +80,19 @@ export default class Bundler {
     appOutputPath: string
   }): Promise<defaultWebpack.Stats | undefined> {
     const {
-      bundleConfigs,
       bundleImplementor = defaultWebpack,
+      bundleConfigs,
       appOutputPath
     } = options
-
+    clearConsole()
+    console.log(
+      chalk.redBright('Start packing, please don’t worry, officer...\n')
+    )
     const previousFileSizes = await measureFileSizesBeforeBuild(appOutputPath)
     fs.emptyDirSync(appOutputPath)
 
     return new Promise((resolve) => {
       const compiler = bundleImplementor(bundleConfigs)
-      clearConsole()
-      console.log(
-        chalk.redBright('Start packing, please don’t worry, officer...\n')
-      )
 
       compiler.run((err, stats) => {
         let messages
