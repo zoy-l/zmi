@@ -15,14 +15,14 @@ import { getBabelOpts } from './getBabelOptions'
 import RuleCss from './ruleCss'
 
 export interface IGetConfigOpts {
-  modifyBabelPresetOpts?: (opts: Record<string, unknown>) => Promise<any>
-  modifyBabelOpts?: (opts: Record<string, unknown>) => Promise<any>
-  chainWebpack?: (webpackConfig: any, args: any) => Promise<any>
+  modifyBabelPresetOpts?: <T>(opts: T) => Promise<T> | T
+  modifyBabelOpts?: <T>(opts: T) => Promise<T> | T
+  chainWebpack?: (
+    webpackConfig: WebpackChain,
+    args: Record<string, any>
+  ) => Promise<any>
   bundleImplementor?: typeof defaultWebpack
-  babelOptsForDep?: Record<string, unknown>
-  babelOpts?: Record<string, unknown>
   env: 'development' | 'production'
-  __disableTerserForTest?: boolean
   entry: Record<string, any>
   pkg: Record<string, any>
   htmlContent: string
@@ -46,7 +46,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
     port,
     entry,
     htmlContent,
-    bundleImplementor = defaultWebpack
+    bundleImplementor = defaultWebpack,
+    modifyBabelOpts,
+    modifyBabelPresetOpts
   } = opts
   const { targets, browserslist } = getTargetsAndBrowsersList({
     config,
@@ -140,23 +142,33 @@ export default async function getConfig(opts: IGetConfigOpts) {
       '.json'
     ])
 
-  const babelOpts = getBabelOpts({
-    config,
-    presetOpts: {
-      typescript: !isVue,
-      isDev,
-      isProd,
-      nodeEnv: env,
-      dynamicImportNode: !config.dynamicImport,
-      autoCSSModules: true,
-      env: {
-        targets
-      },
-      type: config.frameType,
-      frameOptions: config.frameOptions
+  let presetOpts = {
+    typescript: !isVue,
+    isDev,
+    isProd,
+    nodeEnv: env,
+    dynamicImportNode: !config.dynamicImport,
+    autoCSSModules: true,
+    env: {
+      targets
     },
+    type: config.frameType,
+    frameOptions: config.frameOptions
+  }
+
+  if (modifyBabelOpts) {
+    presetOpts = await modifyBabelOpts(presetOpts)
+  }
+
+  let babelOpts = getBabelOpts({
+    config,
+    presetOpts,
     hot
   })
+
+  if (modifyBabelPresetOpts) {
+    babelOpts = await modifyBabelPresetOpts(babelOpts)
+  }
 
   webpackConfig.module
     .rule('js')

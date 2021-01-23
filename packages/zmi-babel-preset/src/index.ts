@@ -1,4 +1,4 @@
-import { mergeConfig } from '@zmi/utils'
+import { deepmerge } from '@zmi/utils'
 import path from 'path'
 
 export interface Ioptions {
@@ -37,7 +37,7 @@ export default (_context: never, options: Ioptions) => {
       options.env && [
         '@babel/preset-env',
         {
-          ...mergeConfig(defaultEnvConfig, toObject(options.env)),
+          ...deepmerge(defaultEnvConfig, toObject(options.env)),
           debug: options.debug
         }
       ],
@@ -70,13 +70,9 @@ export default (_context: never, options: Ioptions) => {
         '@babel/plugin-transform-runtime',
         {
           version: require('@babel/runtime/package.json').version,
-          // https://babeljs.io/docs/en/babel-plugin-transform-runtime#absoluteruntime
-          // lock the version of @babel/runtime
-          // make sure we are using the correct version
           absoluteRuntime: path.dirname(
             require.resolve('@babel/runtime/package.json')
           ),
-          // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
           useESModules: true,
           ...toObject(options.transformRuntime)
         }
