@@ -9,7 +9,8 @@ export default function (api: IApi) {
         return joi.object({
           less: joi.object(),
           scss: joi.object(),
-          stylus: joi.object()
+          stylus: joi.object(),
+          styleLoader: joi.object()
         })
       }
     }

@@ -1,5 +1,6 @@
 import { PluginAPI, Service } from '@zmi/core'
 import WebpackChain from 'webpack-chain'
+import webpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 
 export enum BundlerConfigType {
@@ -21,11 +22,7 @@ interface IEvent<T> {
 interface IModify<T, U> {
   (fn: { (initialValue: T, args: U): T }): void
   (fn: { (initialValue: T, args: U): Promise<T> }): void
-  (args: {
-    fn: { (initialValue: T, args: U): T }
-    before?: string
-    stage?: number
-  }): void
+  (args: { fn: { (initialValue: T, args: U): T }; before?: string; stage?: number }): void
   (args: {
     fn: { (initialValue: T, args: U): Promise<T> }
     before?: string
@@ -77,4 +74,14 @@ export type IApi = ServicePluginApi & {
     }
   >
   modifyPaths: IModify<ServicePluginApi['paths'], null>
+}
+
+export interface IConfig {
+  cssModulesTypescript?: boolean
+  devServer?: webpackDevServer.Configuration
+  favicon?: any
+  frameType?: 'react' | 'vue' | 'miniApp'
+  hash?: boolean
+  loaderOptions?: Record<string, any>
+  miniAppConfig?: any
 }

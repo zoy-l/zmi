@@ -70,9 +70,7 @@ export default (_context: never, options: Ioptions) => {
         '@babel/plugin-transform-runtime',
         {
           version: require('@babel/runtime/package.json').version,
-          absoluteRuntime: path.dirname(
-            require.resolve('@babel/runtime/package.json')
-          ),
+          absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json')),
           useESModules: true,
           ...toObject(options.transformRuntime)
         }
