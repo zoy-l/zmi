@@ -12,7 +12,7 @@ export default function () {
         const { value } = source
 
         if (specifiers.length && cssExtenders.includes(extname(value))) {
-          source.value = `${value}?modules`
+          source.value = `${value}?module`
         }
       }
     }

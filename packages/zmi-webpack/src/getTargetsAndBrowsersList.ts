@@ -2,7 +2,6 @@ import { deepmerge } from '@zmi/utils'
 
 interface IOpts {
   config: any
-  type: any
 }
 
 export default function ({ config }: IOpts) {

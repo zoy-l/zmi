@@ -12,7 +12,7 @@ import path from 'path'
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import VueClient from './VueClientWebpackPlugin'
 import { getBabelOpts } from './getBabelOptions'
-import RuleCss from './ruleCss'
+import ruleCss from './ruleCss'
 
 export interface IGetConfigOpts {
   modifyBabelPresetOpts?: <T>(opts: T) => Promise<T> | T
@@ -26,39 +26,34 @@ export interface IGetConfigOpts {
   entry: Record<string, any>
   pkg: Record<string, any>
   htmlContent: string
-  browserslist?: any
   hot?: boolean
   port?: number
-  targets?: any
   cwd: string
   config: any
-  type: any
 }
 
 export default async function getConfig(opts: IGetConfigOpts) {
   const {
-    env,
-    config,
-    pkg,
-    cwd,
-    hot = true,
-    type,
-    port,
-    entry,
-    htmlContent,
     bundleImplementor = defaultWebpack,
+    modifyBabelPresetOpts,
     modifyBabelOpts,
-    modifyBabelPresetOpts
+    htmlContent,
+    hot = true,
+    config,
+    entry,
+    port,
+    env,
+    pkg,
+    cwd
   } = opts
   const { targets, browserslist } = getTargetsAndBrowsersList({
-    config,
-    type
+    config
   })
 
   const isDev = env === 'development'
   const isProd = env === 'production'
-  let isReact
-  let isVue
+  let isReact = false
+  let isVue = false
 
   if (config.frameType) {
     isReact = config.frameType === 'react'
@@ -93,15 +88,12 @@ export default async function getConfig(opts: IGetConfigOpts) {
   }
 
   const webpackConfig = new WebpackChain()
-  const createCSSRule = new RuleCss({
+  const createCSSRule = ruleCss({
     webpackConfig,
+    browserslist,
     config,
-    isDev,
-    type,
-    browserslist
+    isDev
   })
-
-  createCSSRule.step()
 
   // @ts-expect-error: library type error
   webpackConfig.devtool(isDev ? 'eval-cheap-module-source-map' : false)
@@ -323,17 +315,15 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   if (opts.chainWebpack) {
     await opts.chainWebpack(webpackConfig, {
-      createCSSRule: createCSSRule.createCSSRule,
       webpack: bundleImplementor,
-      type
+      createCSSRule
     })
   }
 
   if (config.chainWebpack) {
     await config.chainWebpack(webpackConfig, {
-      createCSSRule: createCSSRule.createCSSRule,
       webpack: bundleImplementor,
-      type,
+      createCSSRule,
       env
     })
   }

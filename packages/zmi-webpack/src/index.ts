@@ -123,9 +123,12 @@ export default class Bundler {
           console.warn(messages.warnings.join('\n'))
         } else {
           clearConsole()
-          console.log(chalk.yellow(`📦 Compiled successfully !`))
+          console.log(
+            `📦 ${chalk.yellowBright(
+              'Compiled successfully !'
+            )} Size: - Gzip \n`
+          )
         }
-        console.log('📦 Compressed size: - Gzip \n')
 
         printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)
         console.log()
