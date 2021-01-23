@@ -1,18 +1,33 @@
 import { PluginAPI, Service } from '@zmi/core'
 import WebpackChain from 'webpack-chain'
 import webpackDevServer from 'webpack-dev-server'
-import webpack from 'webpack'
+import { IConfig as nerdConfig } from 'zmi-nerd'
+import webpack, { Configuration } from 'webpack'
 
-export enum BundlerConfigType {
-  csr = 'csr',
-  ssr = 'ssr'
+interface IManifest {
+  fileName: string
+  publicPath: string
+  basePath: string
+  writeToFileEmit: boolean
 }
-
-export type IBundlerConfigType = keyof typeof BundlerConfigType
 
 interface IGetter<T> {
   (): T
 }
+
+export interface IHTMLTag {
+  [key: string]: string
+}
+
+export interface IScript extends Partial<HTMLScriptElement> {
+  content?: string
+}
+export interface IStyle extends Partial<HTMLStyleElement> {
+  content: string
+}
+
+export type IScriptConfig = Array<IScript | string>
+export type IStyleConfig = Array<IStyle | string>
 
 interface IEvent<T> {
   (fn: { (args: T): void }): void
@@ -28,6 +43,10 @@ interface IModify<T, U> {
     before?: string
     stage?: number
   }): void
+}
+
+interface IAdd<T> {
+  (fn: () => T[]): void
 }
 
 type ServicePluginApi = Pick<
@@ -62,26 +81,86 @@ export type IApi = ServicePluginApi & {
   onDevCompileDone: IEvent<{
     isFirstCompile: boolean
     stats: webpack.Stats
-    type: IBundlerConfigType
   }>
+
+  addHTMLHeadScripts: IAdd<IScriptConfig>
+  addHTMLScripts: IAdd<IScriptConfig>
+  addHTMLMetas: IAdd<IHTMLTag>
+  addHTMLLinks: IAdd<IHTMLTag>
+  addHTMLStyles: IAdd<IHTMLTag>
 
   chainWebpack: IModify<
     WebpackChain,
     {
       webpack: typeof webpack
-      // createCSSRule: ICreateCSSRule
-      type: IBundlerConfigType
+      createCSSRule: (
+        rule: WebpackChain.Rule<WebpackChain.Rule>,
+        isCSSModules: boolean
+      ) => void
     }
   >
   modifyPaths: IModify<ServicePluginApi['paths'], null>
 }
 
 export interface IConfig {
-  cssModulesTypescript?: boolean
   devServer?: webpackDevServer.Configuration
-  favicon?: any
   frameType?: 'react' | 'vue' | 'miniApp'
+  loaderOptions?: {
+    lessLoader: Record<string, any>
+    scssLoader: Record<string, any>
+    postcssLoader: Record<string, any>
+    stylusLoader: Record<string, any>
+    styleLoader: Record<string, any>
+  }
+  autoprefixer?: Record<string, any>
+
+  links?: Partial<HTMLLinkElement>[]
+  metas?: Partial<HTMLMetaElement>[]
+  manifest?: Partial<IManifest>
+
+  terserOptions?: Record<string, any>
+  cssModulesTypescript?: boolean
+  ignoreMomentLocale?: boolean
+  publicPath?: string
+  outputPath?: string
+
+  alias?: Record<string, any>
+  favicon?: string
   hash?: boolean
-  loaderOptions?: Record<string, any>
-  miniAppConfig?: any
+  define?: Record<string, any>
+  devtool?: Pick<Configuration, 'devtool'>
+  externals?: Pick<Configuration, 'externals'>
+  dynamicImport?: boolean
+  autoCSSModules?: boolean
+
+  miniAppConfig?: Omit<
+    nerdConfig,
+    | 'pkgs'
+    | 'nodeVersion'
+    | 'nodeFiles'
+    | 'browserFiles'
+    | 'react'
+    | 'target'
+    | 'moduleType'
+  >
+  chainWebpack?: (
+    meme: WebpackChain,
+    options: {
+      webpack: typeof webpack
+      createCSSRule: (options: {
+        lang: string
+        test: RegExp
+        loader?: string
+        options?: Record<string, any>
+      }) => void
+      env: 'development' | 'production'
+    }
+  ) => void | Promise<void>
 }
+
+type INonEmpty<T extends Record<string, any>> = Omit<
+  { [key in keyof T]-?: T[key] },
+  'externals' | 'alias'
+>
+
+export type IPrivate = INonEmpty<IConfig> & IConfig

@@ -7,6 +7,7 @@ import WebpackDevServer from 'webpack-dev-server'
 import { chalk, deepmerge } from '@zmi/utils'
 import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
+import { IPrivate } from '@zmi/types'
 import path from 'path'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
@@ -23,10 +24,10 @@ export interface IGetConfigOpts {
   entry: Record<string, any>
   pkg: Record<string, any>
   htmlContent: string
+  config: IPrivate
   hot?: boolean
   port?: number
   cwd: string
-  config: any
 }
 
 export default async function getConfig(opts: IGetConfigOpts) {
@@ -136,17 +137,16 @@ export default async function getConfig(opts: IGetConfigOpts) {
     isDev,
     isProd,
     nodeEnv: env,
-    dynamicImportNode: !config.dynamicImport,
-    autoCSSModules: true,
+    dynamicImportNode: config.dynamicImport,
+    autoCSSModules: config.autoCSSModules,
     env: {
       targets
     },
-    type: config.frameType,
-    frameOptions: config.frameOptions
+    type: config.frameType
   }
 
-  if (modifyBabelOpts) {
-    presetOpts = await modifyBabelOpts(presetOpts)
+  if (modifyBabelPresetOpts) {
+    presetOpts = await modifyBabelPresetOpts(presetOpts)
   }
 
   let babelOpts = getBabelOpts({
@@ -155,8 +155,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     hot
   })
 
-  if (modifyBabelPresetOpts) {
-    babelOpts = await modifyBabelPresetOpts(babelOpts)
+  if (modifyBabelOpts) {
+    babelOpts = await modifyBabelOpts(babelOpts)
   }
 
   webpackConfig.module
@@ -265,15 +265,15 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .plugin('HtmlWebpackPlugin')
     .use(HtmlWebpackPlugin, [{ templateContent: htmlContent }])
 
-  webpackConfig.when(config.externals, (WConfig) => {
-    WConfig.externals(config.externals)
-  })
+  if (config.externals) {
+    webpackConfig.externals(config.externals)
+  }
 
-  webpackConfig.when(config.alias, (WConfig) => {
+  if (config.alias) {
     Object.keys(config.alias).forEach((key) => {
-      WConfig.resolve.alias.set(key, config.alias![key])
+      webpackConfig.resolve.alias.set(key, config.alias![key])
     })
-  })
+  }
 
   webpackConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin, [
     {
@@ -340,9 +340,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
     },
     config.devServer,
     {
-      before(app, server) {
+      before(app, server, compiler) {
         // apply in project middlewares
-        config.devServer.before?.(app, server)
+        config.devServer.before?.(app, server, compiler)
       },
       open: false
     } as WebpackDevServer.Configuration

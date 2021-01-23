@@ -1,8 +1,11 @@
-export default function (api: any) {
+import { IApi } from '@zmi/types'
+
+export default function (api: IApi) {
   api.describe({
     key: 'favicon',
     config: {
-      schema(joi: any) {
+      default: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
+      schema(joi) {
         return joi.string()
       }
     }
@@ -12,9 +15,7 @@ export default function (api: any) {
     {
       rel: 'shortcut icon',
       type: 'image/x-icon',
-      href:
-        api.config.favicon ??
-        'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg'
+      href: api.config.favicon
     }
   ])
 }

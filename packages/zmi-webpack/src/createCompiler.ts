@@ -64,11 +64,7 @@ export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
   }
 }
 
-function printInstructions(opts: {
-  appName: string
-  urls: IUrlType
-  port: number
-}) {
+function printInstructions(opts: { appName: string; urls: IUrlType; port: number }) {
   const { appName, urls, port } = opts
   const { yellow, cyan } = chalk
   const { log } = console
@@ -90,22 +86,10 @@ function printInstructions(opts: {
   )
 
   if (urls.lanUrlForTerminal) {
-    log(
-      `│ Localhost: ${cyan(
-        urls.localUrlForTerminal.padEnd(appNameLineLength - 14)
-      )}│`
-    )
-    log(
-      `│ Network:   ${cyan(
-        urls.lanUrlForTerminal.padEnd(appNameLineLength - 14)
-      )}│`
-    )
+    log(`│ Localhost: ${cyan(urls.localUrlForTerminal.padEnd(appNameLineLength - 14))}│`)
+    log(`│ Network:   ${cyan(urls.lanUrlForTerminal.padEnd(appNameLineLength - 14))}│`)
   } else {
-    log(
-      `│ Localhost: ${cyan(
-        urls.localUrlForTerminal.padEnd(appNameLineLength - 14)
-      )}`
-    )
+    log(`│ Localhost: ${cyan(urls.localUrlForTerminal.padEnd(appNameLineLength - 14))}`)
   }
 
   log('└'.padEnd(appNameLineLength - 1, '─') + '┘')
@@ -132,6 +116,8 @@ function createCompiler(opts: {
     process.exit(1)
   }
 
+  // I don't know what happened,
+  // I need to return a Date type
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
     log(chalk.cyan('Accelerating compilation ,Wait a moment...'))
@@ -139,15 +125,12 @@ function createCompiler(opts: {
   })
 
   const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
-  forkHook.issues.tap(
-    'ForkTsCheckerWebpackPlugin',
-    (issues: string | any[]) => {
-      if (issues.length) {
-        //
-      }
-      return issues
+  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues: string | any[]) => {
+    if (issues.length) {
+      //
     }
-  )
+    return issues
+  })
 
   compiler.hooks.done.tap('done', (stats) => {
     const statsData = stats.toJson({

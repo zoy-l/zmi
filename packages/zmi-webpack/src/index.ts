@@ -7,13 +7,12 @@ import createCompiler, { prepareUrls } from './createCompiler'
 import formatWebpackMessages from './formatWebpackMessages'
 import getConfig, { IGetConfigOpts } from './getConfig'
 
-import {
-  measureFileSizesBeforeBuild,
-  printFileSizesAfterBuild
-} from './reporterFileSize'
+import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 
 interface ISetupOpts {
-  bundleConfigs: defaultWebpack.Configuration
+  bundleConfigs: defaultWebpack.Configuration & {
+    devServer: WebpackDevServer.Configuration
+  }
   bundleImplementor: typeof defaultWebpack
   port: number
   host: string
@@ -79,15 +78,9 @@ export default class Bundler {
     bundleImplementor: typeof defaultWebpack
     appOutputPath: string
   }): Promise<defaultWebpack.Stats | undefined> {
-    const {
-      bundleImplementor = defaultWebpack,
-      bundleConfigs,
-      appOutputPath
-    } = options
+    const { bundleImplementor = defaultWebpack, bundleConfigs, appOutputPath } = options
     clearConsole()
-    console.log(
-      chalk.redBright('Start packing, please don’t worry, officer...\n')
-    )
+    console.log(chalk.redBright('Start packing, please don’t worry, officer...\n'))
     const previousFileSizes = await measureFileSizesBeforeBuild(appOutputPath)
     fs.emptyDirSync(appOutputPath)
 
@@ -123,9 +116,7 @@ export default class Bundler {
         } else {
           clearConsole()
           console.log(
-            `📦 ${chalk.yellowBright(
-              'Compiled successfully !'
-            )} Size: - Gzip \n`
+            `📦 ${chalk.yellowBright('Compiled successfully !')} Size: - Gzip \n`
           )
         }
 
