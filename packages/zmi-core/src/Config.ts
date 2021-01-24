@@ -207,4 +207,8 @@ export default class Config {
 
     return newConfig
   }
+
+  watch(options: any) {
+    console.log(options)
+  }
 }

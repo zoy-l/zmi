@@ -33,7 +33,8 @@
     "yargs-parser": "^20.2.4"
   },
   "dependencies": {
-    "@babel/types": "^7.12.12"
+    "@babel/types": "^7.12.12",
+    "chokidar": "^3.5.1"
   },
   "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
 }

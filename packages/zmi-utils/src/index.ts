@@ -3,6 +3,7 @@ import clearModule from 'clear-module'
 import babelTypes from '@babel/types'
 import portfinder from 'portfinder'
 import deepmerge from 'deepmerge'
+import chokidar from 'chokidar'
 import mustache from 'mustache'
 import inquirer from 'inquirer'
 import cheerio from 'cheerio'
@@ -41,6 +42,7 @@ export {
   winPath,
   pkgUp,
   lodash,
+  chokidar,
   BabelRegister,
   deepmerge,
   mergeConfig,
