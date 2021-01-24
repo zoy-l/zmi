@@ -2,11 +2,11 @@ import { IApi } from '@zmi/types'
 
 export default function (api: IApi) {
   api.describe({
-    key: 'autoCSSModules',
+    key: 'extraBabelPlugins',
     config: {
-      default: true,
+      default: [],
       schema(joi) {
-        return joi.boolean()
+        return joi.array()
       }
     }
   })

@@ -1,14 +1,11 @@
-import { BundlerConfigType, IApi, IBundlerConfigType } from '@zmi/types'
+import { IApi } from '@zmi/types'
 import DefaultBundler from '@zmi/webpack'
 import path from 'path'
 import fs from 'fs'
 
 import { getHtmlGenerator } from './generateHtml'
 
-export async function getBundleAndConfigs(options: {
-  api: IApi
-  port?: number
-}) {
+export async function getBundleAndConfigs(options: { api: IApi; port?: number }) {
   const { api, port } = options
 
   const Html = getHtmlGenerator({ api })
@@ -57,13 +54,12 @@ export async function getBundleAndConfigs(options: {
       fs.existsSync(path.join(api.paths.appSrcPath, file))
     ) ?? 'index.js'
 
-  async function getConfig({ type }: { type: IBundlerConfigType }) {
+  async function getConfig() {
     const getConfigOpts = await api.applyPlugins({
       type: api.ApplyPluginsType.modify,
       key: 'modifyBundleConfigOpts',
       initialValue: {
         env: api.env ?? process.env.NODE_ENV,
-        type,
         port,
         entry: {
           zmi: path.join(api.paths.appSrcPath, entryFilePath)
@@ -96,21 +92,21 @@ export async function getBundleAndConfigs(options: {
           })
         }
       },
-      args: getArgs({ type })
+      args: getArgs({})
     })
 
     return api.applyPlugins({
       type: api.ApplyPluginsType.modify,
       key: 'modifyBundleConfig',
       initialValue: await bundler.getConfig(getConfigOpts),
-      args: getArgs({ type })
+      args: getArgs({})
     })
   }
 
   const bundleConfigs = await api.applyPlugins({
     type: api.ApplyPluginsType.modify,
     key: 'modifyBundleConfigs',
-    initialValue: await getConfig({ type: BundlerConfigType.csr }),
+    initialValue: await getConfig(),
     args: getArgs({ getConfig })
   })
 

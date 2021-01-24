@@ -71,10 +71,17 @@ export default class Config {
       (key) => userConfig[key] !== false
     )
 
+    const keepKeys = {}
     // get config
     Object.keys(plugins).forEach((pluginId) => {
       const { key, config = {} } = plugins[pluginId]
       const value = userConfig[key]
+
+      if (!keepKeys[key]) {
+        keepKeys[key] = key
+      } else {
+        throw new Error(`have multiple same ${key}`)
+      }
 
       // recognize as key if have `schema` config
       // disabled when `value` is false

@@ -11,7 +11,7 @@ import { IPrivate } from '@zmi/types'
 import path from 'path'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
-import VueClient from './VueClientWebpackPlugin'
+import VueClientWebpackPlugin from './VueClientWebpackPlugin'
 import { getBabelOpts } from './getBabelOptions'
 import ruleCss from './ruleCss'
 
@@ -200,7 +200,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
         // happyPackMode: useThreads
       })
 
-    WConfig.plugin('vue-client').use(VueClient)
+    WConfig.plugin('vue-client').use(VueClientWebpackPlugin)
 
     WConfig.plugin('vue-loader').use(require('vue-loader').VueLoaderPlugin)
   })

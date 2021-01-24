@@ -11,11 +11,11 @@ export function getBabelOpts({
   return {
     presets: [
       [require.resolve('@zmi/babel-preset/app'), presetOpts],
-      config.extraBabelPresets
+      ...config.extraBabelPresets
     ].filter(Boolean),
     plugins: [
-      config.extraBabelPlugins,
-      type === 'react' && isDev && hot && 'react-refresh/babel'
+      type === 'react' && isDev && hot && 'react-refresh/babel',
+      ...config.extraBabelPlugins
     ].filter(Boolean),
     sourceType: 'unambiguous',
     babelrc: false

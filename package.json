@@ -7,7 +7,7 @@
   "scripts": {
     "debug": "node --inspect-brk packages/zmi/bin/zmi.js",
     "test": "nerd test",
-    "zmi-bootstrap": "lerna bootstrap",
+    "zmi-bootstrap": "lerna bootstrap && yarn run zmi-clean:modules",
     "zmi-nerd": "nerd build",
     "zmi-nerd:watch": "nerd build --watch",
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
@@ -17,7 +17,6 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@octokit/core": "^3.2.4",
-    "@types/jest": "^26.0.20",
     "@vue/compiler-sfc": "^3.0.5",
     "lerna": "^3.22.1",
     "rimraf": "^3.0.2",
