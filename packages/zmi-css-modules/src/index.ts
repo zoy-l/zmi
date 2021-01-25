@@ -1,17 +1,17 @@
 import { NodePath } from '@babel/traverse'
 import { babelTypes } from '@zmi/utils'
-import { extname } from 'path'
+import path from 'path'
 
 const cssExtenders = ['.css', '.less', '.sass', '.scss', '.stylus', '.styl']
 
 export default function () {
   return {
     visitor: {
-      ImportDeclaration(path: NodePath<babelTypes.ImportDeclaration>) {
-        const { specifiers, source } = path.node
+      ImportDeclaration(content: NodePath<babelTypes.ImportDeclaration>) {
+        const { specifiers, source } = content.node
         const { value } = source
 
-        if (specifiers.length && cssExtenders.includes(extname(value))) {
+        if (specifiers.length && cssExtenders.includes(path.extname(value))) {
           source.value = `${value}?module`
         }
       }
