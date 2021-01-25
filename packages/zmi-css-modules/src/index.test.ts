@@ -7,23 +7,23 @@ function transformWithPlugin(code: string) {
   })!.code
 }
 
-test('css modules', () => {
+test('css module', () => {
   expect(transformWithPlugin(`import styles from 'a.css';`)).toEqual(
-    `import styles from "a.css?modules";`
+    `import styles from "a.css?module";`
   )
   expect(transformWithPlugin(`import styles from 'a.less';`)).toEqual(
-    `import styles from "a.less?modules";`
+    `import styles from "a.less?module";`
   )
   expect(transformWithPlugin(`import styles from 'a.scss';`)).toEqual(
-    `import styles from "a.scss?modules";`
+    `import styles from "a.scss?module";`
   )
   expect(transformWithPlugin(`import styles from 'a.sass';`)).toEqual(
-    `import styles from "a.sass?modules";`
+    `import styles from "a.sass?module";`
   )
   expect(transformWithPlugin(`import styles from 'a.stylus';`)).toEqual(
-    `import styles from "a.stylus?modules";`
+    `import styles from "a.stylus?module";`
   )
   expect(transformWithPlugin(`import styles from 'a.styl';`)).toEqual(
-    `import styles from "a.styl?modules";`
+    `import styles from "a.styl?module";`
   )
 })
