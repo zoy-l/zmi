@@ -4,9 +4,9 @@ import {
   mustache,
   mkdirp,
   chalk,
-  yargs,
+  yargsParser,
   glob
-} from '../../../zmi-utils/lib'
+} from '@zmi/utils'
 import path from 'path'
 import {
   writeFileSync,
@@ -21,7 +21,7 @@ import {
 
 export interface IOpts {
   cwd: string
-  args: yargs.Arguments
+  args: yargsParser.Arguments
 }
 
 interface copyTplOpts {
@@ -39,7 +39,7 @@ interface copyDirectoryOpts {
 export default class Generator {
   cwd: string
 
-  args: yargs.Arguments
+  args: yargsParser.Arguments
 
   constructor(opt: IOpts) {
     this.cwd = opt.cwd
@@ -58,10 +58,7 @@ export default class Generator {
 
       // eslint-disable-next-line no-constant-condition
       while (1) {
-        if (
-          existsSync(IappName) &&
-          !!readdirSync(`${this.cwd}/${IappName}`).length
-        ) {
+        if (existsSync(IappName) && !!readdirSync(`${this.cwd}/${IappName}`).length) {
           // eslint-disable-next-line no-await-in-loop
           const { newAppName } = await inquirer.prompt({
             type: 'input',
@@ -96,9 +93,9 @@ export default class Generator {
     clearConsole()
     this.copyDirectory({
       context: {
-        version: require('../../package').version
+        version: require('../package').version
       },
-      path: path.join(__dirname, '../../templates'),
+      path: path.join(__dirname, '../templates'),
       target: this.cwd
     })
   }
@@ -107,9 +104,7 @@ export default class Generator {
     const tpl = readFileSync(opts.templatePath, 'utf-8')
     const content = mustache.render(tpl, opts.context)
     mkdirp.sync(path.dirname(opts.target))
-    console.log(
-      `│ ${chalk.magenta('Copy: ')} ${path.relative(this.cwd, opts.target)}`
-    )
+    console.log(`│ ${chalk.magenta('[Copy]: ')} ${path.relative(this.cwd, opts.target)}`)
     writeFileSync(opts.target, content, 'utf-8')
   }
 

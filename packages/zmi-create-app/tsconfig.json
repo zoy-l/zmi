@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
-    "declaration": false
+    "declaration": false,
+    "esModuleInterop": true
   }
 }
