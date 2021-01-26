@@ -12,7 +12,6 @@ import mkdirp from 'mkdirp'
 import lodash from 'lodash'
 import pkgUp from 'pkg-up'
 import chalk from 'chalk'
-import yargs from 'yargs'
 import glob from 'glob'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
@@ -57,7 +56,6 @@ export {
   portfinder,
   yargsParser,
   chalk,
-  yargs,
   mustache,
   glob,
   mkdirp,

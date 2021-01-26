@@ -11,25 +11,15 @@ export default (api: IApi) => {
     name: 'webDev',
     description: 'start a webDev server for development',
     fn: async ({ args }) => {
-      api.env = 'development'
-      process.env.NODE_ENV = 'development'
-
-      const defaultPort = [
-        process.env.PORT,
-        args?.port,
-        api.config.devServer?.port
-      ].find(Boolean)
+      const defaultPort = process.env.PORT ?? args?.port ?? api.config.devServer?.port
 
       port = await portfinder.getPortPromise({ port: defaultPort })
-      host = [process.env.HOST, api.config.devServer?.host, '0.0.0.0'].find(
-        Boolean
-      )
+      host = process.env.HOST ?? api.config.devServer?.host ?? '0.0.0.0'
 
-      const {
-        bundler,
-        bundleConfigs,
-        bundleImplementor
-      } = await getBundleAndConfigs({ api, port })
+      const { bundler, bundleConfigs, bundleImplementor } = await getBundleAndConfigs({
+        api,
+        port
+      })
 
       const devServer = await bundler.setupDevServer({
         port,
@@ -44,8 +34,10 @@ export default (api: IApi) => {
           return console.log(err)
         }
         clearConsole()
-        console.log()
-        console.log(chalk.blue(`Speed up the server,Wait a minute...\n`))
+        console.log(
+          chalk.bgBlueBright.black(' SPEED '),
+          chalk.blueBright(`up the server,Wait a minute...\n`)
+        )
       })
     }
   })
@@ -53,10 +45,7 @@ export default (api: IApi) => {
   api.registerMethod({
     name: 'getPort',
     fn() {
-      assert(
-        `api.getPort() is only valid in development.`,
-        api.env === 'development'
-      )
+      assert(`api.getPort() is only valid in development.`, api.env === 'development')
       return port
     }
   })
@@ -64,10 +53,7 @@ export default (api: IApi) => {
   api.registerMethod({
     name: 'getHostname',
     fn() {
-      assert(
-        `api.getHostname() is only valid in development.`,
-        api.env === 'development'
-      )
+      assert(`api.getHostname() is only valid in development.`, api.env === 'development')
       return host
     }
   })
@@ -75,8 +61,8 @@ export default (api: IApi) => {
   api.registerMethod({
     name: 'restartServer',
     fn() {
+      process.send?.({ type: 'RESTART' })
       console.log(chalk.gray(`🎯 Try to restart dev server...`))
-      process.send && process.send({ type: 'RESTART' })
     }
   })
 }

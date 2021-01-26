@@ -28,6 +28,15 @@ export interface IDep {
   [name: string]: string
 }
 
+export enum ConfigChangeType {
+  reload = 'reload'
+}
+
+export interface IChanged {
+  key: string
+  pluginId: string
+}
+
 export interface IPackage {
   name?: string
   dependencies?: IDep

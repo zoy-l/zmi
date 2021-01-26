@@ -16,9 +16,9 @@ import { getBabelOpts } from './getBabelOptions'
 import ruleCss from './ruleCss'
 
 export interface IGetConfigOpts {
+  chainWebpack?: (webpackConfig: WebpackChain, args: Record<string, any>) => Promise<any>
   modifyBabelPresetOpts?: <T>(opts: T) => Promise<T> | T
   modifyBabelOpts?: <T>(opts: T) => Promise<T> | T
-  chainWebpack?: (webpackConfig: WebpackChain, args: Record<string, any>) => Promise<any>
   bundleImplementor?: typeof defaultWebpack
   env: 'development' | 'production'
   entry: Record<string, any>
@@ -94,7 +94,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   })
 
   // @ts-expect-error: library type error
-  webpackConfig.devtool(isDev ? 'eval-cheap-module-source-map' : false)
+  webpackConfig.devtool(config.devtool)
   webpackConfig.mode(env)
 
   const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
@@ -305,7 +305,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
         '( :elapseds )'
       )}`,
       customSummary: (time) => {
-        console.log(chalk.blue(`🎯 Compiled time ${time} \n`))
+        console.log(chalk.blue(`🎯 time ${time} \n`))
       }
     }
   ])

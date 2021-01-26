@@ -1,4 +1,4 @@
-import { assert, BabelRegister, lodash, NodeEnv, yargs } from '@zmi/utils'
+import { assert, BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { EventEmitter } from 'events'
 import path from 'path'
@@ -9,6 +9,7 @@ import loadDotEnv from './withEnv'
 import Config from './Config'
 import paths from './paths'
 import {
+  ConfigChangeType,
   EnumApplyPlugins,
   IServicePaths,
   EnumEnableBy,
@@ -21,7 +22,7 @@ import {
 
 interface IRun {
   command: string
-  args: yargs.Arguments
+  args: yargsParser.Arguments
 }
 
 interface IApplyPlugins {
@@ -119,7 +120,7 @@ export default class Service extends EventEmitter {
    */
   pluginMethods: Record<
     string,
-    ((args: yargs.Arguments) => void) | ((fn: typeof Function) => void)
+    ((args: yargsParser.Arguments) => void) | ((fn: typeof Function) => void)
   > = {}
 
   /**
@@ -176,6 +177,11 @@ export default class Service extends EventEmitter {
    * @desc extra command
    */
   args: any
+
+  /**
+   * @desc dev onChange type
+   */
+  ConfigChangeType = ConfigChangeType
 
   constructor(opts: IServiceOptions) {
     super()
@@ -261,10 +267,7 @@ export default class Service extends EventEmitter {
     this.config = await this.applyPlugins({
       key: 'modifyConfig',
       type: this.ApplyPluginsType.modify,
-      initialValue: this.configInstance.getConfig({
-        userConfig: this.userConfig,
-        defaultConfig
-      })
+      initialValue: this.configInstance.getConfig(defaultConfig)
     })
 
     this.setStage(ServiceStage.getPaths)

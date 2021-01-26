@@ -1,4 +1,3 @@
-import yargs from 'yargs'
 import yargsParser from 'yargs-parser'
 
 export const defaultYargsOptions = {
@@ -11,7 +10,7 @@ export const defaultYargsOptions = {
 
 export default (
   opts?: yargsParser.Options
-): Promise<{ args: yargs.Arguments; command: string }> =>
+): Promise<{ args: yargsParser.Arguments; command: string }> =>
   new Promise((resolve, reject) => {
     try {
       const args = yargsParser(process.argv.slice(2), opts)

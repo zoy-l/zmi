@@ -9,6 +9,11 @@ exec('lerna clean --ignore @zmi/webpack --yes', (err, stdout, stderr) => {
     console.log(stdout)
     console.log(stderr)
     // will cause webpack types errors
-    rimraf.sync(path.join(__dirname, '../packages/zmi-webpack/node_modules/@types'))
+    const webpackTypes = path.join(
+      __dirname,
+      '../packages/zmi-webpack/node_modules/@types'
+    )
+    rimraf.sync(webpackTypes)
+    console.log(`clean removing ${webpackTypes}`)
   }
 })

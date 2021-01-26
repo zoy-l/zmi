@@ -144,6 +144,7 @@ function createCompiler(opts: {
 
     if (isSuccessful) {
       clearConsole()
+      log(chalk.bgBlue.black(' DONE '), chalk.blue('Compiled successfully !'))
       printInstructions({ appName, urls, port })
     }
 

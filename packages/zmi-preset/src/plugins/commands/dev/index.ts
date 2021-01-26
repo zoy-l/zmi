@@ -56,6 +56,9 @@ export default (api: IApi) => {
     name: 'dev',
     description: 'start dev server for development',
     async fn({ args }) {
+      api.env = 'development'
+      process.env.NODE_ENV = 'development'
+
       const { miniAppConfig, frameType } = api.config
       let FrameType = frameType
 
@@ -81,26 +84,15 @@ export default (api: IApi) => {
             )
           }
 
-          FrameType = projectConfig ? 'miniApp' : 'react'
+          FrameType = projectConfig ? 'miniAppDev' : 'webDev'
         }
       }
 
-      switch (FrameType) {
-        case 'react':
-        case 'vue':
-          api.service.runCommand({ command: 'webDev', args })
-          break
-        case 'miniApp':
-          api.service.runCommand({ command: 'miniAppDev', args })
-          break
-        default:
-          break
-      }
+      api.service.runCommand({ command: FrameType, args })
 
       const watch = process.env.WATCH !== 'none'
 
       if (watch) {
-        //
         const unWatchPkg = watchPkg(api.cwd, () => {
           console.log()
           console.log(`Plugins in package.json changed.`)
@@ -112,54 +104,61 @@ export default (api: IApi) => {
         const { configInstance, userConfig } = api.service
         const unWatchConfig = configInstance.watch({
           userConfig,
-          async onChange({ pluginChanged, valueChanged }: any) {
+          async onChange({
+            pluginChanged,
+            valueChanged
+          }: {
+            pluginChanged: any[]
+            valueChanged: any[]
+          }) {
             if (pluginChanged.length) {
               console.log()
               console.log(
-                `Plugins of ${pluginChanged.map((p: any) => p.key).join(', ')} changed.`
+                `Plugins of ${pluginChanged.map((p) => p.key).join(', ')} changed.`
               )
               api.restartServer()
             }
 
             if (valueChanged.length) {
-              // let reload = false
-              // const fns: Function[] = []
-              // const reloadConfigs: string[] = []
-              // valueChanged.forEach(({ key, pluginId }) => {
-              //   const { onChange } = api.service.plugins[pluginId].config || {}
-              //   if (!onChange || onChange === api.ConfigChangeType.reload) {
-              //     reload = true
-              //     reloadConfigs.push(key)
-              //   }
-              //   if (typeof onChange === 'function') {
-              //     fns.push(onChange)
-              //   }
-              // })
-              // if (reload) {
-              //   console.log()
-              //   console.log(`Config ${reloadConfigs.join(', ')} changed.`)
-              //   api.restartServer()
-              // } else {
-              //   api.service.userConfig = configInstance.getUserConfig()
-              //   // TODO: simplify, 和 Service 里的逻辑重复了
-              //   // 需要 Service 露出方法
-              //   const defaultConfig = await api.applyPlugins({
-              //     key: 'modifyDefaultConfig',
-              //     type: api.ApplyPluginsType.modify,
-              //     initialValue: configInstance.getDefaultConfig()
-              //   })
-              //   api.service.config = await api.applyPlugins({
-              //     key: 'modifyConfig',
-              //     type: api.ApplyPluginsType.modify,
-              //     initialValue: configInstance.getConfig({
-              //       defaultConfig
-              //     }) as any
-              //   })
-              //   fns.forEach((fn) => fn())
-              // }
+              let reload = false
+              const fns: any[] = []
+              const reloadConfigs: string[] = []
+              valueChanged.forEach(({ key, pluginId }) => {
+                const { onChange } = api.service.plugins[pluginId].config || {}
+                if (!onChange || onChange === api.ConfigChangeType.reload) {
+                  reload = true
+                  reloadConfigs.push(key)
+                }
+                if (typeof onChange === 'function') {
+                  fns.push(onChange)
+                }
+              })
+              if (reload) {
+                console.log()
+                console.log(`Config ${reloadConfigs.join(', ')} changed.`)
+                api.restartServer()
+              } else {
+                api.service.userConfig = configInstance.getUserConfig()
+
+                const defaultConfig = await api.applyPlugins({
+                  key: 'modifyDefaultConfig',
+                  type: api.ApplyPluginsType.modify,
+                  initialValue: configInstance.getDefaultConfig()
+                })
+                api.service.config = await api.applyPlugins({
+                  key: 'modifyConfig',
+                  type: api.ApplyPluginsType.modify,
+                  initialValue: configInstance.getConfig({
+                    defaultConfig
+                  })
+                })
+                fns.forEach((fn) => fn())
+              }
             }
           }
         })
+
+        unwatchs.push(unWatchConfig)
       }
     }
   })

@@ -11,8 +11,7 @@
     "@types/lodash": "^4.14.168",
     "@types/mkdirp": "^1.0.1",
     "@types/mustache": "^4.1.1",
-    "@types/resolve": "^1.17.1",
-    "@types/yargs": "^15.0.12",
+    "@types/resolve": "^1.19.0",
     "@types/yargs-parser": "^20.2.0",
     "address": "^1.1.2",
     "chalk": "^4.1.0",
@@ -29,7 +28,6 @@
     "portfinder": "^1.0.28",
     "resolve": "^1.19.0",
     "url": "^0.11.0",
-    "yargs": "^16.2.0",
     "yargs-parser": "^20.2.4"
   },
   "dependencies": {

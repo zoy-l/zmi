@@ -19,7 +19,7 @@ interface IDescribe {
 
 interface IRegisterMethod {
   name: string
-  fn?: (args: utils.yargs.Arguments) => void
+  fn?: (args: utils.yargsParser.Arguments) => void
   exitsError?: boolean
 }
 
@@ -115,9 +115,7 @@ export default class PluginAPI {
     }
 
     if (exitsError) {
-      utils.assert(
-        `api.registerMethod() failed, method ${name} is already exist.`
-      )
+      utils.assert(`api.registerMethod() failed, method ${name} is already exist.`)
     }
   }
 

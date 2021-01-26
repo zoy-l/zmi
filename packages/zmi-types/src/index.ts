@@ -51,6 +51,7 @@ interface IAdd<T> {
 
 type ServicePluginApi = Pick<
   Service,
+  | 'ConfigChangeType'
   | 'ApplyPluginsType'
   | 'applyPlugins'
   | 'ServiceStage'
@@ -106,11 +107,11 @@ export interface IConfig {
   devServer?: webpackDevServer.Configuration
   frameType?: 'react' | 'vue' | 'miniApp'
   loaderOptions?: {
-    lessLoader: Record<string, any>
-    scssLoader: Record<string, any>
-    postcssLoader: Record<string, any>
-    stylusLoader: Record<string, any>
-    styleLoader: Record<string, any>
+    lessLoader?: Record<string, any>
+    scssLoader?: Record<string, any>
+    postcssLoader?: Record<string, any>
+    stylusLoader?: Record<string, any>
+    styleLoader?: Record<string, any>
   }
   autoprefixer?: Record<string, any>
 
@@ -158,9 +159,7 @@ export interface IConfig {
   ) => void | Promise<void>
 }
 
-type INonEmpty<T extends Record<string, any>> = Omit<
-  { [key in keyof T]-?: T[key] },
-  'externals' | 'alias'
->
+type INonEmpty<T extends Record<string, any>, U extends keyof T> = Pick<T, U> &
+  Omit<{ [key in keyof T]-?: T[key] }, U>
 
-export type IPrivate = INonEmpty<IConfig> & IConfig
+export type IPrivate = INonEmpty<IConfig, 'externals' | 'alias'>

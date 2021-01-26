@@ -5,12 +5,15 @@ import {
   deepmerge,
   winPath,
   getFile,
-  assert
+  assert,
+  chalk,
+  chokidar,
+  lodash
 } from '@zmi/utils'
 import Joi from 'joi'
 
-import { mergeDefault } from './configUtils'
-import { ServiceStage } from './types'
+import { isEqual, mergeDefault } from './configUtils'
+import { IChanged, ServiceStage } from './types'
 import { Service } from '.'
 import path from 'path'
 import fs from 'fs'
@@ -54,14 +57,10 @@ export default class Config {
     }, {})
   }
 
-  getConfig({
-    defaultConfig,
-    userConfig
-  }: {
-    defaultConfig: Record<string, any>
-    userConfig: Record<string, any>
-  }) {
+  getConfig(defaultConfig: { [key: string]: any }) {
     const { stage, plugins } = this.service
+    const userConfig = this.getUserConfig()
+
     assert(
       `Config.getConfig() failed, it should not be executed before plugin is ready.`,
       stage >= ServiceStage.pluginReady
@@ -208,7 +207,85 @@ export default class Config {
     return newConfig
   }
 
-  watch(options: any) {
-    console.log(options)
+  getWatchFilesAndDirectories() {
+    const umiEnv = process.env.UMI_ENV
+    const configFiles = lodash.clone(possibleConfigPaths)
+    possibleConfigPaths.forEach((f) => {
+      // if (this.localConfig) configFiles.push(this.addAffix(f, 'local'))
+      if (umiEnv) configFiles.push(this.addAffix(f, umiEnv))
+    })
+
+    const configDir = winPath(path.join(this.cwd, 'config'))
+
+    const files = configFiles
+      .reduce<string[]>((memo, f) => {
+        const file = winPath(path.join(this.cwd, f))
+        if (fs.existsSync(file)) {
+          memo = memo.concat(parseRequireDeps(file))
+        } else {
+          memo.push(file)
+        }
+        return memo
+      }, [])
+      .filter((f) => !f.startsWith(configDir))
+
+    return [configDir].concat(files)
+  }
+
+  watch(opts: {
+    userConfig: Record<string, unknown>
+    onChange: (args: {
+      userConfig: any
+      pluginChanged: IChanged[]
+      valueChanged: IChanged[]
+    }) => void
+  }) {
+    let paths = this.getWatchFilesAndDirectories()
+    let { userConfig } = opts
+    const watcher = chokidar.watch(paths, {
+      ignoreInitial: true,
+      cwd: this.cwd
+    })
+    watcher.on('all', (event, path) => {
+      console.log(chalk.gray(`[${event}]:`), path)
+      const newPaths = this.getWatchFilesAndDirectories()
+      const diffs = lodash.difference(newPaths, paths)
+      if (diffs.length) {
+        watcher.add(diffs)
+        paths = paths.concat(diffs)
+      }
+
+      const newUserConfig = this.getUserConfig()
+      const pluginChanged: IChanged[] = []
+      const valueChanged: IChanged[] = []
+      Object.keys(this.service.plugins).forEach((pluginId) => {
+        const { key, config = {} } = this.service.plugins[pluginId]
+        // recognize as key if have schema config
+        if (!config.schema) return
+        if (!isEqual(newUserConfig[key], userConfig[key])) {
+          const changed = {
+            key,
+            pluginId
+          }
+          if (newUserConfig[key] === false || userConfig[key] === false) {
+            pluginChanged.push(changed)
+          } else {
+            valueChanged.push(changed)
+          }
+        }
+      })
+
+      if (pluginChanged.length || valueChanged.length) {
+        opts.onChange({
+          userConfig: newUserConfig,
+          pluginChanged,
+          valueChanged
+        })
+      }
+
+      userConfig = newUserConfig
+    })
+
+    return watcher.close
   }
 }
