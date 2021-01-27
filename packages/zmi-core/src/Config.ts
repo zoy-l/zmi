@@ -24,6 +24,15 @@ const possibleConfigPaths = [
   '.zmirc.js'
 ].filter(Boolean) as string[]
 
+interface IWatchOptions {
+  userConfig: Record<string, any>
+  onChange: (args: {
+    userConfig: any
+    pluginChanged: IChanged[]
+    valueChanged: IChanged[]
+  }) => void
+}
+
 export default class Config {
   /**
    * @desc Directory path
@@ -232,14 +241,7 @@ export default class Config {
     return [configDir].concat(files)
   }
 
-  watch(opts: {
-    userConfig: Record<string, unknown>
-    onChange: (args: {
-      userConfig: any
-      pluginChanged: IChanged[]
-      valueChanged: IChanged[]
-    }) => void
-  }) {
+  watch(opts: IWatchOptions) {
     let paths = this.getWatchFilesAndDirectories()
     let { userConfig } = opts
     const watcher = chokidar.watch(paths, {
@@ -264,16 +266,12 @@ export default class Config {
       Object.keys(this.service.plugins).forEach((pluginId) => {
         const { key, config = {} } = this.service.plugins[pluginId]
         // recognize as key if have schema config
-        if (!config.schema) return
-        if (!isEqual(newUserConfig[key], userConfig[key])) {
-          const changed = {
-            key,
-            pluginId
-          }
+
+        if (!isEqual(newUserConfig[key], userConfig[key]) && config.schema) {
           if (newUserConfig[key] === false || userConfig[key] === false) {
-            pluginChanged.push(changed)
+            pluginChanged.push({ key, pluginId })
           } else {
-            valueChanged.push(changed)
+            valueChanged.push({ key, pluginId })
           }
         }
       })
