@@ -20,7 +20,11 @@ launchDevice().then(({ args }) => {
 
     Signals.forEach((signal) => {
       process.once(signal, () => {
-        console.log(signal)
+        service.applyPlugins({
+          key: 'onExit',
+          type: service.ApplyPluginsType.event,
+          args: { signal }
+        })
         process.exit(0)
       })
     })

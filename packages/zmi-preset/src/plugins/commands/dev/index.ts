@@ -1,6 +1,6 @@
-import { IApi } from '@zmi/types'
-import { chokidar, lodash, winPath } from '@zmi/utils'
+import { chalk, chokidar, clearConsole, lodash, winPath } from '@zmi/utils'
 import { getPlugin } from '@zmi/core'
+import { IApi } from '@zmi/types'
 import path from 'path'
 import fs from 'fs'
 
@@ -24,33 +24,33 @@ function watcher(cwd: string, onChange: { (): void }) {
   const pkgPath = path.join(cwd, 'package.json')
   const plugins = getZmiPlugins(pkgPath)
   const chokidarInstance = chokidar.watch(pkgPath, {
-    ignoreInitial: true
+    ignoreInitial: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 500
+    }
   })
 
   chokidarInstance.on('all', () => {
     const usePlugins = getZmiPlugins(pkgPath)
     !lodash.isEqual(plugins, usePlugins) && onChange()
   })
-
-  return chokidarInstance.close
 }
 
 function watchPkg(cwd: string, onChange: { (): void }) {
-  const unWatchs = [watcher(cwd, onChange)]
+  watcher(cwd, onChange)
 
   if (winPath(cwd) !== winPath(process.cwd())) {
-    unWatchs.push(watcher(process.cwd(), onChange))
-  }
-
-  return () => {
-    unWatchs.forEach((unWatch) => {
-      unWatch()
-    })
+    watcher(process.cwd(), onChange)
   }
 }
 
 export default (api: IApi) => {
-  const unwatchs: { (): void }[] = []
+  function restartServer(desc: string) {
+    clearConsole()
+    console.log(chalk.bgGray(' RESTART '), desc)
+    console.log()
+    api.restartServer()
+  }
 
   api.registerCommand({
     name: 'dev',
@@ -93,16 +93,12 @@ export default (api: IApi) => {
       const watch = process.env.WATCH !== 'none'
 
       if (watch) {
-        const unWatchPkg = watchPkg(api.cwd, () => {
-          console.log()
-          console.log(`Plugins in package.json changed.`)
-          api.restartServer()
+        watchPkg(api.cwd, () => {
+          restartServer(`Plugins in package.json changed.`)
         })
 
-        unwatchs.push(unWatchPkg)
-
         const { configInstance, userConfig } = api.service
-        const unWatchConfig = configInstance.watch({
+        configInstance.watch({
           userConfig,
           async onChange({
             pluginChanged,
@@ -112,31 +108,27 @@ export default (api: IApi) => {
             valueChanged: any[]
           }) {
             if (pluginChanged.length) {
-              console.log()
-              console.log(
+              restartServer(
                 `Plugins of ${pluginChanged.map((p) => p.key).join(', ')} changed.`
               )
-              api.restartServer()
             }
 
             if (valueChanged.length) {
               let reload = false
-              const fns: any[] = []
+              const funcs: (() => void)[] = []
               const reloadConfigs: string[] = []
               valueChanged.forEach(({ key, pluginId }) => {
-                const { onChange } = api.service.plugins[pluginId].config || {}
+                const { onChange } = api.service.plugins[pluginId].config ?? {}
                 if (!onChange || onChange === api.ConfigChangeType.reload) {
                   reload = true
                   reloadConfigs.push(key)
                 }
                 if (typeof onChange === 'function') {
-                  fns.push(onChange)
+                  funcs.push(onChange)
                 }
               })
               if (reload) {
-                console.log()
-                console.log(`Config ${reloadConfigs.join(', ')} changed.`)
-                api.restartServer()
+                restartServer(`Config ${reloadConfigs.join(', ')} changed.`)
               } else {
                 api.service.userConfig = configInstance.getUserConfig()
 
@@ -152,13 +144,11 @@ export default (api: IApi) => {
                     defaultConfig
                   })
                 })
-                fns.forEach((fn) => fn())
+                funcs.forEach((fn) => fn())
               }
             }
           }
         })
-
-        unwatchs.push(unWatchConfig)
       }
     }
   })

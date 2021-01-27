@@ -244,7 +244,10 @@ export default class Config {
     let { userConfig } = opts
     const watcher = chokidar.watch(paths, {
       ignoreInitial: true,
-      cwd: this.cwd
+      cwd: this.cwd,
+      awaitWriteFinish: {
+        stabilityThreshold: 500
+      }
     })
     watcher.on('all', (event, path) => {
       console.log(chalk.gray(`[${event}]:`), path)
@@ -285,7 +288,5 @@ export default class Config {
 
       userConfig = newUserConfig
     })
-
-    return watcher.close
   }
 }

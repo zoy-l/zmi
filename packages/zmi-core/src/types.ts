@@ -49,7 +49,7 @@ export interface IPluginConfig {
   schema?: {
     (joi: Joi.Root): Joi.Schema
   }
-  onChange?: string | typeof Function
+  onChange?: string | { (): void }
 }
 
 export interface IPlugin {
