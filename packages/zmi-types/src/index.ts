@@ -1,8 +1,8 @@
-import { PluginAPI, Service } from '@zmi/core'
-import WebpackChain from 'webpack-chain'
 import webpackDevServer from 'webpack-dev-server'
 import { IConfig as nerdConfig } from 'zmi-nerd'
 import webpack, { Configuration } from 'webpack'
+import { PluginAPI, Service } from '@zmi/core'
+import WebpackChain from 'webpack-chain'
 
 interface IManifest {
   fileName: string

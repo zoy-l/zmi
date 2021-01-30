@@ -13,6 +13,5 @@ export default {
     'zmi',
     'zmi-webpack',
     'zmi-preset'
-  ],
-  sourceMaps: true
+  ]
 } as IConfig

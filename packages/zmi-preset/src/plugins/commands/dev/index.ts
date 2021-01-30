@@ -64,7 +64,7 @@ export default (api: IApi) => {
 
       if (!FrameType) {
         if (miniAppConfig) {
-          FrameType = 'miniApp'
+          FrameType = 'miniAppDev'
         } else {
           const projectConfig = [
             fs.existsSync(`${api.paths.appSrcPath}/project.config.json`),

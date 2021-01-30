@@ -10,11 +10,9 @@ export default (api: IApi) => {
       api.env = 'production'
       process.env.NODE_ENV = 'production'
 
-      const {
-        bundler,
-        bundleConfigs,
-        bundleImplementor
-      } = await getBundleAndConfigs({ api })
+      const { bundler, bundleConfigs, bundleImplementor } = await getBundleAndConfigs({
+        api
+      })
 
       try {
         const { appOutputPath } = api.paths

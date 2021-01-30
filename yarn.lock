@@ -12606,10 +12606,10 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^5.18.0:
-  version "5.18.0"
-  resolved "https://registry.npm.taobao.org/webpack/download/webpack-5.18.0.tgz#bbcf13094aa0da0534d513f27d7ee72d74e499c6"
-  integrity sha1-u88TCUqg2gU01RPyfX7nLXTkmcY=
+webpack@^5.19.0:
+  version "5.19.0"
+  resolved "https://registry.npm.taobao.org/webpack/download/webpack-5.19.0.tgz#1a5fee84dd63557e68336b0774ac4a1c81aa2c73"
+  integrity sha1-Gl/uhN1jVX5oM2sHdKxKHIGqLHM=
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"
@@ -12928,10 +12928,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.npm.taobao.org/yocto-queue/download/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha1-ApTrPe4FAo0x7hpfosVWpqrxChs=
 
-zmi-nerd@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.npm.taobao.org/zmi-nerd/download/zmi-nerd-1.1.2.tgz#e706f2459b2ec70b40ba1014f4fae60a4b15346f"
-  integrity sha1-5wbyRZsuxwtAuhAU9PrmCksVNG8=
+zmi-nerd@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.npm.taobao.org/zmi-nerd/download/zmi-nerd-1.1.4.tgz?cache=0&sync_timestamp=1612005941798&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fzmi-nerd%2Fdownload%2Fzmi-nerd-1.1.4.tgz#7889c2c7b352c857ee3e636b14f106bbdbdfbbce"
+  integrity sha1-eInCx7NSyFfuPmNrFPEGu9vfu84=
   dependencies:
     "@babel/core" "^7.12.10"
     "@babel/plugin-proposal-class-properties" "^7.12.1"
@@ -12949,6 +12949,7 @@ zmi-nerd@^1.1.2:
     "@babel/register" "^7.12.10"
     "@types/gulp-if" "^0.0.33"
     "@types/gulp-insert" "^0.5.8"
+    "@types/gulp-sourcemaps" "^0.0.34"
     "@types/through2" "^2.0.36"
     babel-jest "^26.6.3"
     chokidar "^3.5.1"
