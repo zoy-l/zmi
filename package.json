@@ -21,6 +21,9 @@
     "lerna": "^3.22.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.3",
-    "zmi-nerd": "^1.0.48"
+    "zmi-nerd": "^1.1.2"
+  },
+  "dependencies": {
+    "@types/gulp-sourcemaps": "^0.0.34"
   }
 }

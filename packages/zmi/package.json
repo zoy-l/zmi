@@ -10,5 +10,8 @@
   "bin": {
     "zmi": "bin/zmi.js"
   },
-  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
+  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8",
+  "devDependencies": {
+    "source-map-support": "^0.5.19"
+  }
 }

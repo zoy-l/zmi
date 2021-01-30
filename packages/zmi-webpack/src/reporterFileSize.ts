@@ -41,7 +41,7 @@ function getDifferenceLabel(currentSize: number, previousSize: number) {
     return chalk.yellow('+' + fileSize)
   }
   if (difference < 0) {
-    return chalk.green(fileSize)
+    return chalk.green(`${fileSize}`)
   }
   return ''
 }
@@ -67,14 +67,10 @@ export function printFileSizesAfterBuild(
           const previousSize = sizes[removeFileNameHash(root, asset.name)]
           const difference = getDifferenceLabel(size, previousSize)
           return {
-            folder: path.join(
-              path.basename(buildFolder),
-              path.dirname(asset.name)
-            ),
+            folder: path.join(path.basename(buildFolder), path.dirname(asset.name)),
             name: path.basename(asset.name),
             size,
-            sizeLabel:
-              filesize(size) + (difference ? ' (' + difference + ')' : '')
+            sizeLabel: filesize(size) + (difference ? ' (' + difference + ')' : '')
           }
         })
     )
@@ -94,9 +90,7 @@ export function printFileSizesAfterBuild(
         sizeLabel += rightPadding
       }
       const isMainBundle = asset.name.indexOf('main.') === 0
-      const maxRecommendedSize = isMainBundle
-        ? maxBundleGzipSize
-        : maxChunkGzipSize
+      const maxRecommendedSize = isMainBundle ? maxBundleGzipSize : maxChunkGzipSize
       const isLarge = maxRecommendedSize && asset.size > maxRecommendedSize
       if (isLarge && path.extname(asset.name) === '.js') {
         suggestBundleSplitting = true
@@ -112,18 +106,12 @@ export function printFileSizesAfterBuild(
   )
   if (suggestBundleSplitting) {
     console.log()
+    console.log(chalk.yellow('The bundle size is significantly larger than recommended.'))
     console.log(
-      chalk.yellow('The bundle size is significantly larger than recommended.')
+      chalk.yellow('Consider reducing it with code splitting: https://goo.gl/9VhYWB')
     )
     console.log(
-      chalk.yellow(
-        'Consider reducing it with code splitting: https://goo.gl/9VhYWB'
-      )
-    )
-    console.log(
-      chalk.yellow(
-        'You can also analyze the project dependencies: https://goo.gl/LeUzfb'
-      )
+      chalk.yellow('You can also analyze the project dependencies: https://goo.gl/LeUzfb')
     )
   }
 }
