@@ -35,39 +35,44 @@ export default (_context: never, options: Ioptions) => {
   const preset = {
     presets: [
       options.env && [
-        '@babel/preset-env',
+        require.resolve('@babel/preset-env'),
         {
           ...deepmerge(defaultEnvConfig, toObject(options.env)),
           debug: options.debug
         }
       ],
       options.typescript && [
-        '@babel/preset-typescript',
+        require.resolve('@babel/preset-typescript'),
         {
           allowNamespaces: true
         }
       ]
     ].filter(Boolean),
     plugins: [
-      ['@babel/plugin-proposal-optional-chaining', { loose: false }],
-      ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: false }],
-      '@babel/plugin-syntax-top-level-await',
-      ['@babel/plugin-transform-destructuring', { loose: false }],
-      options.typescript && ['babel-plugin-transform-typescript-metadata'],
-      ['@babel/plugin-proposal-decorators', { legacy: true }],
-      ['@babel/plugin-proposal-class-properties', { loose: true }],
-      '@babel/plugin-proposal-export-default-from',
+      [require.resolve('@babel/plugin-proposal-optional-chaining'), { loose: false }],
       [
-        '@babel/plugin-proposal-pipeline-operator',
+        require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
+        { loose: false }
+      ],
+      require.resolve('@babel/plugin-syntax-top-level-await'),
+      [require.resolve('@babel/plugin-transform-destructuring'), { loose: false }],
+      options.typescript && [
+        require.resolve('babel-plugin-transform-typescript-metadata')
+      ],
+      [require.resolve('@babel/plugin-proposal-decorators'), { legacy: true }],
+      [require.resolve('@babel/plugin-proposal-class-properties'), { loose: true }],
+      require.resolve('@babel/plugin-proposal-export-default-from'),
+      [
+        require.resolve('@babel/plugin-proposal-pipeline-operator'),
         {
           proposal: 'minimal'
         }
       ],
-      '@babel/plugin-proposal-do-expressions',
-      '@babel/plugin-proposal-function-bind',
-      '@babel/plugin-proposal-logical-assignment-operators',
+      require.resolve('@babel/plugin-proposal-do-expressions'),
+      require.resolve('@babel/plugin-proposal-function-bind'),
+      require.resolve('@babel/plugin-proposal-logical-assignment-operators'),
       options.transformRuntime && [
-        '@babel/plugin-transform-runtime',
+        require.resolve('@babel/plugin-transform-runtime'),
         {
           version: require('@babel/runtime/package.json').version,
           absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json')),
@@ -76,7 +81,7 @@ export default (_context: never, options: Ioptions) => {
         }
       ],
       options.autoCSSModules && [require.resolve('@zmi/css-modules')],
-      options.dynamicImportNode && ['babel-plugin-dynamic-import-node']
+      options.dynamicImportNode && [require.resolve('babel-plugin-dynamic-import-node')]
     ].filter(Boolean)
   }
 
