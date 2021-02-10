@@ -1,5 +1,5 @@
 import { yargsParser } from '@zmi/utils'
-import run from '.'
+import generator from './AppGenerator'
 
 const args = yargsParser(process.argv.slice(2), {
   alias: {
@@ -13,5 +13,5 @@ if (args.version && !args._[0]) {
   const { name, version } = require('../package')
   console.log(`${name}@${version}`)
 } else {
-  run({ cwd: process.cwd(), args })
+  generator(process.cwd(), args)
 }

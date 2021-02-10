@@ -1,12 +1,4 @@
-import {
-  clearConsole,
-  inquirer,
-  mustache,
-  mkdirp,
-  chalk,
-  yargsParser,
-  glob
-} from '@zmi/utils'
+import { inquirer, mustache, mkdirp, chalk, yargsParser, glob } from '@zmi/utils'
 import path from 'path'
 import fs from 'fs'
 
@@ -15,123 +7,104 @@ export interface IOpts {
   args: yargsParser.Arguments
 }
 
-interface copyTplOpts {
-  templatePath: string
-  target: string
-  context: Record<string, unknown>
-}
+export default async function generator(cwd: string, args: yargsParser.Arguments) {
+  const { yellow, cyan, green, blue, magenta } = chalk
+  let appName = args._[0]
 
-interface copyDirectoryOpts {
-  path: string
-  context: Record<string, unknown>
-  target: string
-}
+  const directoryList = fs
+    .readdirSync(cwd)
+    .filter((file) => fs.lstatSync(`${cwd}/${file}`).isDirectory())
 
-export default class Generator {
-  cwd: string
-
-  args: yargsParser.Arguments
-
-  constructor(opt: IOpts) {
-    this.cwd = opt.cwd
-    this.args = opt.args
-  }
-
-  async run() {
-    const appName = this.args._[0]
-
-    const directoryList = fs
-      .readdirSync(this.cwd)
-      .filter((file) => fs.lstatSync(`${this.cwd}/${file}`).isDirectory())
-
-    if (appName) {
-      let IappName = appName as fs.PathLike
-
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        if (
-          fs.existsSync(IappName) &&
-          !!fs.readdirSync(`${this.cwd}/${IappName}`).length
-        ) {
-          const { newAppName } = await inquirer.prompt({
-            type: 'input',
-            name: 'newAppName',
-            message: chalk.yellow.bold(
-              [
-                `The ${chalk.cyan.bold(`"📁 ${IappName}"`)}`,
-                'folder already exists and is not empty.\n',
-                '  please enter a new project name : '
-              ].join('')
-            ),
-            prefix: '⚠️ '
-          })
-
-          if (!directoryList.includes(`${newAppName}`)) {
-            this.cwd += `/${newAppName}`
-            break
-          } else {
-            IappName = `${newAppName}`
-          }
-        } else {
-          this.cwd += `/${IappName}`
-          break
-        }
-      }
-    }
-
-    this.writing()
-  }
-
-  writing() {
-    clearConsole()
-    this.copyDirectory({
-      context: {
-        version: require('../package').version
-      },
-      path: path.join(__dirname, '../templates'),
-      target: this.cwd
+  if (!appName) {
+    const { IAppName } = await inquirer.prompt({
+      type: 'input',
+      name: 'IAppName',
+      message: yellow.bold('please enter project name:'),
+      default: 'zmi-project'
     })
+    appName = IAppName
   }
 
-  copyTpl(opts: copyTplOpts) {
-    const tpl = fs.readFileSync(opts.templatePath, 'utf-8')
-    const content = mustache.render(tpl, opts.context)
-    mkdirp.sync(path.dirname(opts.target))
-    console.log(`│ ${chalk.magenta('[Copy]: ')} ${path.relative(this.cwd, opts.target)}`)
-    fs.writeFileSync(opts.target, content, 'utf-8')
-  }
+  let IappName = appName as fs.PathLike
+  const isEmptyDir =
+    fs.existsSync(IappName) && !!fs.readdirSync(`${cwd}/${IappName}`).length
 
-  copyDirectory(opts: copyDirectoryOpts) {
-    const files = glob.sync('**/*', {
-      cwd: opts.path,
-      dot: true,
-      ignore: ['**/node_modules/**']
-    })
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    if (isEmptyDir) {
+      const { newAppName } = await inquirer.prompt({
+        type: 'input',
+        name: 'newAppName',
+        message: yellow(
+          [
+            `The \`${cyan(IappName)}\` `,
+            'folder already exists and is not empty.\n',
+            'please enter a new project name : '
+          ].join('')
+        ),
+        prefix: '⚠️ '
+      })
 
-    files.forEach((file) => {
-      const absFile = path.join(opts.path, file)
-      if (fs.statSync(absFile).isDirectory()) return
-      if (file.endsWith('.tpl')) {
-        this.copyTpl({
-          templatePath: absFile,
-          target: path.join(opts.target, file.replace(/\.tpl$/, '')),
-          context: opts.context
-        })
+      if (!directoryList.includes(`${newAppName}`)) {
+        cwd += `/${newAppName}`
+        break
       } else {
-        console.log(`│ ${chalk.magenta('Copy: ')} ${file}`)
-        const absTarget = path.join(opts.target, file)
-        mkdirp.sync(path.dirname(absTarget))
-        fs.copyFileSync(absFile, absTarget)
+        IappName = `${newAppName}`
       }
-    })
-
-    console.log(
-      [
-        '┌────────────────────────────────────┐',
-        '│ Install dependencies: $ yarn       |',
-        '│ Start the dev server: $ yarn start |',
-        '└────────────────────────────────────┘'
-      ].join('\n')
-    )
+    } else {
+      cwd += `/${IappName}`
+      break
+    }
   }
+
+  const { template } = await inquirer.prompt({
+    type: 'list',
+    name: 'template',
+    message: yellow('Choose the template you want'),
+    choices: [
+      { name: blue('react'), value: 'react' },
+      { name: blue('react-ts'), value: 'react-ts' },
+      { name: cyan('vue'), value: 'vue' },
+      { name: cyan('vue-ts'), value: 'vue-ts' },
+      { name: green('miniapp'), value: 'miniapp' }
+    ]
+  })
+
+  const templatePath = path.join(__dirname, `../templates/${template}`)
+  const context = {
+    version: require('../package').version
+  }
+
+  const files = glob.sync('**/*', {
+    ignore: ['**/node_modules/**'],
+    cwd: templatePath,
+    dot: true
+  })
+
+  files.forEach((file) => {
+    const absFile = path.join(templatePath, file)
+    if (fs.statSync(absFile).isDirectory()) return
+    if (file.endsWith('.tpl')) {
+      const target = path.join(cwd, file.replace(/\.tpl$/, ''))
+      const tpl = fs.readFileSync(absFile, 'utf-8')
+      const content = mustache.render(tpl, context)
+      mkdirp.sync(path.dirname(target))
+      console.log(`${magenta('[Make]: ')} ${path.relative(cwd, target)}`)
+      fs.writeFileSync(target, content, 'utf-8')
+    } else {
+      console.log(`${magenta('[Make]: ')} ${file}`)
+      const absTarget = path.join(cwd, file)
+      mkdirp.sync(path.dirname(absTarget))
+      fs.copyFileSync(absFile, absTarget)
+    }
+  })
+
+  console.log(
+    [
+      '┌────────────────────────────────────┐',
+      '│ Install dependencies: $ yarn       |',
+      '│ Start the dev server: $ yarn start |',
+      '└────────────────────────────────────┘'
+    ].join('\n')
+  )
 }
