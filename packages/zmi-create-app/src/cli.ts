@@ -1,17 +1,11 @@
-import { yargsParser } from '@zmi/utils'
+import { launchDevice, dyo } from '@zmi/utils'
 import generator from './AppGenerator'
 
-const args = yargsParser(process.argv.slice(2), {
-  alias: {
-    version: ['v'],
-    help: ['h']
-  },
-  boolean: ['version']
+launchDevice(dyo).then(({ args }) => {
+  if (args.version && !args._[0]) {
+    const { version } = require('../package')
+    console.log(version)
+  } else {
+    generator(process.cwd(), args)
+  }
 })
-
-if (args.version && !args._[0]) {
-  const { name, version } = require('../package')
-  console.log(`${name}@${version}`)
-} else {
-  generator(process.cwd(), args)
-}
