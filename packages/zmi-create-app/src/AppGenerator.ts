@@ -8,16 +8,7 @@ import {
   glob
 } from '@zmi/utils'
 import path from 'path'
-import {
-  writeFileSync,
-  copyFileSync,
-  readFileSync,
-  readdirSync,
-  existsSync,
-  lstatSync,
-  statSync,
-  PathLike
-} from 'fs'
+import fs from 'fs'
 
 export interface IOpts {
   cwd: string
@@ -49,17 +40,19 @@ export default class Generator {
   async run() {
     const appName = this.args._[0]
 
-    const directoryList = readdirSync(this.cwd).filter((file) =>
-      lstatSync(`${this.cwd}/${file}`).isDirectory()
-    )
+    const directoryList = fs
+      .readdirSync(this.cwd)
+      .filter((file) => fs.lstatSync(`${this.cwd}/${file}`).isDirectory())
 
     if (appName) {
-      let IappName = appName as PathLike
+      let IappName = appName as fs.PathLike
 
       // eslint-disable-next-line no-constant-condition
-      while (1) {
-        if (existsSync(IappName) && !!readdirSync(`${this.cwd}/${IappName}`).length) {
-          // eslint-disable-next-line no-await-in-loop
+      while (true) {
+        if (
+          fs.existsSync(IappName) &&
+          !!fs.readdirSync(`${this.cwd}/${IappName}`).length
+        ) {
           const { newAppName } = await inquirer.prompt({
             type: 'input',
             name: 'newAppName',
@@ -101,11 +94,11 @@ export default class Generator {
   }
 
   copyTpl(opts: copyTplOpts) {
-    const tpl = readFileSync(opts.templatePath, 'utf-8')
+    const tpl = fs.readFileSync(opts.templatePath, 'utf-8')
     const content = mustache.render(tpl, opts.context)
     mkdirp.sync(path.dirname(opts.target))
     console.log(`│ ${chalk.magenta('[Copy]: ')} ${path.relative(this.cwd, opts.target)}`)
-    writeFileSync(opts.target, content, 'utf-8')
+    fs.writeFileSync(opts.target, content, 'utf-8')
   }
 
   copyDirectory(opts: copyDirectoryOpts) {
@@ -117,7 +110,7 @@ export default class Generator {
 
     files.forEach((file) => {
       const absFile = path.join(opts.path, file)
-      if (statSync(absFile).isDirectory()) return
+      if (fs.statSync(absFile).isDirectory()) return
       if (file.endsWith('.tpl')) {
         this.copyTpl({
           templatePath: absFile,
@@ -128,7 +121,7 @@ export default class Generator {
         console.log(`│ ${chalk.magenta('Copy: ')} ${file}`)
         const absTarget = path.join(opts.target, file)
         mkdirp.sync(path.dirname(absTarget))
-        copyFileSync(absFile, absTarget)
+        fs.copyFileSync(absFile, absTarget)
       }
     })
 
