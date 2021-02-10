@@ -3,3 +3,4 @@ node_modules
 dist
 bin
 __test__
+examples

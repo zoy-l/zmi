@@ -10,8 +10,8 @@ import winPath from './winPath'
 
 function parse(filePath: string): string[] {
   const content = fs.readFileSync(filePath, 'utf-8')
-  return (crequire(content) as any[]).filter((item) => {
-    return (
+  return (crequire(content) as any[]).filter(
+    (item) =>
       item.path.charAt(0) === '.' &&
       winPath(
         resolve.sync(item.path, {
@@ -19,8 +19,7 @@ function parse(filePath: string): string[] {
           extensions: ['.tsx', '.ts', '.jsx', '.js']
         })
       )
-    )
-  })
+  )
 }
 
 export default function parseRequireDeps(filePath: string) {

@@ -99,9 +99,14 @@ export default class Bundler {
             warnings: []
           })
         } else {
-          messages = formatWebpackMessages(
-            stats?.toJson({ all: false, warnings: true, errors: true })
-          )
+          messages = stats
+            ? formatWebpackMessages(
+                stats.toJson({ all: false, warnings: true, errors: true })
+              )
+            : {
+                errors: [],
+                warnings: []
+              }
         }
 
         if (messages.errors.length) {

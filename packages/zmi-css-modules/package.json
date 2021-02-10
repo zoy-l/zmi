@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "@babel/traverse": "^7.12.12",
+    "@babel/traverse": "^7.12.13",
     "@zmi/utils": "^1.0.1-alpha.0"
   },
   "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8",

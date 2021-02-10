@@ -1,9 +1,9 @@
 import recursive from 'recursive-readdir'
+import { chalk } from '@zmi/utils'
 import stripAnsi from 'strip-ansi'
 import gzipSize from 'gzip-size'
 import filesize from 'filesize'
 import webpack from 'webpack'
-import chalk from 'chalk'
 import path from 'path'
 import fs from 'fs'
 
@@ -60,7 +60,7 @@ export function printFileSizesAfterBuild(
     .map((stats: webpack.Stats) =>
       stats
         .toJson({ all: false, assets: true })
-        .assets.filter((asset: { name: string }) => canReadAsset(asset.name))
+        .assets?.filter((asset: { name: string }) => canReadAsset(asset.name))
         .map((asset: { name: string }) => {
           const fileContents = fs.readFileSync(path.join(root, asset.name))
           const size = gzipSize.sync(fileContents)

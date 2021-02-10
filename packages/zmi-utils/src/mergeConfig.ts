@@ -6,10 +6,7 @@ type AnyConfig<T extends Record<string, any>, U extends Record<string, any>> = {
     : U[V]
 }
 
-type CalculatedConfig<
-  T extends Record<string, any>,
-  U extends Record<string, any>
-> = T &
+type CalculatedConfig<T extends Record<string, any>, U extends Record<string, any>> = T &
   {
     [V in keyof U]: V extends keyof T ? T[V] : U[V]
   }

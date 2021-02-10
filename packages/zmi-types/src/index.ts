@@ -114,17 +114,14 @@ export interface IConfig {
     styleLoader?: Record<string, any>
   }
   autoprefixer?: Record<string, any>
-
   links?: Partial<HTMLLinkElement>[]
   metas?: Partial<HTMLMetaElement>[]
   manifest?: Partial<IManifest>
-
   terserOptions?: Record<string, any>
   cssModulesTypescript?: boolean
   ignoreMomentLocale?: boolean
   publicPath?: string
   outputPath?: string
-
   alias?: Record<string, any>
   favicon?: string
   hash?: boolean
@@ -133,7 +130,6 @@ export interface IConfig {
   externals?: Pick<Configuration, 'externals'>
   dynamicImport?: boolean
   autoCSSModules?: boolean
-
   miniAppConfig?: Omit<
     nerdConfig,
     | 'pkgs'
