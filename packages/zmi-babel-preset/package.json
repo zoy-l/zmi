@@ -28,10 +28,8 @@
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "babel-plugin-transform-typescript-metadata": "^0.3.1"
-  },
-  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8",
-  "dependencies": {
+    "babel-plugin-transform-typescript-metadata": "^0.3.1",
     "@vue/babel-plugin-jsx": "^1.0.3"
-  }
+  },
+  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
 }

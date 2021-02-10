@@ -13,6 +13,7 @@ import path from 'path'
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
 import { getBabelOpts } from './getBabelOptions'
+import terserOptions from './terserOptions'
 import ruleCss from './ruleCss'
 
 export interface IGetConfigOpts {
@@ -48,6 +49,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
     config
   })
 
+  const disableCompress = process.env.COMPRESS === 'none'
+  const sourceMap = config.devtool !== 'none'
   const isDev = env === 'development'
   const isProd = env === 'production'
   let isReact = false
@@ -89,6 +92,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   const createCSSRule = ruleCss({
     webpackConfig,
     browserslist,
+    sourceMap,
     config,
     isDev
   })
@@ -98,7 +102,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
   webpackConfig.mode(env)
 
   const appOutputPath = path.join(cwd, config.outputPath ?? 'dist')
-  const useHash = config.hash && isProd
+  const useHash = config.hash && isProd ? '[name].[contenthash:8]' : '[name]'
 
   webpackConfig.when(!!entry, (WConfig) => {
     Object.keys(entry).forEach((key) => {
@@ -110,8 +114,8 @@ export default async function getConfig(opts: IGetConfigOpts) {
 
   webpackConfig.output
     .path(appOutputPath)
-    .filename(useHash ? '[name].[contenthash:8].js' : '[name].js')
-    .chunkFilename(useHash ? '[name].[contenthash:8].js' : '[name].js')
+    .filename(`${useHash}.js`)
+    .chunkFilename(`${useHash}.js`)
     .publicPath(config.publicPath)
 
   // To be verified .set('symlinks', true)
@@ -180,14 +184,6 @@ export default async function getConfig(opts: IGetConfigOpts) {
         hotReload: hot
       })
 
-    // http://link.vuejs.org/feature-flags
-    WConfig.plugin('feature-flags').use(defaultWebpack.DefinePlugin, [
-      {
-        __VUE_OPTIONS_API__: 'true',
-        __VUE_PROD_DEVTOOLS__: 'false'
-      }
-    ])
-
     WConfig.module
       .rule('vue-ts')
       .test(/\.ts$/)
@@ -238,6 +234,45 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .use('raw-loader')
     .loader('raw-loader')
 
+  webpackConfig.when(
+    disableCompress,
+    (WConfig) => {
+      WConfig.optimization.minimize(false)
+    },
+    (WConfig) => {
+      WConfig.optimization
+        .minimizer('terser')
+        .use(require.resolve('terser-webpack-plugin'), [
+          {
+            terserOptions: deepmerge(terserOptions, config.terserOptions),
+            extractComments: false,
+            parallel: true
+          }
+        ])
+
+      WConfig.optimization
+        .minimizer('css-minimizer')
+        .use(require.resolve('css-minimizer-webpack-plugin'), [
+          {
+            sourceMap
+          }
+        ])
+    }
+  )
+
+  webpackConfig.plugin('define').use(defaultWebpack.DefinePlugin, [
+    {
+      ...config.define,
+      // http://link.vuejs.org/feature-flags
+      ...(isVue
+        ? {
+            __VUE_OPTIONS_API__: 'true',
+            __VUE_PROD_DEVTOOLS__: 'false'
+          }
+        : {})
+    }
+  ])
+
   // Turn on react fast refresh
   // Official implementation
   // And also added in cra 4.0
@@ -247,7 +282,9 @@ export default async function getConfig(opts: IGetConfigOpts) {
   })
 
   webpackConfig.when(!isDev, (WConfig) => {
-    WConfig.plugin('extract-css').use(miniCssExtractPlugin)
+    WConfig.plugin('extract-css').use(miniCssExtractPlugin, [
+      { filename: `${useHash}.css`, chunkFilename: `${[useHash]}.chunk.css` }
+    ])
   })
 
   // IgnorePlugin ignores localized content when packaging

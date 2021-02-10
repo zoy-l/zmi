@@ -62,7 +62,7 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
         env: api.env ?? process.env.NODE_ENV,
         port,
         entry: {
-          zmi: path.join(api.paths.appSrcPath, entryFilePath)
+          main: path.join(api.paths.appSrcPath, entryFilePath)
         },
         hot: process.env.HMR !== 'none',
         bundleImplementor,

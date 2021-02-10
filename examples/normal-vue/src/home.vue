@@ -1,5 +1,5 @@
 <template>
-  <div @click="hello">
+  <div @click="hello" :class="$style.div">
     {{ msg }}
   </div>
 </template>
@@ -24,7 +24,7 @@ export default defineComponent({
 })
 </script>
 
-<style module>
+<style module lang="less">
 .div {
   color: blue;
 }

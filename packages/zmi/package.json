@@ -5,7 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "@zmi/core": "^1.0.1-alpha.0",
-    "@zmi/preset": "^1.0.1-alpha.0"
+    "@zmi/preset": "^1.0.1-alpha.0",
+    "@zmi/utils": "1.0.1-alpha.0"
   },
   "bin": {
     "zmi": "bin/zmi.js"

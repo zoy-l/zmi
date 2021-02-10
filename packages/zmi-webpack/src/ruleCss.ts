@@ -8,6 +8,7 @@ interface IOpts {
   isDev: boolean
   disableCompress?: boolean
   browserslist?: Record<string, any>
+  sourceMap: boolean
 }
 
 interface ICreateCSSRuleOpts {
@@ -18,7 +19,7 @@ interface ICreateCSSRuleOpts {
 }
 
 export default (options: IOpts) => {
-  const { webpackConfig, isDev, config, browserslist } = options
+  const { webpackConfig, isDev, config, browserslist, sourceMap } = options
 
   function createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
     const { lang, test, loader } = createCSSRuleOptions
@@ -54,7 +55,8 @@ export default (options: IOpts) => {
       // prettier-ignore
       const cssLoaderOptions: Record<string, any> = deepmerge({
           importLoaders: 1,
-          modules: {}
+          modules: {},
+          sourceMap
         },config.cssLoader ?? {})
 
       if (isCSSModules) {
@@ -76,6 +78,7 @@ export default (options: IOpts) => {
         .loader(require.resolve('postcss-loader'))
         .options({
           postcssOptions: {
+            sourceMap,
             plugins: [
               require.resolve('postcss-flexbugs-fixes'),
               [
@@ -102,20 +105,25 @@ export default (options: IOpts) => {
 
   createCSSRule({ lang: 'css', test: /\.(css)(\?.*)?$/ })
 
-  createCSSRule({ lang: 'scss', test: /\.scss$/, loader: 'sass-loader', options: scss })
+  createCSSRule({
+    lang: 'scss',
+    test: /\.scss$/,
+    loader: 'sass-loader',
+    options: deepmerge({ sourceMap }, scss)
+  })
 
   createCSSRule({
     lang: 'less',
     test: /\.less$/,
     loader: require.resolve('less-loader'),
-    options: less
+    options: deepmerge({ sourceMap }, less)
   })
 
   createCSSRule({
     lang: 'stylus',
     test: /\.styl(us)?$/,
     loader: 'stylus-loader',
-    options: stylus
+    options: deepmerge({ sourceMap }, stylus)
   })
 
   return createCSSRule
