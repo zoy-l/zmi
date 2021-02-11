@@ -9,6 +9,7 @@ import WebpackChain from 'webpack-chain'
 import defaultWebpack from 'webpack'
 import { IPrivate } from '@zmi/types'
 import path from 'path'
+import fs from 'fs'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
@@ -171,7 +172,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .exclude.add(/node_modules/)
     .end()
     .use('babel-loader')
-    .loader('babel-loader')
+    .loader(require.resolve('babel-loader'))
     .options(babelOpts)
 
   webpackConfig.when(!!isVue, (WConfig) => {
@@ -179,7 +180,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
       .rule('vue')
       .test(/\.vue$/)
       .use('vue-loader')
-      .loader('vue-loader')
+      .loader(require.resolve('vue-loader'))
       .options({
         hotReload: hot
       })
@@ -188,7 +189,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
       .rule('vue-ts')
       .test(/\.ts$/)
       .use('ts-loader')
-      .loader('ts-loader')
+      .loader(require.resolve('ts-loader'))
       .options({
         transpileOnly: true,
         appendTsSuffixTo: ['\\.vue$']
@@ -205,14 +206,14 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .rule('images')
     .test(/\.(png|jpe?g|gif|webp|ico)(\?.*)?$/)
     .use('url-loader')
-    .loader('url-loader')
+    .loader(require.resolve('url-loader'))
     .options({})
 
   webpackConfig.module
     .rule('svg')
     .test(/\.(svg)(\?.*)?$/)
     .use('file-loader')
-    .loader('file-loader')
+    .loader(require.resolve('file-loader'))
     .options({
       name: 'static/[name].[hash:8].[ext]',
       esModule: false
@@ -222,7 +223,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .rule('fonts')
     .test(/\.(eot|woff|woff2|ttf)(\?.*)?$/)
     .use('file-loader')
-    .loader('file-loader')
+    .loader(require.resolve('file-loader'))
     .options({
       name: 'static/[name].[hash:8].[ext]',
       esModule: false
@@ -232,7 +233,7 @@ export default async function getConfig(opts: IGetConfigOpts) {
     .rule('plaintext')
     .test(/\.(txt|text|md)$/)
     .use('raw-loader')
-    .loader('raw-loader')
+    .loader(require.resolve('raw-loader'))
 
   webpackConfig.when(
     disableCompress,
@@ -312,26 +313,28 @@ export default async function getConfig(opts: IGetConfigOpts) {
     })
   }
 
-  webpackConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin, [
-    {
-      async: false,
-      typescript: isVue
-        ? {
-            extensions: {
-              vue: {
-                enabled: true,
-                compiler: '@vue/compiler-sfc'
+  webpackConfig.when(fs.existsSync(`${cwd}/tsconfig.json`), (WConfig) => {
+    WConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin, [
+      {
+        async: false,
+        typescript: isVue
+          ? {
+              extensions: {
+                vue: {
+                  enabled: true,
+                  compiler: '@vue/compiler-sfc'
+                }
+              },
+              diagnosticOptions: {
+                semantic: true
+                // https://github.com/TypeStrong/ts-loader#happypackmode
+                // syntactic: useThreads
               }
-            },
-            diagnosticOptions: {
-              semantic: true
-              // https://github.com/TypeStrong/ts-loader#happypackmode
-              // syntactic: useThreads
             }
-          }
-        : {}
-    }
-  ])
+          : {}
+      }
+    ])
+  })
 
   webpackConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
     {
