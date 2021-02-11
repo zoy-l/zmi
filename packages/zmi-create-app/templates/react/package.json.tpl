@@ -1,12 +1,12 @@
 {
-  "private": true,
+
   "scripts": {
     "start": "zmi dev",
     "build": "zmi build",
   },
   "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "zmi": "^{{{ version }}}",
   }
 }

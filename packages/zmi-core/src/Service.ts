@@ -293,7 +293,7 @@ export default class Service extends EventEmitter {
     const api = this.getPluginAPI({ id, key, service: this })
 
     // Plugin is cached here for checking
-    this.registerPlugin(plugin)
+    this.plugins[plugin.id] = plugin
 
     // Plugin or Plugins
     // Execute plugin method and pass in api.any
@@ -398,10 +398,6 @@ export default class Service extends EventEmitter {
     }
 
     return TypeSeriesWater.promise(hookArgs[type]) as Promise<any>
-  }
-
-  registerPlugin(plugin: IPlugin) {
-    this.plugins[plugin.id] = plugin
   }
 
   isPluginEnable(pluginId: string) {
