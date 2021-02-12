@@ -15,7 +15,7 @@
     "access": "public"
   },
   "bin": {
-    "zmi-create-app": "bin/zmi-create-app.js"
+    "create-zmi-app": "bin/zmi-create-app.js"
   },
   "gitHead": "4d08c6a53cfba9461ede303592a8e43c487626a8"
 }
