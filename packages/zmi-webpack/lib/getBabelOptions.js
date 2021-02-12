@@ -13,7 +13,7 @@ function getBabelOpts({
   const type = presetOpts.type,
         isDev = presetOpts.isDev;
   return {
-    presets: [[require.resolve('@zmi-cli/babel-preset/app'), presetOpts], ...config.extraBabelPresets].filter(Boolean),
+    presets: [[require.resolve('@zmi-cli/babel-factory/app'), presetOpts], ...config.extraBabelPresets].filter(Boolean),
     plugins: [type === 'react' && isDev && hot && require.resolve('react-refresh/babel'), ...config.extraBabelPlugins].filter(Boolean),
     sourceType: 'unambiguous',
     babelrc: false

@@ -93,6 +93,12 @@ Object.defineProperty(exports, "glob", {
     return _glob().default;
   }
 });
+Object.defineProperty(exports, "url", {
+  enumerable: true,
+  get: function get() {
+    return _url().default;
+  }
+});
 Object.defineProperty(exports, "launchDevice", {
   enumerable: true,
   get: function get() {
@@ -311,6 +317,16 @@ function _glob() {
   const data = _interopRequireDefault(require("glob"));
 
   _glob = function _glob() {
+    return data;
+  };
+
+  return data;
+}
+
+function _url() {
+  const data = _interopRequireDefault(require("url"));
+
+  _url = function _url() {
     return data;
   };
 

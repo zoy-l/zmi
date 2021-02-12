@@ -16,7 +16,7 @@ export default class BabelRegister {
         .map(winPath)
     )
     require('@babel/register')({
-      presets: [require.resolve('@zmi-cli/babel-preset/node')],
+      presets: [require.resolve('@zmi-cli/babel-factory/node')],
       ignore: [/node_modules/],
       only,
       extensions: ['.jsx', '.js', '.ts', '.tsx'],
