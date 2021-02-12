@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/core",
-  "version": "1.0.3-alpha.4.8",
+  "version": "1.0.3-alpha.4.10",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -8,13 +8,13 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@types/ejs": "^3.0.5",
     "@types/prettier": "^2.2.0",
     "@zmi-cli/utils": "^1.0.3-alpha.4.8",
-    "prettier": "^2.2.1",
-    "@types/ejs": "^3.0.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "joi": "^17.4.0",
+    "prettier": "^2.2.1",
     "tapable": "^2.2.0"
   },
   "publishConfig": {
