@@ -193,8 +193,6 @@ export default async function getConfig(opts: IGetConfigOpts) {
       .options({
         transpileOnly: true,
         appendTsSuffixTo: ['\\.vue$']
-        // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
-        // happyPackMode: useThreads
       })
 
     WConfig.plugin('vue-client').use(VueClientWebpackPlugin)

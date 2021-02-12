@@ -250,9 +250,7 @@ function _getConfig() {
       });
       WConfig.module.rule('vue-ts').test(/\.ts$/).use('ts-loader').loader(require.resolve('ts-loader')).options({
         transpileOnly: true,
-        appendTsSuffixTo: ['\\.vue$'] // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
-        // happyPackMode: useThreads
-
+        appendTsSuffixTo: ['\\.vue$']
       });
       WConfig.plugin('vue-client').use(_VueClientWebpackPlugin.default);
       WConfig.plugin('vue-loader').use(require('vue-loader').VueLoaderPlugin);
