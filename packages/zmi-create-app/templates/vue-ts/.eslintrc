@@ -1,7 +1,4 @@
 {
   "root": true,
-  "extends": ["zmi/base", "zmi/vue"],
-  "rules": {
-    "vue/no-multiple-template-root": "off"
-  }
+  "extends": ["zmi/base", "zmi/vue"]
 }
