@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/webpack",
-  "version": "1.0.3-alpha.4.10",
+  "version": "1.0.3-alpha.4.11",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "@babel/core": "^7.12.13",
     "@babel/register": "^7.12.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@zmi-cli/babel-factory": "^1.0.3-alpha.4.9",
+    "@zmi-cli/babel-factory": "^1.0.3-alpha.4.11",
     "@zmi-cli/utils": "^1.0.3-alpha.4.8",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.2",
