@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/preset",
-  "version": "1.0.3-alpha.4.8",
+  "version": "1.0.3-alpha.4.9",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -18,7 +18,7 @@
     "@zmi-cli/core": "^1.0.3-alpha.4.8",
     "@zmi-cli/types": "^1.0.3-alpha.4.8",
     "@zmi-cli/utils": "^1.0.3-alpha.4.8",
-    "@zmi-cli/webpack": "^1.0.3-alpha.4.8",
+    "@zmi-cli/webpack": "^1.0.3-alpha.4.9",
     "zmi-nerd": "^1.1.7"
   }
 }
