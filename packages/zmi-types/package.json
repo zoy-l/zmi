@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/types",
-  "version": "1.0.3-alpha.4.4",
+  "version": "1.0.3-alpha.4.5",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.0.3-alpha.4.4"
+    "@zmi-cli/core": "^1.0.3-alpha.4.5"
   },
   "publishConfig": {
     "access": "public"
