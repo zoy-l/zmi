@@ -13,6 +13,7 @@ import lodash from 'lodash'
 import pkgUp from 'pkg-up'
 import chalk from 'chalk'
 import glob from 'glob'
+import url from 'url'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
@@ -59,5 +60,6 @@ export {
   mustache,
   glob,
   mkdirp,
-  inquirer
+  inquirer,
+  url
 }
