@@ -1,6 +1,6 @@
 {
   "name": "@zmi/babel-preset-zmi",
-  "version": "1.0.3-alpha.4.0",
+  "version": "1.0.3-alpha.4.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
