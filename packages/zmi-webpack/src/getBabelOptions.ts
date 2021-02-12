@@ -10,7 +10,7 @@ export function getBabelOpts({
   const { type, isDev } = presetOpts
   return {
     presets: [
-      [require.resolve('@zmi/babel-preset/app'), presetOpts],
+      [require.resolve('@zmi/babel-preset-zmi/app'), presetOpts],
       ...config.extraBabelPresets
     ].filter(Boolean),
     plugins: [

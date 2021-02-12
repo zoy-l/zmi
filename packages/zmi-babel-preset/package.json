@@ -1,5 +1,5 @@
 {
-  "name": "@zmi/babel-preset",
+  "name": "@zmi/babel-preset-zmi",
   "version": "1.0.3-alpha.4.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -35,4 +35,5 @@
     "access": "public"
   },
   "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360"
+  "gitHead": "be37bf95fd8d5b7ec3e78f225b04c3f3b4d0bdf6"
 }
