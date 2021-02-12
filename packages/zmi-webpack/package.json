@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/webpack",
-  "version": "1.0.3-alpha.4.11",
+  "version": "1.0.3-alpha.4.13",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
