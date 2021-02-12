@@ -16,12 +16,12 @@
     "publish": "lerna publish"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.13",
+    "@babel/core": "^7.12.16",
     "@octokit/core": "^3.2.5",
     "@vue/compiler-sfc": "^3.0.5",
     "lerna": "^3.22.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.1.4",
+    "typescript": "^4.1.5",
     "zmi-nerd": "^1.1.7"
   },
   "dependencies": {
