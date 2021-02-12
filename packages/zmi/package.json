@@ -1,6 +1,6 @@
 {
   "name": "zmi",
-  "version": "1.0.3-alpha.4.11",
+  "version": "1.0.3-alpha.4.12",
   "main": "index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
