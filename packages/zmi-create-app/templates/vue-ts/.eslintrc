@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["zmi/base", "zmi/vue"]
+  "extends": ["zmi/typescript", "zmi/vue"]
 }

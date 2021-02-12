@@ -5891,10 +5891,10 @@ eslint-config-prettier@^7.2.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-7.2.0.tgz#f4a4bd2832e810e8cc7c1411ec85b3e85c0c53f9"
   integrity sha512-rV4Qu0C3nfJKPOAhFujFxB7RMP+URFyQqqOZW9DMRD7ZDTFyjaIlETU3xzHELt++4ugC0+Jm084HQYkkJe+Ivg==
 
-eslint-config-zmi@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/eslint-config-zmi/download/eslint-config-zmi-1.0.0.tgz#482cc890bf7bc4b3ed0d94fdfd463104e4d810da"
-  integrity sha1-SCzIkL97xLPtDZT9/UYxBOTYENo=
+eslint-config-zmi@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/eslint-config-zmi/download/eslint-config-zmi-1.0.1.tgz#7ed66dac91f007b0a950142ec21cc2f0f1fe3798"
+  integrity sha1-ftZtrJHwB7CpUBQuwhzC8PH+N5g=
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.15.0"
     "@typescript-eslint/parser" "^4.15.0"
