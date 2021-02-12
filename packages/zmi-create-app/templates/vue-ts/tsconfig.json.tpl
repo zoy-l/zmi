@@ -10,6 +10,6 @@
     "types": ["zmi/client"],
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["./src", "./typings"],
   "exclude": ["node_modules"]
 }
