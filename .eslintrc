@@ -9,5 +9,13 @@
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
     "no-continue": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["packages/zmi-create-app/*/**"],
+      "rules": {
+        "node/no-missing-import": "off"
+      }
+    }
+  ]
 }

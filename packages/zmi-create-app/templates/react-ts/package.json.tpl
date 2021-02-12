@@ -1,5 +1,5 @@
 {
-  "name": "zmi-react-starter",
+  "name": "zmi-react-ts-starter",
   "version": "0.0.0",
   "scripts": {
     "start": "zmi dev",
@@ -10,6 +10,9 @@
     "react-dom": "^17.0.1"
   },
   "devDependencies": {
-    "zmi": "^{{{ version }}}"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "zmi": "^{{{ version }}}",
+    "typescript": "^4.1.2"
   }
 }
