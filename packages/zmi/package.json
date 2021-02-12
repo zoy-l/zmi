@@ -1,6 +1,6 @@
 {
   "name": "zmi",
-  "version": "1.0.3-alpha.4.7",
+  "version": "1.0.3-alpha.4.8",
   "main": "index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -11,10 +11,10 @@
     "cssModule.d.ts"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.0.3-alpha.4.7",
-    "@zmi-cli/preset": "^1.0.3-alpha.4.7",
-    "@zmi-cli/types": "^1.0.3-alpha.4.7",
-    "@zmi-cli/utils": "^1.0.3-alpha.4.7",
+    "@zmi-cli/core": "^1.0.3-alpha.4.8",
+    "@zmi-cli/preset": "^1.0.3-alpha.4.8",
+    "@zmi-cli/types": "^1.0.3-alpha.4.8",
+    "@zmi-cli/utils": "^1.0.3-alpha.4.8",
     "eslint": "^7.19.0",
     "eslint-config-zmi": "^0.0.4"
   },
