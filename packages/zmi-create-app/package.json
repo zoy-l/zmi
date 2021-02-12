@@ -11,8 +11,11 @@
   "dependencies": {
     "@zmi/utils": "^1.0.3-alpha.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "zmi-create-app": "bin/zmi-create-app.js"
   },
-  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
+  "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360"
 }

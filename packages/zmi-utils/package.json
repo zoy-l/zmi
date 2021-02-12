@@ -34,5 +34,8 @@
     "@babel/types": "^7.12.13",
     "chokidar": "^3.5.1"
   },
-  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360"
 }

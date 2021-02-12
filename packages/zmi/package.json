@@ -21,7 +21,10 @@
   "bin": {
     "zmi": "bin/zmi.js"
   },
-  "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8",
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360",
   "devDependencies": {
     "source-map-support": "^0.5.19"
   }
