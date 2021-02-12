@@ -4,5 +4,5 @@ dist
 bin
 __test__
 examples
-packages/zmi-create-app/templates/*
+packages/zmi-create-app/templates/*/**
 
