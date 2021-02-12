@@ -1,4 +1,5 @@
 // Leave it to eslint to solve the annoying "..."
 {
-  "javascript.validate.enable": false
+  "javascript.validate.enable": false,
+  "vuedx.suggest.enabled": false
 }
