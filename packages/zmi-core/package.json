@@ -1,5 +1,5 @@
 {
-  "name": "@zmi/core",
+  "name": "@zmi-cli/core",
   "version": "1.0.3-alpha.4.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,11 +16,11 @@
   },
   "dependencies": {
     "@types/prettier": "^2.2.0",
-    "@zmi/utils": "^1.0.3-alpha.4.1",
+    "@zmi-cli/utils": "^1.0.3-alpha.4.1",
     "prettier": "^2.2.1"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360"
+  "gitHead": "4d08c6a53cfba9461ede303592a8e43c487626a8"
 }

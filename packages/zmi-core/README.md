@@ -1,1 +1,1 @@
-# @zmi/cli-core
+# @zmi-cli/cli-core

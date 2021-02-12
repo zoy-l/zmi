@@ -1,4 +1,4 @@
-import { deepmerge } from '@zmi/utils'
+import { deepmerge } from '@zmi-cli/utils'
 import path from 'path'
 
 export interface Ioptions {
@@ -80,7 +80,7 @@ export default (_context: never, options: Ioptions) => {
           ...toObject(options.transformRuntime)
         }
       ],
-      options.autoCSSModules && [require.resolve('@zmi/css-modules')],
+      options.autoCSSModules && [require.resolve('@zmi-cli/css-modules')],
       options.dynamicImportNode && [require.resolve('babel-plugin-dynamic-import-node')]
     ].filter(Boolean)
   }

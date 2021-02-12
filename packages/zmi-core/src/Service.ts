@@ -1,4 +1,4 @@
-import { assert, BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi/utils'
+import { assert, BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { EventEmitter } from 'events'
 import path from 'path'

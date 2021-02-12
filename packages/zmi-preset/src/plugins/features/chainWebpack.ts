@@ -1,4 +1,4 @@
-import { IApi } from '@zmi/types'
+import { IApi } from '@zmi-cli/types'
 
 export default (api: IApi) => {
   api.describe({

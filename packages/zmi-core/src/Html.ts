@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'fs'
-import { cheerio, assert } from '@zmi/utils'
+import { cheerio, assert } from '@zmi-cli/utils'
 import prettier from 'prettier'
 import { join } from 'path'
 import ejs from 'ejs'

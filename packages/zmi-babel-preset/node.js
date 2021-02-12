@@ -3,7 +3,7 @@ module.exports = function (opts) {
     presets: [
       [
         require('./lib').default,
-        require('@zmi/utils').deepmerge(
+        require('@zmi-cli/utils').deepmerge(
           {
             typescript: true,
             env: {

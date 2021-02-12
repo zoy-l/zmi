@@ -1,5 +1,5 @@
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
-import { deepmerge } from '@zmi/utils'
+import { deepmerge } from '@zmi-cli/utils'
 import Config from 'webpack-chain'
 
 interface IOpts {

@@ -1,6 +1,6 @@
 /// <reference types="yargs-parser" />
 /// <reference types="node" />
-import { BabelRegister, NodeEnv, yargsParser } from '@zmi/utils';
+import { BabelRegister, NodeEnv, yargsParser } from '@zmi-cli/utils';
 import { EventEmitter } from 'events';
 import PluginAPI, { IPluginAPIOptions } from './PluginAPI';
 import Config from './Config';

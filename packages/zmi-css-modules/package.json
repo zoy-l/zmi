@@ -1,16 +1,16 @@
 {
-  "name": "@zmi/css-modules",
+  "name": "@zmi-cli/css-modules",
   "version": "1.0.3-alpha.4.1",
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
     "@babel/traverse": "^7.12.13",
-    "@zmi/utils": "^1.0.3-alpha.4.1"
+    "@zmi-cli/utils": "^1.0.3-alpha.4.1"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360",
+  "gitHead": "4d08c6a53cfba9461ede303592a8e43c487626a8",
   "devDependencies": {
     "@types/babel__traverse": "^7.11.0"
   }

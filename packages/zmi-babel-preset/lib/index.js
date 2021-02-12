@@ -7,7 +7,7 @@ exports.toObject = toObject;
 exports.default = void 0;
 
 function _utils() {
-  const data = require("@zmi/utils");
+  const data = require("@zmi-cli/utils");
 
   _utils = function _utils() {
     return data;
@@ -64,7 +64,7 @@ var _default = (_context, options) => {
       version: require('@babel/runtime/package.json').version,
       absoluteRuntime: _path().default.dirname(require.resolve('@babel/runtime/package.json')),
       useESModules: true
-    }, toObject(options.transformRuntime))], options.autoCSSModules && [require.resolve('@zmi/css-modules')], options.dynamicImportNode && [require.resolve('babel-plugin-dynamic-import-node')]].filter(Boolean)
+    }, toObject(options.transformRuntime))], options.autoCSSModules && [require.resolve('@zmi-cli/css-modules')], options.dynamicImportNode && [require.resolve('babel-plugin-dynamic-import-node')]].filter(Boolean)
   };
   return options.modify ? options.modify(preset) : preset;
 };

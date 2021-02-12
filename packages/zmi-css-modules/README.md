@@ -1,1 +1,1 @@
-# @zmi/css-modules
+# @zmi-cli/css-modules

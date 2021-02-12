@@ -1,4 +1,4 @@
-import { deepmerge } from '@zmi/utils'
+import { deepmerge } from '@zmi-cli/utils'
 
 interface IOpts {
   config: any

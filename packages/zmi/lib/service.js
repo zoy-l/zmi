@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 function _core() {
-  const data = require("@zmi/core");
+  const data = require("@zmi-cli/core");
 
   _core = function _core() {
     return data;
@@ -24,7 +24,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 class Service extends _core().Service {
   constructor(opts) {
     super(_objectSpread(_objectSpread({}, opts), {}, {
-      plugins: [require.resolve('@zmi/preset')]
+      plugins: [require.resolve('@zmi-cli/preset')]
     }));
   }
 

@@ -1,4 +1,4 @@
-import { launchDevice, dyo } from '@zmi/utils'
+import { launchDevice, dyo } from '@zmi-cli/utils'
 import generator from './AppGenerator'
 
 launchDevice(dyo).then(({ args }) => {

@@ -1,4 +1,4 @@
-import { IApi } from '@zmi/types'
+import { IApi } from '@zmi-cli/types'
 
 import Nerd from 'zmi-nerd'
 

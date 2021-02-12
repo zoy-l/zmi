@@ -1,3 +1,3 @@
-import { IApi } from '@zmi/types';
+import { IApi } from '@zmi-cli/types';
 declare const _default: (api: IApi) => void;
 export default _default;

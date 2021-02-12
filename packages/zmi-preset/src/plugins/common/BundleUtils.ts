@@ -1,5 +1,5 @@
-import { IApi } from '@zmi/types'
-import DefaultBundler from '@zmi/webpack'
+import { IApi } from '@zmi-cli/types'
+import DefaultBundler from '@zmi-cli/webpack'
 import path from 'path'
 import fs from 'fs'
 

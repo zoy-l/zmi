@@ -1,4 +1,4 @@
-import { chalk, launchDevice } from '@zmi/utils'
+import { chalk, launchDevice } from '@zmi-cli/utils'
 
 import { getCwd, getPkg } from './getRoot'
 import Service from './service'

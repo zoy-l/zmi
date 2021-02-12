@@ -1,6 +1,6 @@
-import { chalk, chokidar, clearConsole, lodash, winPath } from '@zmi/utils'
-import { getPlugin } from '@zmi/core'
-import { IApi } from '@zmi/types'
+import { chalk, chokidar, clearConsole, lodash, winPath } from '@zmi-cli/utils'
+import { getPlugin } from '@zmi-cli/core'
+import { IApi } from '@zmi-cli/types'
 import path from 'path'
 import fs from 'fs'
 

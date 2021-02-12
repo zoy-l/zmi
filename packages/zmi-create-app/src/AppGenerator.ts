@@ -1,4 +1,4 @@
-import { inquirer, mustache, mkdirp, chalk, yargsParser, glob } from '@zmi/utils'
+import { inquirer, mustache, mkdirp, chalk, yargsParser, glob } from '@zmi-cli/utils'
 import path from 'path'
 import fs from 'fs'
 

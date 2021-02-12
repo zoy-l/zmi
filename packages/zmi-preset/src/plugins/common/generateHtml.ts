@@ -1,5 +1,5 @@
-import { assert, lodash } from '@zmi/utils'
-import { IApi } from '@zmi/types'
+import { assert, lodash } from '@zmi-cli/utils'
+import { IApi } from '@zmi-cli/types'
 import path from 'path'
 import fs from 'fs'
 

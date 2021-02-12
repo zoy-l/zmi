@@ -5,7 +5,7 @@ import {
   lodash,
   assert,
   pkgUp
-} from '@zmi/utils'
+} from '@zmi-cli/utils'
 import fs from 'fs'
 import path from 'path'
 
@@ -35,12 +35,12 @@ function nameToKey(name: string) {
 }
 
 function pkgNameToKey(pkgName: string) {
-  // strip none @zmi scope
-  if (pkgName.charAt(0) === '@' && !pkgName.startsWith('@zmi/')) {
+  // strip none @zmi-cli scope
+  if (pkgName.charAt(0) === '@' && !pkgName.startsWith('@zmi-cli/')) {
     pkgName = pkgName.split('/')[1]
   }
 
-  return nameToKey(pkgName.replace(/^(@zmi\/|zmi-)plugin-/, ''))
+  return nameToKey(pkgName.replace(/^(@zmi-cli\/|zmi-)plugin-/, ''))
 }
 
 export function pathToRegister({
@@ -79,7 +79,7 @@ export function pathToRegister({
   } else {
     id = winPath(pluginPath)
   }
-  id = id.replace('@zmi/preset/lib/plugins', '@@')
+  id = id.replace('@zmi-cli/preset/lib/plugins', '@@')
   id = id.replace(/\.js$/, '')
 
   let key

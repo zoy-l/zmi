@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { lodash, winPath } from '@zmi/utils'
+import { lodash, winPath } from '@zmi-cli/utils'
 import { IServicePaths } from './types'
 import { IConfig } from './Service'
 

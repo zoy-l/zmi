@@ -1,5 +1,5 @@
-import { assert, chalk, portfinder, clearConsole } from '@zmi/utils'
-import { IApi } from '@zmi/types'
+import { assert, chalk, portfinder, clearConsole } from '@zmi-cli/utils'
+import { IApi } from '@zmi-cli/types'
 
 import { getBundleAndConfigs } from '../../common/BundleUtils'
 

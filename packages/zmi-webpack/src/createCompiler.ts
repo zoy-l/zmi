@@ -1,5 +1,5 @@
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import { chalk, clearConsole } from '@zmi/utils'
+import { chalk, clearConsole } from '@zmi-cli/utils'
 import address from 'address'
 import webpack from 'webpack'
 import url from 'url'

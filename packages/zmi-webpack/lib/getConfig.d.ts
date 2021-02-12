@@ -1,6 +1,6 @@
 import WebpackChain from 'webpack-chain';
 import defaultWebpack from 'webpack';
-import { IPrivate } from '@zmi/types';
+import { IPrivate } from '@zmi-cli/types';
 export interface IGetConfigOpts {
     chainWebpack?: (webpackConfig: WebpackChain, args: Record<string, any>) => Promise<any>;
     modifyBabelPresetOpts?: <T>(opts: T) => Promise<T> | T;

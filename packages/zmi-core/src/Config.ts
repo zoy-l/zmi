@@ -9,7 +9,7 @@ import {
   chalk,
   chokidar,
   lodash
-} from '@zmi/utils'
+} from '@zmi-cli/utils'
 import Joi from 'joi'
 
 import { isEqual, mergeDefault } from './configUtils'

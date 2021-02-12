@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.getBundleAndConfigs = getBundleAndConfigs;
 
 function _webpack() {
-  const data = _interopRequireDefault(require("@zmi/webpack"));
+  const data = _interopRequireDefault(require("@zmi-cli/webpack"));
 
   _webpack = function _webpack() {
     return data;

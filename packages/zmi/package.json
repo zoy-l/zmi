@@ -11,10 +11,10 @@
     "cssModule.d.ts"
   ],
   "dependencies": {
-    "@zmi/core": "^1.0.3-alpha.4.1",
-    "@zmi/preset": "^1.0.3-alpha.4.1",
-    "@zmi/types": "^1.0.3-alpha.4.1",
-    "@zmi/utils": "^1.0.3-alpha.4.1",
+    "@zmi-cli/core": "^1.0.3-alpha.4.1",
+    "@zmi-cli/preset": "^1.0.3-alpha.4.1",
+    "@zmi-cli/types": "^1.0.3-alpha.4.1",
+    "@zmi-cli/utils": "^1.0.3-alpha.4.1",
     "eslint": "^7.19.0",
     "eslint-config-zmi": "^0.0.4"
   },
@@ -24,7 +24,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9dcb8b5c3550d5a6b11be1edd4811ea856deb360",
+  "gitHead": "4d08c6a53cfba9461ede303592a8e43c487626a8",
   "devDependencies": {
     "source-map-support": "^0.5.19"
   }

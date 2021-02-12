@@ -1,5 +1,5 @@
 import WebpackDevServer from 'webpack-dev-server'
-import { chalk, clearConsole } from '@zmi/utils'
+import { chalk, clearConsole } from '@zmi-cli/utils'
 import defaultWebpack from 'webpack'
 import fs from 'fs-extra'
 

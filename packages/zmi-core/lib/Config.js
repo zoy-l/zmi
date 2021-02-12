@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 function _utils() {
-  const data = require("@zmi/utils");
+  const data = require("@zmi-cli/utils");
 
   _utils = function _utils() {
     return data;

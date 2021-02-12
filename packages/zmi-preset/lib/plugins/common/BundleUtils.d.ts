@@ -1,5 +1,5 @@
-import { IApi } from '@zmi/types';
-import DefaultBundler from '@zmi/webpack';
+import { IApi } from '@zmi-cli/types';
+import DefaultBundler from '@zmi-cli/webpack';
 export declare function getBundleAndConfigs(options: {
     api: IApi;
     port?: number;

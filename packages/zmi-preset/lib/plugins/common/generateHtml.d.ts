@@ -1,4 +1,4 @@
-import { IApi } from '@zmi/types';
+import { IApi } from '@zmi-cli/types';
 export declare function chunksToFiles(opts: {
     htmlChunks: (string | Record<string, unknown>)[];
     chunks?: any[];

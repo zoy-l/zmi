@@ -7,7 +7,7 @@ exports.chunksToFiles = chunksToFiles;
 exports.getHtmlGenerator = getHtmlGenerator;
 
 function _utils() {
-  const data = require("@zmi/utils");
+  const data = require("@zmi-cli/utils");
 
   _utils = function _utils() {
     return data;

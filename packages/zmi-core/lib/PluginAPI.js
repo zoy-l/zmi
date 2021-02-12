@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 function utils() {
-  const data = _interopRequireWildcard(require("@zmi/utils"));
+  const data = _interopRequireWildcard(require("@zmi-cli/utils"));
 
   utils = function utils() {
     return data;

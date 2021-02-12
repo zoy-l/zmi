@@ -1,4 +1,4 @@
-import { lodash, deepmerge } from '@zmi/utils'
+import { lodash, deepmerge } from '@zmi-cli/utils'
 
 export function mergeDefault({ defaultConfig, config }: Record<string, any>) {
   if (lodash.isPlainObject(defaultConfig) && lodash.isPlainObject(config)) {
@@ -9,7 +9,7 @@ export function mergeDefault({ defaultConfig, config }: Record<string, any>) {
 
 export function getPlugin(name: string) {
   const hasScope = name.charAt(0) === '@'
-  const re = /^(@zmi\/|zmi-)plugin-/
+  const re = /^(@zmi-cli\/|zmi-)plugin-/
   return hasScope ? re.test(name.split('/')[1]) : re.test(name)
 }
 

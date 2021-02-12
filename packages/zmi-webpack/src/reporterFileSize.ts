@@ -1,5 +1,5 @@
 import recursive from 'recursive-readdir'
-import { chalk } from '@zmi/utils'
+import { chalk } from '@zmi-cli/utils'
 import stripAnsi from 'strip-ansi'
 import gzipSize from 'gzip-size'
 import filesize from 'filesize'

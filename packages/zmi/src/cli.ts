@@ -1,4 +1,4 @@
-import { launchDevice, chalk, dyo, clearConsole, isWin } from '@zmi/utils'
+import { launchDevice, chalk, dyo, clearConsole, isWin } from '@zmi-cli/utils'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'

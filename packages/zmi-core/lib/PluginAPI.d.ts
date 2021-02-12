@@ -1,5 +1,5 @@
 /// <reference types="yargs-parser" />
-import * as utils from '@zmi/utils';
+import * as utils from '@zmi-cli/utils';
 import { ICommand, IHook, IPluginConfig, EnumEnableBy } from './types';
 import Service from './Service';
 import Html from './Html';

@@ -15,7 +15,7 @@ Object.defineProperty(exports, "defineConfig", {
 
 var _defineConfig = require("./defineConfig");
 
-var _utils = require("@zmi/utils");
+var _utils = require("@zmi-cli/utils");
 
 Object.keys(_utils).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -29,7 +29,7 @@ Object.keys(_utils).forEach(function (key) {
   });
 });
 
-var _types = require("@zmi/types");
+var _types = require("@zmi-cli/types");
 
 Object.keys(_types).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;

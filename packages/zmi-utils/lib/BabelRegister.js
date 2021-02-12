@@ -36,7 +36,7 @@ class BabelRegister {
     const only = _lodash().default.uniq(Object.keys(this.only).reduce((memo, key) => memo.concat(this.only[key]), []).map(_winPath.default));
 
     require('@babel/register')({
-      presets: [require.resolve('@zmi/babel-preset-zmi/node')],
+      presets: [require.resolve('@zmi-cli/babel-preset/node')],
       ignore: [/node_modules/],
       only,
       extensions: ['.jsx', '.js', '.ts', '.tsx'],
