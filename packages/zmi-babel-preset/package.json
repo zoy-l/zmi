@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/babel-preset",
-  "version": "1.0.3-alpha.4.1",
+  "version": "1.0.3-alpha.4.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [

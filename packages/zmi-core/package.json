@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/core",
-  "version": "1.0.3-alpha.4.1",
+  "version": "1.0.3-alpha.4.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@types/prettier": "^2.2.0",
-    "@zmi-cli/utils": "^1.0.3-alpha.4.1",
+    "@zmi-cli/utils": "^1.0.3-alpha.4.2",
     "prettier": "^2.2.1"
   },
   "publishConfig": {
