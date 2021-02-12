@@ -1,3 +1,4 @@
 const eslintConifg = require('eslint-config-zmi')
+const zmi = require('./lib')
 
-module.exports = eslintConifg
+module.exports = Object.assign(zmi, eslintConifg)
