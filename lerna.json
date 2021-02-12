@@ -4,7 +4,7 @@
   ],
   "useWorkspaces": true,
   "npmClient": "yarn",
-  "version": "1.0.3-alpha.4.3",
+  "version": "1.0.3-alpha.4.4",
   "ignoreChanges": [
     "**/*.md",
     "**/*.test.ts",
