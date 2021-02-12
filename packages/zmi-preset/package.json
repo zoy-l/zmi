@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/preset",
-  "version": "1.0.3-alpha.4.13",
+  "version": "1.0.3-alpha.4.16",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,10 +15,10 @@
   },
   "gitHead": "4d08c6a53cfba9461ede303592a8e43c487626a8",
   "dependencies": {
-    "@zmi-cli/core": "^1.0.3-alpha.4.10",
-    "@zmi-cli/types": "^1.0.3-alpha.4.10",
-    "@zmi-cli/utils": "^1.0.3-alpha.4.8",
-    "@zmi-cli/webpack": "^1.0.3-alpha.4.13",
+    "@zmi-cli/core": "^1.0.3-alpha.4.16",
+    "@zmi-cli/types": "^1.0.3-alpha.4.16",
+    "@zmi-cli/utils": "^1.0.3-alpha.4.16",
+    "@zmi-cli/webpack": "^1.0.3-alpha.4.16",
     "zmi-nerd": "^1.1.7"
   }
 }
