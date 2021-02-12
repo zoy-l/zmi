@@ -1,6 +1,6 @@
 {
   "name": "@zmi/types",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@zmi/core": "^1.0.1-alpha.0"
+    "@zmi/core": "^1.0.1"
   },
   "gitHead": "cce394329cf83b06fb0b6ae1ff9b344ef3a5c2f8"
 }
