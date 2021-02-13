@@ -4,6 +4,7 @@ export default function (api: IApi) {
   api.describe({
     key: 'externals',
     config: {
+      default: {},
       schema(joi) {
         return joi.object()
       }

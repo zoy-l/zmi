@@ -24,9 +24,6 @@ declare module '*.stylus' {
   export default css
 }
 
-// Built-in asset types
-// see `src/constants.ts`
-
 // images
 declare module '*.jpg' {
   const src: string

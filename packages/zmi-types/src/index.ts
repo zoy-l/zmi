@@ -4,6 +4,11 @@ import webpack, { Configuration } from 'webpack'
 import { PluginAPI, Service } from '@zmi-cli/core'
 import WebpackChain from 'webpack-chain'
 
+export interface ITargets {
+  browsers?: any
+  [key: string]: number | boolean
+}
+
 interface IManifest {
   fileName: string
   publicPath: string
@@ -130,6 +135,7 @@ export interface IConfig {
   externals?: Pick<Configuration, 'externals'>
   dynamicImport?: boolean
   autoCSSModules?: boolean
+  targets?: ITargets
   miniAppConfig?: Omit<
     nerdConfig,
     | 'pkgs'
@@ -158,4 +164,4 @@ export interface IConfig {
 type INonEmpty<T extends Record<string, any>, U extends keyof T> = Pick<T, U> &
   Omit<{ [key in keyof T]-?: T[key] }, U>
 
-export type IPrivate = INonEmpty<IConfig, 'externals' | 'alias'>
+export type IPrivate = INonEmpty<IConfig, 'externals'>

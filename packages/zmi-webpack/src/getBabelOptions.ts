@@ -7,7 +7,7 @@ export function getBabelOpts({
   presetOpts: Record<string, unknown>
   hot: boolean
 }) {
-  const { type, isDev } = presetOpts
+  const { type, isDev, sourceMap } = presetOpts
   return {
     presets: [
       [require.resolve('@zmi-cli/babel-factory/app'), presetOpts],
@@ -17,7 +17,7 @@ export function getBabelOpts({
       type === 'react' && isDev && hot && require.resolve('react-refresh/babel'),
       ...config.extraBabelPlugins
     ].filter(Boolean),
-    sourceType: 'unambiguous',
+    sourceType: sourceMap ? 'unambiguous' : false,
     babelrc: false
   }
 }

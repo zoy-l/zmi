@@ -1,28 +1,19 @@
-import { deepmerge } from '@zmi-cli/utils'
+import { IPrivate } from '@zmi-cli/types'
 
-interface IOpts {
-  config: any
-}
-
-export default function ({ config }: IOpts) {
-  let targets: Record<string, any> = deepmerge(
-    { chrome: 49, firefox: 64, safari: 10, edge: 13, ios: 10 },
-    config.targets ?? {}
-  )
-
+export default function (config: IPrivate) {
   // filter false and 0 targets
-  targets = Object.keys(targets)
+  const targets = Object.keys(config.targets)
     .filter((key) => {
-      if (targets[key] === false) return false
+      if (config.targets[key] === false) return false
       return key !== 'node'
     })
     .reduce((memo, key) => {
-      memo[key] = targets[key]
+      memo[key] = config.targets[key]
       return memo
     }, {})
 
   const browserslist =
-    targets.browsers ??
+    config.targets.browsers ??
     Object.keys(targets).map(
       (key) => `${key} >= ${targets[key] === true ? '0' : targets[key]}`
     )

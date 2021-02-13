@@ -4,6 +4,7 @@ export default function (api: IApi) {
   api.describe({
     key: 'ignoreMomentLocale',
     config: {
+      default: true,
       schema(joi) {
         return joi.boolean()
       }
