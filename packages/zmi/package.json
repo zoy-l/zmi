@@ -15,7 +15,7 @@
     "@zmi-cli/preset": "^1.0.3-alpha.4.17",
     "@zmi-cli/types": "^1.0.3-alpha.4.17",
     "@zmi-cli/utils": "^1.0.3-alpha.4.17",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-config-zmi": "^1.0.1"
   },
   "bin": {

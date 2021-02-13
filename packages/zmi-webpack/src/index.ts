@@ -1,13 +1,13 @@
-import WebpackDevServer from 'webpack-dev-server'
 import { chalk, clearConsole } from '@zmi-cli/utils'
+import WebpackDevServer from 'webpack-dev-server'
 import defaultWebpack from 'webpack'
 import fs from 'fs-extra'
 
+import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 import createCompiler, { prepareUrls } from './createCompiler'
 import formatWebpackMessages from './formatWebpackMessages'
-import getConfig, { IGetConfigOpts } from './getConfig'
-
-import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
+import { IConfigOpts } from './types'
+import getConfig from './getConfig'
 
 interface ISetupOpts {
   bundleConfigs: defaultWebpack.Configuration & {
@@ -38,7 +38,7 @@ export default class Bundler {
     this.pkg = pkg
   }
 
-  async getConfig(options: IGetConfigOpts) {
+  async getConfig(options: IConfigOpts) {
     return getConfig({
       ...options,
       cwd: this.cwd,
