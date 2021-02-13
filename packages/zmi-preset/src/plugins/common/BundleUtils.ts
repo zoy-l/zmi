@@ -42,7 +42,7 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
     bundler: { id: Bundler.id, version: Bundler.version }
   }
 
-  const getArgs = (otps: Record<string, any>) => ({
+  const getArgs = (otps: Record<string, any> = {}) => ({
     args: {
       ...otps,
       bundlerArgs
@@ -86,20 +86,18 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
             type: api.ApplyPluginsType.modify,
             key: 'chainWebpack',
             initialValue: webpackConfig,
-            args: {
-              ...opts
-            }
+            args: { ...opts }
           })
         }
       },
-      args: getArgs({})
+      args: getArgs()
     })
 
     return api.applyPlugins({
       type: api.ApplyPluginsType.modify,
       key: 'modifyBundleConfig',
       initialValue: await bundler.getConfig(getConfigOpts),
-      args: getArgs({})
+      args: getArgs()
     })
   }
 
