@@ -118,8 +118,11 @@ export default class Bundler {
         } else {
           clearConsole()
           console.log(
-            `📦 ${chalk.yellowBright('Compiled successfully !')} Size: - Gzip \n`
+            `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue(
+              'Compiled successfully !\n'
+            )} `
           )
+          console.log('📦 Name: - Size')
         }
 
         printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)
