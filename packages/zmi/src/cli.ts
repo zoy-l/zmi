@@ -32,13 +32,16 @@ launchDevice(dyo).then(({ args, command }) => {
             process.exit(1)
           })
         })
-
         break
       default:
+        if (command === undefined) {
+          return
+        }
         if (command === 'build') {
           process.env.NODE_ENV = 'production'
         }
         clearConsole()
+
         new Service({
           cwd: getCwd(),
           pkg: getPkg(process.cwd())
