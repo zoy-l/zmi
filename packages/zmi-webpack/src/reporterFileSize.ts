@@ -108,10 +108,9 @@ export function printFileSizesAfterBuild(
     console.log()
     console.log(chalk.yellow('The bundle size is significantly larger than recommended.'))
     console.log(
-      chalk.yellow('Consider reducing it with code splitting: https://goo.gl/9VhYWB')
-    )
-    console.log(
-      chalk.yellow('You can also analyze the project dependencies: https://goo.gl/LeUzfb')
+      chalk.yellow(
+        'You can also analyze the project dependencies: https://webpack.js.org/guides/code-splitting/'
+      )
     )
   }
 }
