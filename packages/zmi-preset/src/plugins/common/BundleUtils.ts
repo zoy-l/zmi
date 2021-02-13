@@ -1,4 +1,4 @@
-import DefaultBundler from '@zmi-cli/webpack'
+import DefaultBundler, { WebpackChain, createCSSRule } from '@zmi-cli/webpack'
 import { IApi } from '@zmi-cli/types'
 import path from 'path'
 import fs from 'fs'
@@ -17,29 +17,20 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
   // Built-in device by default
   const Bundler = await api.applyPlugins({
     type: api.ApplyPluginsType.modify,
-    key: 'modifyBundler',
-    initialValue: DefaultBundler
-  })
-
-  // Used to get webpack instance
-  // No changes are made here, but developers may change
-  // Use built-in webpack by default
-  const bundleImplementor = await api.applyPlugins({
-    key: 'modifyBundleImplementor',
-    type: api.ApplyPluginsType.modify,
-    initialValue: undefined
+    initialValue: DefaultBundler,
+    key: 'modifyBundler'
   })
 
   // Initialize the webpack launcher
   const bundler: DefaultBundler = new Bundler({
-    cwd: api.cwd,
     config: api.config,
+    cwd: api.cwd,
     pkg: api.pkg
   })
 
   const bundlerArgs = {
-    env: api.env,
-    bundler: { id: Bundler.id, version: Bundler.version }
+    bundler: { id: Bundler.id, version: Bundler.version },
+    env: api.env
   }
 
   const getArgs = (otps: Record<string, any> = {}) => ({
@@ -65,28 +56,30 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
           main: path.join(api.paths.appSrcPath, entryFilePath)
         },
         hot: process.env.HMR !== 'none',
-        bundleImplementor,
         htmlContent,
-        async modifyBabelOpts(opts: any) {
+        async modifyBabelOpts(opts: Record<string, any>) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
             key: 'modifyBabelOpts',
             initialValue: opts
           })
         },
-        async modifyBabelPresetOpts(opts: any) {
+        async modifyBabelPresetOpts(opts: Record<string, any>) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
             key: 'modifyBabelPresetOpts',
             initialValue: opts
           })
         },
-        async chainWebpack(webpackConfig: any, opts: any) {
+        async chainWebpack(
+          webpackConfig: WebpackChain,
+          opts: { createCSSRule: createCSSRule }
+        ) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
             key: 'chainWebpack',
             initialValue: webpackConfig,
-            args: { ...opts }
+            args: opts
           })
         }
       },
@@ -109,7 +102,6 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
   })
 
   return {
-    bundleImplementor,
     bundleConfigs,
     bundler
   }

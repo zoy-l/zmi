@@ -1,5 +1,4 @@
 import { IApi } from '@zmi-cli/types'
-
 import Nerd from 'zmi-nerd'
 
 export default (api: IApi) => {

@@ -16,7 +16,7 @@ export default (api: IApi) => {
       port = await portfinder.getPortPromise({ port: defaultPort })
       host = process.env.HOST ?? api.config.devServer?.host ?? '0.0.0.0'
 
-      const { bundler, bundleConfigs, bundleImplementor } = await getBundleAndConfigs({
+      const { bundler, bundleConfigs } = await getBundleAndConfigs({
         api,
         port
       })
@@ -25,7 +25,6 @@ export default (api: IApi) => {
         port,
         host,
         bundleConfigs,
-        bundleImplementor,
         appName: api.pkg.name
       })
 

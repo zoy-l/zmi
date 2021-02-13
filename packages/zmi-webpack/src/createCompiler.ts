@@ -96,19 +96,18 @@ function printInstructions(opts: { appName: string; urls: IUrlType; port: number
 }
 
 function createCompiler(opts: {
-  bundleImplementor: typeof webpack
   config: webpack.Configuration
   appName: string
   urls: IUrlType
   port: number
 }) {
-  const { appName, config, urls, port, bundleImplementor } = opts
+  const { appName, config, urls, port } = opts
   const { log } = console
 
   let compiler: webpack.Compiler
 
   try {
-    compiler = bundleImplementor(config)
+    compiler = webpack(config)
   } catch (err) {
     log(chalk.red('❌ Compilation failed.'))
     log()

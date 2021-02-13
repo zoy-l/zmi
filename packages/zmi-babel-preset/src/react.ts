@@ -1,10 +1,10 @@
-import basePreset, { toObject } from '.'
+import basePreset, { isObject } from '.'
 
 export default function (_context: never, opts: Record<string, any>) {
   return {
     presets: [
       [basePreset, opts],
-      [require.resolve('@babel/preset-react'), toObject(opts.frameOptions)]
+      [require.resolve('@babel/preset-react'), isObject(opts.frameOptions)]
     ].filter(Boolean),
     plugins: [
       opts.reactRemovePropTypes && [

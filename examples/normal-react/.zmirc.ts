@@ -1,4 +1,5 @@
-export default {
-  cssModulesTypescript: {},
+import { defineConfig } from 'zmi'
+
+export default defineConfig({
   frameOptions: {}
-}
+})

@@ -1,9 +1,11 @@
+import { IPrivate } from '@zmi-cli/types'
+
 export function getBabelOpts({
   config,
   presetOpts,
   hot
 }: {
-  config: any
+  config: IPrivate
   presetOpts: Record<string, unknown>
   hot: boolean
 }) {

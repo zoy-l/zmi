@@ -33,7 +33,7 @@ function applyPlugin(options: {
     isVue,
     isDev
   } = options
-  const { cwd, hot, config, bundleImplementor = webpack, htmlContent } = configOptions
+  const { cwd, hot, config, htmlContent } = configOptions
 
   const disableCompress = process.env.COMPRESS === 'none'
 
@@ -113,7 +113,7 @@ function applyPlugin(options: {
   })
 
   webpackConfig.when(config.ignoreMomentLocale, (WConfig) => {
-    WConfig.plugin('ignore-moment-locale').use(bundleImplementor.IgnorePlugin, [
+    WConfig.plugin('ignore-moment-locale').use(webpack.IgnorePlugin, [
       { resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }
     ])
   })

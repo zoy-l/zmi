@@ -1,17 +1,18 @@
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import { deepmerge } from '@zmi-cli/utils'
+import { IPrivate } from '@zmi-cli/types'
 import Config from 'webpack-chain'
 
 interface IOpts {
   webpackConfig: Config
-  config: any
+  config: IPrivate
   isDev: boolean
   disableCompress?: boolean
   browserslist?: Record<string, any>
   sourceMap: boolean
 }
 
-interface ICreateCSSRuleOpts {
+export interface ICreateCSSRuleOpts {
   lang: string
   test: RegExp
   loader?: string
@@ -20,6 +21,13 @@ interface ICreateCSSRuleOpts {
 
 export default (options: IOpts) => {
   const { webpackConfig, isDev, config, browserslist, sourceMap } = options
+  const {
+    lessLoader,
+    scssLoader,
+    stylusLoader,
+    styleLoader,
+    cssLoader
+  } = config.loaderOptions
 
   function createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
     const { lang, test, loader } = createCSSRuleOptions
@@ -37,7 +45,7 @@ export default (options: IOpts) => {
         (WConfig) => {
           WConfig.use('style-loader')
             .loader(require.resolve('style-loader'))
-            .options(deepmerge({ base: 0 }, config.styleLoader ?? {}))
+            .options(deepmerge({ base: 0 }, styleLoader))
         },
         (WConfig) => {
           WConfig.use('extract-css-loader')
@@ -46,10 +54,10 @@ export default (options: IOpts) => {
         }
       )
 
-      rule.when(isDev && isCSSModules && config.cssModulesTypescript, (WConfig) => {
+      rule.when(isDev && isCSSModules && !!config.cssModulesTypescript, (WConfig) => {
         WConfig.use('css-modules-typescript-loader')
           .loader(require.resolve('css-modules-typescript-loader'))
-          .options(config.cssModulesTypescript)
+          .options({ mode: config.cssModulesTypescript })
       })
 
       // prettier-ignore
@@ -57,7 +65,7 @@ export default (options: IOpts) => {
           importLoaders: 1,
           modules: {},
           sourceMap
-        },config.cssLoader ?? {})
+        }, cssLoader)
 
       if (isCSSModules) {
         cssLoaderOptions.modules = {
@@ -88,7 +96,7 @@ export default (options: IOpts) => {
                     overrideBrowserslist: browserslist ?? {}
                   },stage: 3}
               ],
-              ...(config.extraPostCSSPlugins ?? [])
+              ...(config.extraPostCSSPlugins)
             ].filter(Boolean)
           }
         })
@@ -101,29 +109,27 @@ export default (options: IOpts) => {
     }
   }
 
-  const { less, scss, stylus } = config.loaderOptions
-
   createCSSRule({ lang: 'css', test: /\.(css)(\?.*)?$/ })
 
   createCSSRule({
     lang: 'scss',
     test: /\.scss$/,
     loader: 'sass-loader',
-    options: deepmerge({ sourceMap }, scss)
+    options: deepmerge({ sourceMap }, scssLoader)
   })
 
   createCSSRule({
     lang: 'less',
     test: /\.less$/,
     loader: require.resolve('less-loader'),
-    options: deepmerge({ sourceMap }, less)
+    options: deepmerge({ sourceMap }, lessLoader)
   })
 
   createCSSRule({
     lang: 'stylus',
     test: /\.styl(us)?$/,
     loader: 'stylus-loader',
-    options: deepmerge({ sourceMap }, stylus)
+    options: deepmerge({ sourceMap }, stylusLoader)
   })
 
   return createCSSRule

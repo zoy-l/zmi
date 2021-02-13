@@ -12,7 +12,7 @@ export interface Ioptions {
   modify?: <T>(value: T) => T
 }
 
-export function toObject<T extends Record<string, any>>(
+export function isObject<T extends Record<string, any>>(
   obj: T | boolean
 ): T | Partial<T> {
   return typeof obj === 'object' ? obj : {}
@@ -37,7 +37,7 @@ export default (_context: never, options: Ioptions) => {
       options.env && [
         require.resolve('@babel/preset-env'),
         {
-          ...deepmerge(defaultEnvConfig, toObject(options.env)),
+          ...deepmerge(defaultEnvConfig, isObject(options.env)),
           debug: options.debug
         }
       ],
@@ -77,7 +77,7 @@ export default (_context: never, options: Ioptions) => {
           version: require('@babel/runtime/package.json').version,
           absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json')),
           useESModules: true,
-          ...toObject(options.transformRuntime)
+          ...isObject(options.transformRuntime)
         }
       ],
       options.autoCSSModules && [require.resolve('@zmi-cli/css-modules')],

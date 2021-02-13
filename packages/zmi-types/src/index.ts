@@ -1,13 +1,20 @@
+import { PluginAPI, Service } from '@zmi-cli/core'
 import webpackDevServer from 'webpack-dev-server'
 import { IConfig as nerdConfig } from 'zmi-nerd'
 import webpack, { Configuration } from 'webpack'
-import { PluginAPI, Service } from '@zmi-cli/core'
 import WebpackChain from 'webpack-chain'
 
 export interface ITargets {
   browsers?: any
   [key: string]: number | boolean
 }
+
+type createCSSRule = (options: {
+  lang: string
+  test: RegExp
+  loader?: string
+  options?: Record<string, any>
+}) => void
 
 interface IManifest {
   fileName: string
@@ -99,10 +106,7 @@ export type IApi = ServicePluginApi & {
     WebpackChain,
     {
       webpack: typeof webpack
-      createCSSRule: (
-        rule: WebpackChain.Rule<WebpackChain.Rule>,
-        isCSSModules: boolean
-      ) => void
+      createCSSRule: createCSSRule
     }
   >
   modifyPaths: IModify<ServicePluginApi['paths'], null>
@@ -117,13 +121,18 @@ export interface IConfig {
     postcssLoader?: Record<string, any>
     stylusLoader?: Record<string, any>
     styleLoader?: Record<string, any>
+    cssLoader?: Record<string, any>
   }
+  extraPostCSSPlugins?: any[]
+  extraBabelPresets?: any[]
+  extraBabelPlugins?: any[]
   autoprefixer?: Record<string, any>
   links?: Partial<HTMLLinkElement>[]
   metas?: Partial<HTMLMetaElement>[]
   manifest?: Partial<IManifest>
+  frameOptions?: Record<string, any>
   terserOptions?: Record<string, any>
-  cssModulesTypescript?: boolean
+  cssModulesTypescript?: 'emit' | 'verify'
   ignoreMomentLocale?: boolean
   publicPath?: string
   outputPath?: string
@@ -149,13 +158,7 @@ export interface IConfig {
   chainWebpack?: (
     meme: WebpackChain,
     options: {
-      webpack: typeof webpack
-      createCSSRule: (options: {
-        lang: string
-        test: RegExp
-        loader?: string
-        options?: Record<string, any>
-      }) => void
+      createCSSRule: createCSSRule
       env: 'development' | 'production'
     }
   ) => void | Promise<void>
@@ -164,4 +167,13 @@ export interface IConfig {
 type INonEmpty<T extends Record<string, any>, U extends keyof T> = Pick<T, U> &
   Omit<{ [key in keyof T]-?: T[key] }, U>
 
-export type IPrivate = INonEmpty<IConfig, 'externals'>
+export type IPrivate = INonEmpty<IConfig, 'externals'> & {
+  loaderOptions: {
+    lessLoader: Record<string, any>
+    scssLoader: Record<string, any>
+    postcssLoader: Record<string, any>
+    stylusLoader: Record<string, any>
+    styleLoader: Record<string, any>
+    cssLoader: Record<string, any>
+  }
+}

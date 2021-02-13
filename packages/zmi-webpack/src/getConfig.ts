@@ -2,7 +2,6 @@ import WebpackDevServer from 'webpack-dev-server'
 import { deepmerge } from '@zmi-cli/utils'
 import { IPrivate } from '@zmi-cli/types'
 import WebpackChain from 'webpack-chain'
-import defaultWebpack from 'webpack'
 import path from 'path'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
@@ -26,16 +25,7 @@ const resolveModules = [
 ]
 
 export default async function getConfig(opts: IConfigOpts) {
-  const {
-    bundleImplementor = defaultWebpack,
-    hot = true,
-    config,
-    entry,
-    port,
-    env,
-    pkg,
-    cwd
-  } = opts
+  const { hot = true, config, entry, port, env, pkg, cwd } = opts
   const { targets, browserslist } = getTargetsAndBrowsersList(config)
   const { isReact, isVue } = getFrameType(config, pkg)
   const sourceMap = config.devtool !== 'none'
@@ -129,14 +119,12 @@ export default async function getConfig(opts: IConfigOpts) {
 
   if (opts.chainWebpack) {
     await opts.chainWebpack(webpackConfig, {
-      webpack: bundleImplementor,
       createCSSRule
     })
   }
 
   if (config.chainWebpack) {
     await config.chainWebpack(webpackConfig, {
-      webpack: bundleImplementor,
       createCSSRule,
       env
     })

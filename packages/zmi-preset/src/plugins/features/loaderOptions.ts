@@ -4,13 +4,20 @@ export default function (api: IApi) {
   api.describe({
     key: 'loaderOptions',
     config: {
-      default: { less: {}, scss: {}, stylus: {} },
+      default: {
+        lessLoader: {},
+        scssLoader: {},
+        stylusLoader: {},
+        styleLoader: {},
+        cssLoader: {}
+      },
       schema(joi) {
         return joi.object({
-          less: joi.object(),
-          scss: joi.object(),
-          stylus: joi.object(),
-          styleLoader: joi.object()
+          lessLoader: joi.object(),
+          scssLoader: joi.object(),
+          stylusLoader: joi.object(),
+          styleLoader: joi.object(),
+          cssLoader: joi.object()
         })
       }
     }

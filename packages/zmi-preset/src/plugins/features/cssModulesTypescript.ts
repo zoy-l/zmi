@@ -5,9 +5,7 @@ export default (api: IApi) => {
     key: 'cssModulesTypescript',
     config: {
       schema(joi) {
-        return joi.object({
-          mode: joi.string().valid('emit', 'verify').optional()
-        })
+        return joi.string().valid('emit', 'verify').optional()
       }
     }
   })

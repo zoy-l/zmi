@@ -1,11 +1,13 @@
 import { chalk, clearConsole } from '@zmi-cli/utils'
 import WebpackDevServer from 'webpack-dev-server'
-import defaultWebpack from 'webpack'
+import defaultWebpack, { webpack } from 'webpack'
+import WebpackChain from 'webpack-chain'
 import fs from 'fs-extra'
 
 import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 import createCompiler, { prepareUrls } from './createCompiler'
 import formatWebpackMessages from './formatWebpackMessages'
+import { ICreateCSSRuleOpts } from './ruleCss'
 import { IConfigOpts } from './types'
 import getConfig from './getConfig'
 
@@ -13,7 +15,6 @@ interface ISetupOpts {
   bundleConfigs: defaultWebpack.Configuration & {
     devServer: WebpackDevServer.Configuration
   }
-  bundleImplementor: typeof defaultWebpack
   port: number
   host: string
   appName?: string
@@ -24,6 +25,10 @@ interface IOpts {
   config: any
   pkg: Record<string, any>
 }
+
+type createCSSRule = (createCSSRuleOptions: ICreateCSSRuleOpts) => void
+
+export { WebpackChain, createCSSRule }
 
 export default class Bundler {
   cwd: string
@@ -48,13 +53,7 @@ export default class Bundler {
   }
 
   async setupDevServer(options: ISetupOpts) {
-    const {
-      bundleConfigs,
-      bundleImplementor = defaultWebpack,
-      appName = 'project',
-      host,
-      port
-    } = options
+    const { appName = 'project', bundleConfigs, host, port } = options
 
     const urls = prepareUrls({ host, port })
 
@@ -62,7 +61,6 @@ export default class Bundler {
 
     const compiler = createCompiler({
       config: bundleConfigs,
-      bundleImplementor,
       appName,
       urls,
       port
@@ -75,17 +73,16 @@ export default class Bundler {
 
   async build(options: {
     bundleConfigs: defaultWebpack.Configuration
-    bundleImplementor: typeof defaultWebpack
     appOutputPath: string
   }): Promise<defaultWebpack.Stats | undefined> {
-    const { bundleImplementor = defaultWebpack, bundleConfigs, appOutputPath } = options
+    const { bundleConfigs, appOutputPath } = options
     clearConsole()
     console.log(chalk.blue('Start packing, please don’t worry, officer...\n'))
     const previousFileSizes = await measureFileSizesBeforeBuild(appOutputPath)
     fs.emptyDirSync(appOutputPath)
 
     return new Promise((resolve) => {
-      const compiler = bundleImplementor(bundleConfigs)
+      const compiler = webpack(bundleConfigs)
 
       compiler.run((err, stats) => {
         let messages
