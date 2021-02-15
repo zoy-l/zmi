@@ -13,7 +13,8 @@ export default (api: IApi) => {
     }
   })
 
-  const { styles } = api.service.userConfig
+  const { styles = [] } = api.userConfig
+
   const [linkArr, styleArr] = formatStyles(styles!)
 
   api.addHTMLStyles(() => styleArr)

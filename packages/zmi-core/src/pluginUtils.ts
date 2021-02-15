@@ -43,20 +43,11 @@ function pkgNameToKey(pkgName: string) {
   return nameToKey(pkgName.replace(/^(@zmi-cli\/|zmi-)plugin-/, ''))
 }
 
-export function pathToRegister({
-  path: pluginPath,
-  cwd
-}: {
-  path: string
-  cwd: string
-}) {
+export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: string }) {
   let pkg = null
   let isPkgPlugin = false
 
-  assert(
-    `${pluginPath} not exists, pathToRegister failed`,
-    fs.existsSync(pluginPath)
-  )
+  assert(`${pluginPath} not exists, pathToRegister failed`, fs.existsSync(pluginPath))
 
   const pkgJSONPath = pkgUp.sync({ cwd: pluginPath })
 

@@ -84,7 +84,7 @@ export default (options: IPenetrateOptions) => {
               [
                 require.resolve('postcss-preset-env'),{
                   autoprefixer: {
-                    ...(config.autoprefixer ?? {}),
+                    ...config.autoprefixer,
                     overrideBrowserslist: browserslist ?? {}
                   },stage: 3}
               ],

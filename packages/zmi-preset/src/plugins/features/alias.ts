@@ -1,6 +1,6 @@
 import { IApi } from '@zmi-cli/types'
 
-export default (api: IApi) => {
+export default function (api: IApi) {
   api.describe({
     key: 'alias',
     config: {
