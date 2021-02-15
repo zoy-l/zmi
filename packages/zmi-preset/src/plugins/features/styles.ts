@@ -2,7 +2,7 @@ import { IApi } from '@zmi-cli/types'
 
 import { formatStyles } from '../common/htmlTools'
 
-export default function (api: IApi) {
+export default (api: IApi) => {
   api.describe({
     key: 'styles',
     config: {
