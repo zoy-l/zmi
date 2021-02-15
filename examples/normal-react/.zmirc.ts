@@ -27,5 +27,8 @@ export default defineConfig({
       name: 'keywords',
       content: 'zmi, zmi-cli'
     }
-  ]
+  ],
+
+  scripts: [`console(111);`, { src: `https://a.com/b.js`, defer: true }],
+  styles: [`body { color: red; }`, `https://a.com/b.css`]
 })
