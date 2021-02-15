@@ -18,6 +18,20 @@ async function applyLoader(options: IPenetrateOptions) {
     env
   } = options
 
+  const genAssetSubPath = (dir: string) => `${dir}/[name].[hash:8].[ext]`
+
+  const genUrlLoaderOptions = (dir: string) => ({
+    limit: 4096,
+    esModule: false,
+    fallback: {
+      loader: require.resolve('file-loader'),
+      options: {
+        name: genAssetSubPath(dir),
+        esModule: false
+      }
+    }
+  })
+
   let presetOpts = {
     dynamicImportNode: config.dynamicImport,
     autoCSSModules: config.autoCSSModules,
@@ -50,27 +64,32 @@ async function applyLoader(options: IPenetrateOptions) {
     .test(/\.(png|jpe?g|gif|webp|ico)(\?.*)?$/)
     .use('url-loader')
     .loader(require.resolve('url-loader'))
-    .options({})
+    .options(genUrlLoaderOptions('img'))
 
+  // https://github.com/facebookincubator/create-react-app/pull/1180
   webpackConfig.module
     .rule('svg')
     .test(/\.(svg)(\?.*)?$/)
     .use('file-loader')
     .loader(require.resolve('file-loader'))
     .options({
-      name: 'static/[name].[hash:8].[ext]',
+      name: genAssetSubPath('img'),
       esModule: false
     })
 
   webpackConfig.module
     .rule('fonts')
-    .test(/\.(eot|woff|woff2|ttf)(\?.*)?$/)
-    .use('file-loader')
-    .loader(require.resolve('file-loader'))
-    .options({
-      name: 'static/[name].[hash:8].[ext]',
-      esModule: false
-    })
+    .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
+    .use('url-loader')
+    .loader(require.resolve('url-loader'))
+    .options(genUrlLoaderOptions('fonts'))
+
+  webpackConfig.module
+    .rule('media')
+    .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
+    .use('url-loader')
+    .loader(require.resolve('url-loader'))
+    .options(genUrlLoaderOptions('media'))
 
   webpackConfig.module
     .rule('plaintext')

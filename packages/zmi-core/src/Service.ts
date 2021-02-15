@@ -1,5 +1,6 @@
 import { assert, BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
+import { IConfig } from '@zmi-cli/types'
 import { EventEmitter } from 'events'
 import path from 'path'
 
@@ -37,11 +38,6 @@ export interface IServiceOptions {
   env?: NodeEnv
   pkg?: IPackage
   plugins?: string[]
-}
-
-export interface IConfig {
-  plugins?: string[]
-  [key: string]: any
 }
 
 const Cycle = [
@@ -213,7 +209,7 @@ export default class Service extends EventEmitter {
       cwd: this.cwd,
       pkg: this.pkg,
       plugins: opts.plugins ?? [],
-      userConfigPlugins: this.userConfig.plugins ?? []
+      userConfigPlugins: this.userConfig.plugins!
     })
 
     this.babelRegister.setOnlyMap({

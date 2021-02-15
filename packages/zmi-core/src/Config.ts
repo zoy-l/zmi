@@ -220,7 +220,6 @@ export default class Config {
     const umiEnv = process.env.UMI_ENV
     const configFiles = lodash.clone(possibleConfigPaths)
     possibleConfigPaths.forEach((f) => {
-      // if (this.localConfig) configFiles.push(this.addAffix(f, 'local'))
       if (umiEnv) configFiles.push(this.addAffix(f, umiEnv))
     })
 

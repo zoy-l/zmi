@@ -1,11 +1,10 @@
-import { existsSync, readFileSync } from 'fs'
 import { cheerio, assert } from '@zmi-cli/utils'
-import prettier from 'prettier'
+import { existsSync, readFileSync } from 'fs'
+import { IConfig } from '@zmi-cli/types'
 import { join } from 'path'
 import ejs from 'ejs'
 
 import { IOpts, IGetContentArgs, IScript } from './types'
-import { IConfig } from './Service'
 
 class Html {
   /**
@@ -32,7 +31,8 @@ class Html {
     path = path.replace(/^\//, '')
     path = path.replace(/\/$/, '')
 
-    if (this.config.exportStatic?.htmlSuffix || path === 'index.html') {
+    // this.config.exportStatic?.htmlSuffix
+    if (path === 'index.html') {
       return `${path}`
     }
     return `${path}/index.html`
@@ -41,10 +41,7 @@ class Html {
   getRelPathToPublicPath(path: string) {
     const htmlPath = this.getHtmlPath(path)
     const len = htmlPath.split('/').length
-    return (
-      Array(this.config.exportStatic?.htmlSuffix ? len : len - 1).join('../') ||
-      './'
-    )
+    return Array(len - 1).join('../') || './'
   }
 
   getAsset(opts: { file: string; path?: string }) {
@@ -52,9 +49,7 @@ class Html {
       return opts.file
     }
     const file = opts.file.charAt(0) === '/' ? opts.file.slice(1) : opts.file
-    if (this.config.exportStatic?.dynamicRoot) {
-      return `${this.getRelPathToPublicPath(opts.path ?? '/')}${file}`
-    }
+
     return `${this.config.publicPath}${file}`
   }
 
@@ -88,11 +83,8 @@ class Html {
   async getContent(args: IGetContentArgs): Promise<string> {
     const {
       tplPath = this.tplPath,
-      headJSFiles = [],
       headScripts = [],
-      cssFiles = [],
       scripts = [],
-      jsFiles = [],
       styles = [],
       metas = [],
       links = [],
@@ -105,14 +97,11 @@ class Html {
         existsSync(tplPath)
       )
     }
-    const tpl = readFileSync(
-      tplPath || join(__dirname, 'document.ejs'),
-      'utf-8'
-    )
+    const tpl = readFileSync(tplPath || join(__dirname, 'document.ejs'), 'utf-8')
     const context = {
       config: this.config
     }
-    let html = ejs.render(tpl, context, {
+    const html = ejs.render(tpl, context, {
       _with: false,
       localsName: 'context',
       filename: 'document.ejs'
@@ -169,17 +158,9 @@ class Html {
       )
     })
 
-    // css
-    cssFiles.forEach((file) => {
-      $('head').append(
-        `<link rel="stylesheet" href="${this.getAsset({
-          file
-        })}" />`
-      )
-    })
-
     // root element
-    const mountElementId = this.config.mountElementId ?? 'root'
+    // this.config.mountElementId ??
+    const mountElementId = 'root'
     if (!$(`#${mountElementId}`).length) {
       const bodyEl = $('body')
       assert('<body> not found in html template.', bodyEl.length)
@@ -190,32 +171,16 @@ class Html {
     if (headScripts.length) {
       $('head').append(this.getScriptsContent(headScripts))
     }
-    headJSFiles.forEach((file) => {
-      $('head').append(`<script src="${this.getAsset({ file })}"></script>`)
-    })
+
     if (scripts.length) {
       $('body').append(this.getScriptsContent(scripts))
     }
-    jsFiles.forEach((file) => {
-      $('body').append(`<script src="${this.getAsset({ file })}"></script>`)
-    })
 
     if (modifyHTML) {
       $ = await modifyHTML($)
     }
 
-    html = $.html()
-    // Node 8 not support prettier v2
-    // https://github.com/prettier/eslint-plugin-prettier/issues/278
-    try {
-      html = prettier.format(html, {
-        parser: 'html'
-      })
-    } catch {
-      // ig-ignore
-    }
-
-    return html
+    return $.html()
   }
 }
 

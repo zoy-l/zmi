@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "strict": true,
-    "allowJs": false,
     "jsx": "preserve",
     "target": "esnext",
     "declaration": true,

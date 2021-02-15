@@ -60,7 +60,7 @@ export default (api: IApi) => {
       process.env.NODE_ENV = 'development'
 
       const { miniAppConfig, frameType } = api.config
-      let FrameType = frameType
+      let FrameType = frameType && (frameType !== 'miniApp' ? 'webDev' : 'miniAppDev')
 
       if (!FrameType) {
         if (miniAppConfig) {

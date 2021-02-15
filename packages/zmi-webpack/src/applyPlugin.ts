@@ -9,6 +9,7 @@ import webpack from 'webpack'
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
 import type { IPenetrateOptions } from './types'
 import terserOptions from './terserOptions'
+import PrettierHtml from './PrettierHtml'
 
 function applyPlugin(options: IPenetrateOptions) {
   const {
@@ -96,11 +97,17 @@ function applyPlugin(options: IPenetrateOptions) {
     }
   )
 
-  webpackConfig.when(isProd, (WConfig) => {
-    WConfig.plugin('extract-css').use(miniCssExtractPlugin, [
-      { filename: `${useHash}.css`, chunkFilename: `${[useHash]}.chunk.css` }
-    ])
-  })
+  webpackConfig.when(
+    isProd,
+    (WConfig) => {
+      WConfig.plugin('extract-css').use(miniCssExtractPlugin, [
+        { filename: `${useHash}.css`, chunkFilename: `${[useHash]}.chunk.css` }
+      ])
+    },
+    (WConfig) => {
+      WConfig.plugin('prettier-html').use(PrettierHtml)
+    }
+  )
 
   webpackConfig.when(config.ignoreMomentLocale, (WConfig) => {
     WConfig.plugin('ignore-moment-locale').use(webpack.IgnorePlugin, [
@@ -108,9 +115,18 @@ function applyPlugin(options: IPenetrateOptions) {
     ])
   })
 
+  const omitKey = ['favicon', 'template', 'templateContent']
+  omitKey.forEach((key) => {
+    if (config.htmlPlugin[key]) {
+      delete config.htmlPlugin[key]
+    }
+  })
+
   webpackConfig
     .plugin('HtmlWebpackPlugin')
-    .use(HtmlWebpackPlugin, [{ templateContent: htmlContent }])
+    .use(HtmlWebpackPlugin, [
+      deepmerge(config.htmlPlugin, { templateContent: htmlContent })
+    ])
 
   webpackConfig.when(isVue, (WConifg) => {
     if (isDev) {

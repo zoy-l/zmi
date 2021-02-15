@@ -1,3 +1,4 @@
+import HtmlPlugin from 'html-webpack-plugin'
 import { PluginAPI, Service } from '@zmi-cli/core'
 import webpackDevServer from 'webpack-dev-server'
 import { IConfig as nerdConfig } from 'zmi-nerd'
@@ -112,6 +113,19 @@ export type IApi = ServicePluginApi & {
   modifyPaths: IModify<ServicePluginApi['paths'], null>
 }
 
+// prettier-ignore
+type KnownKeys<T> = {
+  [K in keyof T]: string extends K
+  ? never
+  : number extends K
+  ? never
+  : K
+} extends { [_ in keyof T]: infer U }
+  ? U
+  : never
+
+type RequireOnly<T extends Record<any, any>> = Pick<T, KnownKeys<T>>
+
 export interface IConfig {
   devServer?: webpackDevServer.Configuration
   frameType?: 'react' | 'vue' | 'miniApp'
@@ -123,9 +137,14 @@ export interface IConfig {
     styleLoader?: Record<string, any>
     cssLoader?: Record<string, any>
   }
+  htmlPlugin?: Omit<
+    RequireOnly<HtmlPlugin.Options>,
+    'favicon' | 'template' | 'templateContent'
+  >
   extraPostCSSPlugins?: any[]
   extraBabelPresets?: any[]
   extraBabelPlugins?: any[]
+  plugins?: any[]
   autoprefixer?: Record<string, any>
   links?: Partial<HTMLLinkElement>[]
   metas?: Partial<HTMLMetaElement>[]
@@ -164,10 +183,9 @@ export interface IConfig {
   ) => void | Promise<void>
 }
 
-type INonEmpty<T extends Record<string, any>, U extends keyof T> = Pick<T, U> &
-  Omit<{ [key in keyof T]-?: T[key] }, U>
+type INonEmpty<T extends Record<string, any>> = { [key in keyof T]-?: T[key] }
 
-export type IPrivate = INonEmpty<IConfig, 'externals'> & {
+export type IPrivate = INonEmpty<IConfig> & {
   loaderOptions: {
     lessLoader: Record<string, any>
     scssLoader: Record<string, any>

@@ -1,8 +1,8 @@
 import path from 'path'
 import fs from 'fs'
 import { lodash, winPath } from '@zmi-cli/utils'
+import { IConfig } from '@zmi-cli/types'
 import { IServicePaths } from './types'
-import { IConfig } from './Service'
 
 interface IServicePath {
   config: IConfig & { singular?: boolean; outputPath?: string }

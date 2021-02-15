@@ -1,6 +1,5 @@
+import { IConfig } from '@zmi-cli/types'
 import Joi from 'joi'
-
-import { IConfig } from './Service'
 
 export enum ServiceStage {
   uninitialized,
