@@ -3,6 +3,7 @@ import { deepmerge } from '@zmi-cli/utils'
 import { IPrivate } from '@zmi-cli/types'
 import WebpackChain from 'webpack-chain'
 import path from 'path'
+import fs from 'fs'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import applyPlugin from './applyPlugin'
@@ -29,42 +30,35 @@ export default async function getConfig(opts: IConfigOpts) {
   const { targets, browserslist } = getTargetsAndBrowsersList(config)
   const { isReact, isVue } = getFrameType(config, pkg)
   const sourceMap = config.devtool !== 'none'
+
   const isDev = env === 'development'
   const isProd = env === 'production'
 
   const useHash = config.hash && isProd ? '[name].[contenthash:8]' : '[name]'
   const appOutputPath = path.join(cwd, config.outputPath)
-
+  const isTypescript = fs.existsSync(`${cwd}/tsconfig.json`)
   const webpackConfig = new WebpackChain()
-  const createCSSRule = ruleCss({
+
+  const penetrateOptions = {
+    configOptions: opts,
     webpackConfig,
+    isTypescript,
     browserslist,
-    sourceMap,
-    config,
-    isDev
-  })
-
-  await applyLoader({
-    configOptions: opts,
-    webpackConfig,
-    sourceMap,
-    targets,
-    isProd,
-    isDev,
-    isVue
-  })
-
-  applyPlugin({
-    configOptions: opts,
-    webpackConfig,
     sourceMap,
     targets,
     isReact,
     useHash,
     isProd,
+    config,
     isDev,
     isVue
-  })
+  }
+
+  const createCSSRule = ruleCss(penetrateOptions)
+
+  await applyLoader(penetrateOptions)
+
+  applyPlugin(penetrateOptions)
 
   // @ts-expect-error: library type error
   webpackConfig.devtool(config.devtool)

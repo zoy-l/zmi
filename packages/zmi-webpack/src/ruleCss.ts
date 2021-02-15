@@ -1,16 +1,8 @@
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import { deepmerge } from '@zmi-cli/utils'
-import { IPrivate } from '@zmi-cli/types'
 import Config from 'webpack-chain'
 
-interface IOpts {
-  webpackConfig: Config
-  config: IPrivate
-  isDev: boolean
-  disableCompress?: boolean
-  browserslist?: Record<string, any>
-  sourceMap: boolean
-}
+import type { IPenetrateOptions } from './types'
 
 export interface ICreateCSSRuleOpts {
   lang: string
@@ -19,7 +11,7 @@ export interface ICreateCSSRuleOpts {
   options?: Record<string, any>
 }
 
-export default (options: IOpts) => {
+export default (options: IPenetrateOptions) => {
   const { webpackConfig, isDev, config, browserslist, sourceMap } = options
   const {
     lessLoader,

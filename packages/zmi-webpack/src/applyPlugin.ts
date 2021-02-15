@@ -4,28 +4,17 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { chalk, deepmerge } from '@zmi-cli/utils'
-import WebpackChain from 'webpack-chain'
 import webpack from 'webpack'
-import fs from 'fs'
 
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
+import type { IPenetrateOptions } from './types'
 import terserOptions from './terserOptions'
-import { IConfigOpts } from './types'
 
-function applyPlugin(options: {
-  targets: Record<string, any>
-  webpackConfig: WebpackChain
-  configOptions: IConfigOpts
-  sourceMap: boolean
-  isVue: boolean
-  isProd: boolean
-  isDev: boolean
-  isReact: boolean
-  useHash: string
-}) {
+function applyPlugin(options: IPenetrateOptions) {
   const {
     webpackConfig,
     configOptions,
+    isTypescript,
     sourceMap,
     isReact,
     useHash,
@@ -33,9 +22,9 @@ function applyPlugin(options: {
     isVue,
     isDev
   } = options
-  const { cwd, hot, config, htmlContent } = configOptions
+  const { hot, config, htmlContent } = configOptions
 
-  const disableCompress = process.env.COMPRESS === 'none'
+  const disableCompress = isProd && process.env.COMPRESS === 'none'
 
   webpackConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
     {
@@ -72,7 +61,7 @@ function applyPlugin(options: {
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [config.define])
 
-  webpackConfig.when(fs.existsSync(`${cwd}/tsconfig.json`), (WConfig) => {
+  webpackConfig.when(isTypescript, (WConfig) => {
     WConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin, [forkTsCheckerOpt])
   })
 
@@ -123,7 +112,9 @@ function applyPlugin(options: {
     .use(HtmlWebpackPlugin, [{ templateContent: htmlContent }])
 
   webpackConfig.when(isVue, (WConifg) => {
-    WConifg.plugin('vue-client').use(VueClientWebpackPlugin)
+    if (isDev) {
+      WConifg.plugin('vue-client').use(VueClientWebpackPlugin)
+    }
 
     WConifg.plugin('vue-loader').use(require('vue-loader').VueLoaderPlugin)
 

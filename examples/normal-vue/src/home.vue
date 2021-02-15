@@ -17,8 +17,8 @@ export default defineComponent({
   },
 
   methods: {
-    hello(a: number) {
-      console.log(this)
+    hello() {
+      console.log(this.msg)
     }
   }
 })

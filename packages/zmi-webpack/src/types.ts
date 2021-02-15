@@ -14,3 +14,18 @@ export interface IConfigOpts {
   port?: number
   cwd: string
 }
+
+export interface IPenetrateOptions {
+  targets: Record<string, any>
+  webpackConfig: WebpackChain
+  configOptions: IConfigOpts
+  browserslist: any
+  config: IPrivate
+  isTypescript: boolean
+  sourceMap: boolean
+  isVue: boolean
+  isProd: boolean
+  isDev: boolean
+  isReact: boolean
+  useHash: string
+}

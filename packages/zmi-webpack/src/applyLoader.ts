@@ -1,20 +1,11 @@
-import WebpackChain from 'webpack-chain'
-
+import type { IPenetrateOptions } from './types'
 import { getBabelOpts } from './getBabelOptions'
-import { IConfigOpts } from './types'
 
-async function applyLoader(options: {
-  targets: Record<string, any>
-  webpackConfig: WebpackChain
-  configOptions: IConfigOpts
-  sourceMap: boolean
-  isVue: boolean
-  isProd: boolean
-  isDev: boolean
-}) {
+async function applyLoader(options: IPenetrateOptions) {
   const {
     configOptions,
     webpackConfig,
+    isTypescript,
     sourceMap,
     targets,
     isProd,
@@ -90,19 +81,19 @@ async function applyLoader(options: {
       .test(/\.vue$/)
       .use('vue-loader')
       .loader(require.resolve('vue-loader'))
-      .options({
-        hotReload: hot
-      })
+      .options({ hotReload: hot })
 
-    WConifg.module
-      .rule('vue-ts')
-      .test(/\.ts$/)
-      .use('ts-loader')
-      .loader(require.resolve('ts-loader'))
-      .options({
-        transpileOnly: true,
-        appendTsSuffixTo: ['\\.vue$']
-      })
+    if (isTypescript) {
+      WConifg.module
+        .rule('vue-ts')
+        .test(/\.ts$/)
+        .use('ts-loader')
+        .loader(require.resolve('ts-loader'))
+        .options({
+          transpileOnly: true,
+          appendTsSuffixTo: ['\\.vue$']
+        })
+    }
   })
 }
 
