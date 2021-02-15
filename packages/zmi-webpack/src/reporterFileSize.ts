@@ -118,7 +118,7 @@ export function printFileSizesAfterBuild(
 export function measureFileSizesBeforeBuild(buildFolder: string) {
   return new Promise((resolve) => {
     recursive(buildFolder, (err, fileNames) => {
-      let sizes
+      let sizes = {}
       if (!err && fileNames) {
         sizes = fileNames.filter(canReadAsset).reduce((memo, fileName) => {
           const contents = fs.readFileSync(fileName)
@@ -129,7 +129,7 @@ export function measureFileSizesBeforeBuild(buildFolder: string) {
       }
       resolve({
         root: buildFolder,
-        sizes: sizes ?? {}
+        sizes
       })
     })
   })
