@@ -217,10 +217,10 @@ export default class Config {
   }
 
   getWatchFilesAndDirectories() {
-    const umiEnv = process.env.UMI_ENV
+    const zmiEnv = process.env.ZMI_ENV
     const configFiles = lodash.clone(possibleConfigPaths)
     possibleConfigPaths.forEach((f) => {
-      if (umiEnv) configFiles.push(this.addAffix(f, umiEnv))
+      if (zmiEnv) configFiles.push(this.addAffix(f, zmiEnv))
     })
 
     const configDir = winPath(path.join(this.cwd, 'config'))
@@ -251,7 +251,7 @@ export default class Config {
       }
     })
     watcher.on('all', (event, path) => {
-      console.log(chalk.gray(`[${event}]:`), path)
+      console.log(chalk.bgGray(` ${event} `), path)
       const newPaths = this.getWatchFilesAndDirectories()
       const diffs = lodash.difference(newPaths, paths)
       if (diffs.length) {
@@ -265,7 +265,6 @@ export default class Config {
       Object.keys(this.service.plugins).forEach((pluginId) => {
         const { key, config = {} } = this.service.plugins[pluginId]
         // recognize as key if have schema config
-
         if (!isEqual(newUserConfig[key], userConfig[key]) && config.schema) {
           if (newUserConfig[key] === false || userConfig[key] === false) {
             pluginChanged.push({ key, pluginId })

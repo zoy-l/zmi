@@ -16,7 +16,7 @@ export default function (api: IApi) {
     {
       rel: 'shortcut icon',
       type: 'image/x-icon',
-      href: api.config.favicon
+      href: api.config.favicon!
     }
   ])
 }
