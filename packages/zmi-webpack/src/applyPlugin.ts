@@ -13,16 +13,17 @@ import terserOptions from './terserOptions'
 function applyPlugin(options: IPenetrateOptions) {
   const {
     webpackConfig,
-    configOptions,
     isTypescript,
+    htmlContent,
     sourceMap,
     isReact,
     useHash,
     isProd,
+    config,
     isVue,
-    isDev
+    isDev,
+    hot
   } = options
-  const { hot, config, htmlContent } = configOptions
 
   const disableCompress = isProd && process.env.COMPRESS === 'none'
 

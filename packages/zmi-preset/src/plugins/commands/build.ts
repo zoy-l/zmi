@@ -1,6 +1,6 @@
 import { IApi } from '@zmi-cli/types'
 
-import { getBundleAndConfigs } from '../../common/BundleUtils'
+import { getBundleAndConfigs } from '../common/BundleUtils'
 
 export default (api: IApi) => {
   api.registerCommand({

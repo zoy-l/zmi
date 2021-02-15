@@ -26,13 +26,14 @@ const resolveModules = [
 ]
 
 export default async function getConfig(opts: IConfigOpts) {
-  const { hot = true, config, entry, port, env, pkg, cwd } = opts
+  const { config, entry, port, env, pkg, cwd } = opts
   const { targets, browserslist } = getTargetsAndBrowsersList(config)
   const { isReact, isVue } = getFrameType(config, pkg)
-  const sourceMap = config.devtool !== 'none'
 
+  const sourceMap = config.devtool !== 'none'
   const isDev = env === 'development'
   const isProd = env === 'production'
+  const hot = isDev && process.env.HMR !== 'none'
 
   const useHash = config.hash && isProd ? '[name].[contenthash:8]' : '[name]'
   const appOutputPath = path.join(cwd, config.outputPath)
@@ -40,7 +41,6 @@ export default async function getConfig(opts: IConfigOpts) {
   const webpackConfig = new WebpackChain()
 
   const penetrateOptions = {
-    configOptions: opts,
     webpackConfig,
     isTypescript,
     browserslist,
@@ -49,9 +49,10 @@ export default async function getConfig(opts: IConfigOpts) {
     isReact,
     useHash,
     isProd,
-    config,
     isDev,
-    isVue
+    isVue,
+    hot,
+    ...opts
   }
 
   const createCSSRule = ruleCss(penetrateOptions)

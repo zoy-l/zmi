@@ -1,7 +1,7 @@
 import { assert, chalk, portfinder, clearConsole } from '@zmi-cli/utils'
 import { IApi } from '@zmi-cli/types'
 
-import { getBundleAndConfigs } from '../../common/BundleUtils'
+import { getBundleAndConfigs } from '../common/BundleUtils'
 
 export default (api: IApi) => {
   let port: number

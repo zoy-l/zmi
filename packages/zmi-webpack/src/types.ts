@@ -10,15 +10,13 @@ export interface IConfigOpts {
   pkg: Record<string, any>
   htmlContent: string
   config: IPrivate
-  hot: boolean
   port?: number
   cwd: string
 }
 
-export interface IPenetrateOptions {
+export interface IPenetrateOptions extends IConfigOpts {
   targets: Record<string, any>
   webpackConfig: WebpackChain
-  configOptions: IConfigOpts
   browserslist: any
   config: IPrivate
   isTypescript: boolean
@@ -28,4 +26,6 @@ export interface IPenetrateOptions {
   isDev: boolean
   isReact: boolean
   useHash: string
+  htmlContent: string
+  hot: boolean
 }

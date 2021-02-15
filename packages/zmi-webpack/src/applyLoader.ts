@@ -3,23 +3,26 @@ import { getBabelOpts } from './getBabelOptions'
 
 async function applyLoader(options: IPenetrateOptions) {
   const {
-    configOptions,
+    modifyBabelPresetOpts,
+    modifyBabelOpts,
     webpackConfig,
     isTypescript,
     sourceMap,
     targets,
     isProd,
+    config,
     isVue,
-    isDev
+    isDev,
+    hot,
+    cwd,
+    env
   } = options
-
-  const { cwd, modifyBabelPresetOpts, modifyBabelOpts, config, hot, env } = configOptions
 
   let presetOpts = {
     dynamicImportNode: config.dynamicImport,
     autoCSSModules: config.autoCSSModules,
+    typescript: !isVue && isTypescript,
     type: config.frameType,
-    typescript: !isVue,
     env: { targets },
     nodeEnv: env,
     sourceMap,

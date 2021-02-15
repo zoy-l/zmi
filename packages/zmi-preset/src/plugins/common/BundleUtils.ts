@@ -55,20 +55,19 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
         entry: {
           main: path.join(api.paths.appSrcPath, entryFilePath)
         },
-        hot: process.env.HMR !== 'none',
         htmlContent,
-        async modifyBabelOpts(opts: Record<string, any>) {
+        async modifyBabelOpts(initialValue: Record<string, any>) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
             key: 'modifyBabelOpts',
-            initialValue: opts
+            initialValue
           })
         },
-        async modifyBabelPresetOpts(opts: Record<string, any>) {
+        async modifyBabelPresetOpts(initialValue: Record<string, any>) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
             key: 'modifyBabelPresetOpts',
-            initialValue: opts
+            initialValue
           })
         },
         async chainWebpack(
