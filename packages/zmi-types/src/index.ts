@@ -69,7 +69,7 @@ type ServicePluginApi = Pick<
   | 'applyPlugins'
   | 'ServiceStage'
   | 'hasPlugins'
-  | 'userConfig'
+  | 'initConifg'
   | 'EnableBy'
   | 'config'
   | 'stage'

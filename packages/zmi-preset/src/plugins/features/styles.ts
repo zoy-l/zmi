@@ -13,7 +13,7 @@ export default (api: IApi) => {
     }
   })
 
-  const { styles = [] } = api.userConfig
+  const { styles = [] } = api.initConifg
 
   const [linkArr, styleArr] = formatStyles(styles!)
 

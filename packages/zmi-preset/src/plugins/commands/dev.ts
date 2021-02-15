@@ -97,9 +97,9 @@ export default (api: IApi) => {
           restartServer(`Plugins in package.json changed.`)
         })
 
-        const { configInstance, userConfig } = api.service
+        const { configInstance, initConifg } = api.service
         configInstance.watch({
-          userConfig,
+          userConfig: initConifg,
           async onChange({
             pluginChanged,
             valueChanged
@@ -130,7 +130,7 @@ export default (api: IApi) => {
               if (reload) {
                 restartServer(`Config ${reloadConfigs.join(', ')} changed.`)
               } else {
-                api.service.userConfig = configInstance.getUserConfig()
+                api.service.initConifg = configInstance.getUserConfig()
 
                 const defaultConfig = await api.applyPlugins({
                   key: 'modifyDefaultConfig',

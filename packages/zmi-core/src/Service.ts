@@ -53,7 +53,7 @@ const ServiceAttribute = [
   'babelRegister',
   'applyPlugins',
   'ServiceStage',
-  'userConfig',
+  'initConifg',
   'hasPlugins',
   'EnableBy',
   'config',
@@ -92,9 +92,9 @@ export default class Service extends EventEmitter {
   configInstance: Config
 
   /**
-   * @desc user config
+   * @desc initial user config
    */
-  userConfig: IConfig
+  initConifg: IConfig
 
   /**
    * @desc runtime babel
@@ -196,11 +196,11 @@ export default class Service extends EventEmitter {
       service: this
     })
 
-    this.userConfig = this.configInstance.getUserConfig()
+    this.initConifg = this.configInstance.getUserConfig()
 
     // Get the path of the app and expose it to the outside
     this.paths = paths({
-      config: this.userConfig,
+      config: this.initConifg,
       cwd: this.cwd,
       env: this.env
     })
@@ -209,7 +209,7 @@ export default class Service extends EventEmitter {
       cwd: this.cwd,
       pkg: this.pkg,
       plugins: opts.plugins ?? [],
-      userConfigPlugins: this.userConfig.plugins!
+      userConfigPlugins: this.initConifg.plugins!
     })
 
     this.babelRegister.setOnlyMap({
@@ -401,8 +401,8 @@ export default class Service extends EventEmitter {
 
     const skipStep = [
       this.skipPluginIds.has(pluginId),
-      this.userConfig[key] === false,
-      this.EnableBy.config === enableBy && !(key in this.userConfig)
+      this.initConifg[key] === false,
+      this.EnableBy.config === enableBy && !(key in this.initConifg)
     ]
 
     // judgment in order
