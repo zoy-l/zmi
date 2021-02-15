@@ -1,8 +1,10 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+import webpackBundleAnalyzer from 'webpack-bundle-analyzer'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+
 import { chalk, deepmerge } from '@zmi-cli/utils'
 import webpack from 'webpack'
 
@@ -103,6 +105,12 @@ function applyPlugin(options: IPenetrateOptions) {
       WConfig.plugin('extract-css').use(miniCssExtractPlugin, [
         { filename: `${useHash}.css`, chunkFilename: `${[useHash]}.chunk.css` }
       ])
+
+      if (process.env.ANALYZER) {
+        webpackConfig
+          .plugin('webpackBundleAnalyzer')
+          .use(webpackBundleAnalyzer.BundleAnalyzerPlugin)
+      }
     },
     (WConfig) => {
       WConfig.plugin('prettier-html').use(PrettierHtml)

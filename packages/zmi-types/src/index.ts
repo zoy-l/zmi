@@ -141,6 +141,7 @@ export interface IConfig {
     RequireOnly<HtmlPlugin.Options>,
     'favicon' | 'template' | 'templateContent'
   >
+  cache?: 'memory' | 'filesystem'
   extraPostCSSPlugins?: any[]
   extraBabelPresets?: any[]
   extraBabelPlugins?: any[]

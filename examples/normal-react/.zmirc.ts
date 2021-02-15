@@ -6,7 +6,7 @@ export default defineConfig({
     config.merge({
       optimization: {
         splitChunks: {
-          chunks: 'all',
+          chunks: 'async',
           minSize: 20000,
           minChunks: 1,
           automaticNameDelimiter: '.',
@@ -29,6 +29,6 @@ export default defineConfig({
     }
   ],
 
-  scripts: [`console(111);`, { src: `https://a.com/b.js`, defer: true }],
-  styles: [`body { color: red; }`, `https://a.com/b.css`]
+  scripts: [`console.log('hello zmi');`],
+  styles: [`body { color: red;margin:0 }`]
 })

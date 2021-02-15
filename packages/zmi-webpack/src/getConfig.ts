@@ -65,6 +65,20 @@ export default async function getConfig(opts: IConfigOpts) {
   webpackConfig.devtool(config.devtool)
   webpackConfig.mode(env)
 
+  webpackConfig.when(!!config.cache, (WConfig) => {
+    const cacheOptions: Partial<{ [key: string]: any }> = {
+      type: config.cache,
+      buildDependencies: {
+        config: [__filename]
+      }
+    }
+    if (config.cache === 'memory') {
+      delete cacheOptions.buildDependencies
+    }
+
+    WConfig.cache(cacheOptions)
+  })
+
   webpackConfig.when(!!entry, (WConfig) => {
     Object.keys(entry).forEach((key) => {
       const entryPoint = WConfig.entry(key)
@@ -125,7 +139,9 @@ export default async function getConfig(opts: IConfigOpts) {
     })
   }
 
-  return webpackConfig.toConfig()
+  const ret = webpackConfig.toConfig()
+
+  return ret
 }
 
 function getFrameType(config: IPrivate, pkg: Record<string, any>) {
