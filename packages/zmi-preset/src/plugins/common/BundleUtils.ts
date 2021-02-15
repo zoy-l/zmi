@@ -8,7 +8,7 @@ import { getHtmlGenerator } from './generateHtml'
 export async function getBundleAndConfigs(options: { api: IApi; port?: number }) {
   const { api, port } = options
 
-  const Html = getHtmlGenerator({ api })
+  const Html = getHtmlGenerator(api)
 
   const htmlContent = await Html.getContent()
 

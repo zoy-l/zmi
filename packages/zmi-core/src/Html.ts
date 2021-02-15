@@ -1,10 +1,10 @@
+import { IConfig, IScript } from '@zmi-cli/types'
 import { cheerio, assert } from '@zmi-cli/utils'
-import { existsSync, readFileSync } from 'fs'
-import { IConfig } from '@zmi-cli/types'
+import { readFileSync } from 'fs'
 import { join } from 'path'
 import ejs from 'ejs'
 
-import { IOpts, IGetContentArgs, IScript } from './types'
+import { IOpts, IGetContentArgs } from './types'
 
 class Html {
   /**
@@ -81,23 +81,9 @@ class Html {
   }
 
   async getContent(args: IGetContentArgs): Promise<string> {
-    const {
-      tplPath = this.tplPath,
-      headScripts = [],
-      scripts = [],
-      styles = [],
-      metas = [],
-      links = [],
-      modifyHTML
-    } = args
+    const { headScripts, scripts, styles, metas, links, modifyHTML } = args
 
-    if (tplPath) {
-      assert(
-        `getContent() failed, tplPath of ${tplPath} not exists.`,
-        existsSync(tplPath)
-      )
-    }
-    const tpl = readFileSync(tplPath || join(__dirname, 'document.ejs'), 'utf-8')
+    const tpl = readFileSync(this.tplPath || join(__dirname, 'document.ejs'), 'utf-8')
     const context = {
       config: this.config
     }

@@ -1,9 +1,8 @@
 import { IApi } from '@zmi-cli/types'
-import { formatScripts } from '../common/htmlTools'
 
 export default function (api: IApi) {
   api.describe({
-    key: 'headScripts',
+    key: 'metas',
     config: {
       default: [],
       schema(joi) {
@@ -12,5 +11,5 @@ export default function (api: IApi) {
     }
   })
 
-  api.addHTMLHeadScripts(() => formatScripts(api.config.headScripts!))
+  api.addHTMLMetas(() => api.config.metas!)
 }

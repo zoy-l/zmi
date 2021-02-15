@@ -11,5 +11,5 @@ export default function (api: IApi) {
     }
   })
 
-  api.addHTMLLinks(() => api.config.links)
+  api.addHTMLLinks(() => api.config.links!)
 }

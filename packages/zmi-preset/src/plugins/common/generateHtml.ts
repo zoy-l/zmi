@@ -2,21 +2,19 @@ import { IApi } from '@zmi-cli/types'
 import path from 'path'
 import fs from 'fs'
 
-export function getHtmlGenerator({ api }: { api: IApi }): any {
+export function getHtmlGenerator(api: IApi) {
   function getDocumentTplPath() {
     const docPath = path.join(api.paths.appPagesPath, 'document.ejs')
     return fs.existsSync(docPath) ? docPath : ''
   }
 
-  class Html extends api.Html {
-    constructor() {
-      super({
-        config: api.config,
-        tplPath: getDocumentTplPath()
-      })
-    }
+  const html = new api.Html({
+    config: api.config,
+    tplPath: getDocumentTplPath()
+  })
 
-    async getContent(): Promise<string> {
+  return {
+    getContent: async () => {
       async function applyPlugins(opts: { initialState?: any[]; key: string }) {
         return api.applyPlugins({
           key: opts.key,
@@ -31,7 +29,7 @@ export function getHtmlGenerator({ api }: { api: IApi }): any {
         initialValue: api.config.publicPath
       })
 
-      return super.getContent({
+      return html.getContent({
         headScripts: await applyPlugins({
           key: 'addHTMLHeadScripts'
         }),
@@ -59,6 +57,4 @@ export function getHtmlGenerator({ api }: { api: IApi }): any {
       })
     }
   }
-
-  return new Html()
 }

@@ -21,5 +21,11 @@ export default defineConfig({
         }
       }
     })
-  }
+  },
+  metas: [
+    {
+      name: 'keywords',
+      content: 'zmi, zmi-cli'
+    }
+  ]
 })

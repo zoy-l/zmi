@@ -59,7 +59,7 @@ interface IModify<T, U> {
 }
 
 interface IAdd<T> {
-  (fn: () => T[]): void
+  (fn: () => T[] | T): void
 }
 
 type ServicePluginApi = Pick<
@@ -99,9 +99,9 @@ export type IApi = ServicePluginApi & {
 
   addHTMLHeadScripts: IAdd<IScriptConfig>
   addHTMLScripts: IAdd<IScriptConfig>
-  addHTMLMetas: IAdd<IHTMLTag>
-  addHTMLLinks: IAdd<IHTMLTag>
-  addHTMLStyles: IAdd<IHTMLTag>
+  addHTMLMetas: IAdd<Partial<HTMLMetaElement>>
+  addHTMLLinks: IAdd<Partial<HTMLLinkElement>>
+  addHTMLStyles: IAdd<Partial<IStyle>>
 
   chainWebpack: IModify<
     WebpackChain,
@@ -148,6 +148,9 @@ export interface IConfig {
   autoprefixer?: Record<string, any>
   links?: Partial<HTMLLinkElement>[]
   metas?: Partial<HTMLMetaElement>[]
+  scripts?: IScriptConfig
+  headScripts?: IScriptConfig
+  styles?: IStyleConfig
   manifest?: Partial<IManifest>
   frameOptions?: Record<string, any>
   terserOptions?: Record<string, any>
