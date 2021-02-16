@@ -1,22 +1,33 @@
 English | [简体中文](./README.zh-CN.md)
 
+## Zmi
+
 🎃 A purely controllable react/vue/miniapp-ts application framework.
 
 > Consider starring, thank you ❤️ and support.
+>
+> This project is a rewrite and modification of fork `UmiJs`
 
 ## Features
 
-> This project draws heavily on the plug-in system of `umijs`
+- 🔩 **Extensible** Everything is plug-in, complete life cycle
 
-- 🎉 **Extensible**, Zmi's plug-in system is inherited from Umi and modified to meet the hierarchical requirements of functions and vertical domains. Complete life cycle, plug-in
+- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp`. `typescript` is supported by default, install `typescript`, add `tsconfig.json`
 
-- 📦 **Out of the Box**, Zmi only needs one dependency to get started. vue/react/miniapp-ts. `typescript` is supported by default, Install typescript and add tsconfig
+- 🙅 **A large number of no self-research** Use mature community solutions first
 
-- 🚀 **Not self-researched**, preferential use of mature community solutions
+- 🤷‍♂️ **No routing** Not involved in runtime, `zmi` is a pure scaffolding tool
 
-- 🌴 **No routing**, no involvement in runtime, zmi is a pure scaffolding tool
+## Why?
 
-- Based on the latest **webpack5**
+- Then why not use UmiJs directly?
+
+  - Zmi positioning is a purely universal **scaffolding** tool without too much integration, so if you need a high degree of integration, then UmiJs may be more suitable for you
+
+- Why not create-react-app
+  - Don't want to be highly integrated, but also configurable
+
+## Quick start
 
 ```bash
 # Create project

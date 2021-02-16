@@ -31,12 +31,8 @@ export default class VueClient {
 
   injectRefreshEntry(originalEntry: EntryNormalized): any {
     const overlayEntries = [
-      require.resolve(
-        '@pmmmwh/react-refresh-webpack-plugin/client/LegacyWDSSocketEntry'
-      ),
-      require.resolve(
-        '@pmmmwh/react-refresh-webpack-plugin/client/ErrorOverlayEntry'
-      )
+      require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/LegacyWDSSocketEntry'),
+      require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ErrorOverlayEntry')
     ]
 
     if (typeof originalEntry === 'string') {
@@ -52,10 +48,7 @@ export default class VueClient {
 
       let socketAndPrecedingEntries = []
       if (socketEntryIndex !== -1) {
-        socketAndPrecedingEntries = originalEntry.splice(
-          0,
-          socketEntryIndex + 1
-        )
+        socketAndPrecedingEntries = originalEntry.splice(0, socketEntryIndex + 1)
       }
 
       return [...socketAndPrecedingEntries, ...overlayEntries, ...originalEntry]
@@ -79,14 +72,12 @@ export default class VueClient {
 
     if (typeof originalEntry === 'function') {
       return (...args: any) =>
-        Promise.resolve(
-          (<IEntry>originalEntry)(...args)
-        ).then((resolvedEntry) => this.injectRefreshEntry(resolvedEntry))
+        Promise.resolve((<IEntry>originalEntry)(...args)).then((resolvedEntry) =>
+          this.injectRefreshEntry(resolvedEntry)
+        )
     }
 
-    const {
-      createError
-    } = require('@pmmmwh/react-refresh-webpack-plugin/lib/utils')
+    const { createError } = require('@pmmmwh/react-refresh-webpack-plugin/lib/utils')
 
     throw createError('Failed to parse the Webpack `entry` object!')
   }
