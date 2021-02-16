@@ -61,8 +61,7 @@ export default async function getConfig(opts: IConfigOpts) {
 
   applyPlugin(penetrateOptions)
 
-  // @ts-expect-error: library type error
-  webpackConfig.devtool(config.devtool)
+  webpackConfig.devtool(config.devtool as WebpackChain.DevTool)
   webpackConfig.mode(env)
 
   webpackConfig.when(!!config.cache, (WConfig) => {
@@ -72,9 +71,8 @@ export default async function getConfig(opts: IConfigOpts) {
         config: [__filename]
       }
     }
-    if (config.cache === 'memory') {
-      delete cacheOptions.buildDependencies
-    }
+
+    config.cache === 'memory' && delete cacheOptions.buildDependencies
 
     WConfig.cache(cacheOptions)
   })
@@ -110,7 +108,8 @@ export default async function getConfig(opts: IConfigOpts) {
       noInfo: true,
       inline: true,
       stats: 'none',
-      contentBase: '/'
+      publicPath: config.publicPath,
+     
     },
     config.devServer,
     {
