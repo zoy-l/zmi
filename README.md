@@ -1,6 +1,6 @@
 English | [简体中文](./README.zh-CN.md)
 
-🎃 A purely fully controllable react / vue / miniapp-ts application framework.
+🎃 A purely controllable react/vue/miniapp-ts application framework.
 
 > Consider starring, thank you ❤️ and support.
 
