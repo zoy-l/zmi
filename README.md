@@ -10,7 +10,7 @@ English | [简体中文](./README.zh-CN.md)
 
 - 🎉 **Extensible**, Zmi's plug-in system is inherited from Umi and modified to meet the hierarchical requirements of functions and vertical domains. Complete life cycle, plug-in
 
-- 📦 **Out of the Box**, Zmi only needs one dependency to get started. vue/react/miniapp-ts
+- 📦 **Out of the Box**, Zmi only needs one dependency to get started. vue/react/miniapp-ts. `typescript` is supported by default, Install typescript and add tsconfig
 
 - 🚀 **Not self-researched**, preferential use of mature community solutions
 

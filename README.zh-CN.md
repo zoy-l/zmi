@@ -10,7 +10,7 @@
 
 - 🎉 **可扩展**，Zmi 的插件系统继承自 Umi 并修改 以满足功能和垂直域的层次要求。完整的生命周期，插件化
 
-- 📦 **开箱即用**，一个依赖项即可同时支持 vue / react / miniapp-ts
+- 📦 **开箱即用**，一个依赖项即可同时支持 vue / react / miniapp. 默认支持 typescript, 安装 typescript, 添加 tsconfig 即可
 
 - 🚀 **大量不自研**，优先使用成熟的社区解决方案
 
