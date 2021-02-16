@@ -2,11 +2,11 @@ English | [简体中文](./README.zh-CN.md)
 
 🎃 A purely fully controllable react / vue / miniapp-ts application framework.
 
-> This project draws heavily on the plug-in system of `umijs`
-
 > Consider starring, thank you ❤️ and support.
 
 ## Features
+
+> This project draws heavily on the plug-in system of `umijs`
 
 - 🎉 **Extensible**, Zmi's plug-in system is inherited from Umi and modified to meet the hierarchical requirements of functions and vertical domains. Complete life cycle, plug-in
 
@@ -31,6 +31,7 @@ $ zmi dev
 ```
 
 ## LICENSE
+
 [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
 
 <!-- yarn debug examples/normal dev -->

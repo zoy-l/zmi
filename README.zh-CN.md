@@ -2,11 +2,11 @@
 
 🎃 一个纯粹的 react / vue / miniapp-ts 应用程序脚手架。
 
-> This project draws heavily on the plug-in system of `umijs`
-
 > Consider starring, thank you ❤️ and support.
 
 ## Features
+
+> This project draws heavily on the plug-in system of `umijs`
 
 - 🎉 **可扩展**，Zmi 的插件系统继承自 Umi 并修改 以满足功能和垂直域的层次要求。完整的生命周期，插件化
 
