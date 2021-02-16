@@ -4,7 +4,7 @@
 
 🎃 一个纯粹的 react / vue / miniapp-ts 应用程序脚手架。
 
-> 考虑点击 star, 谢谢您的 ❤️ 和支持
+> 考虑点击 star, 谢谢您的 🌟 和支持
 >
 > 此项目是 fork `UmiJs` 的重写及修改
 

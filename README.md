@@ -4,7 +4,7 @@ English | [简体中文](./README.zh-CN.md)
 
 🎃 A purely controllable react/vue/miniapp-ts application framework.
 
-> Consider starring, thank you ❤️ and support.
+> Consider starring, thank you 🌟 and support.
 >
 > This project is a rewrite and modification of fork `UmiJs`
 
