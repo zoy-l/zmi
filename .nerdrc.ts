@@ -5,7 +5,7 @@ export default {
   target: 'node',
   pkgs: [
     'zmi-utils',
-    'zmi-babel-preset',
+    'zmi-babel-factory',
     'zmi-css-modules',
     'zmi-create-app',
     'zmi-core',
