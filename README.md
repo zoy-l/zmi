@@ -18,6 +18,8 @@ English | [简体中文](./README.zh-CN.md)
 
 - 🤷‍♂️ **No routing** Not involved in runtime, `zmi` is a pure scaffolding tool
 
+- 🎉 **Based** on the latest `webpack 5`
+
 ## Why?
 
 - Then why not use UmiJs directly?
