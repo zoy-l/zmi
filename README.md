@@ -12,13 +12,13 @@ English | [简体中文](./README.zh-CN.md)
 
 - 🔩 **Extensible** Everything is plug-in, complete life cycle
 
-- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp`. `typescript` is supported by default, install `typescript`, add `tsconfig.json`
+- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp` `typescript` is supported by default, install `typescript`, add `tsconfig.json`
 
 - 🙅 **A large number of no self-research** Use mature community solutions first
 
 - 🤷‍♂️ **No routing** Not involved in runtime, `zmi` is a pure scaffolding tool
 
-- 🎉 **Based** on the latest `webpack 5`
+- 🎉 **Based** on the latest `webpack 5`, Support vue3.x, react 17.x, miniapp file to file transform
 
 ## Why?
 

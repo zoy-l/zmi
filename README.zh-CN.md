@@ -14,11 +14,11 @@
 
 - 📦 **开箱即用** 一个依赖项即可同时支持 `vue` / `react` / `miniapp`. 默认支持 `typescript`, 安装 `typescript`, 添加 `tsconfig.json` 即可
 
-- 🙅 **大量不自研** 优先使用成熟的社区解决方案
+- 🙅 **大量不自研** 优先使用成熟的社区解决方案, 保证稳定性
 
 - 🤷‍♂️ **没有路由** 不参与 runtime，`zmi` 是一个纯粹的脚手架工具
 
-- 🎉 基于最新的 **webpack5**
+- 🎉 基于最新的 **webpack5** 支持vue3.x, react 17.x, 小程序file to file 编译
 
 ## Why?
 
