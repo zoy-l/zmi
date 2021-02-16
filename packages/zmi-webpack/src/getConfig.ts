@@ -106,10 +106,10 @@ export default async function getConfig(opts: IConfigOpts) {
       clientLogLevel: 'silent',
       compress: isProd,
       noInfo: true,
-      inline: true,
       stats: 'none',
+      watchContentBase: isDev,
       publicPath: config.publicPath,
-     
+      contentBase: `${cwd}/public`
     },
     config.devServer,
     {

@@ -4,7 +4,7 @@ export default (api: IApi) => {
   api.describe({
     key: 'publicPath',
     config: {
-      default: './',
+      default: '/',
       schema(joi) {
         return joi.array()
       }

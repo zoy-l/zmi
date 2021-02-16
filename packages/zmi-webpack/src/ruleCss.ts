@@ -22,7 +22,7 @@ export default (options: IPenetrateOptions) => {
   } = config.loaderOptions
 
   function createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
-    const { lang, test, loader } = createCSSRuleOptions
+    const { lang, test, loader, options = {} } = createCSSRuleOptions
     const baseRule = webpackConfig.module.rule(lang).test(test)
 
     const modulesRule = baseRule.oneOf('normal-modules').resourceQuery(/module/)
@@ -93,11 +93,16 @@ export default (options: IPenetrateOptions) => {
           }
         })
 
-      rule.when(!!loader, (WConfig) => {
-        WConfig.use(loader!)
-          .loader(loader!)
-          .options(createCSSRuleOptions.options ?? {})
-      })
+      if (loader) {
+        let resolvedLoader
+        try {
+          resolvedLoader = require.resolve(loader)
+        } catch {
+          resolvedLoader = loader
+        }
+
+        rule.use(loader).loader(resolvedLoader).options(deepmerge({ sourceMap }, options))
+      }
     }
   }
 
@@ -107,21 +112,21 @@ export default (options: IPenetrateOptions) => {
     lang: 'scss',
     test: /\.scss$/,
     loader: 'sass-loader',
-    options: deepmerge({ sourceMap }, scssLoader)
+    options: scssLoader
   })
 
   createCSSRule({
     lang: 'less',
     test: /\.less$/,
-    loader: require.resolve('less-loader'),
-    options: deepmerge({ sourceMap }, lessLoader)
+    loader: 'less-loader',
+    options: lessLoader
   })
 
   createCSSRule({
     lang: 'stylus',
     test: /\.styl(us)?$/,
     loader: 'stylus-loader',
-    options: deepmerge({ sourceMap }, stylusLoader)
+    options: stylusLoader
   })
 
   return createCSSRule
