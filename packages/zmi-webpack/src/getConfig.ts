@@ -109,7 +109,7 @@ export default async function getConfig(opts: IConfigOpts) {
       watchContentBase: isDev,
       publicPath: config.publicPath,
       contentBase: `${cwd}/public`
-    },
+    } as WebpackDevServer.Configuration,
     config.devServer,
     {
       before(app, server, compiler) {

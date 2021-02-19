@@ -6,7 +6,7 @@ import fs from 'fs-extra'
 import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 import createCompiler, { prepareUrls } from './createCompiler'
 import formatWebpackMessages from './formatWebpackMessages'
-import { IConfigOpts } from './types'
+import { IConfigOpts, IPrivate } from './types'
 import getConfig from './getConfig'
 
 interface ISetupOpts {
@@ -20,20 +20,20 @@ interface ISetupOpts {
 
 interface IOpts {
   cwd: string
-  config: any
+  config: IPrivate
   pkg: Record<string, any>
 }
 
 export default class Bundler {
   cwd: string
 
-  config: any
+  config: IPrivate
 
   pkg = {}
 
   constructor({ cwd, config, pkg }: IOpts) {
-    this.cwd = cwd
     this.config = config
+    this.cwd = cwd
     this.pkg = pkg
   }
 
@@ -48,10 +48,14 @@ export default class Bundler {
 
   async setupDevServer(options: ISetupOpts) {
     const { appName = 'project', bundleConfigs, host, port } = options
-
-    const urls = prepareUrls({ host, port })
-
     const { devServer: devServerConfig } = bundleConfigs
+
+    const urls = prepareUrls({
+      host,
+      port,
+      protocol: devServerConfig.https ? 'https' : 'http',
+      pathname: this.config.publicPath
+    })
 
     const compiler = createCompiler({
       config: bundleConfigs,

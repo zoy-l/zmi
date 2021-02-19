@@ -1,5 +1,6 @@
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { chalk, clearConsole } from '@zmi-cli/utils'
+import stripAnsi from 'strip-ansi'
 import address from 'address'
 import webpack from 'webpack'
 import url from 'url'
@@ -22,7 +23,7 @@ interface IPrepareUrlOpts {
 const urlRegex = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
 export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
-  const { protocol = 'http', host, port, pathname = '/' } = prepareUrlOptions
+  const { protocol, host, port, pathname } = prepareUrlOptions
   const formatUrl = (hostname: string) =>
     url.format({
       protocol,
@@ -69,30 +70,39 @@ function printInstructions(opts: { appName: string; urls: IUrlType; port: number
   const { yellow, cyan } = chalk
   const { log } = console
 
+  const portText = ` Running metro bundler on Port: ${yellow(port)}`
+  const appNameText = ` You can now view your Project: ${yellow(appName)}`
+  const localhostText = ` Localhost: ${cyan(urls.localUrlForTerminal)}`
+  const netWorkText = ` Network:   ${cyan(urls.lanUrlForTerminal ?? '')}`
+
+  const textLength = [portText, appNameText, localhostText, netWorkText].map(
+    (text) => stripAnsi(text).length
+  )
+  const maxLength = Math.max(...textLength) + 3
+
+  function padEnd(text: string, index: number) {
+    return text.padEnd(text.length + maxLength - textLength[index] - 1)
+  }
   // devConifg.target !== 'web' &&
   // After `chalk` changes the color, the length of the string is not accurate
   // needs to be calculated manually
-  const appNameLine = `│ You can now view your Project: ${yellow(appName)}  │`
-  const appNameLineLength = 36 + appName.length
   log(
     [
-      '┌'.padEnd(appNameLineLength - 1, '─') + '┐',
-      `│ Running metro bundler on Port: ${yellow(
-        `${port}`.padEnd(appNameLineLength - 34)
-      )}│`,
-      appNameLine,
-      '├'.padEnd(appNameLineLength - 1, '─') + '┤'
+      '┌'.padEnd(maxLength, '─') + '┐',
+      `│${padEnd(portText, 0)}│`,
+      `│${padEnd(appNameText, 1)}|`,
+      '├'.padEnd(maxLength, '─') + '┤'
     ].join('\n')
   )
 
   if (urls.lanUrlForTerminal) {
-    log(`│ Localhost: ${cyan(urls.localUrlForTerminal.padEnd(appNameLineLength - 14))}│`)
-    log(`│ Network:   ${cyan(urls.lanUrlForTerminal.padEnd(appNameLineLength - 14))}│`)
+    log(`│${padEnd(localhostText, 2)}│`)
+    log(`│${padEnd(netWorkText, 3)}│`)
   } else {
-    log(`│ Localhost: ${cyan(urls.localUrlForTerminal.padEnd(appNameLineLength - 14))}`)
+    log(`│${padEnd(localhostText, 2)}│`)
   }
 
-  log('└'.padEnd(appNameLineLength - 1, '─') + '┘')
+  log('└'.padEnd(maxLength, '─') + '┘')
 }
 
 function createCompiler(opts: {

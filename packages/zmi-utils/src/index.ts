@@ -21,7 +21,6 @@ import parseRequireDeps from './parseRequireDeps'
 import { NodeEnv, ArgsType } from './types'
 import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
-import prepareUrls from './prepareUrls'
 import mergeConfig from './mergeConfig'
 import isLerna from './isLerna'
 import getFile from './getFile'
@@ -53,7 +52,6 @@ export {
   resolve,
   launchDevice,
   clearConsole,
-  prepareUrls,
   portfinder,
   yargsParser,
   chalk,
