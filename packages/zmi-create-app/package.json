@@ -17,5 +17,5 @@
   "bin": {
     "create-zmi-app": "bin/zmi-create-app.js"
   },
-  "gitHead": "d673d5e55ff594cec4347884916364428330ab40"
+  "gitHead": "52284bd63e9557210bfdd10cf889a1a9a5e4f42c"
 }
