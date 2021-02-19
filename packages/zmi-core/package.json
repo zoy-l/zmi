@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/core",
-  "version": "1.0.4-alpha.0",
+  "version": "1.0.5-alpha.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/ejs": "^3.0.5",
-    "@zmi-cli/utils": "^1.0.4-alpha.0",
+    "@zmi-cli/utils": "^1.0.5-alpha.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "joi": "^17.4.0",

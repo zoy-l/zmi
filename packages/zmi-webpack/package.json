@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/webpack",
-  "version": "1.0.4-alpha.0",
+  "version": "1.0.5-alpha.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -17,14 +17,14 @@
     "@types/webpack": "4.41.26",
     "@types/webpack-bundle-analyzer": "^3.9.1",
     "@types/webpack-dev-server": "^3.11.1",
-    "@zmi-cli/types": "^1.0.4-alpha.0"
+    "@zmi-cli/types": "^1.0.5-alpha.0"
   },
   "dependencies": {
     "@babel/core": "^7.12.16",
     "@babel/register": "^7.12.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@zmi-cli/babel-factory": "^1.0.4-alpha.0",
-    "@zmi-cli/utils": "^1.0.4-alpha.0",
+    "@zmi-cli/babel-factory": "^1.0.5-alpha.0",
+    "@zmi-cli/utils": "^1.0.5-alpha.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.2",
     "css-minimizer-webpack-plugin": "^1.2.0",
