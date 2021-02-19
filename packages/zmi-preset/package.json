@@ -13,7 +13,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "4d08c6a53cfba9461ede303592a8e43c487626a8",
+  "gitHead": "d673d5e55ff594cec4347884916364428330ab40",
   "dependencies": {
     "@zmi-cli/core": "^1.0.5-alpha.0",
     "@zmi-cli/types": "^1.0.5-alpha.0",
