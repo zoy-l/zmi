@@ -22,6 +22,7 @@ import { NodeEnv, ArgsType } from './types'
 import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import mergeConfig from './mergeConfig'
+import flatDeep from './flatDeep'
 import isLerna from './isLerna'
 import getFile from './getFile'
 import winPath from './winPath'
@@ -31,6 +32,7 @@ const isWin = process.platform === 'win32'
 
 export {
   babelTypes,
+  flatDeep,
   isLerna,
   parseRequireDeps,
   getFile,

@@ -5,7 +5,7 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 
-import { chalk, deepmerge } from '@zmi-cli/utils'
+import { chalk, deepmerge, isWin } from '@zmi-cli/utils'
 import webpack from 'webpack'
 
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
@@ -35,11 +35,11 @@ function applyPlugin(options: IPenetrateOptions) {
       total: 15,
       summary: false,
       complete: '▇',
-      format: `🚧  ${chalk.cyan(':bar ')}${chalk.cyan(':percent')}  ${chalk.grey(
-        '( :elapseds )'
-      )}`,
+      format: `${isWin ? '⭐' : '🚧'}  ${chalk.cyan(':bar ')}${chalk.cyan(
+        ':percent'
+      )}  ${chalk.grey('( :elapseds )')}`,
       customSummary: (time) => {
-        console.log(chalk.blue(`🎯 time ${time} \n`))
+        console.log(chalk.blue(`${isWin ? '✨' : '🎯'} time ${time} \n`))
       }
     }
   ])

@@ -1,4 +1,4 @@
-import { chalk, clearConsole } from '@zmi-cli/utils'
+import { chalk, clearConsole, isWin } from '@zmi-cli/utils'
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import fs from 'fs-extra'
@@ -120,7 +120,7 @@ export default class Bundler {
               'Compiled successfully !\n'
             )} `
           )
-          console.log('📦 Name: - Size')
+          console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
         }
 
         printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)

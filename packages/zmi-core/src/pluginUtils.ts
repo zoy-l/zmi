@@ -1,13 +1,15 @@
 import {
   compatibleWithESModule,
+  flatDeep,
   resolve,
   winPath,
   lodash,
   assert,
   pkgUp
 } from '@zmi-cli/utils'
-import fs from 'fs'
 import path from 'path'
+import fs from 'fs'
+
 
 import { IPackage } from './types'
 
@@ -19,7 +21,7 @@ interface IResolvePluginsOpts {
 }
 
 function getPlugins(opts: IResolvePluginsOpts) {
-  return [opts.plugins ?? [], opts.userConfigPlugins ?? []].flat().map((path) =>
+  return flatDeep([opts.plugins ?? [], opts.userConfigPlugins ?? []]).map((path) =>
     resolve.sync(path, {
       basedir: opts.cwd,
       extensions: ['.js', '.ts']
