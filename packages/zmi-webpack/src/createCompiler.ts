@@ -84,8 +84,6 @@ function printInstructions(opts: { appName: string; urls: IUrlType; port: number
     return text.padEnd(text.length + maxLength - textLength[index] - 1)
   }
   // devConifg.target !== 'web' &&
-  // After `chalk` changes the color, the length of the string is not accurate
-  // needs to be calculated manually
   log(
     [
       '┌'.padEnd(maxLength, '─') + '┐',

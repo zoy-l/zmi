@@ -14,4 +14,3 @@ export {
 export { WebpackChain }
 
 export default Bundler
-// export { WebpackChain, createCSSRule, IConfig, IPrivate }
