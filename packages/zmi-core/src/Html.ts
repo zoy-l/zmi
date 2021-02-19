@@ -1,4 +1,4 @@
-import { IConfig, IScript } from '@zmi-cli/types'
+import { IConfig, IScript } from '@zmi-cli/webpack'
 import { cheerio, assert } from '@zmi-cli/utils'
 import { readFileSync } from 'fs'
 import { join } from 'path'

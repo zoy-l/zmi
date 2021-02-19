@@ -1,6 +1,6 @@
 import { assert, BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
-import { IConfig } from '@zmi-cli/types'
+import { IConfig } from '@zmi-cli/webpack'
 import { EventEmitter } from 'events'
 import path from 'path'
 
@@ -431,7 +431,7 @@ export default class Service extends EventEmitter {
   resolvePackage() {
     try {
       return require(path.join(this.cwd, 'package.json'))
-    } catch (err) {
+    } catch {
       return {}
     }
   }

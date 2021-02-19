@@ -1,4 +1,4 @@
-import { IConfig, IPrivate, IStyle } from '@zmi-cli/types'
+import { IConfig, IPrivate, IStyle } from '@zmi-cli/webpack'
 import Joi from 'joi'
 
 export enum ServiceStage {

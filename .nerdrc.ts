@@ -8,10 +8,10 @@ export default {
     'zmi-babel-factory',
     'zmi-css-modules',
     'zmi-create-app',
+    'zmi-webpack',
     'zmi-core',
     'zmi-types',
     'zmi',
-    'zmi-webpack',
     'zmi-preset'
   ]
   // sourceMaps: true

@@ -1,4 +1,4 @@
-import { IPrivate } from '@zmi-cli/types'
+import { IPrivate } from '.'
 
 export function getBabelOpts({
   config,

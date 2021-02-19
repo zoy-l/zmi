@@ -1,7 +1,8 @@
+import { lodash, winPath } from '@zmi-cli/utils'
+import { IConfig } from '@zmi-cli/webpack'
 import path from 'path'
 import fs from 'fs'
-import { lodash, winPath } from '@zmi-cli/utils'
-import { IConfig } from '@zmi-cli/types'
+
 import { IServicePaths } from './types'
 
 interface IServicePath {

@@ -1,4 +1,4 @@
-import { IPrivate } from '@zmi-cli/types'
+import { IPrivate } from '.'
 
 export default function (config: IPrivate) {
   // filter false and 0 targets

@@ -1,135 +1,17 @@
-import { chalk, clearConsole } from '@zmi-cli/utils'
-import WebpackDevServer from 'webpack-dev-server'
-import defaultWebpack, { webpack } from 'webpack'
 import WebpackChain from 'webpack-chain'
-import fs from 'fs-extra'
 
-import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
-import createCompiler, { prepareUrls } from './createCompiler'
-import formatWebpackMessages from './formatWebpackMessages'
-import { ICreateCSSRuleOpts } from './ruleCss'
-import { IConfigOpts } from './types'
-import getConfig from './getConfig'
+import Bundler from './Bundler'
 
-interface ISetupOpts {
-  bundleConfigs: defaultWebpack.Configuration & {
-    devServer: WebpackDevServer.Configuration
-  }
-  port: number
-  host: string
-  appName?: string
-}
+export {
+  createCSSRule,
+  IConfig,
+  IPrivate,
+  IStyle,
+  IScript,
+  IScriptConfig,
+  IStyleConfig
+} from './types'
+export { WebpackChain }
 
-interface IOpts {
-  cwd: string
-  config: any
-  pkg: Record<string, any>
-}
-
-type createCSSRule = (createCSSRuleOptions: ICreateCSSRuleOpts) => void
-
-export { WebpackChain, createCSSRule }
-
-export default class Bundler {
-  cwd: string
-
-  config: any
-
-  pkg = {}
-
-  constructor({ cwd, config, pkg }: IOpts) {
-    this.cwd = cwd
-    this.config = config
-    this.pkg = pkg
-  }
-
-  async getConfig(options: IConfigOpts) {
-    return getConfig({
-      ...options,
-      cwd: this.cwd,
-      config: this.config,
-      pkg: this.pkg
-    })
-  }
-
-  async setupDevServer(options: ISetupOpts) {
-    const { appName = 'project', bundleConfigs, host, port } = options
-
-    const urls = prepareUrls({ host, port })
-
-    const { devServer: devServerConfig } = bundleConfigs
-
-    const compiler = createCompiler({
-      config: bundleConfigs,
-      appName,
-      urls,
-      port
-    })
-
-    const devServer = new WebpackDevServer(compiler, devServerConfig)
-
-    return devServer
-  }
-
-  async build(options: {
-    bundleConfigs: defaultWebpack.Configuration
-    appOutputPath: string
-  }): Promise<defaultWebpack.Stats | undefined> {
-    const { bundleConfigs, appOutputPath } = options
-    clearConsole()
-    console.log(chalk.blue('Start packing, please don’t worry, officer...\n'))
-    const previousFileSizes = await measureFileSizesBeforeBuild(appOutputPath)
-    fs.emptyDirSync(appOutputPath)
-
-    return new Promise((resolve) => {
-      const compiler = webpack(bundleConfigs)
-
-      compiler.run((err, stats) => {
-        let messages
-        if (err) {
-          if (!err.message) {
-            throw new Error('build fail')
-          }
-
-          messages = formatWebpackMessages({
-            errors: [err.message],
-            warnings: []
-          })
-        } else {
-          messages = stats
-            ? formatWebpackMessages(
-                stats.toJson({ all: false, warnings: true, errors: true })
-              )
-            : {
-                errors: [],
-                warnings: []
-              }
-        }
-
-        if (messages.errors.length) {
-          if (messages.errors.length > 1) {
-            messages.errors.length = 1
-          }
-          throw new Error(messages.errors.join('\n\n'))
-        }
-
-        if (messages.warnings.length) {
-          console.warn(messages.warnings.join('\n'))
-        } else {
-          clearConsole()
-          console.log(
-            `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue(
-              'Compiled successfully !\n'
-            )} `
-          )
-          console.log('📦 Name: - Size')
-        }
-
-        printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)
-        console.log()
-
-        resolve(stats)
-      })
-    })
-  }
-}
+export default Bundler
+// export { WebpackChain, createCSSRule, IConfig, IPrivate }

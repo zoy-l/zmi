@@ -1,14 +1,13 @@
 import WebpackDevServer from 'webpack-dev-server'
 import { deepmerge } from '@zmi-cli/utils'
-import { IPrivate } from '@zmi-cli/types'
 import WebpackChain from 'webpack-chain'
 import path from 'path'
 import fs from 'fs'
 
 import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
+import { IConfigOpts, IPrivate } from './types'
 import applyPlugin from './applyPlugin'
 import applyLoader from './applyLoader'
-import { IConfigOpts } from './types'
 import ruleCss from './ruleCss'
 
 const resolveModules = [

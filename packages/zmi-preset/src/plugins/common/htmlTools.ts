@@ -1,4 +1,4 @@
-import { IScriptConfig, IStyleConfig, IStyle } from '@zmi-cli/types'
+import { IScriptConfig, IStyleConfig, IStyle } from '@zmi-cli/webpack'
 import { lodash } from '@zmi-cli/utils'
 
 const EXP_URL = /^(http:|https:)?\/\//
