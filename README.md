@@ -6,7 +6,7 @@ English | [简体中文](./README.zh-CN.md)
 
 > Consider starring, thank you 🌟 and support.
 >
-> This project is a rewrite and modification of fork `UmiJs`
+> The plug-in mechanism of this project is a rewrite and modification of fork `UmiJs`
 
 ## Features
 
