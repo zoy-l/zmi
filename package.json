@@ -16,7 +16,7 @@
     "publish": "lerna publish"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.12.17",
     "@octokit/core": "^3.2.5",
     "@vue/compiler-sfc": "^3.0.5",
     "lerna": "^3.22.1",
