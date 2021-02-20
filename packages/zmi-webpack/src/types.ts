@@ -123,6 +123,7 @@ export interface IConfig {
       env: 'development' | 'production'
     }
   ) => void | Promise<void>
+  [key: string]: any
 }
 
 type INonEmpty<T extends Record<string, any>, U> = {

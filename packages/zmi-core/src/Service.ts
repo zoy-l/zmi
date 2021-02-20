@@ -23,7 +23,7 @@ import {
 
 interface IRun {
   command: string
-  args: yargsParser.Arguments
+  args?: Partial<yargsParser.Arguments>
 }
 
 interface IApplyPlugins {
