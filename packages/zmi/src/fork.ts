@@ -3,15 +3,9 @@ import { fork } from 'child_process'
 const usedPorts: number[] = []
 let CURRENT_PORT: number | undefined
 
-interface IOpts {
-  scriptPath: string
-}
-
-export default function start({ scriptPath }: IOpts) {
+export default function start(scriptPath: string) {
   const execArgv = process.execArgv.slice(0)
-  const inspectArgvIndex = execArgv.findIndex((argv) =>
-    argv.includes('--inspect-brk')
-  )
+  const inspectArgvIndex = execArgv.findIndex((argv) => argv.includes('--inspect-brk'))
 
   if (inspectArgvIndex > -1) {
     const inspectArgv = execArgv[inspectArgvIndex]
@@ -45,7 +39,7 @@ export default function start({ scriptPath }: IOpts) {
     const type = (data && data.type) || null
     if (type === 'RESTART') {
       child.kill()
-      start({ scriptPath })
+      start(scriptPath)
     } else if (type === 'UPDATE_PORT') {
       // set current used port
       CURRENT_PORT = data.port as number

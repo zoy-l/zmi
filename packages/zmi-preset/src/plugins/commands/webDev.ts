@@ -21,6 +21,12 @@ export default (api: IApi) => {
         port
       })
 
+      clearConsole()
+      console.log(
+        chalk.bgBlueBright.black(' SPEED '),
+        chalk.blueBright(`up the server,Wait a minute...\n`)
+      )
+
       const devServer = await bundler.setupDevServer({
         port,
         host,
@@ -30,13 +36,8 @@ export default (api: IApi) => {
 
       devServer.listen(port, host, (err: Error | undefined) => {
         if (err) {
-          return console.log(err)
+          console.log(err)
         }
-        clearConsole()
-        console.log(
-          chalk.bgBlueBright.black(' SPEED '),
-          chalk.blueBright(`up the server,Wait a minute...\n`)
-        )
       })
     }
   })

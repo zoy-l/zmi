@@ -1,8 +1,8 @@
 import { launchDevice, chalk, dyo, isWin } from '@zmi-cli/utils'
+import { Service } from '@zmi-cli/core'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'
-import Service from './service'
 import fork from './fork'
 
 launchDevice(dyo).then(({ args, command }) => {
@@ -11,9 +11,7 @@ launchDevice(dyo).then(({ args, command }) => {
   try {
     switch (command) {
       case 'dev':
-        const child = fork({
-          scriptPath: require.resolve('./forkedDev')
-        })
+        const child = fork(require.resolve('./forkedDev'))
 
         if (isWin) {
           const rl = readline.createInterface({
@@ -43,7 +41,8 @@ launchDevice(dyo).then(({ args, command }) => {
 
         new Service({
           cwd: getCwd(),
-          pkg: getPkg(process.cwd())
+          pkg: getPkg(process.cwd()),
+          plugins: [require.resolve('@zmi-cli/preset')]
         }).run({
           command,
           args

@@ -1,7 +1,7 @@
 import { chalk, launchDevice } from '@zmi-cli/utils'
+import { Service } from '@zmi-cli/core'
 
 import { getCwd, getPkg } from './getRoot'
-import Service from './service'
 
 launchDevice().then(({ args }) => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
@@ -10,7 +10,8 @@ launchDevice().then(({ args }) => {
 
     const service = new Service({
       cwd: getCwd(),
-      pkg: getPkg(process.cwd())
+      pkg: getPkg(process.cwd()),
+      plugins: [require.resolve('@zmi-cli/preset')]
     })
 
     service.run({
