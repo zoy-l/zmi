@@ -37,13 +37,6 @@ export interface IPenetrateOptions extends IConfigOpts {
   hot: boolean
 }
 
-interface IManifest {
-  fileName: string
-  publicPath: string
-  basePath: string
-  writeToFileEmit: boolean
-}
-
 export interface IScript extends Partial<HTMLScriptElement> {
   content?: string
 }
@@ -98,7 +91,6 @@ export interface IConfig {
   scripts?: IScriptConfig
   headScripts?: IScriptConfig
   styles?: IStyleConfig
-  manifest?: Partial<IManifest>
   frameOptions?: Record<string, any>
   terserOptions?: Record<string, any>
   cssModulesTypescript?: 'emit' | 'verify'
