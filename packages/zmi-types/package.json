@@ -1,8 +1,7 @@
 {
   "name": "@zmi-cli/types",
   "version": "1.0.5-alpha.0",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "types": "index.d.ts",
   "license": "MIT",
   "files": [
     "index.d.ts",

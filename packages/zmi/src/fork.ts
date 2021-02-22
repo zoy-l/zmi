@@ -12,7 +12,7 @@ export default function start(scriptPath: string) {
     execArgv.splice(
       inspectArgvIndex,
       1,
-      inspectArgv.replace(/--inspect-brk=(.*)/, (match, s1) => {
+      inspectArgv.replace(/--inspect-brk=(.*)/, (_, s1) => {
         let port: number
         try {
           port = parseInt(s1, 10) + 1

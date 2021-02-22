@@ -1,4 +1,5 @@
 import WebpackChain from 'webpack-chain'
+import webpack from 'webpack'
 
 import Bundler from './Bundler'
 
@@ -11,6 +12,6 @@ export {
   IScriptConfig,
   IStyleConfig
 } from './types'
-export { WebpackChain }
+export { WebpackChain, webpack }
 
 export default Bundler

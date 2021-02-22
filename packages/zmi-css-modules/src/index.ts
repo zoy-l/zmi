@@ -1,5 +1,5 @@
-import { NodePath } from '@babel/traverse'
 import { babelTypes } from '@zmi-cli/utils'
+import { NodePath } from '@babel/traverse'
 import path from 'path'
 
 const cssExtenders = ['.css', '.less', '.sass', '.scss', '.stylus', '.styl']

@@ -24,14 +24,14 @@
     "deepmerge": "^4.2.2",
     "glob": "^7.1.6",
     "inquirer": "^7.3.3",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "mkdirp": "^1.0.4",
     "mustache": "^4.1.0",
     "pkg-up": "^3.1.0",
     "portfinder": "^1.0.28",
     "resolve": "^1.20.0",
     "url": "^0.11.0",
-    "yargs-parser": "^20.2.5"
+    "yargs-parser": "^20.2.6"
   },
   "publishConfig": {
     "access": "public"
