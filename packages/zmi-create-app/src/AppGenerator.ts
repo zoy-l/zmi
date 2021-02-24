@@ -102,8 +102,8 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
   console.log(
     [
       '┌────────────────────────────────────┐',
-      '│ Install dependencies: $ yarn       |',
-      '│ Start the dev server: $ yarn start |',
+      '│ Install dependencies: $ yarn       │',
+      '│ Start the dev server: $ yarn start │',
       '└────────────────────────────────────┘'
     ].join('\n')
   )

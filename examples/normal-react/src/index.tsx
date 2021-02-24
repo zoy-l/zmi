@@ -4,8 +4,5 @@ import { render } from 'react-dom'
 import App from './app'
 
 document.addEventListener('DOMContentLoaded', () => {
-  render(
-    <App />,
-    document.getElementById('root')
-  )
+  render(<App />, document.getElementById('root'))
 })
