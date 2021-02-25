@@ -97,7 +97,6 @@ class Html {
       decodeEntities: false
     })
 
-    // metas
     metas.forEach((meta) => {
       $('head').append(
         [
@@ -111,7 +110,6 @@ class Html {
       )
     })
 
-    // links
     links.forEach((link) => {
       $('head').append(
         [
@@ -153,7 +151,6 @@ class Html {
       bodyEl.append(`<div id="${mountElementId}"></div>`)
     }
 
-    // js
     if (headScripts.length) {
       $('head').append(this.getScriptsContent(headScripts))
     }

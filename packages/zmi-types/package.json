@@ -1,11 +1,11 @@
 {
   "name": "@zmi-cli/types",
   "version": "1.0.5-alpha.0",
+  "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
   "files": [
-    "index.d.ts",
-    "index.js"
+    "index.d.ts"
   ],
   "dependencies": {
     "@zmi-cli/core": "^1.0.5-alpha.0"

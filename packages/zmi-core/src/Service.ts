@@ -22,22 +22,22 @@ import {
 } from './types'
 
 interface IRun {
-  command: string
   args?: Partial<yargsParser.Arguments>
+  command: string
 }
 
 interface IApplyPlugins {
-  key: string
   type: EnumApplyPlugins
   initialValue?: any
+  key: string
   args?: any
 }
 
 export interface IServiceOptions {
-  cwd: string
-  env?: NodeEnv
-  pkg?: IPackage
   plugins?: string[]
+  pkg?: IPackage
+  env?: NodeEnv
+  cwd: string
 }
 
 const Cycle = [
