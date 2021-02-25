@@ -5,7 +5,8 @@
   "types": "index.d.ts",
   "license": "MIT",
   "files": [
-    "index.d.ts"
+    "index.d.ts",
+    "index.js"
   ],
   "dependencies": {
     "@zmi-cli/core": "^1.0.5-alpha.0"
