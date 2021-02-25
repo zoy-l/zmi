@@ -88,9 +88,19 @@ export default async function getConfig(opts: IConfigOpts) {
     .filename(`${useHash}.js`)
     .chunkFilename(`${useHash}.js`)
     .publicPath(config.publicPath)
+    .pathinfo(isDev)
+    .globalObject('this')
 
   // To be verified .set('symlinks', true)
   webpackConfig.resolve.modules.add('node_modules').end().extensions.merge(resolveModules)
+
+  webpackConfig.performance.hints(false)
+
+  webpackConfig.node.merge({
+    global: false,
+    __filename: false,
+    __dirname: false
+  })
 
   webpackConfig.externals(config.externals)
 
@@ -98,31 +108,29 @@ export default async function getConfig(opts: IConfigOpts) {
     webpackConfig.resolve.alias.set(key, config.alias[key])
   })
 
-  const devServer = deepmerge.all([
-    {
-      hot,
-      port,
-      clientLogLevel: 'silent',
-      compress: isProd,
-      noInfo: true,
-      stats: 'none',
-      watchContentBase: isDev,
-      publicPath: config.publicPath,
-      contentBase: `${cwd}/public`
-    } as WebpackDevServer.Configuration,
-    config.devServer,
-    {
-      before(app, server, compiler) {
-        // apply in project middlewares
-        config.devServer.before?.(app, server, compiler)
-      },
-      open: false
-    } as WebpackDevServer.Configuration
-  ])
-
-  Object.keys(devServer).forEach((key) => {
-    webpackConfig.devServer.set(key, devServer[key])
-  })
+  webpackConfig.devServer.merge(
+    deepmerge.all([
+      {
+        hot,
+        port,
+        clientLogLevel: 'silent',
+        compress: isProd,
+        noInfo: true,
+        stats: 'none',
+        watchContentBase: isDev,
+        publicPath: config.publicPath,
+        contentBase: `${cwd}/public`
+      } as WebpackDevServer.Configuration,
+      config.devServer,
+      {
+        before(app, server, compiler) {
+          // apply in project middlewares
+          config.devServer.before?.(app, server, compiler)
+        },
+        open: false
+      } as WebpackDevServer.Configuration
+    ])
+  )
 
   if (opts.chainWebpack) {
     await opts.chainWebpack(webpackConfig, {
