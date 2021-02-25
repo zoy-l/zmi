@@ -20,7 +20,7 @@
     "@zmi-cli/types": "^1.0.5-alpha.0"
   },
   "dependencies": {
-    "@babel/core": "^7.12.17",
+    "@babel/core": "^7.13.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@zmi-cli/babel-factory": "^1.0.5-alpha.0",
     "@zmi-cli/utils": "^1.0.5-alpha.0",
@@ -50,11 +50,11 @@
     "strip-ansi": "^6.0.0",
     "style-loader": "^2.0.0",
     "ts-loader": "^8.0.17",
-    "type-fest": "^0.21.1",
+    "type-fest": "^0.21.2",
     "url-loader": "^4.1.0",
     "vue-loader": "^16.1.2",
     "vue-style-loader": "^4.1.2",
-    "webpack": "^5.23.0",
+    "webpack": "^5.24.2",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-chain": "^6.5.1",
     "webpack-dev-server": "^3.11.2"
