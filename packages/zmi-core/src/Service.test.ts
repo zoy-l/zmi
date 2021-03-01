@@ -16,7 +16,8 @@ test('normal', async () => {
       require.resolve(path.join(cwd, 'plugins_1')),
       require.resolve(path.join(cwd, 'plugins_2')),
       require.resolve(path.join(cwd, 'plugin_1')),
-      require.resolve(path.join(cwd, 'plugin_2'))
+      require.resolve(path.join(cwd, 'plugin_2')),
+      require.resolve(path.join(cwd, 'outputPath.js'))
     ]
   })
 
@@ -26,6 +27,7 @@ test('normal', async () => {
     'plugins_2',
     'plugin1',
     'plugin2',
+    'outputPath',
     '2',
     'bigfish',
     '1'
@@ -46,6 +48,7 @@ test('normal', async () => {
     '[plugin] ./plugins_2/index',
     '[plugin] ./plugin_1',
     '[plugin] ./plugin_2',
+    '[plugin] ./outputPath',
     '[plugin] zmi-plugin-2',
     '[plugin] @hins/zmi-plugin-bigfish',
     '[plugin] zmi-plugin-1'

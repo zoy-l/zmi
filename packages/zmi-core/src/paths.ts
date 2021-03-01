@@ -34,7 +34,7 @@ export default function servicePath(options: IServicePath): IServicePaths {
   return normalizeWithWinPath({
     cwd,
     appNodeModulesPath: path.join(cwd, 'node_modules'),
-    appOutputPath: path.join(cwd, config.outputPath ?? './dist'),
+    appOutputPath: path.join(cwd, './dist'),
     appSrcPath,
     appPagesPath
   })

@@ -1,3 +1,4 @@
+import assert from 'assert'
 import {
   compatibleWithESModule,
   parseRequireDeps,
@@ -5,7 +6,6 @@ import {
   deepmerge,
   winPath,
   getFile,
-  assert,
   chalk,
   chokidar,
   lodash
@@ -71,8 +71,8 @@ export default class Config {
     const userConfig = this.getUserConfig()
 
     assert(
-      `Config.getConfig() failed, it should not be executed before plugin is ready.`,
-      stage >= ServiceStage.pluginReady
+      stage >= ServiceStage.pluginReady,
+      `Config.getConfig() failed, it should not be executed before plugin is ready.`
     )
 
     const userConfigKeys = Object.keys(userConfig).filter(
@@ -97,11 +97,14 @@ export default class Config {
 
       const schema = config.schema(Joi)
       assert(
-        `schema return from plugin ${pluginId} is not valid schema.`,
-        Joi.isSchema(schema)
+        Joi.isSchema(schema),
+        `schema return from plugin ${pluginId} is not valid schema.`
       )
       const { error } = schema.validate(value)
-      error && assert(`Validate config "${key}" failed, ${error.message}`)
+
+      if (error) {
+        throw new Error(error.message)
+      }
 
       const index = userConfigKeys.indexOf(key.split('.')[0])
       if (index !== -1) {
@@ -120,7 +123,7 @@ export default class Config {
 
     if (userConfigKeys.length) {
       const keys = userConfigKeys.length > 1 ? 'keys' : 'key'
-      assert(`Invalid config ${keys}: ${userConfigKeys.join(', ')}`)
+      throw new Error(`Invalid config ${keys}: ${userConfigKeys.join(', ')}`)
     }
 
     return userConfig
@@ -157,11 +160,11 @@ export default class Config {
         base: this.cwd
       })?.filename
 
-      !envConfigFile &&
-        assert([
-          `get user config failed, ${envConfigFile} does not exist, `,
-          `but process.env.ZMI_ENV is set to ${process.env.ZMI_ENV}.`
-        ])
+      // prettier-ignore
+      assert(!envConfigFile, [
+        `get user config failed, ${envConfigFile} does not exist, `,
+        `but process.env.ZMI_ENV is set to ${process.env.ZMI_ENV}.`
+      ].join(''))
     }
 
     // check the authenticity of documents

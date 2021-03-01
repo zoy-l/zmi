@@ -1,7 +1,8 @@
-module.exports = (api) => {
+export default (api) => {
   api.describe({
-    key: 'appType',
+    key: 'outputPath',
     config: {
+      default: 'dist',
       schema(joi) {
         return joi.string()
       }
