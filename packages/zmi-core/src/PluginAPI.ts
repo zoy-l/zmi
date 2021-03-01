@@ -1,6 +1,14 @@
 import * as utils from '@zmi-cli/utils'
 
-import { ICommand, IHook, IPluginConfig, EnumEnableBy } from './types'
+import {
+  ICommand,
+  IHook,
+  IPluginConfig,
+  EnumEnableBy,
+  ServiceStage,
+  IPlugin
+} from './types'
+import { pathToRegister } from './pluginUtils'
 import Service from './Service'
 import Html from './Html'
 
@@ -19,7 +27,7 @@ interface IDescribe {
 
 interface IRegisterMethod {
   name: string
-  fn?: (args: utils.yargsParser.Arguments) => void
+  fn?: (...args: any[]) => void
   exitsError?: boolean
 }
 
@@ -62,10 +70,11 @@ export default class PluginAPI {
     // this.id and this.key is generated automatically
     // so we need to diff first
     if (id && this.id !== id) {
-      plugins[id] &&
-        utils.assert(
+      if (plugins[id]) {
+        throw new Error(
           `api.describe() failed, plugin ${id} is already registered by ${plugins[id].path}.`
         )
+      }
 
       // overwrite the old describe
       plugins[id] = plugins[this.id]
@@ -98,25 +107,45 @@ export default class PluginAPI {
   }
 
   registerMethod(options: IRegisterMethod) {
-    const { fn, name, exitsError } = options
+    const { fn: func, name, exitsError = true } = options
     const { pluginMethods } = this.service
 
     if (!pluginMethods[name]) {
       pluginMethods[name] =
-        fn ??
-        function (this: PluginAPI, Fn: () => void) {
-          const hook = {
+        func ??
+        function (this: PluginAPI, fn: { fn: () => void } | (() => void)) {
+          this.register({
             key: name,
-            fn: Fn
-          }
-          this.register(hook)
+            ...(utils.lodash.isPlainObject(fn) ? fn : { fn })
+          } as IHook)
         }
       return
     }
 
     if (exitsError) {
-      utils.assert(`api.registerMethod() failed, method ${name} is already exist.`)
+      throw new Error(`api.registerMethod() failed, method ${name} is already exist.`)
     }
+  }
+
+  registerPlugins(plugins: (IPlugin | string)[]) {
+    utils.assert(
+      `api.registerPlugins() failed, it should only be used in registering stage.`,
+      this.service.stage === ServiceStage.initPlugins
+    )
+    utils.assert(
+      `api.registerPlugins() failed, plugins must be Array.`,
+      Array.isArray(plugins)
+    )
+    const extraPlugins = plugins.map((plugin) =>
+      typeof plugin === 'string'
+        ? pathToRegister({
+            path: plugin,
+            cwd: this.service.cwd
+          })
+        : plugin
+    )
+
+    this.service.extraPlugins.splice(0, 0, ...extraPlugins)
   }
 
   register(hook: IHook) {

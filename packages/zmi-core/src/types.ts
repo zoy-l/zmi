@@ -57,16 +57,15 @@ export interface IPlugin {
   path: string
   apply: () => any
   config?: IPluginConfig
-  isPreset?: boolean
   enableBy?: EnumEnableBy | (() => void)
 }
 
 export interface IHook {
-  key: string
-  fn: (args?: { args: any }, option?: any) => Promise<any> | void
+  fn: (...args: any[]) => void | Promise<void>
   pluginId?: string
   before?: string
   stage?: number
+  key: string
 }
 
 export interface ICommand {

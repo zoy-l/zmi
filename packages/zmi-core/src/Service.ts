@@ -1,7 +1,8 @@
-import { assert, BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
+import { BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { IConfig } from '@zmi-cli/webpack'
 import { EventEmitter } from 'events'
+import assert from 'assert'
 import path from 'path'
 
 import { resolvePlugins, pathToRegister } from './pluginUtils'
@@ -65,6 +66,10 @@ const ServiceAttribute = [
   'pkg'
 ]
 
+function uniqCommand({ command, args }: IRun) {
+  if (args && args._?.[0] === command) args._.shift()
+}
+
 export default class Service extends EventEmitter {
   /**
    * @desc Directory path
@@ -114,10 +119,7 @@ export default class Service extends EventEmitter {
   /**
    * @desc plugin Methods
    */
-  pluginMethods: Record<
-    string,
-    ((args: yargsParser.Arguments) => void) | ((fn: typeof Function) => void)
-  > = {}
+  pluginMethods: Record<string, (...args: any[]) => void> = {}
 
   /**
    * @desc plugin set
@@ -284,7 +286,7 @@ export default class Service extends EventEmitter {
   }
 
   async initPlugins(plugin: IPlugin) {
-    const { id, key, apply } = plugin
+    const { id, key, apply = () => {} } = plugin
 
     const api = this.getPluginAPI({ id, key, service: this })
 
@@ -298,13 +300,14 @@ export default class Service extends EventEmitter {
     // 2. Execute plug-in method and pass in api
     // there is an extra, no `require` is used, but `import` is used
     // and ʻimport` is a Promise, so `await` is needed here
-    const plugins = (await apply()(api)) as string[] | undefined
+    const { plugins } = ((await apply()(api)) as { plugins: string[] }) ?? {}
 
     // If it is an Array
     // It represents a collection of plugins added to the top of extraPlugins
     // Path verification pathToRegister has been done
     // `Reverse` to ensure the order of plugins
-    if (Array.isArray(plugins)) {
+
+    if (Array.isArray(plugins) && plugins.length) {
       plugins.reverse().forEach((path) => {
         this.extraPlugins.unshift(pathToRegister({ path, cwd: this.cwd }))
       })
@@ -374,6 +377,12 @@ export default class Service extends EventEmitter {
     // `event`, no return value
     switch (type) {
       case add:
+        if (initialValue !== undefined) {
+          assert(
+            Array.isArray(initialValue),
+            `applyPlugins failed, opts.initialValue must be Array if opts.type is add.`
+          )
+        }
         TypeSeriesWaterApply((hook) => async (memo) => {
           const items = await hook.fn(args)
           return memo.concat(items)
@@ -388,8 +397,8 @@ export default class Service extends EventEmitter {
         })
         break
       default:
-        assert(
-          `applyPlugin failed, type is not defined or is not matched, got "${type}".`
+        throw new Error(
+          `applyPlugin failed, type is not defined or is not matched, got ${type}.`
         )
     }
 
@@ -437,6 +446,8 @@ export default class Service extends EventEmitter {
   }
 
   async run({ args, command }: IRun) {
+    uniqCommand({ command, args })
+    this.args = args
     await this.init()
 
     this.setStage(ServiceStage.run)
@@ -446,21 +457,21 @@ export default class Service extends EventEmitter {
       args: { args }
     })
 
-    this.runCommand({ command, args })
+    return this.runCommand({ command, args })
   }
 
-  runCommand({ command, args }: IRun) {
+  async runCommand({ command, args }: IRun) {
+    uniqCommand({ command, args })
     // If type alias is set
     // Need to find the actual command
-
     const event =
       typeof this.commands[command] === 'string'
         ? this.commands[this.commands[command] as string]
         : this.commands[command]
 
-    assert(`run command failed, command "${command}" does not exists.`, event)
+    assert(event, `run command failed, command "${command}" does not exists.`)
     const { fn } = event as ICommand
 
-    fn({ args })
+    return fn({ args })
   }
 }

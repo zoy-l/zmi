@@ -10,7 +10,6 @@ import {
 import path from 'path'
 import fs from 'fs'
 
-
 import { IPackage } from './types'
 
 interface IResolvePluginsOpts {
@@ -21,7 +20,20 @@ interface IResolvePluginsOpts {
 }
 
 function getPlugins(opts: IResolvePluginsOpts) {
-  return flatDeep([opts.plugins ?? [], opts.userConfigPlugins ?? []]).map((path) =>
+  return flatDeep([
+    opts.plugins,
+    opts.userConfigPlugins ?? [],
+    Object.keys(opts.pkg.devDependencies ?? {})
+      .concat(Object.keys(opts.pkg.dependencies ?? {}))
+      .filter((name) => {
+        const hasScope = name.charAt(0) === '@'
+        const re = /^(@zmi\/|zmi-)plugin-/
+        if (hasScope) {
+          return re.test(name.split('/')[1]) ?? re.test(name)
+        }
+        return re.test(name)
+      })
+  ]).map((path) =>
     resolve.sync(path, {
       basedir: opts.cwd,
       extensions: ['.js', '.ts']
@@ -98,7 +110,7 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
         const ret = require(pluginPath)
         return compatibleWithESModule(ret)
       } catch (err) {
-        assert(`Register ${pluginPath} failed, since ${err.message}`)
+        throw new Error(`Register plugin ${path} failed, since ${err.message}`)
       }
     }
   }
@@ -106,6 +118,7 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
 
 export function resolvePlugins(opts: IResolvePluginsOpts) {
   let plugins = getPlugins(opts)
+
   plugins = [...plugins]
 
   return plugins.map((path: string) =>
