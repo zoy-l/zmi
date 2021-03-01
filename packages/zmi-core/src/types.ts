@@ -1,4 +1,3 @@
-import { IConfig, IPrivate, IStyle } from '@zmi-cli/webpack'
 import Joi from 'joi'
 
 export enum ServiceStage {
@@ -87,26 +86,4 @@ export type IServicePathKeys =
 
 export type IServicePaths = {
   [key in IServicePathKeys]: string
-}
-
-export interface IModifyHTML {
-  (memo: any, args?: any): Promise<any>
-}
-
-export type IOpts = {
-  config: IConfig
-  tplPath?: string
-  modifyHTML?: IModifyHTML
-}
-
-export interface ILink {
-  [key: string]: string
-}
-
-export type IHtmlConfig = Pick<IPrivate, 'metas' | 'links' | 'headScripts' | 'scripts'>
-
-export interface IGetContentArgs extends IHtmlConfig {
-  styles: IStyle[]
-  tplPath?: string
-  modifyHTML?: IModifyHTML
 }

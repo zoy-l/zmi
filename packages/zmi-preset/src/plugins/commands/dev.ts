@@ -4,6 +4,11 @@ import { IApi } from '@zmi-cli/types'
 import path from 'path'
 import fs from 'fs'
 
+interface IChangeType {
+  pluginChanged: any[]
+  valueChanged: any[]
+}
+
 function getZmiPlugins(pkgPath: string) {
   let pkg: Record<string, any> = {}
 
@@ -100,13 +105,8 @@ export default (api: IApi) => {
         const { configInstance, initConifg } = api.service
         configInstance.watch({
           userConfig: initConifg,
-          async onChange({
-            pluginChanged,
-            valueChanged
-          }: {
-            pluginChanged: any[]
-            valueChanged: any[]
-          }) {
+          async onChange(options: IChangeType) {
+            const { pluginChanged, valueChanged } = options
             if (pluginChanged.length) {
               restartServer(
                 `Plugins of ${pluginChanged.map((p) => p.key).join(', ')} changed.`

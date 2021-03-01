@@ -1,10 +1,15 @@
-import { IConfig, IScript } from '@zmi-cli/webpack'
 import { cheerio, assert } from '@zmi-cli/utils'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import ejs from 'ejs'
 
-import { IOpts, IGetContentArgs } from './types'
+import { IModifyHTML, IGetContentArgs, IConfig, IScript } from './types'
+
+export type IOpts = {
+  config: IConfig
+  tplPath?: string
+  modifyHTML?: IModifyHTML
+}
 
 class Html {
   /**

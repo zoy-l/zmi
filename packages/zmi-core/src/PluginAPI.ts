@@ -10,7 +10,6 @@ import {
 } from './types'
 import { pathToRegister } from './pluginUtils'
 import Service from './Service'
-import Html from './Html'
 
 export interface IPluginAPIOptions {
   id: string
@@ -52,17 +51,11 @@ export default class PluginAPI {
    */
   utils: typeof utils
 
-  /**
-   * @desc Html generated
-   */
-  Html: typeof Html
-
   constructor(options: IPluginAPIOptions) {
     this.service = options.service
     this.id = options.id
     this.key = options.key
     this.utils = utils
-    this.Html = Html
   }
 
   describe({ id, key, config, enableBy }: IDescribe = {}) {
@@ -75,7 +68,6 @@ export default class PluginAPI {
           `api.describe() failed, plugin ${id} is already registered by ${plugins[id].path}.`
         )
       }
-
       // overwrite the old describe
       plugins[id] = plugins[this.id]
       plugins[id].id = id

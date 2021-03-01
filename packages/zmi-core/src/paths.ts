@@ -39,3 +39,4 @@ export default function servicePath(options: IServicePath): IServicePaths {
     appPagesPath
   })
 }
+

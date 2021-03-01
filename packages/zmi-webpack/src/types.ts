@@ -131,3 +131,15 @@ type INonEmpty<T extends Record<string, any>, U> = {
 }
 
 export type IPrivate = INonEmpty<IConfig, 'loaderOptions'>
+
+export interface IModifyHTML {
+  (memo: any, args?: any): Promise<any>
+}
+
+export type IHtmlConfig = Pick<IPrivate, 'metas' | 'links' | 'headScripts' | 'scripts'>
+
+export interface IGetContentArgs extends IHtmlConfig {
+  styles: IStyle[]
+  tplPath?: string
+  modifyHTML?: IModifyHTML
+}

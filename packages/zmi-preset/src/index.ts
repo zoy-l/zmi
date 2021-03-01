@@ -11,7 +11,9 @@ export default () => {
       .filter((file) => file.endsWith('.js'))
   )
 
-  return ['registerMethods', ...commandsPath, ...featuresPath].map((file) =>
-    require.resolve(`${plugins}/${file}`)
-  )
+  return {
+    plugins: ['registerMethods', ...commandsPath, ...featuresPath].map((file) =>
+      require.resolve(`${plugins}/${file}`)
+    )
+  }
 }

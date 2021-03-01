@@ -1,4 +1,5 @@
 import { IApi } from '@zmi-cli/types'
+import { Html } from '@zmi-cli/webpack'
 import path from 'path'
 import fs from 'fs'
 
@@ -8,7 +9,7 @@ export function getHtmlGenerator(api: IApi) {
     return fs.existsSync(docPath) ? docPath : ''
   }
 
-  const html = new api.Html({
+  const html = new Html({
     config: api.config,
     tplPath: getDocumentTplPath()
   })

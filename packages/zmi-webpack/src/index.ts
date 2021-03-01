@@ -2,6 +2,7 @@ import WebpackChain from 'webpack-chain'
 import webpack from 'webpack'
 
 import Bundler from './Bundler'
+import Html from './Html'
 
 export {
   createCSSRule,
@@ -12,6 +13,7 @@ export {
   IScriptConfig,
   IStyleConfig
 } from './types'
-export { WebpackChain, webpack }
+
+export { WebpackChain, webpack, Html }
 
 export default Bundler

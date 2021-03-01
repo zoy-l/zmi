@@ -24,13 +24,12 @@ const possibleConfigPaths = [
   '.zmirc.js'
 ].filter(Boolean) as string[]
 
-interface IWatchOptions {
+export interface IWatchOptions {
   userConfig: Record<string, any>
   onChange: (args: {
-    userConfig: any
     pluginChanged: IChanged[]
     valueChanged: IChanged[]
-  }) => void
+  }) => Promise<void>
 }
 
 export default class Config {
@@ -160,11 +159,13 @@ export default class Config {
         base: this.cwd
       })?.filename
 
-      // prettier-ignore
-      assert(!envConfigFile, [
-        `get user config failed, ${envConfigFile} does not exist, `,
-        `but process.env.ZMI_ENV is set to ${process.env.ZMI_ENV}.`
-      ].join(''))
+      if (!envConfigFile) {
+        // prettier-ignore
+        throw new Error([
+          `get user config failed, ${envConfigFile} does not exist, `,
+          `but process.env.ZMI_ENV is set to ${process.env.ZMI_ENV}.`
+        ].join(''))
+      }
     }
 
     // check the authenticity of documents
@@ -226,21 +227,17 @@ export default class Config {
       if (zmiEnv) configFiles.push(this.addAffix(f, zmiEnv))
     })
 
-    const configDir = winPath(path.join(this.cwd, 'config'))
+    const files = configFiles.reduce<string[]>((memo, f) => {
+      const file = winPath(path.join(this.cwd, f))
+      if (fs.existsSync(file)) {
+        memo = memo.concat(parseRequireDeps(file))
+      } else {
+        memo.push(file)
+      }
+      return memo
+    }, [])
 
-    const files = configFiles
-      .reduce<string[]>((memo, f) => {
-        const file = winPath(path.join(this.cwd, f))
-        if (fs.existsSync(file)) {
-          memo = memo.concat(parseRequireDeps(file))
-        } else {
-          memo.push(file)
-        }
-        return memo
-      }, [])
-      .filter((f) => !f.startsWith(configDir))
-
-    return [configDir].concat(files)
+    return files
   }
 
   watch(opts: IWatchOptions) {
@@ -257,6 +254,7 @@ export default class Config {
       console.log(chalk.bgGray(` ${event} `), path)
       const newPaths = this.getWatchFilesAndDirectories()
       const diffs = lodash.difference(newPaths, paths)
+
       if (diffs.length) {
         watcher.add(diffs)
         paths = paths.concat(diffs)
@@ -265,6 +263,7 @@ export default class Config {
       const newUserConfig = this.getUserConfig()
       const pluginChanged: IChanged[] = []
       const valueChanged: IChanged[] = []
+
       Object.keys(this.service.plugins).forEach((pluginId) => {
         const { key, config = {} } = this.service.plugins[pluginId]
         // recognize as key if have schema config
@@ -279,7 +278,6 @@ export default class Config {
 
       if (pluginChanged.length || valueChanged.length) {
         opts.onChange({
-          userConfig: newUserConfig,
           pluginChanged,
           valueChanged
         })
