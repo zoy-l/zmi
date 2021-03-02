@@ -4,7 +4,7 @@ import HtmlPlugin from 'html-webpack-plugin'
 import WebpackChain from 'webpack-chain'
 import { Configuration } from 'webpack'
 
-import { ICreateCSSRuleOpts } from './ruleCss'
+import { ICreateCSSRuleOpts } from './applyCss'
 
 export type createCSSRule = (createCSSRuleOptions: ICreateCSSRuleOpts) => void
 

@@ -8,7 +8,7 @@ import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import { IConfigOpts, IPrivate } from './types'
 import applyPlugin from './applyPlugin'
 import applyLoader from './applyLoader'
-import ruleCss from './ruleCss'
+import applyCss from './applyCss'
 
 const resolveModules = [
   '.web.js',
@@ -54,7 +54,7 @@ export default async function getConfig(opts: IConfigOpts) {
     ...opts
   }
 
-  const createCSSRule = ruleCss(penetrateOptions)
+  const createCSSRule = applyCss(penetrateOptions)
 
   await applyLoader(penetrateOptions)
 

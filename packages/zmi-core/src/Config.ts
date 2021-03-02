@@ -50,7 +50,7 @@ export default class Config {
   service: Service
 
   constructor(options: { cwd: string; service: Service }) {
-    this.cwd = options.cwd ?? process.cwd()
+    this.cwd = options.cwd
     this.service = options.service
   }
 
@@ -271,7 +271,6 @@ export default class Config {
       Object.keys(this.service.plugins).forEach((pluginId) => {
         const { key, config = {} } = this.service.plugins[pluginId]
         // recognize as key if have schema config
-
         if (!isEqual(newUserConfig[key], userConfig[key]) && config.schema) {
           if (newUserConfig[key] === false || userConfig[key] === false) {
             pluginChanged.push({ key, pluginId })

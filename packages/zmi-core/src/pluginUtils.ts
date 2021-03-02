@@ -118,11 +118,7 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
 }
 
 export function resolvePlugins(opts: IResolvePluginsOpts) {
-  let plugins = getPlugins(opts)
-
-  plugins = [...plugins]
-
-  return plugins.map((path: string) =>
+  return [...getPlugins(opts)].map((path: string) =>
     pathToRegister({
       path,
       cwd: opts.cwd
