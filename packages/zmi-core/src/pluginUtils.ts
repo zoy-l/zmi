@@ -64,7 +64,7 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
   assert(`${pluginPath} not exists, pathToRegister failed`, fs.existsSync(pluginPath))
 
   const pkgJSONPath = pkgUp.sync({ cwd: pluginPath })
-
+  /* istanbul ignore next */
   if (pkgJSONPath) {
     pkg = require(pkgJSONPath)
     isPkgPlugin =
@@ -77,11 +77,12 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
     id = pkg!.name
   } else if (winPath(pluginPath).startsWith(winPath(cwd))) {
     id = `./${winPath(path.relative(cwd, pluginPath))}`
-  } else if (pkgJSONPath) {
+  } /* istanbul ignore next */ else if (pkgJSONPath) {
     id = winPath(
       path.join(pkg!.name, path.relative(path.dirname(pkgJSONPath), pluginPath))
     )
   } else {
+    /* istanbul ignore next */
     id = winPath(pluginPath)
   }
   id = id.replace('@zmi-cli/preset/lib/plugins', '@@')

@@ -29,6 +29,7 @@ export interface IWatchOptions {
   onChange: (args: {
     pluginChanged: IChanged[]
     valueChanged: IChanged[]
+    __watcher: chokidar.FSWatcher
   }) => Promise<void>
 }
 
@@ -146,10 +147,10 @@ export default class Config {
       // local may be `(j|t)s` file
       // If there is no configFile, the default is `.zmirc`
       // Set here to `.ts` it has no practical effect, just a placeholder
+      // !!configFile
       const envConfigFileName = this.addAffix(
         configFile ?? '.zmirc.ts',
-        process.env.ZMI_ENV,
-        !!configFile
+        process.env.ZMI_ENV
       )
 
       // 👆 follow the above, or the real local environment config file
@@ -186,7 +187,9 @@ export default class Config {
         (memo: string[], file) => memo.concat(parseRequireDeps(file)),
         []
       )
-      requireDeps.forEach(clearModule)
+      requireDeps.forEach((path) => {
+        clearModule(path)
+      })
 
       // Just-in-time compilation at runtime
       this.service.babelRegister.setOnlyMap({
@@ -200,9 +203,10 @@ export default class Config {
     return {}
   }
 
-  addAffix(file: string, affix: string, isExt = true) {
+  // , isExt = true ${isExt ? ext : ''}
+  addAffix(file: string, affix: string) {
     const ext = path.extname(file)
-    return file.replace(new RegExp(`${ext}$`), `.${affix}${isExt ? ext : ''}`)
+    return file.replace(new RegExp(`${ext}$`), `.${affix}`)
   }
 
   requireConfigs(configFiles: string[]) {
@@ -267,6 +271,7 @@ export default class Config {
       Object.keys(this.service.plugins).forEach((pluginId) => {
         const { key, config = {} } = this.service.plugins[pluginId]
         // recognize as key if have schema config
+
         if (!isEqual(newUserConfig[key], userConfig[key]) && config.schema) {
           if (newUserConfig[key] === false || userConfig[key] === false) {
             pluginChanged.push({ key, pluginId })
@@ -279,7 +284,8 @@ export default class Config {
       if (pluginChanged.length || valueChanged.length) {
         opts.onChange({
           pluginChanged,
-          valueChanged
+          valueChanged,
+          __watcher: watcher
         })
       }
 

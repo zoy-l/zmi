@@ -191,20 +191,48 @@ test('registerPlugin id conflict', async () => {
   await expect(service.init()).rejects.toThrow(/plugin foo is already registered by/)
 })
 
-test.skip('skip plugins', async () => {
+test('skip plugins', async () => {
   const cwd = path.join(fixtures, 'skip-plugins')
   const service = new Service({
     cwd,
     plugins: [
       require.resolve(path.join(cwd, 'plugin_1')),
       require.resolve(path.join(cwd, 'plugin_2')),
-      require.resolve(path.join(cwd, 'plugin_3')),
-      require.resolve(path.join(cwd, 'plugin_4'))
+      require.resolve(path.join(cwd, 'plugin_3'))
     ]
   })
+
   await service.init()
 
-  expect(Object.keys(service.hooksByPluginId)).toEqual(['plugin_4'])
+  expect(
+    await service.applyPlugins({
+      key: 'foo',
+      type: EnumApplyPlugins.add
+    })
+  ).toEqual(['a', 'c'])
+
+  service.initConifg.plugin_1 = false
+  expect(
+    await service.applyPlugins({
+      key: 'foo',
+      type: EnumApplyPlugins.add
+    })
+  ).toEqual(['c'])
+
+  service.initConifg.plugin3 = false
+  expect(
+    await service.applyPlugins({
+      key: 'foo',
+      type: EnumApplyPlugins.add
+    })
+  ).toEqual([])
+
+  expect([...service.skipPluginIds]).toEqual(['plugin_2'])
+  expect(Object.keys(service.hooksByPluginId)).toEqual([
+    'plugin_1',
+    'plugin_2',
+    'plugin_3'
+  ])
 })
 
 test('api.registerPlugins', async () => {
@@ -364,9 +392,22 @@ test('async plugin register', async () => {
   await service.init()
   const c1 = await service.applyPlugins({
     key: 'count',
-    type: service.ApplyPluginsType.add
+    type: EnumApplyPlugins.add
   })
   expect(c1).toEqual(['foo'])
+})
+
+test('path register', async () => {
+  const cwd = path.join(fixtures, 'path-register')
+  const service = new Service({
+    cwd,
+    plugins: [require.resolve(path.join(cwd, '../skip-plugins/plugin_3'))]
+  })
+  await service.init()
+
+  expect(service.initialPlugins[0].id).toEqual(
+    '@zmi-cli/core/fixtures/skip-plugins/plugin_3'
+  )
 })
 
 test('enableBy', async () => {
@@ -384,7 +425,7 @@ test('enableBy', async () => {
 
   const c1 = await service.applyPlugins({
     key: 'count',
-    type: service.ApplyPluginsType.add
+    type: EnumApplyPlugins.add
   })
   expect(c1).toEqual(['foo'])
 
@@ -393,7 +434,7 @@ test('enableBy', async () => {
   }
   const c2 = await service.applyPlugins({
     key: 'count',
-    type: service.ApplyPluginsType.add
+    type: EnumApplyPlugins.add
   })
   expect(c2).toEqual(['foo', 'bar'])
 
@@ -402,7 +443,7 @@ test('enableBy', async () => {
   }
   const c3 = await service.applyPlugins({
     key: 'count',
-    type: service.ApplyPluginsType.add
+    type: EnumApplyPlugins.add
   })
   expect(c3).toEqual(['foo', 'bar', 'hoo'])
 })

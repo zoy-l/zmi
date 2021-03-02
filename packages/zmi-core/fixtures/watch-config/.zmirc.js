@@ -1,1 +1,1 @@
-export default { foo: 1,bar: 2, plugins:['./foo'] }
+export default { foo: 1, plugins:['./foo'] }

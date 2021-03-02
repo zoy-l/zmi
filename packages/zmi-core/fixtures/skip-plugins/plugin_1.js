@@ -4,9 +4,8 @@ module.exports = function (api) {
     key: 'plugin_1'
   })
   api.skipPlugins(['plugin_2'])
-
   api.register({
     key: 'foo',
-    fn: () => {}
+    fn: () => 'a'
   })
 }

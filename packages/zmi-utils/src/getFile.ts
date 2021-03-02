@@ -34,9 +34,11 @@ export default function getFile(opts: IGetFileOpts) {
   // because eslint prompts that you cannot use for-x
   // `eslint no-restricted-syntax`
   // and i don't want to ban it 😑
+
   while (ex.length) {
     const filename = `${opts.fileNameWithoutExt}${ex.shift()}`
     const paths = winPath(path.join(opts.base, filename))
+
     if (fs.existsSync(paths)) {
       return {
         path,

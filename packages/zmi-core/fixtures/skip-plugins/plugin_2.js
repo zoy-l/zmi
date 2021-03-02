@@ -5,6 +5,6 @@ module.exports = function (api) {
 
   api.register({
     key: 'foo',
-    fn: () => {}
+    fn: () => 'b'
   })
 }

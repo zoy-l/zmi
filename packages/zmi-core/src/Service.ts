@@ -38,7 +38,7 @@ export interface IServiceOptions {
   plugins?: string[]
   pkg?: IPackage
   env?: NodeEnv
-  cwd: string
+  cwd?: string
 }
 
 const Cycle = [
@@ -229,6 +229,7 @@ export default class Service extends EventEmitter {
     this.extraPlugins = lodash.cloneDeep(this.initialPlugins)
 
     this.setStage(ServiceStage.initPlugins)
+
     while (this.extraPlugins.length) {
       // An error will be reported here because `ESlint` prohibits all circular use of `await`
       // It is safe to use `await` in a loop without callback
