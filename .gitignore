@@ -1,4 +1,4 @@
-node_modules
+/node_modules
 .cache
 dist
 *.map
@@ -8,3 +8,5 @@ yarn-error.log
 .yarn
 /packages/*/coverage
 /coverage/
+/packages/*/node_modules
+/examples/*/node_modules

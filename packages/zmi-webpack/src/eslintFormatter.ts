@@ -68,9 +68,9 @@ function formatter(results: ESLint.LintResult[]) {
   })
 
   if (reportContainsErrorRuleIDs) {
-    output += `Search for the ${chalk.underline(
-      chalk.red('keywords')
-    )} to learn more about each error.`
+    output =
+      stripAnsi(output) +
+      `Search for the ${chalk.underline(chalk.red('keywords'))} to learn more about each error.`
   }
 
   return output
