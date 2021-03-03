@@ -3,10 +3,11 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import webpackBundleAnalyzer from 'webpack-bundle-analyzer'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-
 import { chalk, deepmerge, isWin } from '@zmi-cli/utils'
+import esLintWebpackPlugin from 'eslint-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
+import path from 'path'
 
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
 import type { IPenetrateOptions } from './types'
@@ -25,24 +26,27 @@ function applyPlugin(options: IPenetrateOptions) {
     config,
     isVue,
     isDev,
-    hot
+    hot,
+    cwd
   } = options
 
   const disableCompress = isProd && process.env.COMPRESS === 'none'
 
-  webpackConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
-    {
-      total: 15,
-      summary: false,
-      complete: '▇',
-      format: `${isWin ? '⭐' : '🚧'}  ${chalk.cyan(':bar ')}${chalk.cyan(
-        ':percent'
-      )}  ${chalk.grey('( :elapseds )')}`,
-      customSummary: (time) => {
-        console.log(chalk.blue(`${isWin ? '✨' : '🎯'} time ${time} \n`))
+  webpackConfig.when(process.env.ZMI_TEST !== 'true', (WConfig) => {
+    WConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
+      {
+        total: 15,
+        summary: false,
+        complete: '▇',
+        format: `${isWin ? '⭐' : '🚧'}  ${chalk.cyan(':bar ')}${chalk.cyan(
+          ':percent'
+        )}  ${chalk.grey('( :elapseds )')}`,
+        customSummary: (time) => {
+          console.log(chalk.blue(`${isWin ? '✨' : '🎯'} time ${time} \n`))
+        }
       }
-    }
-  ])
+    ])
+  })
 
   const forkTsCheckerOpt: Record<string, any> = {
     async: false,
@@ -53,6 +57,7 @@ function applyPlugin(options: IPenetrateOptions) {
           compiler: '@vue/compiler-sfc'
         }
       },
+      configFile: `${cwd}/tsconfig.json`,
       diagnosticOptions: {
         semantic: true
       }
@@ -60,8 +65,26 @@ function applyPlugin(options: IPenetrateOptions) {
   }
 
   if (isReact) {
-    delete forkTsCheckerOpt.typescript
+    delete forkTsCheckerOpt.typescript.extensions
   }
+
+  webpackConfig.plugin('esLintWebpackPlugin').use(esLintWebpackPlugin, [
+    {
+      extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'vue'],
+      formatter: require('./eslintFormatter'),
+      eslintPath: require.resolve('eslint'),
+      context: cwd,
+      cache: true,
+      resolvePluginsRelativeTo: __dirname,
+      cacheLocation: path.resolve(`${cwd}/node_modules`, '.cache/.eslintcache'),
+      baseConfig: {
+        extends: [
+          require.resolve(isTypescript ? 'eslint-config-zmi/typescript' : 'eslint-config-zmi/base'),
+          require.resolve(isReact ? 'eslint-config-zmi/react' : 'eslint-config-zmi/vue')
+        ]
+      }
+    }
+  ])
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [config.define])
 
@@ -83,15 +106,13 @@ function applyPlugin(options: IPenetrateOptions) {
       WConfig.optimization.minimize(false)
     },
     (WConfig) => {
-      WConfig.optimization
-        .minimizer('terser')
-        .use(require.resolve('terser-webpack-plugin'), [
-          {
-            terserOptions: deepmerge(terserOptions, config.terserOptions),
-            extractComments: false,
-            parallel: true
-          }
-        ])
+      WConfig.optimization.minimizer('terser').use(require.resolve('terser-webpack-plugin'), [
+        {
+          terserOptions: deepmerge(terserOptions, config.terserOptions),
+          extractComments: false,
+          parallel: true
+        }
+      ])
 
       WConfig.optimization
         .minimizer('css-minimizer')
@@ -132,9 +153,7 @@ function applyPlugin(options: IPenetrateOptions) {
 
   webpackConfig
     .plugin('HtmlWebpackPlugin')
-    .use(HtmlWebpackPlugin, [
-      deepmerge(config.htmlPlugin, { templateContent: htmlContent })
-    ])
+    .use(HtmlWebpackPlugin, [deepmerge(config.htmlPlugin, { templateContent: htmlContent })])
 
   webpackConfig.when(isVue, (WConifg) => {
     if (isDev) {

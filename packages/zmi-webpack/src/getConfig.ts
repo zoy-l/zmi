@@ -4,10 +4,10 @@ import WebpackChain from 'webpack-chain'
 import path from 'path'
 import fs from 'fs'
 
-import getTargetsAndBrowsersList from './getTargetsAndBrowsersList'
 import { IConfigOpts, IPrivate } from './types'
 import applyPlugin from './applyPlugin'
 import applyLoader from './applyLoader'
+import getTargets from './getTargets'
 import applyCss from './applyCss'
 
 const resolveModules = [
@@ -26,7 +26,7 @@ const resolveModules = [
 
 export default async function getConfig(opts: IConfigOpts) {
   const { config, entry, port, env, pkg, cwd } = opts
-  const { targets, browserslist } = getTargetsAndBrowsersList(config)
+  const { targets, browserslist } = getTargets(config)
   const { isReact, isVue } = getFrameType(config, pkg)
 
   const sourceMap = config.devtool !== 'none'
@@ -62,6 +62,7 @@ export default async function getConfig(opts: IConfigOpts) {
 
   webpackConfig.devtool(config.devtool as WebpackChain.DevTool)
   webpackConfig.mode(env)
+  webpackConfig.stats('normal')
 
   webpackConfig.when(!!config.cache, (WConfig) => {
     const cacheOptions: Partial<{ [key: string]: any }> = {
@@ -108,29 +109,31 @@ export default async function getConfig(opts: IConfigOpts) {
     webpackConfig.resolve.alias.set(key, config.alias[key])
   })
 
-  webpackConfig.devServer.merge(
-    deepmerge.all([
-      {
-        hot,
-        port,
-        clientLogLevel: 'silent',
-        compress: isProd,
-        noInfo: true,
-        stats: 'none',
-        watchContentBase: isDev,
-        publicPath: config.publicPath,
-        contentBase: `${cwd}/public`
-      } as WebpackDevServer.Configuration,
-      config.devServer,
-      {
-        before(app, server, compiler) {
-          // apply in project middlewares
-          config.devServer.before?.(app, server, compiler)
-        },
-        open: false
-      } as WebpackDevServer.Configuration
-    ])
-  )
+  webpackConfig.when(isDev, (WConfig) => {
+    WConfig.devServer.merge(
+      deepmerge.all([
+        {
+          hot,
+          port,
+          clientLogLevel: 'silent',
+          compress: isProd,
+          noInfo: true,
+          stats: 'none',
+          watchContentBase: isDev,
+          publicPath: config.publicPath,
+          contentBase: `${cwd}/public`
+        } as WebpackDevServer.Configuration,
+        config.devServer,
+        {
+          before(app, server, compiler) {
+            // apply in project middlewares
+            config.devServer.before?.(app, server, compiler)
+          },
+          open: false
+        } as WebpackDevServer.Configuration
+      ])
+    )
+  })
 
   if (opts.chainWebpack) {
     await opts.chainWebpack(webpackConfig, {
@@ -158,7 +161,7 @@ function getFrameType(config: IPrivate, pkg: Record<string, any>) {
     isReact = config.frameType === 'react'
     isVue = config.frameType === 'vue'
   } else {
-    const dpsArr = Object.keys(pkg.dependencies)
+    const dpsArr = Object.keys(pkg.dependencies ?? {})
 
     for (const dpsName of dpsArr) {
       if (dpsName === 'vue') {

@@ -13,13 +13,7 @@ export interface ICreateCSSRuleOpts {
 
 export default (options: IPenetrateOptions) => {
   const { webpackConfig, isDev, config, browserslist, sourceMap } = options
-  const {
-    lessLoader,
-    scssLoader,
-    stylusLoader,
-    styleLoader,
-    cssLoader
-  } = config.loaderOptions
+  const { lessLoader, scssLoader, stylusLoader, styleLoader, cssLoader } = config.loaderOptions
 
   function createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
     const { lang, test, loader, options = {} } = createCSSRuleOptions
@@ -52,12 +46,14 @@ export default (options: IPenetrateOptions) => {
           .options({ mode: config.cssModulesTypescript })
       })
 
-      // prettier-ignore
-      const cssLoaderOptions: Record<string, any> = deepmerge({
+      const cssLoaderOptions: Record<string, any> = deepmerge(
+        {
           importLoaders: 1,
           modules: {},
           sourceMap
-        }, cssLoader)
+        },
+        cssLoader
+      )
 
       if (isCSSModules) {
         cssLoaderOptions.modules = {
@@ -68,13 +64,10 @@ export default (options: IPenetrateOptions) => {
         delete cssLoaderOptions.modules
       }
 
-      // prettier-ignore
-      rule.use('css-loader')
-        .loader(require.resolve('css-loader'))
-        .options(cssLoaderOptions)
+      rule.use('css-loader').loader(require.resolve('css-loader')).options(cssLoaderOptions)
 
-      // prettier-ignore
-      rule.use('postcss')
+      rule
+        .use('postcss')
         .loader(require.resolve('postcss-loader'))
         .options({
           postcssOptions: {
@@ -82,13 +75,16 @@ export default (options: IPenetrateOptions) => {
             plugins: [
               require.resolve('postcss-flexbugs-fixes'),
               [
-                require.resolve('postcss-preset-env'),{
+                require.resolve('postcss-preset-env'),
+                {
                   autoprefixer: {
                     ...config.autoprefixer,
                     overrideBrowserslist: browserslist ?? {}
-                  },stage: 3}
+                  },
+                  stage: 3
+                }
               ],
-              ...(config.extraPostCSSPlugins)
+              ...config.extraPostCSSPlugins
             ].filter(Boolean)
           }
         })

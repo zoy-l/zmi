@@ -8,6 +8,7 @@
     "no-use-before-define": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
-    "no-continue": "off"
+    "no-continue": "off",
+    "no-var": 1
   }
 }

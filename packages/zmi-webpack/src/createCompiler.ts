@@ -1,11 +1,10 @@
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { chalk, clearConsole } from '@zmi-cli/utils'
 import stripAnsi from 'strip-ansi'
 import address from 'address'
 import webpack from 'webpack'
 import url from 'url'
 
-import formatWebpackMessages from './formatWebpackMessages'
+import formatMessages from './formatMessages'
 
 interface IUrlType {
   lanUrlForTerminal: string | undefined
@@ -84,23 +83,28 @@ function printInstructions(opts: { appName: string; urls: IUrlType; port: number
     return text.padEnd(text.length + maxLength - textLength[index] - 1)
   }
   // devConifg.target !== 'web' &&
-  log(
-    [
-      '┌'.padEnd(maxLength, '─') + '┐',
-      `│${padEnd(portText, 0)}│`,
-      `│${padEnd(appNameText, 1)}|`,
-      '├'.padEnd(maxLength, '─') + '┤'
-    ].join('\n')
-  )
 
-  if (urls.lanUrlForTerminal) {
-    log(`│${padEnd(localhostText, 2)}│`)
-    log(`│${padEnd(netWorkText, 3)}│`)
+  if (process.env.ZMI_TEST !== 'true') {
+    log(
+      [
+        '┌'.padEnd(maxLength, '─') + '┐',
+        `│${padEnd(portText, 0)}│`,
+        `│${padEnd(appNameText, 1)}|`,
+        '├'.padEnd(maxLength, '─') + '┤'
+      ].join('\n')
+    )
+
+    if (urls.lanUrlForTerminal) {
+      log(`│${padEnd(localhostText, 2)}│`)
+      log(`│${padEnd(netWorkText, 3)}│`)
+    } else {
+      log(`│${padEnd(localhostText, 2)}│`)
+    }
+
+    log('└'.padEnd(maxLength, '─') + '┘')
   } else {
-    log(`│${padEnd(localhostText, 2)}│`)
+    log(localhostText, netWorkText)
   }
-
-  log('└'.padEnd(maxLength, '─') + '┘')
 }
 
 function createCompiler(opts: {
@@ -131,14 +135,6 @@ function createCompiler(opts: {
     log()
   })
 
-  const forkHook = ForkTsCheckerWebpackPlugin.getCompilerHooks(compiler)
-  forkHook.issues.tap('ForkTsCheckerWebpackPlugin', (issues: string | any[]) => {
-    if (issues.length) {
-      //
-    }
-    return issues
-  })
-
   compiler.hooks.done.tap('done', (stats) => {
     const statsData = stats.toJson({
       all: false,
@@ -146,8 +142,8 @@ function createCompiler(opts: {
       errors: true
     })
 
-    const messages = formatWebpackMessages(statsData)
-    const isSuccessful = !messages.errors.length && !messages.warnings.length
+    const messages = formatMessages(statsData)
+    const isSuccessful = !messages.errors.length
 
     if (isSuccessful) {
       clearConsole()

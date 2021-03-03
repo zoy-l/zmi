@@ -7,7 +7,7 @@ function isLikelyASyntaxError(message: string | string[]) {
 }
 
 // Cleans up webpack error messages.
-function formatMessage(message: string) {
+function formatMessage(message = '') {
   let lines = message.split('\n') as string[]
 
   // Strip webpack-added headers off errors/warnings
@@ -63,13 +63,6 @@ function formatMessage(message: string) {
     ]
   }
 
-  // Add helpful message for users trying to use Sass for the first time
-  if (lines[1] && lines[1].match(/Cannot find module.+node-sass/)) {
-    lines[1] = 'To import Sass files, you first need to install node-sass.\n'
-    lines[1] +=
-      'Run `npm install node-sass` or `yarn add node-sass` inside your workspace.'
-  }
-
   message = lines.join('\n')
   // Internal stacks are generally useless so we strip them... with the
   // exception of stacks containing `webpack:` because they're normally
@@ -81,8 +74,7 @@ function formatMessage(message: string) {
 
   // Remove duplicated newlines
   lines = lines.filter(
-    (line, index, arr) =>
-      index === 0 || line.trim() !== '' || line.trim() !== arr[index - 1].trim()
+    (line, index, arr) => index === 0 || line.trim() !== '' || line.trim() !== arr[index - 1].trim()
   )
 
   // Reassemble the message

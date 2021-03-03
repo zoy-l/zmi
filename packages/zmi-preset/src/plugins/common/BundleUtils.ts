@@ -29,7 +29,6 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
   })
 
   const bundlerArgs = {
-    bundler: { id: Bundler.id, version: Bundler.version },
     env: api.env
   }
 
@@ -70,10 +69,7 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
             initialValue
           })
         },
-        async chainWebpack(
-          webpackConfig: WebpackChain,
-          opts: { createCSSRule: createCSSRule }
-        ) {
+        async chainWebpack(webpackConfig: WebpackChain, opts: { createCSSRule: createCSSRule }) {
           return api.applyPlugins({
             type: api.ApplyPluginsType.modify,
             key: 'chainWebpack',

@@ -46,7 +46,6 @@ export function getHtmlGenerator(api: IApi) {
         styles: await applyPlugins({
           key: 'addHTMLStyles'
         }),
-
         async modifyHTML(memo: any, args: Record<string, any>) {
           return api.applyPlugins({
             key: 'modifyHTML',

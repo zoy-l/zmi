@@ -1,5 +1,5 @@
 import type { IPenetrateOptions } from './types'
-import { getBabelOpts } from './getBabelOptions'
+import getBabelOpts from './getBabelOptions'
 
 async function applyLoader(options: IPenetrateOptions) {
   const {

@@ -5,14 +5,12 @@ import fs from 'fs-extra'
 
 import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 import createCompiler, { prepareUrls } from './createCompiler'
-import formatWebpackMessages from './formatWebpackMessages'
+import formatMessages from './formatMessages'
 import { IConfigOpts, IPrivate } from './types'
 import getConfig from './getConfig'
 
 interface ISetupOpts {
-  bundleConfigs: webpack.Configuration & {
-    devServer: WebpackDevServer.Configuration
-  }
+  bundleConfigs: webpack.Configuration
   port: number
   host: string
   appName?: string
@@ -37,7 +35,7 @@ export default class Bundler {
     this.pkg = pkg
   }
 
-  async getConfig(options: IConfigOpts) {
+  async getConfig(options: Omit<IConfigOpts, 'cwd' | 'config' | 'pkg'>) {
     return getConfig({
       ...options,
       cwd: this.cwd,
@@ -53,7 +51,7 @@ export default class Bundler {
     const urls = prepareUrls({
       host,
       port,
-      protocol: devServerConfig.https ? 'https' : 'http',
+      protocol: devServerConfig?.https ? 'https' : 'http',
       pathname: this.config.publicPath
     })
 
@@ -84,20 +82,19 @@ export default class Bundler {
 
       compiler.run((err, stats) => {
         let messages
+
         if (err) {
           if (!err.message) {
             throw new Error('build fail')
           }
 
-          messages = formatWebpackMessages({
+          messages = formatMessages({
             errors: [err.message],
             warnings: []
           })
         } else {
           messages = stats
-            ? formatWebpackMessages(
-                stats.toJson({ all: false, warnings: true, errors: true })
-              )
+            ? formatMessages(stats.toJson({ all: false, warnings: true, errors: true }))
             : {
                 errors: [],
                 warnings: []
@@ -108,7 +105,7 @@ export default class Bundler {
           if (messages.errors.length > 1) {
             messages.errors.length = 1
           }
-          throw new Error(messages.errors.join('\n\n'))
+          // throw new Error(messages.errors.join('\n\n'))
         }
 
         if (messages.warnings.length) {
@@ -116,9 +113,7 @@ export default class Bundler {
         } else {
           clearConsole()
           console.log(
-            `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue(
-              'Compiled successfully !\n'
-            )} `
+            `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue('Compiled successfully !\n')} `
           )
           console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
         }

@@ -15,9 +15,7 @@
     "@zmi-cli/preset": "^1.0.5-alpha.0",
     "@zmi-cli/types": "^1.0.5-alpha.0",
     "@zmi-cli/utils": "^1.0.5-alpha.0",
-    "@zmi-cli/webpack": "1.0.5-alpha.0",
-    "eslint": "^7.21.0",
-    "eslint-config-zmi": "^1.0.1"
+    "@zmi-cli/webpack": "1.0.5-alpha.0"
   },
   "bin": {
     "zmi": "bin/zmi.js"

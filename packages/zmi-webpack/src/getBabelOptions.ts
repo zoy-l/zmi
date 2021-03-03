@@ -1,6 +1,6 @@
 import { IPrivate } from '.'
 
-export function getBabelOpts({
+export default function getBabelOpts({
   config,
   presetOpts,
   hot
@@ -16,7 +16,12 @@ export function getBabelOpts({
       ...config.extraBabelPresets
     ].filter(Boolean),
     plugins: [
-      type === 'react' && isDev && hot && require.resolve('react-refresh/babel'),
+      type === 'react' &&
+        isDev &&
+        hot && [
+          require.resolve('react-refresh/babel'),
+          { skipEnvCheck: process.env.ZMI_TEST === 'true' }
+        ],
       ...config.extraBabelPlugins
     ].filter(Boolean),
     sourceType: sourceMap ? 'unambiguous' : false,

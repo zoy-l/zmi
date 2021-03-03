@@ -4,5 +4,6 @@ declare namespace NodeJS {
     APP_ROOT: string
     HOST: string
     PORT: string
+    ZMI_TEST: string
   }
 }
