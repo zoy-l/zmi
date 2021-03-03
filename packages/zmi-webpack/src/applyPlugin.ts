@@ -13,6 +13,7 @@ import VueClientWebpackPlugin from './VueClientWebpackPlugin'
 import type { IPenetrateOptions } from './types'
 import terserOptions from './terserOptions'
 import PrettierHtml from './PrettierHtml'
+import formatter from './eslintFormatter'
 
 function applyPlugin(options: IPenetrateOptions) {
   const {
@@ -71,7 +72,7 @@ function applyPlugin(options: IPenetrateOptions) {
   webpackConfig.plugin('esLintWebpackPlugin').use(esLintWebpackPlugin, [
     {
       extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'vue'],
-      formatter: require('./eslintFormatter'),
+      formatter,
       eslintPath: require.resolve('eslint'),
       context: cwd,
       cwd,

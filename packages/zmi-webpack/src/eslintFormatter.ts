@@ -11,7 +11,7 @@ function isError(message: Linter.LintMessage) {
   return message.fatal || message.severity === 2
 }
 
-function formatter(results: ESLint.LintResult[]) {
+export default function formatter(results: ESLint.LintResult[]) {
   let output = '\n'
   let hasErrors = false
   let reportContainsErrorRuleIDs = false
@@ -75,5 +75,3 @@ function formatter(results: ESLint.LintResult[]) {
 
   return output
 }
-
-module.exports = formatter
