@@ -4,7 +4,7 @@ import logo from './logo.svg'
 import './app.less'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(1)
 
   return (
     <div className="App">

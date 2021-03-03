@@ -105,21 +105,21 @@ export default class Bundler {
           if (messages.errors.length > 1) {
             messages.errors.length = 1
           }
-          // throw new Error(messages.errors.join('\n\n'))
+          throw new Error(messages.errors.join('\n\n'))
         }
 
-        if (messages.warnings.length) {
-          console.warn(messages.warnings.join('\n'))
-        } else {
-          clearConsole()
-          console.log(
-            `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue('Compiled successfully !\n')} `
-          )
-          console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
-        }
+        clearConsole()
+        console.log(
+          `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue('Compiled successfully !\n')} `
+        )
+        console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
 
         printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)
         console.log()
+
+        if (messages.warnings.length) {
+          console.warn(messages.warnings.join('\n'))
+        }
 
         resolve(stats)
       })

@@ -4,21 +4,19 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'tsx',
-  data() {
-    return {
-      tsx: 'hello vue tsx'
-    }
-  },
-
   components: {
     kda
   },
-
   setup() {
     const count = ref('hello setup')
 
     return {
       count
+    }
+  },
+  data() {
+    return {
+      tsx: 'hello vue tsx'
     }
   },
 

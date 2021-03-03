@@ -28,7 +28,8 @@ function applyPlugin(options: IPenetrateOptions) {
     isVue,
     isDev,
     hot,
-    cwd
+    cwd,
+    pkg
   } = options
 
   const disableCompress = isProd && process.env.COMPRESS === 'none'
@@ -65,8 +66,16 @@ function applyPlugin(options: IPenetrateOptions) {
     }
   }
 
+  let reactVersion
   if (isReact) {
+    const { react } = pkg.dependencies
     delete forkTsCheckerOpt.typescript.extensions
+
+    if (isNaN(Number(react.charAt(0)))) {
+      reactVersion = react.replace(react.charAt(0), '')
+    } else {
+      reactVersion = react
+    }
   }
 
   webpackConfig.plugin('esLintWebpackPlugin').use(esLintWebpackPlugin, [
@@ -84,7 +93,14 @@ function applyPlugin(options: IPenetrateOptions) {
         extends: [
           require.resolve(isTypescript ? 'eslint-config-zmi/typescript' : 'eslint-config-zmi/base'),
           require.resolve(isReact ? 'eslint-config-zmi/react' : 'eslint-config-zmi/vue')
-        ]
+        ],
+        settings: isReact
+          ? {
+              react: {
+                version: reactVersion
+              }
+            }
+          : {}
       }
     }
   ])

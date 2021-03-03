@@ -4,19 +4,16 @@
   </div>
 </template>
 
-
 <script >
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'App',
-
+  name: 'Home',
   data() {
     return {
       msg: 'hello vue 3'
     }
   },
-
   methods: {
     hello() {
       console.log(this.msg)
