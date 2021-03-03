@@ -9,7 +9,7 @@ test('getBabelOptions', () => {
   })
 
   expect(babel).toEqual({
-    presets: [['/Users/zaire/zmi/packages/zmi-babel-factory/app.js', { sourceMap: false }]],
+    presets: [[babel.presets[0][0], { sourceMap: false }]],
     plugins: [],
     sourceType: false,
     babelrc: false

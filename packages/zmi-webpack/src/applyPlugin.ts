@@ -74,7 +74,9 @@ function applyPlugin(options: IPenetrateOptions) {
       formatter: require('./eslintFormatter'),
       eslintPath: require.resolve('eslint'),
       context: cwd,
+      cwd,
       cache: true,
+      failOnError: isDev,
       resolvePluginsRelativeTo: __dirname,
       cacheLocation: path.resolve(`${cwd}/node_modules`, '.cache/.eslintcache'),
       baseConfig: {

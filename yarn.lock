@@ -2603,10 +2603,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^4.15.0":
+"@typescript-eslint/eslint-plugin@^4.16.1":
   version "4.16.1"
-  resolved "https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.16.1.tgz#2caf6a79dd19c3853b8d39769a27fccb24e4e651"
-  integrity sha512-SK777klBdlkUZpZLC1mPvyOWk9yAFCWmug13eAjVQ4/Q1LATE/NbcQL1xDHkptQkZOLnPmLUA1Y54m8dqYwnoQ==
+  resolved "https://registry.npm.taobao.org/@typescript-eslint/eslint-plugin/download/@typescript-eslint/eslint-plugin-4.16.1.tgz#2caf6a79dd19c3853b8d39769a27fccb24e4e651"
+  integrity sha1-LK9qed0Zw4U7jTl2mif8yyTk5lE=
   dependencies:
     "@typescript-eslint/experimental-utils" "4.16.1"
     "@typescript-eslint/scope-manager" "4.16.1"
@@ -2629,10 +2629,10 @@
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
-"@typescript-eslint/parser@^4.15.0":
+"@typescript-eslint/parser@^4.16.1":
   version "4.16.1"
-  resolved "https://registry.npmjs.org/@typescript-eslint/parser/-/parser-4.16.1.tgz#3bbd3234dd3c5b882b2bcd9899bc30e1e1586d2a"
-  integrity sha512-/c0LEZcDL5y8RyI1zLcmZMvJrsR6SM1uetskFkoh3dvqDKVXPsXI+wFB/CbVw7WkEyyTKobC1mUNp/5y6gRvXg==
+  resolved "https://registry.npm.taobao.org/@typescript-eslint/parser/download/@typescript-eslint/parser-4.16.1.tgz#3bbd3234dd3c5b882b2bcd9899bc30e1e1586d2a"
+  integrity sha1-O70yNN08W4grK82Ymbww4eFYbSo=
   dependencies:
     "@typescript-eslint/scope-manager" "4.16.1"
     "@typescript-eslint/types" "4.16.1"
@@ -5319,24 +5319,24 @@ eslint-config-airbnb-base@^14.2.1:
     object.assign "^4.1.2"
     object.entries "^1.1.2"
 
-eslint-config-prettier@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-7.2.0.tgz#f4a4bd2832e810e8cc7c1411ec85b3e85c0c53f9"
-  integrity sha512-rV4Qu0C3nfJKPOAhFujFxB7RMP+URFyQqqOZW9DMRD7ZDTFyjaIlETU3xzHELt++4ugC0+Jm084HQYkkJe+Ivg==
+eslint-config-prettier@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.npm.taobao.org/eslint-config-prettier/download/eslint-config-prettier-8.1.0.tgz#4ef1eaf97afe5176e6a75ddfb57c335121abc5a6"
+  integrity sha1-TvHq+Xr+UXbmp13ftXwzUSGrxaY=
 
-eslint-config-zmi@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/eslint-config-zmi/-/eslint-config-zmi-1.0.1.tgz#7ed66dac91f007b0a950142ec21cc2f0f1fe3798"
-  integrity sha512-nH0EqfFev3+u4TV5x6cG7OD1/YX3482dIrDuDAW8yoMJB25dwAxAKInI0lrmZS/XPECk3SLhcnfHKK3RnFNeDw==
+eslint-config-zmi@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npm.taobao.org/eslint-config-zmi/download/eslint-config-zmi-1.0.4.tgz#7e17f6f1fc201920c78ad1698944428aa0b56d95"
+  integrity sha1-fhf28fwgGSDHitFpiURCiqC1bZU=
   dependencies:
-    "@typescript-eslint/eslint-plugin" "^4.15.0"
-    "@typescript-eslint/parser" "^4.15.0"
+    "@typescript-eslint/eslint-plugin" "^4.16.1"
+    "@typescript-eslint/parser" "^4.16.1"
     eslint-config-airbnb-base "^14.2.1"
-    eslint-config-prettier "^7.2.0"
+    eslint-config-prettier "^8.1.0"
     eslint-plugin-import "^2.22.1"
     eslint-plugin-react "^7.22.0"
     eslint-plugin-react-hooks "^4.2.0"
-    eslint-plugin-vue "^7.5.0"
+    eslint-plugin-vue "^7.7.0"
 
 eslint-import-resolver-node@^0.3.4:
   version "0.3.4"
@@ -5395,10 +5395,10 @@ eslint-plugin-react@^7.22.0:
     resolve "^1.18.1"
     string.prototype.matchall "^4.0.2"
 
-eslint-plugin-vue@^7.5.0:
+eslint-plugin-vue@^7.7.0:
   version "7.7.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-vue/-/eslint-plugin-vue-7.7.0.tgz#a90df4595e670821bf243bd2750ededdb74948b8"
-  integrity sha512-mYz4bpLGv5jx6YG/GvKkqbGSfV7uma2u1P3mLA41Q5vQl8W1MeuTneB8tfsLq6xxxesFubcrOC0BZBJ5R+eaCQ==
+  resolved "https://registry.npm.taobao.org/eslint-plugin-vue/download/eslint-plugin-vue-7.7.0.tgz#a90df4595e670821bf243bd2750ededdb74948b8"
+  integrity sha1-qQ30WV5nCCG/JDvSdQ7e3bdJSLg=
   dependencies:
     eslint-utils "^2.1.0"
     natural-compare "^1.4.0"
