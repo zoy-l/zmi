@@ -1,12 +1,13 @@
-import { chalk, clearConsole, isWin } from '@zmi-cli/utils'
+import { chalk, clearConsole, deepmerge, isWin } from '@zmi-cli/utils'
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import fs from 'fs-extra'
 
 import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 import createCompiler, { prepareUrls } from './createCompiler'
-import formatMessages from './formatMessages'
 import { IConfigOpts, IPrivate } from './types'
+import formatMessages from './formatMessages'
+import defaultConfig from './defaultConfig'
 import getConfig from './getConfig'
 
 interface ISetupOpts {
@@ -18,8 +19,8 @@ interface ISetupOpts {
 
 interface IOpts {
   cwd: string
-  config: IPrivate
-  pkg: Record<string, any>
+  config?: IPrivate
+  pkg?: Record<string, any>
 }
 
 export default class Bundler {
@@ -27,12 +28,12 @@ export default class Bundler {
 
   config: IPrivate
 
-  pkg = {}
+  pkg: Record<string, any>
 
   constructor({ cwd, config, pkg }: IOpts) {
-    this.config = config
+    this.config = deepmerge(defaultConfig, config ?? {})
     this.cwd = cwd
-    this.pkg = pkg
+    this.pkg = pkg ?? {}
   }
 
   async getConfig(options: Omit<IConfigOpts, 'cwd' | 'config' | 'pkg'>) {

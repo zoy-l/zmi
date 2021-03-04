@@ -12,6 +12,7 @@ import mkdirp from 'mkdirp'
 import lodash from 'lodash'
 import pkgUp from 'pkg-up'
 import chalk from 'chalk'
+import slash from 'slash'
 import glob from 'glob'
 import url from 'url'
 
@@ -25,12 +26,12 @@ import mergeConfig from './mergeConfig'
 import flatDeep from './flatDeep'
 import isLerna from './isLerna'
 import getFile from './getFile'
-import winPath from './winPath'
-import assert from './assert'
+// import assert from './assert'
 
 const isWin = process.platform === 'win32'
 
 export {
+  slash,
   babelTypes,
   flatDeep,
   isLerna,
@@ -40,7 +41,6 @@ export {
   NodeEnv,
   ArgsType,
   cheerio,
-  winPath,
   pkgUp,
   lodash,
   chokidar,
@@ -49,7 +49,7 @@ export {
   mergeConfig,
   compatibleWithESModule,
   isWin,
-  assert,
+  // assert,
   dyo,
   resolve,
   launchDevice,

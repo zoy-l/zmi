@@ -1,4 +1,4 @@
-import { winPath } from '@zmi-cli/utils'
+import { slash } from '@zmi-cli/utils'
 import path from 'path'
 
 import { EnumApplyPlugins } from './types'
@@ -6,7 +6,7 @@ import Service from './Service'
 
 const fixtures = path.join(__dirname, '../fixtures')
 const simplyPluginIds = ({ cwd, plugins }: { cwd: string; plugins: any }) =>
-  Object.keys(plugins).map((id) => `[plugin] ${id.replace(winPath(cwd), '.')}`)
+  Object.keys(plugins).map((id) => `[plugin] ${id.replace(slash(cwd), '.')}`)
 
 test('normal', async () => {
   const cwd = path.join(fixtures, 'normal')

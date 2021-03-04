@@ -1,6 +1,7 @@
 import WebpackDevServer from 'webpack-dev-server'
 import { deepmerge } from '@zmi-cli/utils'
 import WebpackChain from 'webpack-chain'
+import { Configuration } from 'webpack'
 import path from 'path'
 import fs from 'fs'
 
@@ -24,7 +25,7 @@ const resolveModules = [
   '.json'
 ]
 
-export default async function getConfig(opts: IConfigOpts) {
+export default async function getConfig(opts: IConfigOpts): Promise<Configuration> {
   const { config, entry, port, env, pkg, cwd } = opts
   const { targets, browserslist } = getTargets(config)
   const { isReact, isVue } = getFrameType(config, pkg)
@@ -64,23 +65,9 @@ export default async function getConfig(opts: IConfigOpts) {
   webpackConfig.mode(env)
   webpackConfig.stats('normal')
 
-  webpackConfig.when(!!config.cache, (WConfig) => {
-    const cacheOptions: Partial<{ [key: string]: any }> = {
-      type: config.cache,
-      buildDependencies: {
-        config: [__filename]
-      }
-    }
-
-    config.cache === 'memory' && delete cacheOptions.buildDependencies
-
-    WConfig.cache(cacheOptions)
-  })
-
   webpackConfig.when(!!entry, (WConfig) => {
     Object.keys(entry).forEach((key) => {
-      const entryPoint = WConfig.entry(key)
-      entryPoint.add(entry[key])
+      WConfig.entry(key).add(entry[key])
     })
   })
 
@@ -150,10 +137,24 @@ export default async function getConfig(opts: IConfigOpts) {
 
   const ret = webpackConfig.toConfig()
 
+  if (config.cache) {
+    const cacheOptions: {
+      type: 'memory' | 'filesystem'
+      buildDependencies?: Record<string, any>
+    } = {
+      type: config.cache,
+      buildDependencies: {
+        config: [__filename]
+      }
+    }
+    config.cache === 'memory' && delete cacheOptions.buildDependencies
+    ret.cache = cacheOptions
+  }
+
   return ret
 }
 
-function getFrameType(config: IPrivate, pkg: Record<string, any>) {
+export function getFrameType(config: IPrivate, pkg: Record<string, any>) {
   let isReact = false
   let isVue = false
 
@@ -167,7 +168,7 @@ function getFrameType(config: IPrivate, pkg: Record<string, any>) {
       if (dpsName === 'vue') {
         isVue = true
         config.frameType = 'vue'
-        continue
+        break
       }
 
       if (dpsName === 'react') {

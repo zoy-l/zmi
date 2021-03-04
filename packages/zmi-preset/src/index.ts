@@ -8,7 +8,7 @@ export default () => {
     fs
       .readdirSync(`${plugins}/${type}`)
       .map((f) => `${type}/${f}`)
-      .filter((file) => file.endsWith('.js'))
+      .filter((file) => !file.endsWith('.d.ts') && file.charAt(0) !== '.')
   )
 
   return {

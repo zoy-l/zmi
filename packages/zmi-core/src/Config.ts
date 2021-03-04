@@ -4,7 +4,7 @@ import {
   parseRequireDeps,
   clearModule,
   deepmerge,
-  winPath,
+  slash,
   getFile,
   chalk,
   chokidar,
@@ -133,7 +133,7 @@ export default class Config {
     const configFile = possibleConfigPaths.find((file) =>
       fs.existsSync(path.join(this.cwd, file))
     )
-    return configFile ? winPath(configFile) : undefined
+    return configFile ? slash(configFile) : undefined
   }
 
   getUserConfig() {
@@ -232,7 +232,7 @@ export default class Config {
     })
 
     const files = configFiles.reduce<string[]>((memo, f) => {
-      const file = winPath(path.join(this.cwd, f))
+      const file = slash(path.join(this.cwd, f))
       if (fs.existsSync(file)) {
         memo = memo.concat(parseRequireDeps(file))
       } else {

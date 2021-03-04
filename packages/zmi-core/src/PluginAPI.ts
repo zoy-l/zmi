@@ -1,13 +1,7 @@
 import * as utils from '@zmi-cli/utils'
+import assert from 'assert'
 
-import {
-  ICommand,
-  IHook,
-  IPluginConfig,
-  EnumEnableBy,
-  ServiceStage,
-  IPlugin
-} from './types'
+import { ICommand, IHook, IPluginConfig, EnumEnableBy, ServiceStage, IPlugin } from './types'
 import { pathToRegister } from './pluginUtils'
 import Service from './Service'
 
@@ -88,9 +82,9 @@ export default class PluginAPI {
 
   registerCommand(command: ICommand) {
     const { name, alias } = command
-    utils.assert(
-      `api.registerCommand() failed, the command ${name} is exists.`,
-      !this.service.commands[name]
+    assert(
+      !this.service.commands[name],
+      `api.registerCommand() failed, the command ${name} is exists.`
     )
     this.service.commands[name] = command
     if (alias) {
@@ -120,14 +114,11 @@ export default class PluginAPI {
   }
 
   registerPlugins(plugins: (IPlugin | string)[]) {
-    utils.assert(
-      `api.registerPlugins() failed, it should only be used in registering stage.`,
-      this.service.stage === ServiceStage.initPlugins
+    assert(
+      this.service.stage === ServiceStage.initPlugins,
+      `api.registerPlugins() failed, it should only be used in registering stage.`
     )
-    utils.assert(
-      `api.registerPlugins() failed, plugins must be Array.`,
-      Array.isArray(plugins)
-    )
+    assert(Array.isArray(plugins), `api.registerPlugins() failed, plugins must be Array.`)
     const extraPlugins = plugins.map((plugin) =>
       typeof plugin === 'string'
         ? pathToRegister({
@@ -141,13 +132,13 @@ export default class PluginAPI {
   }
 
   register(hook: IHook) {
-    utils.assert(
-      `api.register() failed, hook.key must supplied and should be string, but got ${hook.key}.`,
-      hook.key && typeof hook.key === 'string'
+    assert(
+      hook.key && typeof hook.key === 'string',
+      `api.register() failed, hook.key must supplied and should be string, but got ${hook.key}.`
     )
-    utils.assert(
-      `api.register() failed, hook.fn must supplied and should be function, but got ${hook.fn}.`,
-      typeof hook.fn === 'function'
+    assert(
+      typeof hook.fn === 'function',
+      `api.register() failed, hook.fn must supplied and should be function, but got ${hook.fn}.`
     )
 
     const { hooksByPluginId } = this.service

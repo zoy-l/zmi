@@ -1,5 +1,6 @@
-import { assert, chalk, portfinder, clearConsole } from '@zmi-cli/utils'
+import { chalk, portfinder, clearConsole } from '@zmi-cli/utils'
 import { IApi } from '@zmi-cli/types'
+import assert from 'assert'
 
 import { getBundleAndConfigs } from '../common/BundleUtils'
 
@@ -45,7 +46,7 @@ export default (api: IApi) => {
   api.registerMethod({
     name: 'getPort',
     fn() {
-      assert(`api.getPort() is only valid in development.`, api.env === 'development')
+      assert(api.env === 'development', `api.getPort() is only valid in development.`)
       return port
     }
   })
@@ -53,7 +54,7 @@ export default (api: IApi) => {
   api.registerMethod({
     name: 'getHostname',
     fn() {
-      assert(`api.getHostname() is only valid in development.`, api.env === 'development')
+      assert(api.env === 'development', `api.getHostname() is only valid in development.`)
       return host
     }
   })

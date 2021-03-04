@@ -14,12 +14,8 @@ export function getCwd() {
 
 export function getPkg(dir: string) {
   try {
-    return require(path.join(getCwd(), 'package.json'))
+    return require(path.join(dir, 'package.json'))
   } catch (error) {
-    try {
-      return require(path.join(dir, 'package.json'))
-    } catch (error) {
-      return null
-    }
+    return null
   }
 }

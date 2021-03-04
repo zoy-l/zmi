@@ -1,13 +1,7 @@
+import slash from 'slash'
 import path from 'path'
 import fs from 'fs'
 
-import winPath from './winPath'
-
-/**
- * @description
- * - `'javascript'`: try to match the file with extname `.{ts(x)|js(x)}`
- * - `'css'`: try to match the file with extname `.{less|sass|scss|stylus|css}`
- */
 type FileType = 'javascript' | 'css'
 
 interface IGetFileOpts {
@@ -21,12 +15,6 @@ const extsMap: Record<FileType, string[]> = {
   css: ['.less', '.sass', '.scss', '.stylus', '.css']
 }
 
-/**
- * Try to match the exact extname of the file in a specific directory.
- * @returns
- * - matched: `{ path: string; filename: string }`
- * - otherwise: `null`
- */
 export default function getFile(opts: IGetFileOpts) {
   const exts = extsMap[opts.type]
   const ex = [...exts]
@@ -37,11 +25,11 @@ export default function getFile(opts: IGetFileOpts) {
 
   while (ex.length) {
     const filename = `${opts.fileNameWithoutExt}${ex.shift()}`
-    const paths = winPath(path.join(opts.base, filename))
+    const paths = slash(path.join(opts.base, filename))
 
     if (fs.existsSync(paths)) {
       return {
-        path,
+        paths,
         filename
       }
     }

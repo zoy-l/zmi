@@ -6,10 +6,10 @@
     "build": "zmi build"
   },
   "dependencies": {
-    "vue": "^3.0.5"
+    "vue": "^3.0.7"
   },
   "devDependencies": {
     "zmi": "^{{{ version }}}",
-    "@vue/compiler-sfc": "^3.0.5"
+    "@vue/compiler-sfc": "^3.0.7"
   }
 }

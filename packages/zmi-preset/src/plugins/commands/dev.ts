@@ -1,4 +1,4 @@
-import { chalk, chokidar, clearConsole, lodash, winPath } from '@zmi-cli/utils'
+import { chalk, chokidar, clearConsole, lodash, slash } from '@zmi-cli/utils'
 import { getPlugin } from '@zmi-cli/core'
 import { IApi } from '@zmi-cli/types'
 import path from 'path'
@@ -44,7 +44,7 @@ function watcher(cwd: string, onChange: { (): void }) {
 function watchPkg(cwd: string, onChange: { (): void }) {
   watcher(cwd, onChange)
 
-  if (winPath(cwd) !== winPath(process.cwd())) {
+  if (slash(cwd) !== slash(process.cwd())) {
     watcher(process.cwd(), onChange)
   }
 }

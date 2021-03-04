@@ -68,7 +68,7 @@ function applyPlugin(options: IPenetrateOptions) {
 
   let reactVersion
   if (isReact) {
-    const { react } = pkg.dependencies
+    const { react = 'detect' } = pkg.dependencies ?? {}
     delete forkTsCheckerOpt.typescript.extensions
 
     if (isNaN(Number(react.charAt(0)))) {

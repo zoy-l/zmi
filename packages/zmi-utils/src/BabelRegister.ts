@@ -1,5 +1,5 @@
 import lodash from 'lodash'
-import winPath from './winPath'
+import slash from 'slash'
 
 export default class BabelRegister {
   only: Record<string, string[]> = {}
@@ -13,7 +13,7 @@ export default class BabelRegister {
     const only = lodash.uniq(
       Object.keys(this.only)
         .reduce<string[]>((memo, key) => memo.concat(this.only[key]), [])
-        .map(winPath)
+        .map(slash)
     )
     require('@babel/register')({
       presets: [require.resolve('@zmi-cli/babel-factory/node')],

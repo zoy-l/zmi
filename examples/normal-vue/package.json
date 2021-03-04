@@ -5,13 +5,13 @@
   "license": "MIT",
   "dependencies": {
     "@vuedx/typescript-plugin-vue": "^0.6.0",
-    "vue": "^3.0.5"
+    "vue": "^3.0.7"
   },
   "scripts": {
     "dev": "zmi dev",
     "build": "zmi build"
   },
   "devDependencies": {
-    "@vue/compiler-sfc": "^3.0.5"
+    "@vue/compiler-sfc": "^3.0.7"
   }
 }

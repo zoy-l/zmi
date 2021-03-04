@@ -9,7 +9,7 @@ import { ICreateCSSRuleOpts } from './applyCss'
 export type createCSSRule = (createCSSRuleOptions: ICreateCSSRuleOpts) => void
 
 export interface IConfigOpts {
-  chainWebpack?: (webpackConfig: WebpackChain, args: Record<string, any>) => Promise<any>
+  chainWebpack?: (webpackConfig: WebpackChain, args: Record<string, any>) => void | Promise<any>
   modifyBabelPresetOpts?: <T>(opts: T) => Promise<T> | T
   modifyBabelOpts?: <T>(opts: T) => Promise<T> | T
   env: 'development' | 'production'
@@ -76,10 +76,7 @@ export interface IConfig {
     styleLoader?: Record<string, any>
     cssLoader?: Record<string, any>
   }
-  htmlPlugin?: Omit<
-    RequireOnly<HtmlPlugin.Options>,
-    'favicon' | 'template' | 'templateContent'
-  >
+  htmlPlugin?: Omit<RequireOnly<HtmlPlugin.Options>, 'favicon' | 'template' | 'templateContent'>
   cache?: 'memory' | 'filesystem'
   extraPostCSSPlugins?: string[]
   extraBabelPresets?: string[]
@@ -108,13 +105,7 @@ export interface IConfig {
   targets?: ITargets
   miniAppConfig?: Omit<
     nerdConfig,
-    | 'pkgs'
-    | 'nodeVersion'
-    | 'nodeFiles'
-    | 'browserFiles'
-    | 'react'
-    | 'target'
-    | 'moduleType'
+    'pkgs' | 'nodeVersion' | 'nodeFiles' | 'browserFiles' | 'react' | 'target' | 'moduleType'
   >
   chainWebpack?: (
     meme: WebpackChain,

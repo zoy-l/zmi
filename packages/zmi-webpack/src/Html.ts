@@ -1,14 +1,15 @@
-import { cheerio, assert } from '@zmi-cli/utils'
+import { cheerio, deepmerge } from '@zmi-cli/utils'
 import { readFileSync } from 'fs'
+import assert from 'assert'
 import { join } from 'path'
 import ejs from 'ejs'
 
-import { IModifyHTML, IGetContentArgs, IConfig, IScript } from './types'
+import { IGetContentArgs, IConfig, IScript } from './types'
+import defaultConfig from './defaultConfig'
 
 export type IOpts = {
   config: IConfig
   tplPath?: string
-  modifyHTML?: IModifyHTML
 }
 
 class Html {
@@ -22,9 +23,9 @@ class Html {
    */
   tplPath?: string
 
-  constructor(opts: IOpts) {
-    this.config = opts.config
-    this.tplPath = opts.tplPath
+  constructor(options: IOpts = { config: {}, tplPath: undefined }) {
+    this.config = deepmerge(defaultConfig, options.config)
+    this.tplPath = options.tplPath
   }
 
   getHtmlPath(path: string) {
@@ -152,7 +153,7 @@ class Html {
     const mountElementId = 'root'
     if (!$(`#${mountElementId}`).length) {
       const bodyEl = $('body')
-      assert('<body> not found in html template.', bodyEl.length)
+      assert(bodyEl.length, '<body> not found in html template.')
       bodyEl.append(`<div id="${mountElementId}"></div>`)
     }
 

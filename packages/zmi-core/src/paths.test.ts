@@ -1,4 +1,4 @@
-import { lodash, winPath } from '@zmi-cli/utils'
+import { lodash, slash } from '@zmi-cli/utils'
 import { join, relative } from 'path'
 
 import { IServicePaths } from './types'
@@ -8,7 +8,7 @@ const fixtures = join(__dirname, '../fixtures')
 
 function stripCwd(paths: IServicePaths, cwd: string) {
   return lodash.mapValues(paths, (value) =>
-    value.startsWith('@') ? value : winPath(relative(cwd, value))
+    value.startsWith('@') ? value : slash(relative(cwd, value))
   )
 }
 

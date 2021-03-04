@@ -1,4 +1,5 @@
 import path from 'path'
+import { EntryObject } from 'webpack'
 
 import Bundler from './Bundler'
 import Html from './Html'
@@ -102,5 +103,99 @@ describe('setupDevServer', () => {
     devServer.close()
     await wait()
     done()
+  })
+})
+
+describe('normal', () => {
+  const html = new Html()
+
+  let content: string
+
+  beforeEach(async () => {
+    content = await html.getContent({
+      headScripts: [],
+      metas: [],
+      styles: [],
+      scripts: [],
+      links: []
+    })
+  })
+
+  const args = (cwd: string) => ({
+    entry: {
+      main: path.join(`${cwd}/src`, 'index.js')
+    },
+    htmlContent: content,
+    port: 8000
+  })
+
+  test('framType', async () => {
+    const cwd = path.join(fixtures, 'frameType')
+
+    const bundler = new Bundler({ cwd, pkg: require(`${cwd}/package.json`) })
+    const bundleConfigs = await bundler.getConfig({
+      env: 'production',
+      ...args(cwd)
+    })
+
+    expect(/eslint-config-zmi\/react\.js/.test(JSON.stringify(bundleConfigs.plugins))).toEqual(true)
+  })
+
+  test('user modify config', async () => {
+    const cwd = path.join(fixtures, 'user-modify-config')
+
+    const bundler = new Bundler({ cwd, config: require(`${cwd}/index.js`).default })
+    const bundleConfigs = await bundler.getConfig({
+      env: 'development',
+      ...args(cwd)
+    })
+
+    const entry = bundleConfigs.entry as EntryObject
+
+    expect(bundleConfigs.cache).toEqual({
+      type: 'filesystem',
+      buildDependencies: {
+        config: [path.join(__dirname, 'getConfig.ts')]
+      }
+    })
+    expect(entry.test).toEqual(['./foo.js'])
+    expect(entry.bar).toEqual(['./bar.js'])
+    expect(entry.arr).toEqual(['./bar.js', './foo.js'])
+  })
+
+  test('alias', async () => {
+    const cwd = path.join(fixtures, 'alias')
+
+    const bundler = new Bundler({ cwd, config: require(`${cwd}/index.js`).default })
+    const bundleConfigs = await bundler.getConfig({
+      env: 'development',
+      ...args(cwd)
+    })
+
+    const alias = bundleConfigs.resolve?.alias
+
+    expect(alias).toEqual({ src: '@', react: 'vue' })
+  })
+
+  test('plugin modify config', async () => {
+    const cwd = path.join(fixtures, 'plugin-modify-config')
+
+    const bundler = new Bundler({
+      cwd,
+      config: require(`${cwd}/index.js`).default
+    })
+    const bundleConfigs = await bundler.getConfig({
+      env: 'development',
+      ...args(cwd),
+      chainWebpack(webpackConfig) {
+        webpackConfig.resolve.alias.set('src', '@@')
+      }
+    })
+
+    const { resolve, cache } = bundleConfigs
+
+    // console.log(cache)
+    expect(cache).toEqual({ type: 'memory' })
+    expect(resolve?.alias).toEqual({ src: '@@' })
   })
 })

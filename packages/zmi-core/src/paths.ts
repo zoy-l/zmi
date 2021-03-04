@@ -1,4 +1,4 @@
-import { lodash, winPath } from '@zmi-cli/utils'
+import { lodash, slash } from '@zmi-cli/utils'
 import { IConfig } from '@zmi-cli/webpack'
 import path from 'path'
 import fs from 'fs'
@@ -16,7 +16,7 @@ function isDirectoryAndExist(path: string) {
 }
 
 function normalizeWithWinPath<T extends Record<string, string>>(obj: T) {
-  return lodash.mapValues(obj, (value: string) => winPath(value))
+  return lodash.mapValues(obj, (value: string) => slash(value))
 }
 
 export default function servicePath(options: IServicePath): IServicePaths {

@@ -1,12 +1,5 @@
-import {
-  compatibleWithESModule,
-  flatDeep,
-  resolve,
-  winPath,
-  lodash,
-  assert,
-  pkgUp
-} from '@zmi-cli/utils'
+import { compatibleWithESModule, flatDeep, resolve, slash, lodash, pkgUp } from '@zmi-cli/utils'
+import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
 
@@ -61,29 +54,26 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
   let pkg = null
   let isPkgPlugin = false
 
-  assert(`${pluginPath} not exists, pathToRegister failed`, fs.existsSync(pluginPath))
+  assert(fs.existsSync(pluginPath), `${pluginPath} not exists, pathToRegister failed`)
 
   const pkgJSONPath = pkgUp.sync({ cwd: pluginPath })
   /* istanbul ignore next */
   if (pkgJSONPath) {
     pkg = require(pkgJSONPath)
     isPkgPlugin =
-      winPath(path.join(path.dirname(pkgJSONPath), pkg.main || 'index.js')) ===
-      winPath(pluginPath)
+      slash(path.join(path.dirname(pkgJSONPath), pkg.main || 'index.js')) === slash(pluginPath)
   }
 
   let id
   if (isPkgPlugin) {
     id = pkg!.name
-  } else if (winPath(pluginPath).startsWith(winPath(cwd))) {
-    id = `./${winPath(path.relative(cwd, pluginPath))}`
+  } else if (slash(pluginPath).startsWith(slash(cwd))) {
+    id = `./${slash(path.relative(cwd, pluginPath))}`
   } /* istanbul ignore next */ else if (pkgJSONPath) {
-    id = winPath(
-      path.join(pkg!.name, path.relative(path.dirname(pkgJSONPath), pluginPath))
-    )
+    id = slash(path.join(pkg!.name, path.relative(path.dirname(pkgJSONPath), pluginPath)))
   } else {
     /* istanbul ignore next */
-    id = winPath(pluginPath)
+    id = slash(pluginPath)
   }
   id = id.replace('@zmi-cli/preset/lib/plugins', '@@')
   id = id.replace(/\.js$/, '')
@@ -105,7 +95,7 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
   return {
     id,
     key,
-    path: winPath(pluginPath),
+    path: slash(pluginPath),
     apply() {
       try {
         const ret = require(pluginPath)
