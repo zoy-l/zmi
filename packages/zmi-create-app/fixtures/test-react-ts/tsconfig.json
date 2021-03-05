@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "types": ["zmi/client"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./src", "./typings"],
+  "exclude": ["node_modules"]
+}

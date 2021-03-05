@@ -26,35 +26,31 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
   }
 
   let IappName = appName as fs.PathLike
-  const isEmptyDir = fs.existsSync(IappName) && !!fs.readdirSync(`${cwd}/${IappName}`).length
 
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    if (isEmptyDir) {
-      const { newAppName } = await inquirer.prompt({
-        type: 'input',
-        name: 'newAppName',
-        message: yellow(
-          [
-            `The \`${cyan(IappName)}\` `,
-            'folder already exists and is not empty.\n',
-            'please enter a new project name : '
-          ].join('')
-        ),
-        prefix: '⚠️ '
-      })
+  const isEmptyDir =
+    fs.existsSync(`${cwd}/${IappName}`) && !!fs.readdirSync(`${cwd}/${IappName}`).length
 
-      if (!directoryList.includes(`${newAppName}`)) {
-        cwd += `/${newAppName}`
-        break
-      } else {
-        IappName = `${newAppName}`
-      }
-    } else {
-      cwd += `/${IappName}`
+  while (isEmptyDir) {
+    const { newAppName } = await inquirer.prompt({
+      type: 'input',
+      name: 'newAppName',
+      message: yellow(
+        [
+          `The \`${cyan(IappName)}\` `,
+          'folder already exists and is not empty.\n',
+          'please enter a new project name : '
+        ].join('')
+      ),
+      prefix: '⚠️ '
+    })
+    IappName = `${newAppName}`
+
+    if (!directoryList.includes(`${newAppName}`)) {
       break
     }
   }
+
+  cwd += `/${IappName}`
 
   const { template } = await inquirer.prompt({
     type: 'list',
