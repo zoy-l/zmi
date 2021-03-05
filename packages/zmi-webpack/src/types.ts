@@ -83,8 +83,16 @@ export interface IConfig {
   extraBabelPlugins?: string[]
   plugins?: string[]
   autoprefixer?: Record<string, any>
-  links?: Partial<HTMLLinkElement>[]
-  metas?: Partial<HTMLMetaElement>[]
+  links?: Partial<
+    HTMLLinkElement & {
+      [key: string]: string
+    }
+  >[]
+  metas?: Partial<
+    HTMLMetaElement & {
+      [key: string]: string
+    }
+  >[]
   scripts?: IScriptConfig
   headScripts?: IScriptConfig
   styles?: IStyleConfig
@@ -124,7 +132,7 @@ type INonEmpty<T extends Record<string, any>, U> = {
 export type IPrivate = INonEmpty<IConfig, 'loaderOptions'>
 
 export interface IModifyHTML {
-  (memo: any, args?: any): Promise<any>
+  (memo: cheerio.Root): void
 }
 
 export type IHtmlConfig = Pick<IPrivate, 'metas' | 'links' | 'headScripts' | 'scripts'>

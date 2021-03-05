@@ -1,12 +1,19 @@
 import path from 'path'
 import { EntryObject } from 'webpack'
+import stripAnsi from 'strip-ansi'
 
 import Bundler from './Bundler'
 import Html from './Html'
 
 const fixtures = path.join(__dirname, '../fixtures')
-const wait = () => new Promise((resolve) => setTimeout(resolve, 1500))
+const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
 jest.setTimeout(30000)
+
+const _log = console.log
+const _warn = console.warn
+
+const _path = process.cwd().split('/')
+const isRoot = _path[_path.length - 1] !== 'zmi-webpack'
 
 describe('setupDevServer', () => {
   const cwd = path.join(fixtures, 'vue-config')
@@ -17,6 +24,16 @@ describe('setupDevServer', () => {
   const host = '0.0.0.0'
 
   process.env.ZMI_TEST = 'true'
+
+  beforeEach(() => {
+    window.console.warn = jest.fn()
+    window.console.log = jest.fn()
+  })
+
+  afterEach(() => {
+    window.console.log = _log
+    window.console.warn = _warn
+  })
 
   it(cwd, async (done) => {
     const content = await html.getContent({
@@ -41,6 +58,14 @@ describe('setupDevServer', () => {
     })
 
     await bundler.build({ bundleConfigs, appOutputPath: path.join(cwd, './dist') })
+    // @ts-expect-error test
+    expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
+      'Start packing, please don’t worry, officer...\n',
+      ' BUILD  Compiled successfully !\n ',
+      '📦 Name: - Size',
+      '➜  dist/main.js  23 B',
+      undefined
+    ])
 
     const devBundleConfigs = await bundler.getConfig({
       env: 'development',
@@ -51,9 +76,20 @@ describe('setupDevServer', () => {
       port,
       host
     })
+
     await wait()
+
+    // @ts-expect-error test
+    expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
+      'Start packing, please don’t worry, officer...\n',
+      ' BUILD  Compiled successfully !\n ',
+      '📦 Name: - Size',
+      '➜  dist/main.js  23 B',
+      undefined,
+      ' DONE ',
+      ' Localhost: http://localhost:8000/'
+    ])
     devServer.close()
-    await wait()
     done()
   })
 })
@@ -65,6 +101,16 @@ describe('setupDevServer', () => {
   const port = 8000
   const host = '0.0.0.0'
   const html = new Html({ config })
+
+  beforeEach(() => {
+    window.console.warn = jest.fn()
+    window.console.log = jest.fn()
+  })
+
+  afterEach(() => {
+    window.console.log = _log
+    window.console.warn = _warn
+  })
 
   it(cwd, async (done) => {
     const content = await html.getContent({
@@ -89,6 +135,16 @@ describe('setupDevServer', () => {
     })
 
     await bundler.build({ bundleConfigs, appOutputPath: path.join(cwd, './dist') })
+
+    // @ts-expect-error test
+    expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
+      'Start packing, please don’t worry, officer...\n',
+      ' BUILD  Compiled successfully !\n ',
+      '📦 Name: - Size',
+      '➜  dist/main.c9188445.js  59 B (-17 B) ',
+      undefined
+    ])
+
     const devBundleConfigs = await bundler.getConfig({
       env: 'development',
       ...args
@@ -99,9 +155,19 @@ describe('setupDevServer', () => {
       port,
       host
     })
+
     await wait()
+    // @ts-expect-error test
+    expect(console.warn.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
+      `${isRoot ? 'packages/zmi-webpack/' : ''}fixtures/react-config/src/index.jsx\n` +
+        '  Line 5:1:  Do not use "@ts-ignore" because it alters compilation errors  @typescript-eslint/ban-ts-comment\n' +
+        `${isRoot ? 'packages/zmi-webpack/' : ''}fixtures/react-config/src/index.jsx\n` +
+        "  Line 3:7:  'foo' is assigned a value but never used  @typescript-eslint/no-unused-vars\n" +
+        '\n' +
+        'Search for the keywords to learn more about each error.'
+    ])
+
     devServer.close()
-    await wait()
     done()
   })
 })
@@ -194,7 +260,6 @@ describe('normal', () => {
 
     const { resolve, cache } = bundleConfigs
 
-    // console.log(cache)
     expect(cache).toEqual({ type: 'memory' })
     expect(resolve?.alias).toEqual({ src: '@@' })
   })

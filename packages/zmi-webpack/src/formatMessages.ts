@@ -1,5 +1,7 @@
 // Taken from the `react-dev-utils`
 
+import webpack from 'webpack'
+
 const friendlySyntaxErrorLabel = 'Syntax error:'
 
 function isLikelyASyntaxError(message: string | string[]) {
@@ -21,7 +23,7 @@ function formatMessage(message = '') {
     if (!parsingError) {
       return line
     }
-    const [, errorLine, errorColumn, errorMessage] = parsingError
+    const [errorLine, errorColumn, errorMessage] = parsingError
     return `${friendlySyntaxErrorLabel} ${errorMessage} (${errorLine}:${errorColumn})`
   })
 
@@ -82,7 +84,7 @@ function formatMessage(message = '') {
   return message.trim()
 }
 
-function formatWebpackMessages(json: { errors?: any[]; warnings?: any[] }) {
+function formatWebpackMessages(json: webpack.StatsCompilation) {
   json.errors = json.errors ?? []
   json.warnings = json.warnings ?? []
   const formattedErrors = json.errors.map(({ message }) => formatMessage(message))

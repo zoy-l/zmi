@@ -24,6 +24,7 @@ export default function formatter(results: ESLint.LintResult[]) {
 
     let msg = messages.map((message) => {
       let messageType
+
       if (isError(message) && !emitErrorsAsWarnings) {
         messageType = 'error'
         hasErrors = true

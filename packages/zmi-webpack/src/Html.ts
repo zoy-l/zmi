@@ -28,27 +28,27 @@ class Html {
     this.tplPath = options.tplPath
   }
 
-  getHtmlPath(path: string) {
-    if (path === '/') {
-      return 'index.html'
-    }
+  // getHtmlPath(path: string) {
+  //   if (path === '/') {
+  //     return 'index.html'
+  //   }
 
-    // remove first and last slash
-    path = path.replace(/^\//, '')
-    path = path.replace(/\/$/, '')
+  //   // remove first and last slash
+  //   path = path.replace(/^\//, '')
+  //   path = path.replace(/\/$/, '')
 
-    // this.config.exportStatic?.htmlSuffix
-    if (path === 'index.html') {
-      return `${path}`
-    }
-    return `${path}/index.html`
-  }
+  //   // this.config.exportStatic?.htmlSuffix
+  //   if (path === 'index.html') {
+  //     return `${path}`
+  //   }
+  //   return `${path}/index.html`
+  // }
 
-  getRelPathToPublicPath(path: string) {
-    const htmlPath = this.getHtmlPath(path)
-    const len = htmlPath.split('/').length
-    return Array(len - 1).join('../') || './'
-  }
+  // getRelPathToPublicPath(path: string) {
+  //   const htmlPath = this.getHtmlPath(path)
+  //   const len = htmlPath.split('/').length
+  //   return Array(len - 1).join('../') || './'
+  // }
 
   getAsset(opts: { file: string; path?: string }) {
     if (/^https?:\/\//.test(opts.file)) {
@@ -63,6 +63,7 @@ class Html {
     return scripts
       .map((script: any) => {
         const { content, ...attrs } = script
+
         if (content && !attrs.src) {
           const newAttrs = Object.keys(attrs).reduce(
             (memo: any, key: string) => [...memo, `${key}="${attrs[key]}"`],
@@ -99,7 +100,7 @@ class Html {
       filename: 'document.ejs'
     })
 
-    let $ = cheerio.load(html, {
+    const $ = cheerio.load(html, {
       decodeEntities: false
     })
 
@@ -166,7 +167,7 @@ class Html {
     }
 
     if (modifyHTML) {
-      $ = await modifyHTML($)
+      modifyHTML($)
     }
 
     return $.html()

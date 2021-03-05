@@ -2,14 +2,14 @@ import { chalk, clearConsole } from '@zmi-cli/utils'
 import stripAnsi from 'strip-ansi'
 import address from 'address'
 import webpack from 'webpack'
-import url from 'url'
+// import url from 'url'
 
 import formatMessages from './formatMessages'
 
 interface IUrlType {
-  lanUrlForTerminal: string | undefined
-  localUrlForTerminal: string
   lanUrlForConfig: any
+  lanUrlForTerminal: URL | undefined
+  localUrlForTerminal: URL
 }
 
 interface IPrepareUrlOpts {
@@ -23,13 +23,7 @@ const urlRegex = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
 export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
   const { protocol, host, port, pathname } = prepareUrlOptions
-  const formatUrl = (hostname: string) =>
-    url.format({
-      protocol,
-      hostname,
-      port,
-      pathname
-    })
+  const formatUrl = (hostname: string) => new URL(`${protocol}://${hostname}:${port}${pathname}`)
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::'
 

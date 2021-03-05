@@ -76,6 +76,7 @@ export default class Bundler {
     clearConsole()
     console.log(chalk.blue('Start packing, please don’t worry, officer...\n'))
     const previousFileSizes = await measureFileSizesBeforeBuild(appOutputPath)
+
     fs.emptyDirSync(appOutputPath)
 
     return new Promise((resolve) => {
@@ -86,27 +87,14 @@ export default class Bundler {
 
         if (err) {
           if (!err.message) {
-            throw new Error('build fail')
+            throw new Error(`build fail: ${err.message}`)
           }
-
-          messages = formatMessages({
-            errors: [err.message],
-            warnings: []
-          })
-        } else {
-          messages = stats
-            ? formatMessages(stats.toJson({ all: false, warnings: true, errors: true }))
-            : {
-                errors: [],
-                warnings: []
-              }
+        } else if (stats) {
+          messages = formatMessages(stats.toJson({ all: false, warnings: true, errors: true }))
         }
 
-        if (messages.errors.length) {
-          if (messages.errors.length > 1) {
-            messages.errors.length = 1
-          }
-          throw new Error(messages.errors.join('\n\n'))
+        if (messages && messages.errors.length && messages.errors.length > 1) {
+          messages.errors.length = 1
         }
 
         clearConsole()
@@ -115,10 +103,16 @@ export default class Bundler {
         )
         console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
 
-        printFileSizesAfterBuild(stats, previousFileSizes, appOutputPath)
+        if (stats) {
+          printFileSizesAfterBuild(
+            stats.toJson({ all: false, assets: true }),
+            previousFileSizes,
+            appOutputPath
+          )
+        }
         console.log()
 
-        if (messages.warnings.length) {
+        if (messages && messages.warnings.length) {
           console.warn(messages.warnings.join('\n'))
         }
 
