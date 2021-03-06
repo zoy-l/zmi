@@ -8,7 +8,7 @@ import Service from './Service'
 
 const fixtures = path.join(__dirname, '../fixtures')
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 1500))
+const wait = () => new Promise((resolve) => setTimeout(resolve, 2000))
 jest.setTimeout(30000)
 
 beforeEach(() => {

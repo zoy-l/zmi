@@ -6,7 +6,7 @@ import Bundler from './Bundler'
 import Html from './Html'
 
 const fixtures = path.join(__dirname, '../fixtures')
-const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
+const wait = () => new Promise((resolve) => setTimeout(resolve, 1500))
 jest.setTimeout(30000)
 
 process.env.ZMI_TEST = 'true'
