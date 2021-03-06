@@ -71,10 +71,11 @@ describe('setupDevServer', () => {
 
     await wait()
 
-    console.error(console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join(''))
     expect(
-      // @ts-expect-error test
-      /Running metro bundler/.test(console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join(''))
+      /Running metro bundler/.test(
+        // @ts-expect-error test
+        console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join('')
+      )
     ).toEqual(true)
     devServer.close()
     done()
