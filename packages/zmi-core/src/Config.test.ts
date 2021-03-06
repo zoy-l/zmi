@@ -116,6 +116,7 @@ describe('watch', () => {
         __watcher: chokidar.FSWatcher
       }) {
         const { pluginChanged, valueChanged, __watcher } = options
+        console.log(pluginChanged, valueChanged)
         expect(pluginChanged.length).toEqual(0)
         expect(valueChanged.length).toEqual(1)
         __watcher.close()
@@ -152,6 +153,7 @@ describe('watch', () => {
         __watcher: chokidar.FSWatcher
       }) {
         const { pluginChanged, valueChanged, __watcher } = options
+
         expect(pluginChanged.length).toEqual(1)
         expect(valueChanged.length).toEqual(0)
         __watcher.close()

@@ -73,7 +73,7 @@ describe('setupDevServer', () => {
 
     expect(
       // @ts-expect-error test
-      console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).includes(' DONE ')
+      /DONE/.test(console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join(''))
     ).toEqual(true)
     devServer.close()
     done()
