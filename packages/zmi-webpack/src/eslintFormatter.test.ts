@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-
+import { slash } from '@zmi-cli/utils'
 import eslintFormatter from './eslintFormatter'
 import stripAnsi from 'strip-ansi'
 
@@ -61,7 +61,7 @@ test('eslint formatter e', () => {
   ]
   const data = eslintFormatter(state)
 
-  expect(stripAnsi(data)).toContain(
+  expect(slash(stripAnsi(data))).toContain(
     `fixtures/react-config/src/index.jsx\n  Line 5:1:  Do not use "@ts-ignore"`
   )
 })
@@ -100,6 +100,6 @@ test('eslint formatter f', () => {
   const data = eslintFormatter(state)
   process.env.NODE_ENV = nodeEnv
 
-  expect(stripAnsi(data)).toContain(`fixtures/react-config/src/index.jsx
+  expect(slash(stripAnsi(data))).toContain(`fixtures/react-config/src/index.jsx
   Line 0:  Do not use "@ts-ignore" because it alters compilation errors`)
 })

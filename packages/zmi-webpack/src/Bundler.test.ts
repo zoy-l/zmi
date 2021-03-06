@@ -178,7 +178,11 @@ describe('normal', () => {
       ...args(cwd)
     })
 
-    expect(/eslint-config-zmi\/react\.js/.test(JSON.stringify(bundleConfigs.plugins))).toEqual(true)
+    expect(
+      /react.js/.test(
+        JSON.parse(JSON.stringify(bundleConfigs.plugins?.[0])).options.baseConfig.extends
+      )
+    ).toEqual(true)
   })
 
   test('user modify config', async () => {

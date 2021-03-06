@@ -3,7 +3,7 @@
 
 import { printFileSizesAfterBuild, measureFileSizesBeforeBuild } from './reporterFileSize'
 import { rmdirSync } from 'fs-extra'
-import { lodash } from '@zmi-cli/utils'
+import { lodash, slash } from '@zmi-cli/utils'
 import stripAnsi from 'strip-ansi'
 import path from 'path'
 
@@ -114,10 +114,12 @@ test('reporter file size green', () => {
   const sizes = { 'main.css': 304, 'main.js': 523007 }
   printFileSizesAfterBuild(state, sizes, fixtures)
 
-  expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  492.91 KB (-17.84 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  82.99 KB              ',
-    '➜  reporter-file-size/main.86a8dd21.css  304 B                 '
+  expect(
+    console.log.mock.calls.map((str) => stripAnsi(str[0]).replace(/reporter-file-size(\\|\/)/, ''))
+  ).toEqual([
+    '➜  main.abc02671.js  492.92 KB (-17.83 KB) ',
+    '➜  chunk.abc02671.js  82.99 KB              ',
+    '➜  main.86a8dd21.css  304 B                 '
   ])
 })
 
@@ -125,10 +127,12 @@ test('reporter file size yellow', () => {
   const sizes = { 'main.css': 50, 'main.js': 443007 }
   printFileSizesAfterBuild(state, sizes, fixtures)
 
-  expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  492.91 KB (+60.28 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  82.99 KB              ',
-    '➜  reporter-file-size/main.86a8dd21.css  304 B (+254 B)        '
+  expect(
+    console.log.mock.calls.map((str) => stripAnsi(str[0]).replace(/reporter-file-size(\\|\/)/, ''))
+  ).toEqual([
+    '➜  main.abc02671.js  492.92 KB (+60.3 KB) ',
+    '➜  chunk.abc02671.js  82.99 KB             ',
+    '➜  main.86a8dd21.css  304 B (+254 B)       '
   ])
 })
 
@@ -136,10 +140,12 @@ test('reporter file size red', () => {
   const sizes = { 'main.css': 1024, 'main.js': 100 }
   printFileSizesAfterBuild(state, sizes, fixtures)
 
-  expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  492.91 KB (+492.81 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  82.99 KB               ',
-    '➜  reporter-file-size/main.86a8dd21.css  304 B (-720 B)         '
+  expect(
+    console.log.mock.calls.map((str) => stripAnsi(str[0]).replace(/reporter-file-size(\\|\/)/, ''))
+  ).toEqual([
+    '➜  main.abc02671.js  492.92 KB (+492.83 KB) ',
+    '➜  chunk.abc02671.js  82.99 KB               ',
+    '➜  main.86a8dd21.css  304 B (-720 B)         '
   ])
 })
 
@@ -191,9 +197,11 @@ test('main suggest bundle splitting', () => {
   const sizes = { 'main.css': 1024, 'main.js': 1000 }
   printFileSizesAfterBuild(state2, sizes, fixtures)
 
-  expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02672.js  599.36 KB (+598.38 KB) ',
-    '➜  reporter-file-size/chunk.abc02672.js  599.36 KB              ',
+  expect(
+    console.log.mock.calls.map((str) => stripAnsi(str[0])?.replace(/reporter-file-size(\\|\/)/, ''))
+  ).toEqual([
+    '➜  main.abc02672.js  599.39 KB (+598.41 KB) ',
+    '➜  chunk.abc02672.js  599.39 KB              ',
     undefined,
     'The bundle size is significantly larger than recommended.',
     'You can also analyze the project dependencies: https://webpack.js.org/guides/code-splitting/'
@@ -204,9 +212,11 @@ test('chunk suggest bundle splitting', () => {
   const sizes = { 'main.css': 1024, 'main.js': 600000 }
   printFileSizesAfterBuild(state2, sizes, fixtures)
 
-  expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02672.js  599.36 KB (+13.42 KB) ',
-    '➜  reporter-file-size/chunk.abc02672.js  599.36 KB             ',
+  expect(
+    console.log.mock.calls.map((str) => stripAnsi(str[0])?.replace(/reporter-file-size(\\|\/)/, ''))
+  ).toEqual([
+    '➜  main.abc02672.js  599.39 KB (+13.45 KB) ',
+    '➜  chunk.abc02672.js  599.39 KB             ',
     undefined,
     'The bundle size is significantly larger than recommended.',
     'You can also analyze the project dependencies: https://webpack.js.org/guides/code-splitting/'

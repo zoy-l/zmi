@@ -1,3 +1,4 @@
+import { slash } from '@zmi-cli/utils'
 import getFile from './getFile'
 import path from 'path'
 
@@ -6,9 +7,9 @@ test('getFile', () => {
     fileNameWithoutExt: 'index',
     type: 'javascript',
     base: __dirname
-  })
-
-  expect(file).toEqual({ paths: `${__dirname}/index.ts`, filename: 'index.ts' })
+  })!
+  file.paths = slash(file.paths)
+  expect(file).toEqual({ paths: slash(`${__dirname}/index.ts`), filename: 'index.ts' })
 })
 
 test('getFile css', () => {
@@ -17,9 +18,9 @@ test('getFile css', () => {
     fileNameWithoutExt: 'getFile',
     type: 'css',
     base: cwd
-  })
-
-  expect(file1).toEqual({ paths: `${cwd}/getFile.css`, filename: 'getFile.css' })
+  })!
+  file1.paths = slash(file1.paths)
+  expect(file1).toEqual({ paths: slash(`${cwd}/getFile.css`), filename: 'getFile.css' })
 })
 
 test('getFile null', () => {

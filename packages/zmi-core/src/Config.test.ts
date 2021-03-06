@@ -136,12 +136,12 @@ describe('watch', () => {
       }
     }
 
-    fs.writeFileSync(`${cwd}/.zmirc.js`, `export default { foo: 1, plugins:['./foo'] }`)
-    require.cache[`${cwd}/.zmirc.js`]!.exports = { foo: 2, plugins: ['./foo'] }
-
+    const configCwd = path.join(cwd, '.zmirc.js')
+    fs.writeFileSync(configCwd, `export default { foo: 1, plugins:['./foo'] }`)
+    require.cache[configCwd]!.exports = { foo: 2, plugins: ['./foo'] }
     await wait()
-    fs.writeFileSync(`${cwd}/.zmirc.js`, `export default { foo: 1 }`)
-    require.cache[`${cwd}/.zmirc.js`]!.exports = { foo: 1 }
+    fs.writeFileSync(configCwd, `export default { foo: 1 }`)
+    require.cache[configCwd]!.exports = { foo: 1 }
   })
 
   it(cwd, async (done) => {
@@ -173,12 +173,13 @@ describe('watch', () => {
       }
     }
 
-    fs.writeFileSync(`${cwd}/.zmirc.js`, `export default { foo: 1, plugins:['./foo'] }`)
-    require.cache[`${cwd}/.zmirc.js`]!.exports = { foo: false, plugins: ['./foo'] }
+    const configCwd = path.join(cwd, '.zmirc.js')
+    fs.writeFileSync(configCwd, `export default { foo: 1, plugins:['./foo'] }`)
+    require.cache[configCwd]!.exports = { foo: false, plugins: ['./foo'] }
     process.env.ZMI_ENV = `loc`
 
     await wait()
-    fs.writeFileSync(`${cwd}/.zmirc.js`, `export default { foo: 1 }`)
-    require.cache[`${cwd}/.zmirc.js`]!.exports = { foo: 1 }
+    fs.writeFileSync(configCwd, `export default { foo: 1 }`)
+    require.cache[configCwd]!.exports = { foo: 1 }
   })
 })

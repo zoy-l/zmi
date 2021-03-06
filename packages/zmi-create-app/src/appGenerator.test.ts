@@ -34,8 +34,8 @@ describe('app generator', () => {
   })
 
   it('input app name', async (done) => {
-    const cwd = `${fixtures}/test-react`
-    const templateCwd = `${templates}/react`
+    const cwd = path.join(fixtures, 'test-react')
+    const templateCwd = path.join(templates, 'react')
 
     rimraf.sync(cwd)
     appGenerator(fixtures, { _: [], $0: '' })
@@ -63,8 +63,9 @@ describe('app generator', () => {
   })
 
   it('input app name repeat', async (done) => {
-    const cwd = `${fixtures}/test-react-ts`
-    const templateCwd = `${templates}/react-ts`
+    const cwd = path.join(fixtures, 'test-react-ts')
+    const templateCwd = path.join(templates, 'react-ts')
+
     rimraf.sync(cwd)
     appGenerator(fixtures, { _: [], $0: '' })
     process.stdin.emit('keypress', 'test-react\r')
@@ -97,8 +98,9 @@ describe('app generator', () => {
   })
 
   it('input app name repeats', async (done) => {
-    const cwd = `${fixtures}/test-vue`
-    const templateCwd = `${templates}/vue`
+    const cwd = path.join(fixtures, 'test-vue')
+    const templateCwd = path.join(templates, 'vue')
+
     rimraf.sync(cwd)
     appGenerator(fixtures, { _: [], $0: '' })
     process.stdin.emit('keypress', 'test-react\r')
@@ -132,8 +134,9 @@ describe('app generator', () => {
   })
 
   it('cli app name miniapp', async (done) => {
-    const cwd = `${fixtures}/test-miniapp`
-    const templateCwd = `${templates}/miniapp`
+    const cwd = path.join(fixtures, 'test-miniapp')
+    const templateCwd = path.join(templates, 'miniapp')
+
     rimraf.sync(cwd)
     appGenerator(fixtures, { _: ['test-miniapp'], $0: '' })
     await wait()
@@ -161,8 +164,8 @@ describe('app generator', () => {
   })
 
   it('cli app name', async (done) => {
-    const cwd = `${fixtures}/test-vue-ts`
-    const templateCwd = `${templates}/vue-ts`
+    const cwd = path.join(fixtures, 'test-vue-ts')
+    const templateCwd = path.join(templates, 'vue-ts')
 
     rimraf.sync(cwd)
     appGenerator(fixtures, { _: ['test-vue-ts'], $0: '' })
@@ -193,8 +196,8 @@ describe('app generator', () => {
   })
 
   it('error', async (done) => {
-    const cwd = `${fixtures}/test-error`
-    const templateCwd = `${templates}/vue-ts`
+    const cwd = path.join(fixtures, 'test-error')
+    const templateCwd = path.join(templates, 'vue-ts')
 
     rimraf.sync(cwd)
     appGenerator(fixtures, { _: ['test-error'], $0: '' })

@@ -1,3 +1,4 @@
+import {slash} from '@zmi-cli/utils'
 import { getCwd, getPkg } from './getRoot'
 
 import path from 'path'
@@ -10,7 +11,7 @@ test('get cwd', () => {
 test('get cwd APP_ROOT', () => {
   process.env.APP_ROOT = './src'
   const cwd = getCwd()
-  expect(cwd).toEqual(`${process.cwd()}/src`)
+  expect(slash(cwd)).toEqual(`${slash(process.cwd())}/src`)
 
   process.env.APP_ROOT = '/Users/zoy/zmi/packages/zmi/lib'
   const cwd1 = getCwd()
