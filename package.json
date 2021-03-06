@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "debug": "node --inspect-brk packages/zmi/bin/zmi.js",
-    "test": "nerd test",
+    "test": "nerd test --coverage",
     "zmi-bootstrap": "lerna bootstrap && yarn run zmi-clean:modules",
     "zmi-nerd": "nerd build",
     "zmi-nerd:watch": "nerd build --watch",
