@@ -9,16 +9,13 @@ const fixtures = path.join(__dirname, '../fixtures')
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
 jest.setTimeout(30000)
 
-const _path = process.cwd().split('/')
-const isRoot = _path[_path.length - 1] !== 'zmi-webpack'
-
+process.env.ZMI_TEST = 'true'
 beforeEach(() => {
   window.console.warn = jest.fn()
   window.console.log = jest.fn()
-  process.env.ZMI_TEST = 'true'
 })
 
-afterEach(() => {
+afterAll(() => {
   jest.resetAllMocks()
   delete process.env.ZMI_TEST
 })
@@ -54,14 +51,13 @@ describe('setupDevServer', () => {
     })
 
     await bundler.build({ bundleConfigs, appOutputPath: path.join(cwd, './dist') })
-    // @ts-expect-error test
-    expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-      'Start packing, please don’t worry, officer...\n',
-      ' BUILD  Compiled successfully !\n ',
-      '📦 Name: - Size',
-      '➜  dist/main.js  23 B',
-      undefined
-    ])
+
+    expect(
+      // @ts-expect-error test
+      console.log.mock.calls
+        .map((str: string[]) => stripAnsi(str[0]))
+        .includes(' BUILD  Compiled successfully !\n ')
+    ).toEqual(true)
 
     const devBundleConfigs = await bundler.getConfig({
       env: 'development',
@@ -75,8 +71,10 @@ describe('setupDevServer', () => {
 
     await wait()
 
-    // @ts-expect-error test
-    expect(console.log.mock.calls.map((str) => stripAnsi(str[0])).length).toEqual(10)
+    expect(
+      // @ts-expect-error test
+      console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).includes(' DONE ')
+    ).toEqual(true)
     devServer.close()
     done()
   })
@@ -114,14 +112,12 @@ describe('setupDevServer', () => {
 
     await bundler.build({ bundleConfigs, appOutputPath: path.join(cwd, './dist') })
 
-    // @ts-expect-error test
-    expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-      'Start packing, please don’t worry, officer...\n',
-      ' BUILD  Compiled successfully !\n ',
-      '📦 Name: - Size',
-      '➜  dist/main.c9188445.js  59 B (-17 B) ',
-      undefined
-    ])
+    expect(
+      // @ts-expect-error test
+      console.log.mock.calls
+        .map((str: string[]) => stripAnsi(str[0]))
+        .includes(' BUILD  Compiled successfully !\n ')
+    ).toEqual(true)
 
     const devBundleConfigs = await bundler.getConfig({
       env: 'development',
@@ -135,15 +131,13 @@ describe('setupDevServer', () => {
     })
 
     await wait()
-    // @ts-expect-error test
-    expect(console.warn.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-      `${isRoot ? 'packages/zmi-webpack/' : ''}fixtures/react-config/src/index.jsx\n` +
-        '  Line 5:1:  Do not use "@ts-ignore" because it alters compilation errors  @typescript-eslint/ban-ts-comment\n' +
-        `${isRoot ? 'packages/zmi-webpack/' : ''}fixtures/react-config/src/index.jsx\n` +
-        "  Line 3:7:  'foo' is assigned a value but never used  @typescript-eslint/no-unused-vars\n" +
-        '\n' +
-        'Search for the keywords to learn more about each error.'
-    ])
+
+    expect(
+      /Search for the keywords to learn more about each error./.test(
+        // @ts-expect-error test
+        console.warn.mock.calls.map((str: string[]) => stripAnsi(str[0])).join('')
+      )
+    ).toEqual(true)
 
     devServer.close()
     done()
