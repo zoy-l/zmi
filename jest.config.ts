@@ -15,7 +15,8 @@ export default {
       '!packages/zmi-create-app/src/cli.ts',
 
       '!packages/zmi-utils/src/index.ts',
-      '!packages/zmi-utils/src/clearConsole.ts'
+      '!packages/zmi-utils/src/clearConsole.ts',
+      '!packages/zmi-utils/src/launchDevice.ts'
     ])
   }
 } as jestConfig

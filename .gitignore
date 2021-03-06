@@ -1,6 +1,6 @@
 /node_modules
 .cache
-dist
+/examples/*/dist
 *.map
 .DS_Store
 yarn-error.log
