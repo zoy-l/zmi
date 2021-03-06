@@ -5,7 +5,9 @@ import readline from 'readline'
 import { getCwd, getPkg } from './getRoot'
 import fork from './fork'
 
-launchDevice(dyo).then(({ args, command }) => {
+const { args, command } = launchDevice(dyo)
+
+;(() => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
 
   try {
@@ -54,4 +56,4 @@ launchDevice(dyo).then(({ args, command }) => {
     console.log(err.stack)
     process.exit(1)
   }
-})
+})()

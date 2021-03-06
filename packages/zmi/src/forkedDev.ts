@@ -3,7 +3,9 @@ import { Service } from '@zmi-cli/core'
 
 import { getCwd, getPkg } from './getRoot'
 
-launchDevice().then(({ args }) => {
+const { args } = launchDevice()
+
+;(() => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
   try {
     process.env.NODE_ENV = 'development'
@@ -34,4 +36,4 @@ launchDevice().then(({ args }) => {
     console.error(e.stack)
     process.exit(1)
   }
-})
+})()

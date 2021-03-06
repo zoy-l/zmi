@@ -1,16 +1,5 @@
 import { Compiler, ProvidePlugin, EntryNormalized } from 'webpack'
 
-function isSocketEntry(entry: string | string[]) {
-  const socketEntries = [
-    'webpack-dev-server/client',
-    'webpack-hot-middleware/client',
-    'webpack-plugin-serve/client',
-    'react-dev-utils/webpackHotDevClient'
-  ]
-
-  return socketEntries.some((socketEntry) => entry.includes(socketEntry))
-}
-
 type IEntry = (...args: any[]) => any
 
 export default class VueClient {
@@ -36,22 +25,11 @@ export default class VueClient {
     ]
 
     if (typeof originalEntry === 'string') {
-      if (isSocketEntry(originalEntry)) {
-        return [originalEntry, ...overlayEntries]
-      }
-
       return [...overlayEntries, originalEntry]
     }
 
     if (Array.isArray(originalEntry)) {
-      const socketEntryIndex = originalEntry.findIndex(isSocketEntry)
-
-      let socketAndPrecedingEntries = []
-      if (socketEntryIndex !== -1) {
-        socketAndPrecedingEntries = originalEntry.splice(0, socketEntryIndex + 1)
-      }
-
-      return [...socketAndPrecedingEntries, ...overlayEntries, ...originalEntry]
+      return [...overlayEntries, ...originalEntry]
     }
 
     if (typeof originalEntry === 'object') {

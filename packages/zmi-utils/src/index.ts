@@ -14,7 +14,6 @@ import pkgUp from 'pkg-up'
 import chalk from 'chalk'
 import slash from 'slash'
 import glob from 'glob'
-import url from 'url'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
@@ -26,7 +25,6 @@ import mergeConfig from './mergeConfig'
 import flatDeep from './flatDeep'
 import isLerna from './isLerna'
 import getFile from './getFile'
-// import assert from './assert'
 
 const isWin = process.platform === 'win32'
 
@@ -49,7 +47,6 @@ export {
   mergeConfig,
   compatibleWithESModule,
   isWin,
-  // assert,
   dyo,
   resolve,
   launchDevice,
@@ -60,6 +57,5 @@ export {
   mustache,
   glob,
   mkdirp,
-  inquirer,
-  url
+  inquirer
 }

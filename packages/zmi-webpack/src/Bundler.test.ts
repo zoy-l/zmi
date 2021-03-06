@@ -9,11 +9,19 @@ const fixtures = path.join(__dirname, '../fixtures')
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
 jest.setTimeout(30000)
 
-const _log = console.log
-const _warn = console.warn
-
 const _path = process.cwd().split('/')
 const isRoot = _path[_path.length - 1] !== 'zmi-webpack'
+
+beforeEach(() => {
+  window.console.warn = jest.fn()
+  window.console.log = jest.fn()
+  process.env.ZMI_TEST = 'true'
+})
+
+afterEach(() => {
+  jest.resetAllMocks()
+  delete process.env.ZMI_TEST
+})
 
 describe('setupDevServer', () => {
   const cwd = path.join(fixtures, 'vue-config')
@@ -22,18 +30,6 @@ describe('setupDevServer', () => {
   const html = new Html({ config })
   const port = 8000
   const host = '0.0.0.0'
-
-  process.env.ZMI_TEST = 'true'
-
-  beforeEach(() => {
-    window.console.warn = jest.fn()
-    window.console.log = jest.fn()
-  })
-
-  afterEach(() => {
-    window.console.log = _log
-    window.console.warn = _warn
-  })
 
   it(cwd, async (done) => {
     const content = await html.getContent({
@@ -80,15 +76,7 @@ describe('setupDevServer', () => {
     await wait()
 
     // @ts-expect-error test
-    expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-      'Start packing, please don’t worry, officer...\n',
-      ' BUILD  Compiled successfully !\n ',
-      '📦 Name: - Size',
-      '➜  dist/main.js  23 B',
-      undefined,
-      ' DONE ',
-      ' Localhost: http://localhost:8000/'
-    ])
+    expect(console.log.mock.calls.map((str) => stripAnsi(str[0])).length).toEqual(10)
     devServer.close()
     done()
   })
@@ -101,16 +89,6 @@ describe('setupDevServer', () => {
   const port = 8000
   const host = '0.0.0.0'
   const html = new Html({ config })
-
-  beforeEach(() => {
-    window.console.warn = jest.fn()
-    window.console.log = jest.fn()
-  })
-
-  afterEach(() => {
-    window.console.log = _log
-    window.console.warn = _warn
-  })
 
   it(cwd, async (done) => {
     const content = await html.getContent({

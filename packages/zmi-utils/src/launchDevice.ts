@@ -8,14 +8,7 @@ export const defaultYargsOptions = {
   boolean: ['version']
 }
 
-export default (
-  opts?: yargsParser.Options
-): Promise<{ args: yargsParser.Arguments; command: string }> =>
-  new Promise((resolve, reject) => {
-    try {
-      const args = yargsParser(process.argv.slice(2), opts)
-      resolve({ args, command: args._[0] })
-    } catch (err) {
-      reject(err)
-    }
-  })
+export default (opts?: yargsParser.Options): { args: yargsParser.Arguments; command: string } => {
+  const args = yargsParser(process.argv.slice(2), opts)
+  return { args, command: args._[0] }
+}

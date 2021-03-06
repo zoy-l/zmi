@@ -2,7 +2,6 @@ import { chalk, clearConsole } from '@zmi-cli/utils'
 import stripAnsi from 'strip-ansi'
 import address from 'address'
 import webpack from 'webpack'
-// import url from 'url'
 
 import formatMessages from './formatMessages'
 
@@ -78,27 +77,23 @@ function printInstructions(opts: { appName: string; urls: IUrlType; port: number
   }
   // devConifg.target !== 'web' &&
 
-  if (process.env.ZMI_TEST !== 'true') {
-    log(
-      [
-        '┌'.padEnd(maxLength, '─') + '┐',
-        `│${padEnd(portText, 0)}│`,
-        `│${padEnd(appNameText, 1)}|`,
-        '├'.padEnd(maxLength, '─') + '┤'
-      ].join('\n')
-    )
+  log(
+    [
+      '┌'.padEnd(maxLength, '─') + '┐',
+      `│${padEnd(portText, 0)}│`,
+      `│${padEnd(appNameText, 1)}|`,
+      '├'.padEnd(maxLength, '─') + '┤'
+    ].join('\n')
+  )
 
-    if (urls.lanUrlForTerminal) {
-      log(`│${padEnd(localhostText, 2)}│`)
-      log(`│${padEnd(netWorkText, 3)}│`)
-    } else {
-      log(`│${padEnd(localhostText, 2)}│`)
-    }
-
-    log('└'.padEnd(maxLength, '─') + '┘')
+  if (urls.lanUrlForTerminal) {
+    log(`│${padEnd(localhostText, 2)}│`)
+    log(`│${padEnd(netWorkText, 3)}│`)
   } else {
-    log(localhostText, netWorkText)
+    log(`│${padEnd(localhostText, 2)}│`)
   }
+
+  log('└'.padEnd(maxLength, '─') + '┘')
 }
 
 function createCompiler(opts: {
