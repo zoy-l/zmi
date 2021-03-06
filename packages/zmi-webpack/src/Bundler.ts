@@ -102,7 +102,6 @@ export default class Bundler {
           `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue('Compiled successfully !\n')} `
         )
         console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
-
         if (stats) {
           printFileSizesAfterBuild(
             stats.toJson({ all: false, assets: true }),

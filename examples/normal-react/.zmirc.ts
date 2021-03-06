@@ -30,6 +30,5 @@ export default defineConfig({
   ],
 
   scripts: [`console.log('hello zmi');`],
-  styles: [`body { color: red;margin:0 }`],
-  publicPath: '/hello/'
+  styles: [`body { color: red;margin:0 }`]
 })

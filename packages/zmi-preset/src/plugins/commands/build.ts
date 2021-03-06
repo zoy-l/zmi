@@ -30,6 +30,7 @@ export default (api: IApi) => {
           type: api.ApplyPluginsType.event,
           args: { err }
         })
+        throw new Error(err)
       }
     }
   })

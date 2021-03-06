@@ -2,6 +2,7 @@
 // @ts-nocheck
 
 import { printFileSizesAfterBuild, measureFileSizesBeforeBuild } from './reporterFileSize'
+import { rmdirSync } from 'fs-extra'
 import { lodash } from '@zmi-cli/utils'
 import stripAnsi from 'strip-ansi'
 import path from 'path'
@@ -110,24 +111,24 @@ test('reporter file size null', () => {
 })
 
 test('reporter file size green', () => {
-  const sizes = { 'main.css': 304, 'main.js': 123007 }
+  const sizes = { 'main.css': 304, 'main.js': 523007 }
   printFileSizesAfterBuild(state, sizes, fixtures)
 
   expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  129.26 KB (+9.14 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  129.26 KB            ',
-    '➜  reporter-file-size/main.86a8dd21.css  478 B (+174 B)       '
+    '➜  reporter-file-size/main.abc02671.js  492.91 KB (-17.84 KB) ',
+    '➜  reporter-file-size/chunk.abc02671.js  82.99 KB              ',
+    '➜  reporter-file-size/main.86a8dd21.css  304 B                 '
   ])
 })
 
 test('reporter file size yellow', () => {
-  const sizes = { 'main.css': 50, 'main.js': 43007 }
+  const sizes = { 'main.css': 50, 'main.js': 443007 }
   printFileSizesAfterBuild(state, sizes, fixtures)
 
   expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  129.26 KB (+87.26 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  129.26 KB             ',
-    '➜  reporter-file-size/main.86a8dd21.css  478 B (+428 B)        '
+    '➜  reporter-file-size/main.abc02671.js  492.91 KB (+60.28 KB) ',
+    '➜  reporter-file-size/chunk.abc02671.js  82.99 KB              ',
+    '➜  reporter-file-size/main.86a8dd21.css  304 B (+254 B)        '
   ])
 })
 
@@ -136,22 +137,63 @@ test('reporter file size red', () => {
   printFileSizesAfterBuild(state, sizes, fixtures)
 
   expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  129.26 KB (+129.17 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  129.26 KB              ',
-    '➜  reporter-file-size/main.86a8dd21.css  478 B (-546 B)         '
+    '➜  reporter-file-size/main.abc02671.js  492.91 KB (+492.81 KB) ',
+    '➜  reporter-file-size/chunk.abc02671.js  82.99 KB               ',
+    '➜  reporter-file-size/main.86a8dd21.css  304 B (-720 B)         '
   ])
 })
 
+const state2 = {
+  assetsByChunkName: { main: ['main.abc02671.js'] },
+  assets: [
+    {
+      type: 'asset',
+      name: 'main.abc02672.js',
+      size: 132365,
+      emitted: true,
+      comparedForEmit: false,
+      cached: false,
+      info: {
+        immutable: true,
+        contenthash: 'abc02671',
+        javascriptModule: false,
+        minimized: true,
+        size: 132365
+      },
+      chunkNames: ['main'],
+      chunkIdHints: [],
+      auxiliaryChunkNames: [],
+      auxiliaryChunkIdHints: []
+    },
+    {
+      type: 'asset',
+      name: 'chunk.abc02672.js',
+      size: 132365,
+      emitted: true,
+      comparedForEmit: false,
+      cached: false,
+      info: {
+        immutable: true,
+        contenthash: 'abc02671',
+        javascriptModule: false,
+        minimized: true,
+        size: 132365
+      },
+      chunkNames: ['chunk'],
+      chunkIdHints: [],
+      auxiliaryChunkNames: [],
+      auxiliaryChunkIdHints: []
+    }
+  ]
+}
+
 test('main suggest bundle splitting', () => {
-  const sizes = { 'main.css': 1024, 'main.js': 100 }
-  const _state = lodash.cloneDeep(state)
-  _state.assets[0].size = 524289
-  printFileSizesAfterBuild(_state, sizes, fixtures)
+  const sizes = { 'main.css': 1024, 'main.js': 1000 }
+  printFileSizesAfterBuild(state2, sizes, fixtures)
 
   expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/main.abc02671.js  512 KB (+511.9 KB) ',
-    '➜  reporter-file-size/chunk.abc02671.js  129.26 KB          ',
-    '➜  reporter-file-size/main.86a8dd21.css  478 B (-546 B)     ',
+    '➜  reporter-file-size/main.abc02672.js  599.36 KB (+598.38 KB) ',
+    '➜  reporter-file-size/chunk.abc02672.js  599.36 KB              ',
     undefined,
     'The bundle size is significantly larger than recommended.',
     'You can also analyze the project dependencies: https://webpack.js.org/guides/code-splitting/'
@@ -159,21 +201,21 @@ test('main suggest bundle splitting', () => {
 })
 
 test('chunk suggest bundle splitting', () => {
-  const sizes = { 'main.css': 1024, 'main.js': 100 }
-  const _state = lodash.cloneDeep(state)
-  _state.assets[1].size = 1048577
-  printFileSizesAfterBuild(_state, sizes, fixtures)
+  const sizes = { 'main.css': 1024, 'main.js': 600000 }
+  printFileSizesAfterBuild(state2, sizes, fixtures)
 
   expect(console.log.mock.calls.map((str) => stripAnsi(str[0]))).toEqual([
-    '➜  reporter-file-size/chunk.abc02671.js  1 MB                   ',
-    '➜  reporter-file-size/main.abc02671.js  129.26 KB (+129.17 KB) ',
-    '➜  reporter-file-size/main.86a8dd21.css  478 B (-546 B)         ',
+    '➜  reporter-file-size/main.abc02672.js  599.36 KB (+13.42 KB) ',
+    '➜  reporter-file-size/chunk.abc02672.js  599.36 KB             ',
     undefined,
     'The bundle size is significantly larger than recommended.',
     'You can also analyze the project dependencies: https://webpack.js.org/guides/code-splitting/'
   ])
 })
 
+const wait = () => new Promise((resolve) => setTimeout(resolve, 2000))
 test('measure file sizes before build error', async () => {
-  await expect(measureFileSizesBeforeBuild(`${fixtures}/error`)).rejects.toThrow(/ENOENT/)
+  rmdirSync(`${fixtures}/error`)
+  await wait()
+  expect(Object.keys(measureFileSizesBeforeBuild(`${fixtures}/error`)).length).toEqual(0)
 })

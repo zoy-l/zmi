@@ -1,5 +1,6 @@
 import recursiveReaddir from 'recursive-readdir'
 import { chalk } from '@zmi-cli/utils'
+import { mkdirpSync } from 'fs-extra'
 import stripAnsi from 'strip-ansi'
 import gzipSize from 'gzip-size'
 import filesize from 'filesize'
@@ -69,14 +70,16 @@ export function printFileSizesAfterBuild(
     assets = webpackStats.assets
       .filter((asset) => canReadAsset(asset.name))
       .map((asset) => {
+        const fileContents = fs.readFileSync(path.join(buildFolder, asset.name))
+        const size = gzipSize.sync(fileContents)
         const previousSize = previousSizeMap[removeFileNameHash(buildFolder, asset.name)]
-        const difference = getDifferenceLabel(asset.size, previousSize)
+        const difference = getDifferenceLabel(size, previousSize)
 
         return {
           folder: path.join(path.basename(buildFolder), path.dirname(asset.name)),
           name: path.basename(asset.name),
-          size: asset.size,
-          sizeLabel: filesize(asset.size) + (difference ? ` (${difference}) ` : '')
+          size,
+          sizeLabel: filesize(size) + (difference ? ` (${difference}) ` : '')
         }
       })
       .sort((a, b) => b.size - a.size)
@@ -84,6 +87,7 @@ export function printFileSizesAfterBuild(
 
   const longestSizeLabelLength = Math.max(...assets.map((a) => stripAnsi(a.sizeLabel).length))
   let suggestBundleSplitting = false
+
   assets.forEach((asset) => {
     let { sizeLabel } = asset
     const sizeLength = stripAnsi(sizeLabel).length
@@ -103,8 +107,13 @@ export function printFileSizesAfterBuild(
     const assetPath = chalk.dim(`${asset.folder}${path.sep}`)
     const assetName = chalk.cyan(asset.name)
     const size = isLarge ? chalk.yellow(sizeLabel) : sizeLabel
+
     console.log(`➜  ${assetPath}${assetName}  ${size}`)
   })
+
+  if (!assets.length) {
+    console.log(`➜ file has not changed`)
+  }
 
   if (suggestBundleSplitting) {
     console.log()
@@ -117,7 +126,9 @@ export function printFileSizesAfterBuild(
   }
 }
 
-export async function measureFileSizesBeforeBuild(buildFolder: string) {
+export async function measureFileSizesBeforeBuild(
+  buildFolder: string
+): Promise<Record<string, number>> {
   const { error, files } = await recursive(buildFolder)
   const sizes: Record<string, number> = {}
 
@@ -130,5 +141,11 @@ export async function measureFileSizesBeforeBuild(buildFolder: string) {
 
     return sizes
   }
+
+  if (/ENOENT: no such file or directory/.test(error.message)) {
+    mkdirpSync(buildFolder)
+    return {}
+  }
+
   throw new Error(error.message)
 }
