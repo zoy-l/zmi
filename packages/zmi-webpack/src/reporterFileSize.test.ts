@@ -213,9 +213,9 @@ test('chunk suggest bundle splitting', () => {
   ])
 })
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 2000))
+const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
 test('measure file sizes before build error', async () => {
-  rmdirSync(`${fixtures}/error`)
-  await wait()
   expect(Object.keys(measureFileSizesBeforeBuild(`${fixtures}/error`)).length).toEqual(0)
+  await wait()
+  rmdirSync(`${fixtures}/error`)
 })
