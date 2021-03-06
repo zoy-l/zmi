@@ -1,5 +1,7 @@
 ## Zmi
 
+[![codecov](https://codecov.io/gh/l-zoy/zmi/branch/main/graph/badge.svg?token=804YLQMX9B)](https://codecov.io/gh/l-zoy/zmi) [![GitHub license](https://img.shields.io/github/license/l-zoy/zmi)](https://github.com/l-zoy/zmi/blob/master/LICENSE) [![<ORG_NAME>](https://circleci.com/gh/l-zoy/zmi.svg?style=svg)](https://app.circleci.com/pipelines/github/l-zoy/zmi)
+
 🎃 一个纯粹的 react / vue / miniapp-ts 应用程序脚手架。
 
 > 考虑点击 star, 谢谢您的 🌟 和支持
