@@ -1,12 +1,13 @@
 import { launchDevice, dyo } from '@zmi-cli/utils'
-import generator from './AppGenerator'
+import generator from './appGenerator'
 
-launchDevice(dyo).then(({ args }) => {
+const { args } = launchDevice(dyo)
+
+;(() => {
   if (args.version && !args._[0]) {
     const { version } = require('../package')
     console.log(version)
   } else {
     generator(process.cwd(), args)
   }
-})
-
+})()
