@@ -1,6 +1,7 @@
 import { defineConfig } from 'zmi'
 
 export default defineConfig({
+  title: 'zmi',
   frameOptions: {},
   chainWebpack: function (config) {
     config.merge({

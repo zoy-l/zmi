@@ -9,7 +9,9 @@
     "index.js"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.0.5-alpha.0"
+    "@zmi-cli/webpack": "^1.0.5-alpha.0",
+    "@zmi-cli/core": "^1.0.5-alpha.0",
+    "@zmi-cli/utils": "^1.0.5-alpha.0"
   },
   "publishConfig": {
     "access": "public"

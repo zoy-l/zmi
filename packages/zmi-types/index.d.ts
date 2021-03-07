@@ -1,7 +1,6 @@
-import { createCSSRule, IStyle } from '@zmi-cli/webpack'
+import { createCSSRule, IStyle, WebpackChain, webpack } from '@zmi-cli/webpack'
 import { PluginAPI, Service } from '@zmi-cli/core'
-import WebpackChain from 'webpack-chain'
-import webpack from 'webpack'
+import { cheerio } from '@zmi-cli/utils'
 
 export interface ITargets {
   browsers?: any
@@ -18,14 +17,9 @@ interface IEvent<T> {
 }
 
 interface IModify<T, U> {
-  (fn: { (initialValue: T, args: U): T }): void
-  (fn: { (initialValue: T, args: U): Promise<T> }): void
-  (args: { fn: { (initialValue: T, args: U): T }; before?: string; stage?: number }): void
-  (args: {
-    fn: { (initialValue: T, args: U): Promise<T> }
-    before?: string
-    stage?: number
-  }): void
+  (fn: { (memo: T, args: U): Promise<T> | T | void }): void
+  // (args: { fn: { (initialValue: T, args: U): T }; before?: string; stage?: number }): void
+  // (args: { fn: { (initialValue: T, args: U): Promise<T> }; before?: string; stage?: number }): void
 }
 
 interface IAdd<T> {
@@ -81,4 +75,5 @@ export type IApi = ServicePluginApi & {
     }
   >
   modifyPaths: IModify<ServicePluginApi['paths'], null>
+  modifyHTML: IModify<cheerio.Root, null>
 }

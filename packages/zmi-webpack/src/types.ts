@@ -66,6 +66,7 @@ type KnownKeys<T> = {
 type RequireOnly<T extends Record<any, any>> = Pick<T, KnownKeys<T>>
 
 export interface IConfig {
+  title?: string
   devServer?: webpackDevServer.Configuration
   frameType?: 'react' | 'vue' | 'miniApp'
   loaderOptions?: {

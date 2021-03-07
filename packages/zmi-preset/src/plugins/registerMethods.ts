@@ -10,7 +10,8 @@ export default function (api: IApi) {
     'addHTMLLinks',
     'addHTMLStyles',
     'addHTMLHeadScripts',
-    'addHTMLScripts'
+    'addHTMLScripts',
+    'modifyHTML'
   ]
   presetApiMethods.forEach((name) => {
     api.registerMethod({ name })
