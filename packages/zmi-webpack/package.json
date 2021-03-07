@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/webpack",
-  "version": "1.0.6-alpha.1",
+  "version": "1.0.6-alpha.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "@types/webpack": "4.41.26",
     "@types/webpack-bundle-analyzer": "^3.9.1",
     "@types/webpack-dev-server": "^3.11.1",
-    "@zmi-cli/types": "^1.0.6-alpha.1"
+    "@zmi-cli/types": "^1.0.6-alpha.2"
   },
   "scripts": {
     "test": "nerd test",

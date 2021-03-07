@@ -1,6 +1,6 @@
 {
   "name": "zmi",
-  "version": "1.0.6-alpha.1",
+  "version": "1.0.6-alpha.2",
   "main": "index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -22,10 +22,10 @@
   "bugs": "https://github.com/l-zoy/zmi/issues",
   "dependencies": {
     "@zmi-cli/core": "^1.0.6-alpha.1",
-    "@zmi-cli/preset": "^1.0.6-alpha.1",
-    "@zmi-cli/types": "^1.0.6-alpha.1",
+    "@zmi-cli/preset": "^1.0.6-alpha.2",
+    "@zmi-cli/types": "^1.0.6-alpha.2",
     "@zmi-cli/utils": "^1.0.6-alpha.1",
-    "@zmi-cli/webpack": "^1.0.6-alpha.1"
+    "@zmi-cli/webpack": "^1.0.6-alpha.2"
   },
   "bin": {
     "zmi": "bin/zmi.js"
