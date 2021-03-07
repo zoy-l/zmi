@@ -1,6 +1,6 @@
-import path from 'path'
+import { stripAnsi } from '@zmi-cli/utils'
 import { EntryObject } from 'webpack'
-import stripAnsi from 'strip-ansi'
+import path from 'path'
 
 import Bundler from './Bundler'
 import Html from './Html'

@@ -1,9 +1,4 @@
-import recursiveReaddir from 'recursive-readdir'
-import { chalk } from '@zmi-cli/utils'
-import { mkdirpSync } from 'fs-extra'
-import stripAnsi from 'strip-ansi'
-import gzipSize from 'gzip-size'
-import filesize from 'filesize'
+import { chalk, filesize, fsExtra, gzipSize, stripAnsi, recursiveReaddir } from '@zmi-cli/utils'
 import webpack from 'webpack'
 import path from 'path'
 import fs from 'fs'
@@ -143,7 +138,7 @@ export async function measureFileSizesBeforeBuild(
   }
 
   if (/ENOENT: no such file or directory/.test(error.message)) {
-    mkdirpSync(buildFolder)
+    fsExtra.mkdirpSync(buildFolder)
     return {}
   }
 

@@ -1,8 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { slash } from '@zmi-cli/utils'
+import { slash, stripAnsi } from '@zmi-cli/utils'
 import eslintFormatter from './eslintFormatter'
-import stripAnsi from 'strip-ansi'
 
 test('eslint formatter null', () => {
   const stateNull = [

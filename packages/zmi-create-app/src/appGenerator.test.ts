@@ -1,4 +1,4 @@
-import recursiveReaddir from 'recursive-readdir'
+import { recursiveReaddir } from '@zmi-cli/utils'
 import rimraf from 'rimraf'
 import path from 'path'
 

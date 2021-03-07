@@ -1,6 +1,4 @@
-import { chalk, clearConsole } from '@zmi-cli/utils'
-import stripAnsi from 'strip-ansi'
-import address from 'address'
+import { chalk, clearConsole, stripAnsi, address } from '@zmi-cli/utils'
 import webpack from 'webpack'
 
 import formatMessages from './formatMessages'

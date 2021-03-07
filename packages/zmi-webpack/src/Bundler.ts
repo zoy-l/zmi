@@ -1,7 +1,6 @@
-import { chalk, clearConsole, deepmerge, isWin } from '@zmi-cli/utils'
+import { chalk, clearConsole, deepmerge, isWin, fsExtra as fs } from '@zmi-cli/utils'
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
-import fs from 'fs-extra'
 
 import { measureFileSizesBeforeBuild, printFileSizesAfterBuild } from './reporterFileSize'
 import createCompiler, { prepareUrls } from './createCompiler'

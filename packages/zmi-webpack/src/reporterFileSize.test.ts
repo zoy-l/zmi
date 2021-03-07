@@ -1,8 +1,5 @@
-import { lodash } from '@zmi-cli/utils'
-import { rmdirSync } from 'fs-extra'
-import stripAnsi from 'strip-ansi'
-import gzipSize from 'gzip-size'
-import filesize from 'filesize'
+import { lodash, filesize, gzipSize, stripAnsi, fsExtra } from '@zmi-cli/utils'
+
 import path from 'path'
 import fs from 'fs'
 
@@ -173,5 +170,5 @@ test('measure file sizes before build error', async () => {
   jest.requireMock('recursive-readdir')
   expect(Object.keys(measureFileSizesBeforeBuild(`${fixtures}/error`)).length).toEqual(0)
   await wait()
-  rmdirSync(`${fixtures}/error`)
+  fsExtra.rmdirSync(`${fixtures}/error`)
 })

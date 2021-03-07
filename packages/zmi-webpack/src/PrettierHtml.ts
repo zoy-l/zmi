@@ -1,6 +1,6 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { prettier } from '@zmi-cli/utils'
 import { Compiler } from 'webpack'
-import prettier from 'prettier'
 
 export default class PrettierHtml {
   isInit = false

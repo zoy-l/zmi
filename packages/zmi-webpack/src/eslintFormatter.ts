@@ -1,7 +1,5 @@
+import { stripAnsi, textTable, chalk } from '@zmi-cli/utils'
 import { ESLint, Linter } from 'eslint'
-import stripAnsi from 'strip-ansi'
-import table from 'text-table'
-import chalk from 'chalk'
 import path from 'path'
 
 const cwd = process.cwd()
@@ -58,7 +56,7 @@ export default function formatter(results: ESLint.LintResult[]) {
       m.splice(2, 1)
     })
 
-    const outputTable = table(msg, {
+    const outputTable = textTable(msg, {
       align: ['l', 'l', 'l'],
       stringLength(str: string) {
         return stripAnsi(str).length
