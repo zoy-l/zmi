@@ -10,6 +10,6 @@
     "react-dom": "^17.0.1"
   },
   "devDependencies": {
-    "zmi": "^1.0.6-alpha.0"
+    "zmi": "^1.0.6-alpha.1"
   }
 }

@@ -91,7 +91,7 @@ function applyPlugin(options: IPenetrateOptions) {
       cacheLocation: path.resolve(`${cwd}/node_modules`, '.cache/.eslintcache'),
       baseConfig: {
         extends: [
-          require.resolve(isTypescript ? 'eslint-config-zmi/typescript' : 'eslint-config-zmi/base'),
+          // require.resolve(isTypescript ? 'eslint-config-zmi/typescript' : 'eslint-config-zmi/base'),
           require.resolve(isReact ? 'eslint-config-zmi/react' : 'eslint-config-zmi/vue')
         ],
         settings: isReact

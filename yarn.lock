@@ -5388,10 +5388,10 @@ eslint-config-prettier@^8.1.0:
   resolved "https://registry.npm.taobao.org/eslint-config-prettier/download/eslint-config-prettier-8.1.0.tgz?cache=0&sync_timestamp=1614187358311&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-config-prettier%2Fdownload%2Feslint-config-prettier-8.1.0.tgz#4ef1eaf97afe5176e6a75ddfb57c335121abc5a6"
   integrity sha1-TvHq+Xr+UXbmp13ftXwzUSGrxaY=
 
-eslint-config-zmi@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.npm.taobao.org/eslint-config-zmi/download/eslint-config-zmi-1.0.5.tgz#69499dcdaa15001afe649d30b0e119df7a711715"
-  integrity sha1-aUmdzaoVABr+ZJ0wsOEZ33pxFxU=
+eslint-config-zmi@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.1.0.tgz#5f800a8acc0c0724598a9f33e8482819ebac8559"
+  integrity sha512-a7AtO20a9wfh/c6+objuay6QGHH5qBP7EIbqe2rsy7KFicABSzdgeMWbIPnuvuy59SfSyyIJ4WsA2KohF/dMaQ==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.16.1"
     "@typescript-eslint/parser" "^4.16.1"
@@ -5401,6 +5401,7 @@ eslint-config-zmi@^1.0.5:
     eslint-plugin-react "^7.22.0"
     eslint-plugin-react-hooks "^4.2.0"
     eslint-plugin-vue "^7.7.0"
+    minimatch "^3.0.4"
 
 eslint-import-resolver-node@^0.3.4:
   version "0.3.4"
@@ -6661,14 +6662,13 @@ html-tags@^3.1.0:
   resolved "https://registry.npm.taobao.org/html-tags/download/html-tags-3.1.0.tgz#7b5e6f7e665e9fb41f30007ed9e0d41e97fb2140"
   integrity sha1-e15vfmZen7QfMAB+2eDUHpf7IUA=
 
-html-webpack-plugin@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.npm.taobao.org/html-webpack-plugin/download/html-webpack-plugin-5.2.0.tgz?cache=0&sync_timestamp=1613744660514&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fhtml-webpack-plugin%2Fdownload%2Fhtml-webpack-plugin-5.2.0.tgz#d675ad0027a89de6b3d9950e0b57656dcfd97fbf"
-  integrity sha1-1nWtACeoneaz2ZUOC1dlbc/Zf78=
+html-webpack-plugin@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-5.3.0.tgz#9d93a547db34ac1f28b9f41fd8fe38a5d56770f3"
+  integrity sha512-BjtSQCy5J0e9EDV+NZ4i+w36N9avXfQDF4QoAV9YAECG50x6/2tfJkFb0ws9eTcszLdyg4vs6FI6hMgVzVoQqw==
   dependencies:
     "@types/html-minifier-terser" "^5.0.0"
     html-minifier-terser "^5.0.1"
-    loader-utils "^2.0.0"
     lodash "^4.17.20"
     pretty-error "^2.1.1"
     tapable "^2.0.0"

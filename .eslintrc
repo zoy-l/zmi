@@ -1,6 +1,6 @@
 {
   "root": true,
-  "extends": ["zmi/typescript", "zmi/vue"],
+  "extends": ["zmi/typescript"],
   "rules": {
     "global-require": "off",
     "no-case-declarations": "off",
