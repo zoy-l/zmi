@@ -48,5 +48,8 @@
     "cli",
     "miniapp",
     "wechat-app"
-  ]
+  ],
+  "engines": {
+    "node": ">=10.13.0"
+  }
 }
