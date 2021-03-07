@@ -1,11 +1,11 @@
 {
   "name": "@zmi-cli/css-modules",
-  "version": "1.0.6-alpha.0",
+  "version": "1.0.6-alpha.1",
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
     "@babel/traverse": "^7.13.0",
-    "@zmi-cli/utils": "^1.0.6-alpha.0"
+    "@zmi-cli/utils": "^1.0.6-alpha.1"
   },
   "publishConfig": {
     "access": "public"
