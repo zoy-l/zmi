@@ -4,6 +4,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "authors": [
+    "l-zoy <zoy-l@outlook.com> (https://github.com/l-zoy)"
+  ],
   "scripts": {
     "debug": "node --inspect-brk packages/zmi/bin/zmi.js",
     "test": "nerd test --coverage",
@@ -37,5 +40,23 @@
     "typescript": "^4.2.3",
     "yorkie": "^2.0.0",
     "zmi-nerd": "^1.1.9"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/l-zoy/zmi"
+  },
+  "homepage": "https://github.com/l-zoy/zmi",
+  "bugs": "https://github.com/l-zoy/zmi/issues",
+  "keywords": [
+    "zmi",
+    "webpack 5",
+    "react",
+    "小程序",
+    "vue",
+    "typescript",
+    "cli-app",
+    "cli",
+    "miniapp",
+    "wechat-app"
+  ]
 }
