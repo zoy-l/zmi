@@ -4,12 +4,22 @@
   "main": "index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
+  "description": "zmi",
   "files": [
     "lib",
     "bin",
     "client.d.ts",
     "cssModule.d.ts"
   ],
+  "authors": [
+    "l-zoy <zoy-l@outlook.com> (https://github.com/l-zoy)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/l-zoy/zmi"
+  },
+  "homepage": "https://github.com/l-zoy/zmi",
+  "bugs": "https://github.com/l-zoy/zmi/issues",
   "dependencies": {
     "@zmi-cli/core": "^1.0.6-alpha.0",
     "@zmi-cli/preset": "^1.0.6-alpha.0",
@@ -26,5 +36,17 @@
   "gitHead": "52284bd63e9557210bfdd10cf889a1a9a5e4f42c",
   "devDependencies": {
     "source-map-support": "^0.5.19"
-  }
+  },
+  "keywords": [
+    "zmi",
+    "webpack 5",
+    "react",
+    "小程序",
+    "vue",
+    "typescript",
+    "cli-app",
+    "cli",
+    "miniapp",
+    "wechat-app"
+  ]
 }
