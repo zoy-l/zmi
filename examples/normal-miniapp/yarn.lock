@@ -3,6 +3,6 @@
 
 
 miniprogram-api-typings@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/miniprogram-api-typings/-/miniprogram-api-typings-3.2.2.tgz#c928c32cffcb948200273c214e3dee3957eafd14"
-  integrity sha512-7TSeYV3Z4sUAw802K+bIFTRlQNUzl2GZ4zWnh5fMETjDsU7e8+uLzK7vF9Nd9TGYcePPhoHee25K86oHfDnxLA==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/miniprogram-api-typings/-/miniprogram-api-typings-3.3.0.tgz#3275d2ae66887481a410aedec54fd11eb8c7261f"
+  integrity sha512-WgwsHfIu62JNJIRYzuw4C5gF2ueE/w0ysni1AF/2J1XXLKHWklnyLGCgg8ZRDV781sP8MeaPzQmB+u3Yr08QRw==
