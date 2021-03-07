@@ -8,54 +8,28 @@ import fs from 'fs'
 
 import { printFileSizesAfterBuild, measureFileSizesBeforeBuild } from './reporterFileSize'
 
-const state = {
+const state: Record<string, any> = {
   assetsByChunkName: { main: ['main.86a8dd21.css', 'main.abc02671.js'] },
   assets: [
     {
-      type: 'asset',
       name: 'main.abc02671.js',
-      size: 132365,
-      emitted: true,
-      comparedForEmit: false,
-      cached: false,
-      info: {
-        immutable: true,
-        contenthash: 'abc02671',
-        javascriptModule: false,
-        minimized: true,
-        size: 132365
-      },
-      chunkNames: ['main'],
-      chunkIdHints: [],
-      auxiliaryChunkNames: [],
-      auxiliaryChunkIdHints: []
+      size: 132365
     },
     {
-      type: 'asset',
       name: 'main.86a8dd21.css',
-      size: 478,
-      emitted: true,
-      comparedForEmit: false,
-      cached: false,
-      info: { immutable: true, contenthash: '86a8dd21', minimized: true, size: 478 },
-      chunkNames: ['main'],
-      chunkIdHints: [],
-      auxiliaryChunkNames: [],
-      auxiliaryChunkIdHints: []
+      size: 478
     }
   ]
 }
 
 const fixtures = path.join(__dirname, '../fixtures/reporter-file-size')
 
-const cacheLog = console.log
-
 beforeEach(() => {
   window.console.log = jest.fn()
 })
 
 afterEach(() => {
-  window.console.log = cacheLog
+  jest.resetAllMocks()
 })
 
 const FIFTY_KILOBYTES = 1024 * 50
@@ -109,7 +83,6 @@ test('reporter file size null', () => {
   const sizes = { 'main.css': 304, 'main.js': 123007 }
   const _state = lodash.cloneDeep(state)
 
-  // @ts-expect-error test
   _state.assets = undefined
   printFileSizesAfterBuild(_state, sizes, fixtures)
 })
@@ -119,7 +92,7 @@ test('reporter file size green', () => {
   printFileSizesAfterBuild(state, sizes, fixtures)
 
   const received: string[][] = []
-  state.assets.forEach((asset) => {
+  state.assets.forEach((asset: { name: string }) => {
     const fileContents = fs.readFileSync(path.join(fixtures, asset.name))
     const size = gzipSize.sync(fileContents)
 
@@ -138,7 +111,7 @@ test('reporter file size yellow', () => {
   printFileSizesAfterBuild(state, sizes, fixtures)
 
   const received: string[][] = []
-  state.assets.forEach((asset) => {
+  state.assets.forEach((asset: { name: string }) => {
     const fileContents = fs.readFileSync(path.join(fixtures, asset.name))
     const size = gzipSize.sync(fileContents)
 
@@ -157,7 +130,7 @@ test('reporter file size red', () => {
   printFileSizesAfterBuild(state, sizes, fixtures)
 
   const received: string[][] = []
-  state.assets.forEach((asset) => {
+  state.assets.forEach((asset: { name: string }) => {
     const fileContents = fs.readFileSync(path.join(fixtures, asset.name))
     const size = gzipSize.sync(fileContents)
 
@@ -170,46 +143,16 @@ test('reporter file size red', () => {
   expect(curVariety[0] > FIFTY_KILOBYTES).toEqual(true)
 })
 
-const state2 = {
+const state2: Record<string, any> = {
   assetsByChunkName: { main: ['main.abc02671.js'] },
   assets: [
     {
-      type: 'asset',
       name: 'main.abc02672.js',
-      size: 132365,
-      emitted: true,
-      comparedForEmit: false,
-      cached: false,
-      info: {
-        immutable: true,
-        contenthash: 'abc02671',
-        javascriptModule: false,
-        minimized: true,
-        size: 132365
-      },
-      chunkNames: ['main'],
-      chunkIdHints: [],
-      auxiliaryChunkNames: [],
-      auxiliaryChunkIdHints: []
+      size: 132365
     },
     {
-      type: 'asset',
       name: 'chunk.abc02672.js',
-      size: 132365,
-      emitted: true,
-      comparedForEmit: false,
-      cached: false,
-      info: {
-        immutable: true,
-        contenthash: 'abc02671',
-        javascriptModule: false,
-        minimized: true,
-        size: 132365
-      },
-      chunkNames: ['chunk'],
-      chunkIdHints: [],
-      auxiliaryChunkNames: [],
-      auxiliaryChunkIdHints: []
+      size: 132365
     }
   ]
 }
@@ -227,6 +170,7 @@ test('main suggest bundle splitting', () => {
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
 test('measure file sizes before build error', async () => {
+  jest.requireMock('recursive-readdir')
   expect(Object.keys(measureFileSizesBeforeBuild(`${fixtures}/error`)).length).toEqual(0)
   await wait()
   rmdirSync(`${fixtures}/error`)
