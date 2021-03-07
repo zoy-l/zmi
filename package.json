@@ -15,11 +15,24 @@
     "zmi-update:deps": "yarn upgrade-interactive --latest",
     "publish": "lerna publish"
   },
+  "gitHooks": {
+    "pre-commit": "lint-staged",
+    "commit-msg": "node scripts/verifyCommit.js"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@types/rimraf": "^3.0.0",
     "@vue/compiler-sfc": "^3.0.7",
     "lerna": "^4.0.0",
+    "lint-staged": "^10.5.4",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.3",
     "zmi-nerd": "^1.1.8"
