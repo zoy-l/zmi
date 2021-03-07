@@ -5,6 +5,7 @@
   "types": "lib/index.d.ts",
   "license": "MIT",
   "files": [
+    "getDefaultValue.js",
     "lib",
     "bin"
   ],
