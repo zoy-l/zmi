@@ -1,6 +1,6 @@
 {
   "name": "zmi",
-  "version": "1.0.5-alpha.0",
+  "version": "1.0.6-alpha.0",
   "main": "index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -11,11 +11,11 @@
     "cssModule.d.ts"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.0.5-alpha.0",
-    "@zmi-cli/preset": "^1.0.5-alpha.0",
-    "@zmi-cli/types": "^1.0.5-alpha.0",
-    "@zmi-cli/utils": "^1.0.5-alpha.0",
-    "@zmi-cli/webpack": "1.0.5-alpha.0"
+    "@zmi-cli/core": "^1.0.6-alpha.0",
+    "@zmi-cli/preset": "^1.0.6-alpha.0",
+    "@zmi-cli/types": "^1.0.6-alpha.0",
+    "@zmi-cli/utils": "^1.0.6-alpha.0",
+    "@zmi-cli/webpack": "^1.0.6-alpha.0"
   },
   "bin": {
     "zmi": "bin/zmi.js"
