@@ -70,7 +70,6 @@ describe('setupDevServer', () => {
     })
 
     await wait()
-
     expect(
       /Running metro bundler/.test(
         // @ts-expect-error test
@@ -133,14 +132,12 @@ describe('setupDevServer', () => {
     })
 
     await wait()
-
     expect(
-      /Search for the keywords to learn more about each error./.test(
+      /Running metro bundler/.test(
         // @ts-expect-error test
-        console.warn.mock.calls.map((str: string[]) => stripAnsi(str[0])).join('')
+        console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join('')
       )
     ).toEqual(true)
-
     devServer.close()
     done()
   })
@@ -178,11 +175,7 @@ describe('normal', () => {
       ...args(cwd)
     })
 
-    expect(
-      /react.js/.test(
-        JSON.parse(JSON.stringify(bundleConfigs.plugins?.[0])).options.baseConfig.extends
-      )
-    ).toEqual(true)
+    expect(/17.0.1/.test(JSON.stringify(bundleConfigs.plugins?.[0]))).toEqual(true)
   })
 
   test('user modify config', async () => {

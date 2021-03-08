@@ -1,1 +1,1 @@
-import '../src/foo';
+import '../src/foo'

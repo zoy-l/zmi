@@ -31,6 +31,7 @@ async function applyPlugin(options: IPenetrateOptions) {
     isVue,
     isDev,
     hot,
+    pkg,
     cwd
   } = options
 
@@ -69,19 +70,30 @@ async function applyPlugin(options: IPenetrateOptions) {
   }
 
   let isEslint = false
-  let eslintConfig = {}
+  let eslintConfig: eslint.Linter.Config = {}
 
-  for (const file of ESLINT_CONFIG) {
-    const es = path.join(cwd, file)
-    if (fsExtra.existsSync(es)) {
-      isEslint = true
-      const cli = new eslint.ESLint({ cwd })
-      eslintConfig = await cli.calculateConfigForFile(file)
-      break
+  if (config.disableESLint) {
+    for (const file of ESLINT_CONFIG) {
+      const es = path.join(cwd, file)
+      if (fsExtra.existsSync(es)) {
+        isEslint = true
+        const cli = new eslint.ESLint({ cwd })
+        eslintConfig = await cli.calculateConfigForFile(file)
+        break
+      }
+    }
+
+    if (!isEslint) {
+      const { eslintConfig: pkgEslintConfig } = pkg
+
+      if (pkgEslintConfig) {
+        isEslint = true
+        eslintConfig = pkgEslintConfig
+      }
     }
   }
 
-  webpackConfig.when(isEslint, (WConfig) => {
+  webpackConfig.when(config.disableESLint && isEslint, (WConfig) => {
     WConfig.plugin('esLintWebpackPlugin').use(esLintWebpackPlugin, [
       {
         extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'vue'],
@@ -90,6 +102,7 @@ async function applyPlugin(options: IPenetrateOptions) {
         context: cwd,
         cwd,
         cache: true,
+        useEslintrc: false,
         failOnError: isDev,
         resolvePluginsRelativeTo: __dirname,
         cacheLocation: path.join(cwd, 'node_modules/.cache/.eslintcache'),

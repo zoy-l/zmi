@@ -26,7 +26,13 @@ recursiveReaddir(cwd).then((files) => {
        // The logic here is similar to the preset logic, but does not conflict
        export default ${JSON.stringify(defaultConfig)}`,
       {
-        parser: 'babel-ts'
+        parser: 'babel-ts',
+        singleQuote: true,
+        trailingComma: 'none',
+        printWidth: 100,
+        proseWrap: 'never',
+        arrowParens: 'always',
+        semi: false
       }
     ),
     'utf-8'

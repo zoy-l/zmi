@@ -3,7 +3,6 @@
 
 import { getFrameType } from './getConfig'
 
-
 test('getFrameType-vue', () => {
   const type = getFrameType({}, { dependencies: { vue: '1' } })
 
@@ -35,5 +34,3 @@ test('getFrameType-null-error', () => {
     )
   }
 })
-
-
