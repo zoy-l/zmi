@@ -11,7 +11,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "suppressImplicitAnyIndexErrors": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["zmi/client"]
   },
   "exclude": ["dist", "node_modules"]
 }

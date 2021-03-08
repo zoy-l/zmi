@@ -37,7 +37,7 @@ export default async function getConfig(opts: IConfigOpts): Promise<Configuratio
 
   const useHash = config.hash && isProd ? '[name].[contenthash:8]' : '[name]'
   const appOutputPath = path.join(cwd, config.outputPath)
-  const isTypescript = fs.existsSync(`${cwd}/tsconfig.json`)
+  const isTypescript = fs.existsSync(path.join(cwd, 'tsconfig.json'))
   const webpackConfig = new WebpackChain()
 
   const penetrateOptions = {
@@ -59,7 +59,7 @@ export default async function getConfig(opts: IConfigOpts): Promise<Configuratio
 
   await applyLoader(penetrateOptions)
 
-  applyPlugin(penetrateOptions)
+  await applyPlugin(penetrateOptions)
 
   webpackConfig.devtool(config.devtool as WebpackChain.DevTool)
   webpackConfig.mode(env)
@@ -106,9 +106,9 @@ export default async function getConfig(opts: IConfigOpts): Promise<Configuratio
           compress: isProd,
           noInfo: true,
           stats: 'none',
-          watchContentBase: isDev,
-          publicPath: config.publicPath,
-          contentBase: `${cwd}/public`
+          publicPath: config.publicPath
+          // watchContentBase: isDev,
+          // contentBase: path.join(cwd, 'public')
         } as WebpackDevServer.Configuration,
         config.devServer,
         {

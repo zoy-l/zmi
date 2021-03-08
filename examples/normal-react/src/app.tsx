@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// @ts-ignore
 import logo from './logo.svg'
 import './app.less'
 

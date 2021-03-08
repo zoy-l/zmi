@@ -1,0 +1,7 @@
+{
+  "extends": ["zmi/react", "plugin:jsx-a11y/recommended"],
+  "rules": {
+    "no-use-before-define": 0,
+    "react/jsx-uses-vars": "off"
+  }
+}

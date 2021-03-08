@@ -1,12 +1,13 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+import { chalk, deepmerge, fsExtra, isWin } from '@zmi-cli/utils'
 import webpackBundleAnalyzer from 'webpack-bundle-analyzer'
 import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
-import { chalk, deepmerge, isWin } from '@zmi-cli/utils'
 import esLintWebpackPlugin from 'eslint-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
+import eslint from 'eslint'
 import path from 'path'
 
 import VueClientWebpackPlugin from './VueClientWebpackPlugin'
@@ -15,7 +16,9 @@ import terserOptions from './terserOptions'
 import PrettierHtml from './PrettierHtml'
 import formatter from './eslintFormatter'
 
-function applyPlugin(options: IPenetrateOptions) {
+const ESLINT_CONFIG = ['.eslintrc', '.eslintrc.json', '.eslintrc.js']
+
+async function applyPlugin(options: IPenetrateOptions) {
   const {
     webpackConfig,
     isTypescript,
@@ -28,8 +31,7 @@ function applyPlugin(options: IPenetrateOptions) {
     isVue,
     isDev,
     hot,
-    cwd,
-    pkg
+    cwd
   } = options
 
   const disableCompress = isProd && process.env.COMPRESS === 'none'
@@ -59,51 +61,42 @@ function applyPlugin(options: IPenetrateOptions) {
           compiler: '@vue/compiler-sfc'
         }
       },
-      configFile: `${cwd}/tsconfig.json`,
+      configFile: path.join(cwd, 'tsconfig.json'),
       diagnosticOptions: {
         semantic: true
       }
     }
   }
 
-  let reactVersion
-  if (isReact) {
-    const { react = 'detect' } = pkg.dependencies ?? {}
-    delete forkTsCheckerOpt.typescript.extensions
+  let isEslint = false
+  let eslintConfig = {}
 
-    if (isNaN(Number(react.charAt(0)))) {
-      reactVersion = react.replace(react.charAt(0), '')
-    } else {
-      reactVersion = react
+  for (const file of ESLINT_CONFIG) {
+    const es = path.join(cwd, file)
+    if (fsExtra.existsSync(es)) {
+      isEslint = true
+      const cli = new eslint.ESLint({ cwd })
+      eslintConfig = await cli.calculateConfigForFile(file)
+      break
     }
   }
 
-  webpackConfig.plugin('esLintWebpackPlugin').use(esLintWebpackPlugin, [
-    {
-      extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'vue'],
-      formatter,
-      eslintPath: require.resolve('eslint'),
-      context: cwd,
-      cwd,
-      cache: true,
-      failOnError: isDev,
-      resolvePluginsRelativeTo: __dirname,
-      cacheLocation: path.resolve(`${cwd}/node_modules`, '.cache/.eslintcache'),
-      baseConfig: {
-        extends: [
-          // require.resolve(isTypescript ? 'eslint-config-zmi/typescript' : 'eslint-config-zmi/base'),
-          require.resolve(isReact ? 'eslint-config-zmi/react' : 'eslint-config-zmi/vue')
-        ],
-        settings: isReact
-          ? {
-              react: {
-                version: reactVersion
-              }
-            }
-          : {}
+  webpackConfig.when(isEslint, (WConfig) => {
+    WConfig.plugin('esLintWebpackPlugin').use(esLintWebpackPlugin, [
+      {
+        extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'vue'],
+        formatter,
+        eslintPath: require.resolve('eslint'),
+        context: cwd,
+        cwd,
+        cache: true,
+        failOnError: isDev,
+        resolvePluginsRelativeTo: __dirname,
+        cacheLocation: path.join(cwd, 'node_modules/.cache/.eslintcache'),
+        baseConfig: eslintConfig
       }
-    }
-  ])
+    ])
+  })
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [config.define])
 
