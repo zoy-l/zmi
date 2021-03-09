@@ -5564,10 +5564,10 @@ eslint-config-prettier@^8.1.0:
   resolved "https://registry.npm.taobao.org/eslint-config-prettier/download/eslint-config-prettier-8.1.0.tgz?cache=0&sync_timestamp=1614187358311&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-config-prettier%2Fdownload%2Feslint-config-prettier-8.1.0.tgz#4ef1eaf97afe5176e6a75ddfb57c335121abc5a6"
   integrity sha1-TvHq+Xr+UXbmp13ftXwzUSGrxaY=
 
-eslint-config-zmi@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.1.5.tgz#84bb623be42a435de5efd4d7e1f57e3af5f1e588"
-  integrity sha512-zXhDMjK5+81ise6Gu+TX5OF0DkXamprzvTH9lASGRaQGaH0E+XLORJFnc3ZiwP08VNTYqVQRiVKNaImsHdK4nQ==
+eslint-config-zmi@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.1.6.tgz#8df3930765d06a224bbd057c3b4073bbbf25b081"
+  integrity sha512-UkVb00F0a8O3tE8SIBraLlGbTbDZpqboqxshpPSCMNVwAz4v5cJsHCDqQniE37QWgkTD9HcpToici6IzA9C6Ug==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.16.1"
     "@typescript-eslint/parser" "^4.16.1"

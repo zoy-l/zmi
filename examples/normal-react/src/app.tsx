@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import logo from './logo.svg'
 import './app.less'
 
+const b = 1
+
 function App() {
   const [count, setCount] = useState(1)
 

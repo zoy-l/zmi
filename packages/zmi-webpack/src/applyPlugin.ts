@@ -102,7 +102,7 @@ async function applyPlugin(options: IPenetrateOptions) {
         context: cwd,
         cwd,
         cache: true,
-        useEslintrc: false,
+        // useEslintrc: false,
         failOnError: isDev,
         resolvePluginsRelativeTo: __dirname,
         cacheLocation: path.join(cwd, 'node_modules/.cache/.eslintcache'),

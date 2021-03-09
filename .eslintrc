@@ -14,10 +14,6 @@
     {
       "files": ["examples/normal-react/*.tsx"],
       "extends": ["zmi/react"]
-    },
-    {
-      "files": ["examples/normal-vue/*.tsx", "examples/normal-vue/*.vue"],
-      "extends": ["zmi/vue"]
     }
   ]
 }

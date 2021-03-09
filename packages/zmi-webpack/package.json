@@ -30,7 +30,7 @@
     "css-minimizer-webpack-plugin": "^1.2.0",
     "css-modules-typescript-loader": "^4.0.1",
     "eslint": "^7.21.0",
-    "eslint-config-zmi": "^1.1.5",
+    "eslint-config-zmi": "^1.1.6",
     "eslint-webpack-plugin": "^2.5.2",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.1.1",

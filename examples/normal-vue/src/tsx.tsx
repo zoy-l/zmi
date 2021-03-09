@@ -25,7 +25,9 @@ export default defineComponent({
       <div class={hello.red}>
         {this.tsx}
         <div> {this.count}</div>
-
+        {/* {[1, 2].map((i) => {
+          return <div>{i}</div>
+        })} */}
         <kda class={hello.tsx} />
       </div>
     )

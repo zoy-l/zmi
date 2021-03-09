@@ -8,7 +8,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Home',
+  name: 'home',
   data() {
     return {
       msg: 'hello vue 3'
