@@ -1,145 +1,84 @@
-import { stripAnsi } from '@zmi-cli/utils'
 import { EntryObject } from 'webpack'
 import path from 'path'
 
 import Bundler from './Bundler'
 import Html from './Html'
 
-const fixtures = path.join(__dirname, '../fixtures')
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1500))
 jest.setTimeout(30000)
 
 process.env.ZMI_TEST = 'true'
-beforeEach(() => {
-  window.console.warn = jest.fn()
-  window.console.log = jest.fn()
-})
 
 afterAll(() => {
   jest.resetAllMocks()
   delete process.env.ZMI_TEST
 })
 
-describe('setupDevServer', () => {
-  const cwd = path.join(fixtures, 'vue-config')
-  const config = require(cwd)
-  const bundler = new Bundler({ cwd, config, pkg: {} })
-  const html = new Html({ config })
-  const port = 8000
-  const host = '0.0.0.0'
+const fixtures = path.join(__dirname, '../fixtures')
 
-  it(cwd, async (done) => {
-    const content = await html.getContent({
-      headScripts: [],
-      metas: [],
-      styles: [],
-      scripts: [],
-      links: []
-    })
-
-    const args = {
-      entry: {
-        main: path.join(`${cwd}/src`, 'index.js')
-      },
-      htmlContent: content,
-      port
-    }
-
-    const bundleConfigs = await bundler.getConfig({
-      env: 'production',
-      ...args
-    })
-
-    await bundler.build({ bundleConfigs, appOutputPath: path.join(cwd, './dist') })
-
-    expect(
-      // @ts-expect-error test
-      console.log.mock.calls
-        .map((str: string[]) => stripAnsi(str[0]))
-        .includes(' BUILD  Compiled successfully !\n ')
-    ).toEqual(true)
-
-    const devBundleConfigs = await bundler.getConfig({
-      env: 'development',
-      ...args
-    })
-    const devServer = await bundler.setupDevServer({
-      bundleConfigs: devBundleConfigs,
-      port,
-      host
-    })
-
-    await wait()
-    expect(
-      /Running metro bundler/.test(
-        // @ts-expect-error test
-        console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join('')
-      )
-    ).toEqual(true)
-    devServer.close()
-    done()
-  })
-})
+const contentArgs = {
+  headScripts: [],
+  metas: [],
+  styles: [],
+  scripts: [],
+  links: []
+}
+const port = 8000
+const host = '0.0.0.0'
 
 describe('setupDevServer', () => {
-  const cwd = path.join(fixtures, 'react-config')
-  const config = require(cwd)
-  const bundler = new Bundler({ cwd, config, pkg: {} })
-  const port = 8000
-  const host = '0.0.0.0'
-  const html = new Html({ config })
+  const paths = [
+    { cwd: path.join(fixtures, 'vue-config'), entry: './src/index.js' },
+    { cwd: path.join(fixtures, 'react-config'), entry: './src/index.jsx' }
+  ]
 
-  it(cwd, async (done) => {
-    const content = await html.getContent({
-      headScripts: [],
-      metas: [],
-      styles: [],
-      scripts: [],
-      links: []
+  paths.forEach(({ cwd, entry }) => {
+    const config = require(cwd)
+    const bundler = new Bundler({ cwd, config, pkg: {} })
+    const html = new Html({ config })
+
+    it(cwd, async (done) => {
+      const content = await html.getContent(contentArgs)
+
+      const args = {
+        entry: {
+          main: path.join(cwd, entry)
+        },
+        htmlContent: content,
+        port
+      }
+
+      const bundleConfigs = await bundler.getConfig({
+        env: 'production',
+        ...args
+      })
+
+      const { err } = await bundler.build({
+        bundleConfigs,
+        appOutputPath: path.join(cwd, './dist')
+      })
+      expect(err).toEqual(null)
+
+      await wait()
+      const devBundleConfigs = await bundler.getConfig({
+        env: 'development',
+        ...args
+      })
+
+      const devServer = await bundler.setupDevServer({
+        bundleConfigs: devBundleConfigs,
+        port,
+        host
+      })
+      await wait()
+      devServer.listen(port, host, (error) => {
+        expect(error).toEqual(undefined)
+      })
+
+      await wait()
+      devServer.close()
+      done()
     })
-
-    const args = {
-      entry: {
-        main: path.join(`${cwd}/src`, 'index.jsx')
-      },
-      htmlContent: content,
-      port: 8000
-    }
-
-    const bundleConfigs = await bundler.getConfig({
-      env: 'production',
-      ...args
-    })
-
-    await bundler.build({ bundleConfigs, appOutputPath: path.join(cwd, './dist') })
-
-    expect(
-      // @ts-expect-error test
-      console.log.mock.calls
-        .map((str: string[]) => stripAnsi(str[0]))
-        .includes(' BUILD  Compiled successfully !\n ')
-    ).toEqual(true)
-
-    const devBundleConfigs = await bundler.getConfig({
-      env: 'development',
-      ...args
-    })
-
-    const devServer = await bundler.setupDevServer({
-      bundleConfigs: devBundleConfigs,
-      port,
-      host
-    })
-
-    await wait()
-    expect(
-      /Running metro bundler/.test(
-        // @ts-expect-error test
-        console.log.mock.calls.map((str: string[]) => stripAnsi(str[0])).join('')
-      )
-    ).toEqual(true)
-    devServer.close()
-    done()
   })
 })
 

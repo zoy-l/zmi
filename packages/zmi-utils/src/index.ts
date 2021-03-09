@@ -20,7 +20,6 @@ import gzipSize from 'gzip-size'
 import recursiveReaddir from 'recursive-readdir'
 import stripAnsi from 'strip-ansi'
 import textTable from 'text-table'
-import prettier from 'prettier'
 import address from 'address'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
@@ -41,7 +40,6 @@ export {
   recursiveReaddir,
   stripAnsi,
   textTable,
-  prettier,
   fsExtra,
   filesize,
   gzipSize,

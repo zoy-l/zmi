@@ -5564,11 +5564,12 @@ eslint-config-prettier@^8.1.0:
   resolved "https://registry.npm.taobao.org/eslint-config-prettier/download/eslint-config-prettier-8.1.0.tgz?cache=0&sync_timestamp=1614187358311&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-config-prettier%2Fdownload%2Feslint-config-prettier-8.1.0.tgz#4ef1eaf97afe5176e6a75ddfb57c335121abc5a6"
   integrity sha1-TvHq+Xr+UXbmp13ftXwzUSGrxaY=
 
-eslint-config-zmi@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.1.6.tgz#8df3930765d06a224bbd057c3b4073bbbf25b081"
-  integrity sha512-UkVb00F0a8O3tE8SIBraLlGbTbDZpqboqxshpPSCMNVwAz4v5cJsHCDqQniE37QWgkTD9HcpToici6IzA9C6Ug==
+eslint-config-zmi@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.2.3.tgz#7e4328968a0cff7ac219324bfcb826d22737af5c"
+  integrity sha512-LYJUIpgjFzjGJz7v8ddiW7Dpfw0bLPyB3TdfRzS/kL1RxBV+giZuk+Mmo8Ng2wIoJbbJ78PZcmEnQSqrrdsfsA==
   dependencies:
+    "@types/prettier" "^2.2.2"
     "@typescript-eslint/eslint-plugin" "^4.16.1"
     "@typescript-eslint/parser" "^4.16.1"
     eslint-config-airbnb-base "^14.2.1"
@@ -6870,10 +6871,10 @@ html-tags@^3.1.0:
   resolved "https://registry.npm.taobao.org/html-tags/download/html-tags-3.1.0.tgz#7b5e6f7e665e9fb41f30007ed9e0d41e97fb2140"
   integrity sha1-e15vfmZen7QfMAB+2eDUHpf7IUA=
 
-html-webpack-plugin@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-5.3.0.tgz#9d93a547db34ac1f28b9f41fd8fe38a5d56770f3"
-  integrity sha512-BjtSQCy5J0e9EDV+NZ4i+w36N9avXfQDF4QoAV9YAECG50x6/2tfJkFb0ws9eTcszLdyg4vs6FI6hMgVzVoQqw==
+html-webpack-plugin@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-5.3.1.tgz#8797327548e3de438e3494e0c6d06f181a7f20d1"
+  integrity sha512-rZsVvPXUYFyME0cuGkyOHfx9hmkFa4pWfxY/mdY38PsBEaVNsRoA+Id+8z6DBDgyv3zaw6XQszdF8HLwfQvcdQ==
   dependencies:
     "@types/html-minifier-terser" "^5.0.0"
     html-minifier-terser "^5.0.1"

@@ -70,7 +70,7 @@ export default class Bundler {
   async build(options: {
     bundleConfigs: webpack.Configuration
     appOutputPath: string
-  }): Promise<webpack.Stats | undefined> {
+  }): Promise<{ err: Error | undefined; stats: webpack.Stats | undefined }> {
     const { bundleConfigs, appOutputPath } = options
     clearConsole()
     console.log(chalk.blue('Start packing, please don’t worry, officer...\n'))
@@ -114,7 +114,7 @@ export default class Bundler {
           console.warn(messages.warnings.join('\n'))
         }
 
-        resolve(stats)
+        resolve({ err, stats })
       })
     })
   }

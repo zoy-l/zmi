@@ -1,4 +1,5 @@
-const { prettier, recursiveReaddir } = require('@zmi-cli/utils')
+const { prettier } = require('eslint-config-zmi')
+const { recursiveReaddir } = require('@zmi-cli/utils')
 const path = require('path')
 const fs = require('fs')
 

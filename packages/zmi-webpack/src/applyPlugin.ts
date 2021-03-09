@@ -73,11 +73,11 @@ async function applyPlugin(options: IPenetrateOptions) {
   let eslintConfig: eslint.Linter.Config = {}
 
   if (config.disableESLint) {
+    const cli = new eslint.ESLint({ cwd })
     for (const file of ESLINT_CONFIG) {
       const es = path.join(cwd, file)
       if (fsExtra.existsSync(es)) {
         isEslint = true
-        const cli = new eslint.ESLint({ cwd })
         eslintConfig = await cli.calculateConfigForFile(file)
         break
       }
@@ -85,7 +85,6 @@ async function applyPlugin(options: IPenetrateOptions) {
 
     if (!isEslint) {
       const { eslintConfig: pkgEslintConfig } = pkg
-
       if (pkgEslintConfig) {
         isEslint = true
         eslintConfig = pkgEslintConfig
@@ -102,11 +101,17 @@ async function applyPlugin(options: IPenetrateOptions) {
         context: cwd,
         cwd,
         cache: true,
-        // useEslintrc: false,
         failOnError: isDev,
         resolvePluginsRelativeTo: __dirname,
         cacheLocation: path.join(cwd, 'node_modules/.cache/.eslintcache'),
-        baseConfig: eslintConfig
+        baseConfig: eslintConfig,
+        overrideConfig: {
+          rules: isTypescript
+            ? {
+                'no-unused-vars': 'off'
+              }
+            : {}
+        }
       }
     ])
   })

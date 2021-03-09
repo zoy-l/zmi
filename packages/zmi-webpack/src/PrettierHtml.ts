@@ -1,5 +1,5 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { prettier } from '@zmi-cli/utils'
+import { prettier } from 'eslint-config-zmi'
 import { Compiler } from 'webpack'
 
 export default class PrettierHtml {
