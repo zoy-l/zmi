@@ -1,7 +1,0 @@
-{
-  "extends": ["zmi/react"],
-  "rules": {
-    "no-use-before-define": 0,
-    "react/jsx-uses-vars": "off"
-  }
-}

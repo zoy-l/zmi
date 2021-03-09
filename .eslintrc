@@ -9,5 +9,15 @@
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
     "no-continue": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["examples/normal-react/*.tsx"],
+      "extends": ["zmi/react"]
+    },
+    {
+      "files": ["examples/normal-vue/*.tsx", "examples/normal-vue/*.vue"],
+      "extends": ["zmi/vue"]
+    }
+  ]
 }
