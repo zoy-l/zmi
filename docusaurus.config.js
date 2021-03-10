@@ -5,12 +5,24 @@ module.exports = {
   tagline: '🎃 通用的 React Vue miniapp-ts 开发工具.',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
+  titleDelimiter: '·',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.svg',
   organizationName: 'zoy-l',
   projectName: 'zmi',
+
   themeConfig: {
+    algolia: {
+      apiKey: '25626fae796133dc1e734c6bcaaeac3c',
+      indexName: 'docsearch',
+
+      // Optional: see doc section bellow
+      contextualSearch: true,
+
+      // Optional: Algolia search parameters
+      searchParameters: {}
+    },
     prism: {
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/dracula')
@@ -18,7 +30,7 @@ module.exports = {
     navbar: {
       title: 'Zmi-CLI',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Zmi Logo',
         src: 'img/logo.svg'
       },
       items: [

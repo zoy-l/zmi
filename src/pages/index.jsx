@@ -55,7 +55,10 @@ export default function Home() {
   const context = useDocusaurusContext()
   const { siteConfig = {} } = context
   return (
-    <Layout title="Zmi-CLI" description="Description will go into a meta tag in <head />">
+    <Layout
+      title="通用的 React Vue miniapp-ts 开发工具"
+      description="Cli/Vue-Cli/React-Cli/微信小程序/React/Vue"
+    >
       <header className={clsx('hero', styles.heroBanner, 'container')}>
         <div>
           <h1 className="hero__title">{siteConfig.title}</h1>

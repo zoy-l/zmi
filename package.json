@@ -24,7 +24,8 @@
     "publish": "lerna publish",
     "start-doc": "docusaurus start",
     "build-doc": "docusaurus build",
-    "serve-doc": "docusaurus serve"
+    "serve-doc": "docusaurus serve",
+    "swizzle-doc": "docusaurus swizzle"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
