@@ -10,6 +10,9 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
 }
 
 @media screen and (max-width: 966px) {
@@ -24,6 +27,15 @@
   justify-content: center;
 }
 
+.headerAnchor {
+  font-size: 0.85em;
+  float: left;
+  margin-left: -0.87em;
+  padding-right: 0.23em;
+  margin-top: 0.125em;
+  opacity: 0;
+}
+
 .features {
   display: flex;
   align-items: center;
@@ -34,4 +46,16 @@
 .featureImage {
   height: 200px;
   width: 200px;
+}
+
+.logo {
+  padding-left: 40px;
+}
+
+.logVue {
+  transform: translate(670px, 610px) scale(0.1);
+}
+
+.logMini {
+  transform: translate(420px, 440px) scale(0.1) rotate(270deg);
 }

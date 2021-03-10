@@ -7,7 +7,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary: rgb(130, 82, 157);
   --ifm-color-primary-dark: rgb(33, 175, 144);
   --ifm-color-primary-darker: rgb(31, 165, 136);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
@@ -15,11 +15,26 @@
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-code-font-size: 95%;
+  --ifm-font-color-base: #444950;
+
+  --use-button-color: #444950;
+  --use-button-bg-color: rgba(130, 82, 157, 0.1);
+  --use-button-border-color: rgba(130, 82, 157, 0.4);
+  /* --ifm-button-border-color */
 }
 
-.docusaurus-highlight-code-line {
-  background-color: rgb(72, 77, 91);
-  display: block;
-  margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
+html[data-theme='dark'] {
+  --ifm-color-primary: rgb(203, 145, 236);
+
+  --ifm-font-color-base: white;
+  --use-button-bg-color: rgba(255, 255, 255, 0.2);
+  --use-button-color: white;
+  --use-button-border-color: white;
+  /* any other colors you wish to overwrite */
+}
+
+.button.button--secondary:hover {
+  color: var(--use-button-color);
+  background-color: var(--use-button-bg-color);
+  border-color: var(--use-button-border-color);
 }
