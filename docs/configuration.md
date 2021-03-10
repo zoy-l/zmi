@@ -442,7 +442,7 @@ export default {
 - Type: `Array`
 - Default: `[]`
 
-同 [headScripts](TODO)，配置 `<body>` 里的额外脚本。
+同 `headScripts`，配置 `<body>` 里的额外脚本。
 
 ### styles
 
