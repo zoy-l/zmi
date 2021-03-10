@@ -1,4 +1,11 @@
 /* You can override the default Infima variables here. */
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 :root {
   --ifm-color-primary: rgb(130, 82, 157);
   --ifm-color-primary-dark: rgb(33, 175, 144);

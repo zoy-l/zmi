@@ -23,7 +23,8 @@
     "zmi-update:deps": "yarn upgrade-interactive --latest",
     "publish": "lerna publish",
     "start-doc": "docusaurus start",
-    "build-doc": "docusaurus build"
+    "build-doc": "docusaurus build",
+    "serve-doc": "docusaurus serve"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",

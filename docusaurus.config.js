@@ -25,7 +25,7 @@ module.exports = {
         {
           to: 'docs/',
           activeBasePath: 'docs',
-          label: '配置参考',
+          label: '指南',
           position: 'left'
         },
         {
