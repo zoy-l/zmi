@@ -89,13 +89,7 @@ export default function Home() {
       </main>
 
       <div style={{ position: 'relative' }}>
-        <svg
-          className={styles.waves}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 24 150 28"
-          preserveAspectRatio="none"
-          shapeRendering="auto"
-        >
+        <svg className={styles.waves} viewBox="0 24 150 28">
           <defs>
             <path
               id="gentle-wave"
