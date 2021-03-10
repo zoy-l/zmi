@@ -1,16 +1,16 @@
-import React from 'react'
-import clsx from 'clsx'
-import Layout from '@theme/Layout'
-import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
+import Link from '@docusaurus/Link'
+import Layout from '@theme/Layout'
+import React from 'react'
+import clsx from 'clsx'
+
+import styles from '../css/styles.module.css'
 import Logo from './logo'
-import styles from './styles.module.css'
 
 const features = [
   {
     title: '开箱即用',
-    // imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
         您无需学习和配置许多构建工具。可有助您专注于开发,默认支持Typescript, ESlint, Babel,
@@ -20,7 +20,6 @@ const features = [
   },
   {
     title: '简单',
-    // imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
         您的应用程序仅需要一个构建依赖项。Zmi 有丰富测试
@@ -30,7 +29,6 @@ const features = [
   },
   {
     title: '功能丰富',
-    // imageUrl: 'img/undraw_docusaurus_react.svg',
     description: <>一个依赖即可同时支持 React / Vue / miniApp-ts 并且完全可配置.</>
   }
 ]
@@ -81,7 +79,7 @@ export default function Home() {
                 <Feature key={idx} {...props} />
               ))}
             </div>
-            <h2>起步</h2>
+            {/* <h2>起步</h2>
             <p>安装:</p>
             <pre>
               <code>yarn create @zmi-cli/zmi-app</code>
@@ -89,10 +87,11 @@ export default function Home() {
               <span># OR</span>
               <br />
               <code>npx @zmi-cli/create-zmi-app</code>
-            </pre>
+            </pre> */}
           </div>
         </section>
       </main>
+      <p className={styles.footer}>MIT Licensed | Copyright © {new Date().getFullYear()} zoy-l</p>
     </Layout>
   )
 }

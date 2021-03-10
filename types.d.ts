@@ -5,5 +5,6 @@ declare namespace NodeJS {
     HOST: string
     PORT: string
     ZMI_TEST: string
+    ANALYZER: string
   }
 }

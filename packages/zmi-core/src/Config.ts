@@ -18,11 +18,9 @@ import { Service } from '.'
 import path from 'path'
 import fs from 'fs'
 
-const possibleConfigPaths = [
-  process.env.LIM_CONFIG_PATH,
-  '.zmirc.ts',
-  '.zmirc.js'
-].filter(Boolean) as string[]
+const possibleConfigPaths = [process.env.LIM_CONFIG_PATH, '.zmirc.ts', '.zmirc.js'].filter(
+  Boolean
+) as string[]
 
 export interface IWatchOptions {
   userConfig: Record<string, any>
@@ -75,9 +73,7 @@ export default class Config {
       `Config.getConfig() failed, it should not be executed before plugin is ready.`
     )
 
-    const userConfigKeys = Object.keys(userConfig).filter(
-      (key) => userConfig[key] !== false
-    )
+    const userConfigKeys = Object.keys(userConfig).filter((key) => userConfig[key] !== false)
 
     const keepKeys = {}
     // get config
@@ -96,10 +92,7 @@ export default class Config {
       if (!config.schema || value === false) return
 
       const schema = config.schema(Joi)
-      assert(
-        Joi.isSchema(schema),
-        `schema return from plugin ${pluginId} is not valid schema.`
-      )
+      assert(Joi.isSchema(schema), `schema return from plugin ${pluginId} is not valid schema.`)
       const { error } = schema.validate(value)
 
       if (error) {
@@ -130,9 +123,7 @@ export default class Config {
   }
 
   getConfigFile() {
-    const configFile = possibleConfigPaths.find((file) =>
-      fs.existsSync(path.join(this.cwd, file))
-    )
+    const configFile = possibleConfigPaths.find((file) => fs.existsSync(path.join(this.cwd, file)))
     return configFile ? slash(configFile) : undefined
   }
 
@@ -148,10 +139,7 @@ export default class Config {
       // If there is no configFile, the default is `.zmirc`
       // Set here to `.ts` it has no practical effect, just a placeholder
       // !!configFile
-      const envConfigFileName = this.addAffix(
-        configFile ?? '.zmirc.ts',
-        process.env.ZMI_ENV
-      )
+      const envConfigFileName = this.addAffix(configFile ?? '.zmirc.ts', process.env.ZMI_ENV)
 
       // 👆 follow the above, or the real local environment config file
       envConfigFile = getFile({

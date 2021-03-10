@@ -1,9 +1,14 @@
 {
   "name": "root",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/html-minifier-terser"
+    ]
+  },
   "authors": [
     "l-zoy <zoy-l@outlook.com> (https://github.com/l-zoy)"
   ],
@@ -16,7 +21,9 @@
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
     "zmi-clean:modules": "node ./scripts/cleanModules.js",
     "zmi-update:deps": "yarn upgrade-interactive --latest",
-    "publish": "lerna publish"
+    "publish": "lerna publish",
+    "start-doc": "docusaurus start",
+    "build-doc": "docusaurus build"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -29,6 +36,13 @@
     "*.ts?(x)": [
       "prettier --parser=typescript --write"
     ]
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-alpha.71",
+    "@docusaurus/preset-classic": "2.0.0-alpha.71",
+    "clsx": "^1.1.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
