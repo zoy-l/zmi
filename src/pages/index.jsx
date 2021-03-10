@@ -6,11 +6,12 @@ import React from 'react'
 import clsx from 'clsx'
 
 import styles from '../css/styles.module.css'
-import Logo from './logo'
 
 const features = [
   {
     title: '开箱即用',
+    imageUrl: 'img/undraw_typewriter.svg',
+
     description: (
       <>
         您无需学习和配置许多构建工具。可有助您专注于开发,默认支持Typescript, ESlint, Babel,
@@ -20,6 +21,7 @@ const features = [
   },
   {
     title: '简单',
+    imageUrl: 'img/undraw_version_control.svg',
     description: (
       <>
         您的应用程序仅需要一个构建依赖项。Zmi 有丰富测试
@@ -29,6 +31,7 @@ const features = [
   },
   {
     title: '功能丰富',
+    imageUrl: 'img/undraw_switches.svg',
     description: <>一个依赖即可同时支持 React / Vue / miniApp-ts 并且完全可配置.</>
   }
 ]
@@ -69,7 +72,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <Logo />
       </header>
       <main>
         <section className={styles.features}>
@@ -97,7 +99,7 @@ export default function Home() {
               d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
             />
           </defs>
-          {/* 213, 172, 236 */}
+
           <g className={styles.parallax}>
             <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(213, 172, 236, 0.2)" />
             <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(213, 172, 236, 0.1)" />

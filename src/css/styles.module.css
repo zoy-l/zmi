@@ -37,8 +37,8 @@
 }
 
 .featureImage {
-  height: 200px;
-  width: 200px;
+  max-width: 60%;
+  max-height: 128px;
 }
 
 .footer {
@@ -47,18 +47,6 @@
   top: 60%;
   left: 50%;
   transform: translate(-50%, 0);
-}
-
-.logo {
-  padding-left: 40px;
-}
-
-.logVue {
-  transform: translate(670px, 610px) scale(0.1);
-}
-
-.logMini {
-  transform: translate(420px, 440px) scale(0.1) rotate(270deg);
 }
 
 .waves {
