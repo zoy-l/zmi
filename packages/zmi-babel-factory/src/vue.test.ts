@@ -5,7 +5,8 @@ export function transformWithPreset(code: string, opts: Ioptions) {
   const filename = opts.typescript ? 'file.ts' : 'file.js'
   return transform(code, {
     filename,
-    presets: [[require.resolve('./vue.ts')]]
+    presets: [[require.resolve('./vue.ts')]],
+    babelrc: false
   })!.code
 }
 

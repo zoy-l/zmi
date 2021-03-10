@@ -53,6 +53,7 @@ module.exports = {
       require.resolve('@docusaurus/preset-classic'),
       {
         docs: {
+          path: '../docs',
           sidebarPath: require.resolve('./src/sidebars.js')
           // editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/'
         },

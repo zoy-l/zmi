@@ -3,7 +3,8 @@ import { transform } from '@babel/core'
 function transformWithPlugin(code: string) {
   return transform(code, {
     filename: 'file.js',
-    plugins: [require.resolve('./index.ts')]
+    plugins: [require.resolve('./index.ts')],
+    babelrc: false
   })!.code
 }
 

@@ -13,7 +13,8 @@ export function transformWithPreset(code: string, opts: Ioptions) {
   const filename = opts.typescript ? 'file.ts' : 'file.js'
   return transform(code, {
     filename,
-    presets: [[require.resolve('./index.ts'), deepmerge(DEFAULT_OPTS, opts)]]
+    presets: [[require.resolve('./index.ts'), deepmerge(DEFAULT_OPTS, opts)]],
+    babelrc: false
   })!.code
 }
 

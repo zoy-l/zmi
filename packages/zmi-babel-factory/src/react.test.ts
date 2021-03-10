@@ -5,7 +5,8 @@ export function transformWithPreset(code: string, opts: Ioptions) {
   const filename = opts.typescript ? 'file.ts' : 'file.js'
   return transform(code, {
     filename,
-    presets: [[require.resolve('./react.ts'), opts]]
+    presets: [[require.resolve('./react.ts'), opts]],
+    babelrc: false
   })!.code
 }
 

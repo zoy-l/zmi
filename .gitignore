@@ -9,6 +9,7 @@
 /coverage/
 /packages/*/node_modules
 /examples/*/node_modules
+/website/node_modules
 
 # Production
 /build
