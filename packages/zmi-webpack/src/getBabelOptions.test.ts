@@ -9,9 +9,10 @@ test('getBabelOptions', () => {
   })
 
   expect(babel).toEqual({
-    presets: [[babel.presets[0][0], { sourceMap: false }]],
+    presets: [[babel.presets![0][0], { sourceMap: false }]],
     plugins: [],
     sourceType: false,
-    babelrc: false
+    babelrc: false,
+    configFile: false
   })
 })
