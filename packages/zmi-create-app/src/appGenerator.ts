@@ -1,4 +1,4 @@
-import { inquirer, mustache, mkdirp, chalk, yargsParser, glob } from '@zmi-cli/utils'
+import { inquirer, mustache, fsExtra, chalk, yargsParser, glob } from '@zmi-cli/utils'
 import path from 'path'
 import fs from 'fs'
 
@@ -83,14 +83,14 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
       const target = path.join(cwd, file.replace(/\.tpl$/, ''))
       const tpl = fs.readFileSync(absFile, 'utf-8')
       const content = mustache.render(tpl, context)
-      mkdirp.sync(path.dirname(target))
+      fsExtra.mkdirSync(path.dirname(target))
       console.log(`${magenta('[Make]: ')} ${path.relative(cwd, target)}`)
-      fs.writeFileSync(target, content, 'utf-8')
+      fsExtra.writeFileSync(target, content, 'utf-8')
     } else {
       console.log(`${magenta('[Make]: ')} ${file}`)
       const absTarget = path.join(cwd, file)
-      mkdirp.sync(path.dirname(absTarget))
-      fs.copyFileSync(absFile, absTarget)
+      fsExtra.mkdirSync(path.dirname(absTarget))
+      fsExtra.copyFileSync(absFile, absTarget)
     }
   })
 
