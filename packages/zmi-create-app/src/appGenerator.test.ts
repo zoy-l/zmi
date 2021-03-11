@@ -26,6 +26,7 @@ const replaceTpl = (file: string, cwd: string) => {
 
 describe('app generator', () => {
   if (process.env.CI) {
+    expect(1).toEqual(1)
     return
   }
 
