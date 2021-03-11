@@ -69,6 +69,10 @@ async function applyPlugin(options: IPenetrateOptions) {
     }
   }
 
+  if (isReact) {
+    delete forkTsCheckerOpt.typescript.extensions.vue
+  }
+
   let isEslint = false
   let eslintConfig: eslint.Linter.Config = {}
 
