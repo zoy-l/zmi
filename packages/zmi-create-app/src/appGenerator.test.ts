@@ -46,6 +46,8 @@ describe('app generator', () => {
     const fixturesFile = await recursive(cwd)
     const templateFile = await recursive(templateCwd)
 
+    console.warn(fixturesFile.files)
+
     expect(fixturesFile.files.length).toEqual(templateFile.files.length)
 
     // file order has changed
@@ -80,6 +82,8 @@ describe('app generator', () => {
 
     const fixturesFile = await recursive(cwd)
     const templateFile = await recursive(templateCwd)
+
+    console.warn(fixturesFile.files)
 
     expect(fixturesFile.files.length).toEqual(templateFile.files.length)
 
@@ -116,6 +120,8 @@ describe('app generator', () => {
 
     const fixturesFile = await recursive(cwd)
     const templateFile = await recursive(templateCwd)
+
+    console.warn(fixturesFile.files)
 
     expect(fixturesFile.files.length).toEqual(templateFile.files.length)
 
