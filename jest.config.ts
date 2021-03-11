@@ -17,6 +17,9 @@ export default {
       '!packages/zmi-utils/src/index.ts',
       '!packages/zmi-utils/src/clearConsole.ts',
       '!packages/zmi-utils/src/launchDevice.ts',
+
+      '!packages/*/fixtures/*/*',
+
       '!<rootDir>/examples/**',
       '!<rootDir>/website/**'
     ])

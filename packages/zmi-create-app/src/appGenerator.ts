@@ -13,7 +13,7 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
 
   const directoryList = fs
     .readdirSync(cwd)
-    .filter((file) => fs.lstatSync(`${cwd}/${file}`).isDirectory())
+    .filter((file) => fs.lstatSync(path.join(cwd, file)).isDirectory())
 
   if (!appName) {
     const { IAppName } = await inquirer.prompt({
@@ -25,10 +25,10 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
     appName = IAppName
   }
 
-  let IappName = appName as fs.PathLike
+  let IappName = appName
 
   const isEmptyDir =
-    fs.existsSync(`${cwd}/${IappName}`) && !!fs.readdirSync(`${cwd}/${IappName}`).length
+    fs.existsSync(path.join(cwd, IappName)) && !!fs.readdirSync(path.join(cwd, IappName)).length
 
   while (isEmptyDir) {
     const { newAppName } = await inquirer.prompt({
@@ -50,7 +50,7 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
     }
   }
 
-  cwd += `/${IappName}`
+  cwd = path.join(cwd, IappName)
 
   const { template } = await inquirer.prompt({
     type: 'list',
