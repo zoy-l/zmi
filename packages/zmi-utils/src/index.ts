@@ -8,7 +8,7 @@ import mustache from 'mustache'
 import inquirer from 'inquirer'
 import cheerio from 'cheerio'
 import resolve from 'resolve'
-import mkdirp from 'mkdirp'
+import makeDir from 'make-dir'
 import lodash from 'lodash'
 import pkgUp from 'pkg-up'
 import chalk from 'chalk'
@@ -70,6 +70,6 @@ export {
   chalk,
   mustache,
   glob,
-  mkdirp,
+  makeDir,
   inquirer
 }

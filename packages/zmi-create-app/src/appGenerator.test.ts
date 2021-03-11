@@ -12,6 +12,16 @@ const recursive = (path: string): Promise<{ error: Error; files: string[] }> =>
   })
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000))
+const rimrafAsync = (cwd: string) =>
+  new Promise((rs, rj) => {
+    rimraf(cwd, (error) => {
+      if (error) {
+        rj(error)
+      } else {
+        rs(null)
+      }
+    })
+  })
 jest.setTimeout(30000)
 
 const fixtures = path.join(__dirname, '../fixtures')
@@ -37,7 +47,7 @@ describe('app generator', () => {
     const cwd = path.join(fixtures, 'test-react')
     const templateCwd = path.join(templates, 'react')
 
-    rimraf.sync(cwd)
+    await rimrafAsync(cwd)
     appGenerator(fixtures, { _: [], $0: '' })
     process.stdin.emit('keypress', 'test-react\r')
     await wait()
@@ -68,7 +78,7 @@ describe('app generator', () => {
     const cwd = path.join(fixtures, 'test-react-ts')
     const templateCwd = path.join(templates, 'react-ts')
 
-    rimraf.sync(cwd)
+    await rimrafAsync(cwd)
     appGenerator(fixtures, { _: [], $0: '' })
     process.stdin.emit('keypress', 'test-react\r')
     await wait()
@@ -105,7 +115,7 @@ describe('app generator', () => {
     const cwd = path.join(fixtures, 'test-vue')
     const templateCwd = path.join(templates, 'vue')
 
-    rimraf.sync(cwd)
+    await rimrafAsync(cwd)
     appGenerator(fixtures, { _: [], $0: '' })
     process.stdin.emit('keypress', 'test-react\r')
     await wait()
@@ -143,7 +153,7 @@ describe('app generator', () => {
     const cwd = path.join(fixtures, 'test-miniapp')
     const templateCwd = path.join(templates, 'miniapp')
 
-    rimraf.sync(cwd)
+    await rimrafAsync(cwd)
     appGenerator(fixtures, { _: ['test-miniapp'], $0: '' })
     await wait()
     process.stdin.emit('keypress', '', { name: 'up' })
@@ -173,7 +183,7 @@ describe('app generator', () => {
     const cwd = path.join(fixtures, 'test-vue-ts')
     const templateCwd = path.join(templates, 'vue-ts')
 
-    rimraf.sync(cwd)
+    await rimrafAsync(cwd)
     appGenerator(fixtures, { _: ['test-vue-ts'], $0: '' })
     await wait()
     process.stdin.emit('keypress', '', { name: 'down' })
@@ -205,7 +215,7 @@ describe('app generator', () => {
     const cwd = path.join(fixtures, 'test-error')
     const templateCwd = path.join(templates, 'vue-ts')
 
-    rimraf.sync(cwd)
+    await rimrafAsync(cwd)
     appGenerator(fixtures, { _: ['test-error'], $0: '' })
     await wait()
     process.stdin.emit('keypress', '\r')

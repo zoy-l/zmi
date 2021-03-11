@@ -32,7 +32,7 @@
     "gzip-size": "^6.0.0",
     "inquirer": "^8.0.0",
     "lodash": "^4.17.21",
-    "mkdirp": "^1.0.4",
+    "make-dir": "^3.1.0",
     "mustache": "^4.1.0",
     "pkg-up": "^3.1.0",
     "portfinder": "^1.0.28",
