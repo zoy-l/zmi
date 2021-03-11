@@ -5,6 +5,7 @@
   "types": "lib/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.13.10",
     "@babel/register": "^7.13.8",
     "@babel/types": "^7.13.0",
     "@types/cheerio": "^0.22.25",

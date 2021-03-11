@@ -1,3 +1,4 @@
+import { TransformOptions } from '@babel/core'
 import { IPrivate } from '.'
 
 export default function getBabelOpts({
@@ -25,6 +26,7 @@ export default function getBabelOpts({
       ...config.extraBabelPlugins
     ].filter(Boolean),
     sourceType: sourceMap ? 'unambiguous' : false,
-    babelrc: false
-  }
+    babelrc: false,
+    configFile: false
+  } as TransformOptions
 }

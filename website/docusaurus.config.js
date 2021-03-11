@@ -3,13 +3,13 @@
 module.exports = {
   title: 'Zmi-CLI',
   tagline: '🎃 通用的 React Vue miniapp-ts 开发工具.',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://l-zoy.github.io',
+  baseUrl: '/zmi/',
   titleDelimiter: '·',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.svg',
-  organizationName: 'zoy-l',
+  organizationName: 'l-zoy',
   projectName: 'zmi',
 
   themeConfig: {

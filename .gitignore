@@ -12,7 +12,7 @@
 /website/node_modules
 
 # Production
-/build
+/website/build
 
 # Generated files
 .docusaurus

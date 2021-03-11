@@ -20,6 +20,7 @@
   --use-button-color: #444950;
   --use-button-bg-color: rgba(130, 82, 157, 0.1);
   --use-button-border-color: rgba(130, 82, 157, 0.4);
+
   /* --ifm-button-border-color */
 }
 
@@ -27,15 +28,34 @@
   border: none;
 }
 
+.DocSearch-Search-Icon {
+  color: rgba(130, 82, 157, 0.7) !important;
+}
+
+html[data-theme='dark'] .DocSearch-Search-Icon {
+  color: rgba(255, 255, 255, 0.733) !important;
+}
+
+.react-toggle-track {
+  background-color: rgba(213, 172, 236, 0.2) !important;
+}
+
+.react-toggle-thumb {
+  border-color: rgba(213, 172, 236) !important;
+}
+
+.react-toggle--focus .react-toggle-thumb,
+.react-toggle:hover .react-toggle-thumb {
+  box-shadow: 0px 0px 5px 3px rgba(213, 172, 236, 0.5) !important;
+}
+
 html[data-theme='dark']
   .docSidebarContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage- {
-  /* border: none; */
   border-right: 1px solid rgba(58, 58, 58, 0.288);
 }
 
 html[data-theme='dark'] {
   --ifm-color-primary: rgb(203, 145, 236);
-
   --ifm-font-color-base: white;
   --use-button-bg-color: rgba(255, 255, 255, 0.2);
   --use-button-color: white;

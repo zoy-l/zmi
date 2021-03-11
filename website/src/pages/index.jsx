@@ -88,8 +88,13 @@ export default function Home() {
         </section>
       </main>
 
-      <div style={{ position: 'relative' }}>
-        <svg className={styles.waves} viewBox="0 24 150 28">
+      <div style={{ position: 'relative', height: '20vh', overflow: 'hidden' }}>
+        <svg
+          className={styles.waves}
+          viewBox="0 24 150 28"
+          preserveAspectRatio="none"
+          shapeRendering="auto"
+        >
           <defs>
             <path
               id="gentle-wave"
@@ -98,8 +103,8 @@ export default function Home() {
           </defs>
 
           <g className={styles.parallax}>
-            <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(213, 172, 236, 0.2)" />
-            <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(213, 172, 236, 0.1)" />
+            <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(213, 172, 236, 0.1)" />
+            <use xlinkHref="#gentle-wave" x="48" y="2" fill="rgba(213, 172, 236, 0.1)" />
             <use xlinkHref="#gentle-wave" x="48" y="5" fill="rgba(213, 172, 236, 0.1)" />
             <use xlinkHref="#gentle-wave" x="48" y="7" fill="rgba(213, 172, 236, 0.1)" />
           </g>
