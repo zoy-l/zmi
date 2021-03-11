@@ -15,8 +15,8 @@ recursiveReaddir(cwd).then((files) => {
           defaultConfig[opt.key] = opt.config.default
         }
       })
-    } catch {
-      // @-ignore
+    } catch (err) {
+      throw new Error(err)
     }
   })
 

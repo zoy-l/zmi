@@ -44,6 +44,6 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.2.3",
     "yorkie": "^2.0.0",
-    "zmi-nerd": "^1.1.9"
+    "zmi-nerd": "^1.2.0"
   }
 }
