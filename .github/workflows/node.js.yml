@@ -41,3 +41,4 @@ jobs:
       - run: yarn test --forceExit --detectOpenHandles --runInBand --maxWorkers=2
         env:
           NODE_ENV: test
+          CI: true
