@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [10.13.0, 12.x, 14.x]
         os: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
@@ -41,4 +41,4 @@ jobs:
       - run: yarn test --forceExit
         env:
           NODE_ENV: test
-          CI: false
+          CI: true
