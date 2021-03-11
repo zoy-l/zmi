@@ -20,28 +20,44 @@
 
 - 🎉 基于最新的 **webpack5** 支持 vue3.x, react 17.x, 小程序 file to file 编译
 
-## Why?
+## Documentation
 
-- 那为什么不直接使用 UmiJs?
-
-  - Zmi 定位是一个纯粹通用型**脚手架**工具 ,没有过多的集成,所以如果您需要高度集成,那么 UmiJs 可能更适合您
-
-- 为什么不是 create-react-app
-  - 不想要高度集成, 又想可配置
+- 有关更多详细信息，请访问 [Zmi v1](https://l-zoy.github.io/zmi/) 网站
 
 ## Quick start
 
+<div style="display:flex">
+
+<div height="250" >
+
+<!-- ```bash -->
+
+Create project
+
 ```bash
-# Create project
 $ yarn create @zmi-cli/zmi-app
-# or npx @zmi-cli/create-zmi-app
+# npx @zmi-cli/create-zmi-app
+```
 
-# Install dependency
+Install dependency
+
+```bash
 $ cd myApp && yarn
+```
 
-# Start development
+Start development
+
+```bash
 $ zmi dev
 ```
+
+<!-- ``` -->
+
+</div>
+
+<div align=center style="margin-left:10px;"><img src="./website/static/img/code.gif" width="400" height="290"/></div>
+
+</div>
 
 ## LICENSE
 

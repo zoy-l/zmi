@@ -22,28 +22,44 @@ English | [简体中文](./README.zh-CN.md)
 
 - 🎉 **Based** on the latest `webpack 5`, Support vue3.x, react 17.x, miniapp file to file transform
 
-## Why?
+## Documentation
 
-- Then why not use UmiJs directly?
-
-  - Zmi positioning is a purely universal **scaffolding** tool without too much integration, so if you need a high degree of integration, then UmiJs may be more suitable for you
-
-- Why not create-react-app
-  - Don't want to be highly integrated, but also configurable
+- 有关更多详细信息，请访问 [Zmi v1](https://l-zoy.github.io/zmi/) 网站
 
 ## Quick start
 
+<div style="display:flex">
+
+<div height="250" >
+
+<!-- ```bash -->
+
+Create project
+
 ```bash
-# Create project
 $ yarn create @zmi-cli/zmi-app
-# or npx @zmi-cli/create-zmi-app
+# npx @zmi-cli/create-zmi-app
+```
 
-# Install dependency
+Install dependency
+
+```bash
 $ cd myApp && yarn
+```
 
-# Start development
+Start development
+
+```bash
 $ zmi dev
 ```
+
+<!-- ``` -->
+
+</div>
+
+<div align=center style="margin-left:10px;"><img src="./website/static/img/code.gif" width="400" height="290"/></div>
+
+</div>
 
 ## LICENSE
 
