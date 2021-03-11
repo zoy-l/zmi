@@ -25,6 +25,10 @@ const replaceTpl = (file: string, cwd: string) => {
 }
 
 describe('app generator', () => {
+  if (process.env.CI) {
+    return
+  }
+
   beforeEach(() => {
     window.console.log = jest.fn()
   })
@@ -33,113 +37,111 @@ describe('app generator', () => {
     jest.resetAllMocks()
   })
 
-  if (!process.env.CI) {
-    it('input app name', async (done) => {
-      const cwd = path.join(fixtures, 'test-react')
-      const templateCwd = path.join(templates, 'react')
+  it('input app name', async (done) => {
+    const cwd = path.join(fixtures, 'test-react')
+    const templateCwd = path.join(templates, 'react')
 
-      rimraf.sync(cwd)
-      appGenerator(fixtures, { _: [], $0: '' })
-      process.stdin.emit('keypress', 'test-react\r')
-      await wait()
-      process.stdin.emit('keypress', '\r')
-      await wait()
-      const fixturesFile = await recursive(cwd)
-      const templateFile = await recursive(templateCwd)
+    rimraf.sync(cwd)
+    appGenerator(fixtures, { _: [], $0: '' })
+    process.stdin.emit('keypress', 'test-react\r')
+    await wait()
+    process.stdin.emit('keypress', '\r')
+    await wait()
+    const fixturesFile = await recursive(cwd)
+    const templateFile = await recursive(templateCwd)
 
-      console.warn(JSON.stringify(fixturesFile))
+    console.warn(JSON.stringify(fixturesFile))
 
-      expect(fixturesFile.files.length).toEqual(templateFile.files.length)
+    expect(fixturesFile.files.length).toEqual(templateFile.files.length)
 
-      // file order has changed
-      // If two folders are the same, the number of folders is equal
-      const arr = [
-        ...new Set([
-          ...fixturesFile.files.map((file) => file.replace(cwd, '')),
-          ...templateFile.files.map((file) => replaceTpl(file, templateCwd))
-        ])
-      ]
+    // file order has changed
+    // If two folders are the same, the number of folders is equal
+    const arr = [
+      ...new Set([
+        ...fixturesFile.files.map((file) => file.replace(cwd, '')),
+        ...templateFile.files.map((file) => replaceTpl(file, templateCwd))
+      ])
+    ]
 
-      expect(templateFile.files.length).toEqual(arr.length)
+    expect(templateFile.files.length).toEqual(arr.length)
 
-      done()
-    })
+    done()
+  })
 
-    it('input app name repeat', async (done) => {
-      const cwd = path.join(fixtures, 'test-react-ts')
-      const templateCwd = path.join(templates, 'react-ts')
+  it('input app name repeat', async (done) => {
+    const cwd = path.join(fixtures, 'test-react-ts')
+    const templateCwd = path.join(templates, 'react-ts')
 
-      rimraf.sync(cwd)
-      appGenerator(fixtures, { _: [], $0: '' })
-      process.stdin.emit('keypress', 'test-react\r')
-      await wait()
-      process.stdin.emit('keypress', 'test-react-ts\r')
-      await wait()
-      process.stdin.emit('keypress', '', { name: 'down' })
-      process.stdin.emit('keypress', '', { name: 'down' })
-      process.stdin.emit('keypress', '', { name: 'up' })
-      process.stdin.emit('keypress', '\r')
-      await wait()
+    rimraf.sync(cwd)
+    appGenerator(fixtures, { _: [], $0: '' })
+    process.stdin.emit('keypress', 'test-react\r')
+    await wait()
+    process.stdin.emit('keypress', 'test-react-ts\r')
+    await wait()
+    process.stdin.emit('keypress', '', { name: 'down' })
+    process.stdin.emit('keypress', '', { name: 'down' })
+    process.stdin.emit('keypress', '', { name: 'up' })
+    process.stdin.emit('keypress', '\r')
+    await wait()
 
-      const fixturesFile = await recursive(cwd)
-      const templateFile = await recursive(templateCwd)
+    const fixturesFile = await recursive(cwd)
+    const templateFile = await recursive(templateCwd)
 
-      console.warn(JSON.stringify(fixturesFile))
+    console.warn(JSON.stringify(fixturesFile))
 
-      expect(fixturesFile.files.length).toEqual(templateFile.files.length)
+    expect(fixturesFile.files.length).toEqual(templateFile.files.length)
 
-      // file order has changed
-      // If two folders are the same, the number of folders is equal
-      const arr = [
-        ...new Set([
-          ...fixturesFile.files.map((file) => file.replace(cwd, '')),
-          ...templateFile.files.map((file) => replaceTpl(file, templateCwd))
-        ])
-      ]
+    // file order has changed
+    // If two folders are the same, the number of folders is equal
+    const arr = [
+      ...new Set([
+        ...fixturesFile.files.map((file) => file.replace(cwd, '')),
+        ...templateFile.files.map((file) => replaceTpl(file, templateCwd))
+      ])
+    ]
 
-      expect(templateFile.files.length).toEqual(arr.length)
+    expect(templateFile.files.length).toEqual(arr.length)
 
-      done()
-    })
+    done()
+  })
 
-    it('input app name repeats', async (done) => {
-      const cwd = path.join(fixtures, 'test-vue')
-      const templateCwd = path.join(templates, 'vue')
+  it('input app name repeats', async (done) => {
+    const cwd = path.join(fixtures, 'test-vue')
+    const templateCwd = path.join(templates, 'vue')
 
-      rimraf.sync(cwd)
-      appGenerator(fixtures, { _: [], $0: '' })
-      process.stdin.emit('keypress', 'test-react\r')
-      await wait()
-      process.stdin.emit('keypress', 'test-react-ts\r')
-      await wait()
-      process.stdin.emit('keypress', 'test-vue\r')
-      await wait()
-      process.stdin.emit('keypress', '', { name: 'down' })
-      process.stdin.emit('keypress', '', { name: 'down' })
-      process.stdin.emit('keypress', '\r')
-      await wait()
+    rimraf.sync(cwd)
+    appGenerator(fixtures, { _: [], $0: '' })
+    process.stdin.emit('keypress', 'test-react\r')
+    await wait()
+    process.stdin.emit('keypress', 'test-react-ts\r')
+    await wait()
+    process.stdin.emit('keypress', 'test-vue\r')
+    await wait()
+    process.stdin.emit('keypress', '', { name: 'down' })
+    process.stdin.emit('keypress', '', { name: 'down' })
+    process.stdin.emit('keypress', '\r')
+    await wait()
 
-      const fixturesFile = await recursive(cwd)
-      const templateFile = await recursive(templateCwd)
+    const fixturesFile = await recursive(cwd)
+    const templateFile = await recursive(templateCwd)
 
-      console.warn(JSON.stringify(fixturesFile))
+    console.warn(JSON.stringify(fixturesFile))
 
-      expect(fixturesFile.files.length).toEqual(templateFile.files.length)
+    expect(fixturesFile.files.length).toEqual(templateFile.files.length)
 
-      // file order has changed
-      // If two folders are the same, the number of folders is equal
-      const arr = [
-        ...new Set([
-          ...fixturesFile.files.map((file) => file.replace(cwd, '')),
-          ...templateFile.files.map((file) => replaceTpl(file, templateCwd))
-        ])
-      ]
+    // file order has changed
+    // If two folders are the same, the number of folders is equal
+    const arr = [
+      ...new Set([
+        ...fixturesFile.files.map((file) => file.replace(cwd, '')),
+        ...templateFile.files.map((file) => replaceTpl(file, templateCwd))
+      ])
+    ]
 
-      expect(templateFile.files.length).toEqual(arr.length)
+    expect(templateFile.files.length).toEqual(arr.length)
 
-      done()
-    })
-  }
+    done()
+  })
 
   it('cli app name miniapp', async (done) => {
     const cwd = path.join(fixtures, 'test-miniapp')
