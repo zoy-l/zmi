@@ -26,12 +26,6 @@
 
 ## Quick start
 
-<div style="display:flex">
-
-<div height="250" >
-
-<!-- ```bash -->
-
 Create project
 
 ```bash
@@ -51,13 +45,7 @@ Start development
 $ zmi dev
 ```
 
-<!-- ``` -->
-
-</div>
-
-<div align=center style="margin-left:10px;"><img src="./website/static/img/code.gif" width="400" height="290"/></div>
-
-</div>
+![Image text](./website/static/img/code.gif)
 
 ## LICENSE
 
