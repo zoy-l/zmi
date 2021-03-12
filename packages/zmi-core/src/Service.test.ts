@@ -228,11 +228,7 @@ test('skip plugins', async () => {
   ).toEqual([])
 
   expect([...service.skipPluginIds]).toEqual(['plugin_2'])
-  expect(Object.keys(service.hooksByPluginId)).toEqual([
-    'plugin_1',
-    'plugin_2',
-    'plugin_3'
-  ])
+  expect(Object.keys(service.hooksByPluginId)).toEqual(['plugin_1', 'plugin_2', 'plugin_3'])
 })
 
 test('api.registerPlugins', async () => {
@@ -247,11 +243,7 @@ test('api.registerPlugins', async () => {
     plugins: service.plugins
   })
 
-  expect(plugins).toEqual([
-    '[plugin] ./plugin_1',
-    '[plugin] plugin_2',
-    '[plugin] ./plugin_3'
-  ])
+  expect(plugins).toEqual(['[plugin] ./plugin_1', '[plugin] plugin_2', '[plugin] ./plugin_3'])
 })
 
 test('api.registerCommand', async () => {
@@ -405,9 +397,7 @@ test('path register', async () => {
   })
   await service.init()
 
-  expect(service.initialPlugins[0].id).toEqual(
-    '@zmi-cli/core/fixtures/skip-plugins/plugin_3'
-  )
+  expect(service.initialPlugins[0].id).toEqual('@zmi-cli/core/fixtures/skip-plugins/plugin_3')
 })
 
 test('enableBy', async () => {
