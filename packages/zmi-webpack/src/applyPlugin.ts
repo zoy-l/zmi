@@ -6,6 +6,7 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import miniCssExtractPlugin from 'mini-css-extract-plugin'
 import esLintWebpackPlugin from 'eslint-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import webpack from 'webpack'
 import eslint from 'eslint'
 import path from 'path'
@@ -119,6 +120,19 @@ async function applyPlugin(options: IPenetrateOptions) {
       }
     ])
   })
+
+  if (config.copy && isProd) {
+    const copyPatterns = config.copy.map((item: string | { to: string; from: string }) => {
+      return typeof item === 'string'
+        ? { from: path.join(cwd, item) }
+        : {
+            from: path.join(cwd, item.from),
+            to: path.join(cwd, item.to)
+          }
+    })
+
+    webpackConfig.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [{ patterns: copyPatterns }])
+  }
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [config.define])
 

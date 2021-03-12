@@ -67,6 +67,8 @@ type RequireOnly<T extends Record<any, any>> = Pick<T, KnownKeys<T>>
 
 export interface IConfig {
   title?: string
+  mountElementId?: string
+  copy?: string[] | { from: string; to: string }[]
   disableESLint?: boolean
   devServer?: webpackDevServer.Configuration
   frameType?: 'react' | 'vue' | 'miniApp'
@@ -127,7 +129,7 @@ export interface IConfig {
   [key: string]: any
 }
 
-type INonEmpty<T extends Record<string, any>, U> = {
+export type INonEmpty<T extends Record<string, any>, U> = {
   [key in keyof T]-?: key extends U ? INonEmpty<T[key], key> : T[key]
 }
 
@@ -139,8 +141,8 @@ export interface IModifyHTML {
 
 export type IHtmlConfig = Pick<IPrivate, 'metas' | 'links' | 'headScripts' | 'scripts'>
 
-export interface IGetContentArgs extends IHtmlConfig {
-  styles: IStyle[]
+export interface IGetContentArgs extends Partial<IHtmlConfig> {
+  styles?: IStyle[]
   tplPath?: string
   modifyHTML?: IModifyHTML
 }

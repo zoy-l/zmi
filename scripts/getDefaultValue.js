@@ -1,10 +1,10 @@
+const { recursiveReaddir } = require('../packages/zmi-utils/lib')
 const { prettier } = require('eslint-config-zmi')
-const { recursiveReaddir } = require('@zmi-cli/utils')
 const path = require('path')
 const fs = require('fs')
 
-const cwd = path.join(__dirname, '../zmi-preset/lib/plugins/features')
-const aims = path.join(__dirname, './src/defaultConfig.ts')
+const aims = path.join(__dirname, '../packages/zmi-webpack/src/defaultConfig.ts')
+const cwd = path.join(__dirname, '../packages/zmi-preset/lib/plugins/features')
 
 recursiveReaddir(cwd).then((files) => {
   const defaultConfig = {}
@@ -15,8 +15,8 @@ recursiveReaddir(cwd).then((files) => {
           defaultConfig[opt.key] = opt.config.default
         }
       })
-    } catch (err) {
-      throw new Error(err)
+    } catch {
+      // ignore
     }
   })
 
@@ -25,7 +25,16 @@ recursiveReaddir(cwd).then((files) => {
     prettier.format(
       `// when using @zmi/webpack alone
        // The logic here is similar to the preset logic, but does not conflict
-       export default ${JSON.stringify(defaultConfig)}`,
+       const configDefault = ${JSON.stringify(defaultConfig)}
+       export const htmlDefaultOptions = {
+          headScripts: [],
+          scripts: [],
+          styles: [],
+          metas: [],
+          links: [],
+          config: configDefault
+        };
+       export default configDefault`,
       {
         parser: 'babel-ts',
         singleQuote: true,

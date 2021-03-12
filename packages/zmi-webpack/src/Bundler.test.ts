@@ -2,7 +2,7 @@ import { EntryObject } from 'webpack'
 import path from 'path'
 
 import Bundler from './Bundler'
-import Html from './Html'
+import html from './Html'
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 2000))
 jest.setTimeout(30000)
@@ -16,14 +16,7 @@ afterAll(() => {
 
 const fixtures = path.join(__dirname, '../fixtures')
 
-const contentArgs = {
-  headScripts: [],
-  metas: [],
-  styles: [],
-  scripts: [],
-  links: []
-}
-const port = 8000
+const port = 8181
 const host = '0.0.0.0'
 
 describe('setupDevServer', () => {
@@ -35,16 +28,13 @@ describe('setupDevServer', () => {
   paths.forEach(({ cwd, entry }) => {
     const config = require(cwd)
     const bundler = new Bundler({ cwd, config, pkg: {} })
-    const html = new Html({ config })
 
     it(cwd, async (done) => {
-      const content = await html.getContent(contentArgs)
-
       const args = {
         entry: {
           main: path.join(cwd, entry)
         },
-        htmlContent: content,
+        htmlContent: await html({ config }),
         port
       }
 
@@ -67,16 +57,13 @@ describe('setupDevServer', () => {
   paths.forEach(({ cwd, entry }) => {
     const config = require(cwd)
     const bundler = new Bundler({ cwd, config, pkg: {} })
-    const html = new Html({ config })
 
     it(cwd, async (done) => {
-      const content = await html.getContent(contentArgs)
-
       const args = {
         entry: {
           main: path.join(cwd, entry)
         },
-        htmlContent: content,
+        htmlContent: await html({ config }),
         port
       }
 
@@ -103,18 +90,10 @@ describe('setupDevServer', () => {
 })
 
 describe('normal', () => {
-  const html = new Html()
-
   let content: string
 
   beforeEach(async () => {
-    content = await html.getContent({
-      headScripts: [],
-      metas: [],
-      styles: [],
-      scripts: [],
-      links: []
-    })
+    content = await html()
   })
 
   const args = (cwd: string) => ({

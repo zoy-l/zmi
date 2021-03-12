@@ -3,6 +3,7 @@ import { defineConfig } from 'zmi'
 export default defineConfig({
   title: 'zmi',
   frameOptions: {},
+  copy: ['/foo.js'],
   chainWebpack: function (config) {
     config.merge({
       optimization: {
@@ -30,6 +31,6 @@ export default defineConfig({
     }
   ],
 
-  scripts: [`console.log('hello zmi');`],
+  scripts: [`console.log('hello zmi');`, { src: './foo.js' }],
   styles: [`body { color: red;margin:0 }`]
 })

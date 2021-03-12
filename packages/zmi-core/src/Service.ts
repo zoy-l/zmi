@@ -41,13 +41,7 @@ export interface IServiceOptions {
   cwd?: string
 }
 
-const Cycle = [
-  'onPluginReady',
-  'modifyPaths',
-  'onStart',
-  'modifyDefaultConfig',
-  'modifyConfig'
-]
+const Cycle = ['onPluginReady', 'modifyPaths', 'onStart', 'modifyDefaultConfig', 'modifyConfig']
 
 const ServiceAttribute = [
   'ApplyPluginsType',
@@ -202,7 +196,7 @@ export default class Service extends EventEmitter {
 
     // Get the path of the app and expose it to the outside
     this.paths = paths({
-      config: this.initConifg,
+      outputPath: this.initConifg.outputPath,
       cwd: this.cwd,
       env: this.env
     })
@@ -398,9 +392,7 @@ export default class Service extends EventEmitter {
         })
         break
       default:
-        throw new Error(
-          `applyPlugin failed, type is not defined or is not matched, got ${type}.`
-        )
+        throw new Error(`applyPlugin failed, type is not defined or is not matched, got ${type}.`)
     }
 
     return TypeSeriesWater.promise(hookArgs[type]) as Promise<any>
@@ -433,9 +425,7 @@ export default class Service extends EventEmitter {
 
   hasPlugins(pluginIds: string[]) {
     // exposed to the outside for inspection
-    return pluginIds.every(
-      (pluginId) => this.plugins[pluginId] && this.isPluginEnable(pluginId)
-    )
+    return pluginIds.every((pluginId) => this.plugins[pluginId] && this.isPluginEnable(pluginId))
   }
 
   resolvePackage() {

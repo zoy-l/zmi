@@ -1,12 +1,11 @@
 import { lodash, slash } from '@zmi-cli/utils'
-import { IConfig } from '@zmi-cli/webpack'
 import path from 'path'
 import fs from 'fs'
 
 import { IServicePaths } from './types'
 
 interface IServicePath {
-  config: IConfig & { singular?: boolean; outputPath?: string }
+  outputPath?: string
   env?: string
   cwd: string
 }
@@ -20,23 +19,18 @@ function normalizeWithWinPath<T extends Record<string, string>>(obj: T) {
 }
 
 export default function servicePath(options: IServicePath): IServicePaths {
-  const { cwd, config } = options
+  const { cwd, outputPath } = options
   let appSrcPath = cwd
 
   if (isDirectoryAndExist(path.join(cwd, 'src'))) {
     appSrcPath = path.join(cwd, 'src')
   }
 
-  const appPagesPath = config.singular
-    ? path.join(appSrcPath, 'page')
-    : path.join(appSrcPath, 'pages')
-
   return normalizeWithWinPath({
     cwd,
     appNodeModulesPath: path.join(cwd, 'node_modules'),
-    appOutputPath: path.join(cwd, './dist'),
+    appOutputPath: path.join(cwd, outputPath ?? 'dist'),
     appSrcPath,
-    appPagesPath
+    appPagesPath: path.join(appSrcPath, 'pages')
   })
 }
-

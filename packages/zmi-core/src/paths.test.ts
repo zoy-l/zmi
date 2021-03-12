@@ -18,7 +18,6 @@ test('empty', () => {
     stripCwd(
       paths({
         cwd,
-        config: {},
         env: 'development'
       }),
       cwd
@@ -38,7 +37,7 @@ test('empty production', () => {
     stripCwd(
       paths({
         cwd,
-        config: {},
+        outputPath: 'dist',
         env: 'production'
       }),
       cwd
@@ -52,35 +51,13 @@ test('empty production', () => {
   })
 })
 
-test('empty config singular', () => {
-  const cwd = join(fixtures, 'getPaths-empty')
-  expect(
-    stripCwd(
-      paths({
-        cwd,
-        config: {
-          singular: true
-        },
-        env: 'development'
-      }),
-      cwd
-    )
-  ).toEqual({
-    appNodeModulesPath: 'node_modules',
-    appOutputPath: 'dist',
-    appPagesPath: 'page',
-    appSrcPath: '',
-    cwd: ''
-  })
-})
-
 test('src', () => {
   const cwd = join(fixtures, 'getPaths-with-src')
   expect(
     stripCwd(
       paths({
         cwd,
-        config: {},
+        outputPath: 'dist',
         env: 'development'
       }),
       cwd
@@ -89,28 +66,6 @@ test('src', () => {
     appNodeModulesPath: 'node_modules',
     appOutputPath: 'dist',
     appPagesPath: 'src/pages',
-    appSrcPath: 'src',
-    cwd: ''
-  })
-})
-
-test('src config singular', () => {
-  const cwd = join(fixtures, 'getPaths-with-src')
-  expect(
-    stripCwd(
-      paths({
-        cwd,
-        config: {
-          singular: true
-        },
-        env: 'development'
-      }),
-      cwd
-    )
-  ).toEqual({
-    appNodeModulesPath: 'node_modules',
-    appOutputPath: 'dist',
-    appPagesPath: 'src/page',
     appSrcPath: 'src',
     cwd: ''
   })
