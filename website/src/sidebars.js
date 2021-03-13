@@ -9,6 +9,7 @@ module.exports = {
     'prettier',
     'analyzer',
     'https',
-    'styles'
+    'styles',
+    'webpack'
   ]
 }

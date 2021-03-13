@@ -1,5 +1,6 @@
 export default {
   frameOptions: {},
+  cssModulesTypescript: 'emit',
   metas: [
     {
       name: 'keywords',

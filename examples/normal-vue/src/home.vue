@@ -1,5 +1,5 @@
 <template>
-  <div @click="hello" :class="$style.div">
+  <div @click="hello" class="div">
     {{ msg }}
   </div>
 </template>
@@ -8,7 +8,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'home',
+  name: 'Home',
   data() {
     return {
       msg: 'hello vue 3'
@@ -22,7 +22,7 @@ export default defineComponent({
 })
 </script>
 
-<style module lang="less">
+<style lang="less" scoped>
 .div {
   color: blue;
 }

@@ -49,7 +49,9 @@ export default (options: IPenetrateOptions) => {
       const cssLoaderOptions: Record<string, any> = deepmerge(
         {
           importLoaders: 1,
-          modules: {},
+          modules: {
+            exportLocalsConvention: 'camelCaseOnly'
+          },
           sourceMap
         },
         cssLoader

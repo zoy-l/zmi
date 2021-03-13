@@ -3,7 +3,7 @@ import hello from './index.css'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'tsx',
+  name: 'Tsx',
   components: {
     kda
   },
@@ -28,7 +28,7 @@ export default defineComponent({
         {/* {[1, 2].map((i) => {
           return <div>{i}</div>
         })} */}
-        <kda class={hello.tsx} />
+        <kda class={hello.tsxHello} />
       </div>
     )
   }

@@ -20,26 +20,8 @@ title: 运行时配置
     <meta charset="utf-8" />
     <title>Your App</title>
   </head>
-  <body>
-    <div id="root"></div>
-  </body>
+  <body></body>
 </html>
 ```
 
-### CSS 预处理器
-
-Zmi 内置支持 `less`，不支持 `sass` 和 `stylus`，但如果有需求,安装对应的 `loader` 即可, 无需其它设置
-
-注: 不支持 **.sass** 文件,默认只支持 **.scss**
-
-### CSS Modules
-
-Zmi 会自动识别 CSS Modules 的使用
-
-```js
-// CSS Modules
-import styles from './foo.css'
-
-// 非 CSS Modules
-import './foo.css'
-```
+**注意: 不需要添加 `<div id="root"></div>` 标签, 启动服务时会自动添加**
