@@ -281,7 +281,7 @@ HTML 中会生成，
 
 ### frameType
 
-- Type: `vue | react | miniApp`
+- Type: `vue | react`
 - Default: `undefined`
 
 指定运行框架

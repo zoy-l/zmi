@@ -11,7 +11,8 @@ module.exports = function (opts) {
                 node: 'current'
               },
               modules: 'commonjs'
-            }
+            },
+            type: 'node'
           },
           opts
         )

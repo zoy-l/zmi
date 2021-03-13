@@ -1,4 +1,4 @@
-import {slash} from '@zmi-cli/utils'
+import { slash } from '@zmi-cli/utils'
 import { getCwd, getPkg } from './getRoot'
 
 import path from 'path'

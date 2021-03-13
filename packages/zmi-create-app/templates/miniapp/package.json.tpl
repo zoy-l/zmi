@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "miniprogram-api-typings": "^3.2.2",
-    "zmi": "^{{{ version }}}"
+    "miniprogram-api-typings": "^3.3.0",
+    "zmi-miniapp": "^{{{ version }}}"
   },
   "scripts": {
-    "dev": "zmi dev"
+    "dev": "zmi-miniapp"
   }
 }

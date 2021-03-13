@@ -2,6 +2,7 @@ import { deepmerge } from '@zmi-cli/utils'
 import path from 'path'
 
 export interface Ioptions {
+  type?: 'node' | 'react' | 'vue'
   typescript?: boolean
   react?: Record<string, any>
   debug?: boolean
@@ -26,8 +27,9 @@ export default (_context: never, options: Ioptions) => {
       'transform-modules-umd',
       'transform-modules-systemjs',
       'transform-modules-amd',
-      'transform-literals'
-    ]
+      'transform-literals',
+      options.type === 'node' && 'transform-regenerator'
+    ].filter(Boolean)
   }
 
   const preset = {

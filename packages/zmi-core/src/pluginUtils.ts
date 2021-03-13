@@ -101,7 +101,7 @@ export function pathToRegister({ path: pluginPath, cwd }: { path: string; cwd: s
         const ret = require(pluginPath)
         return compatibleWithESModule(ret)
       } catch (err) {
-        throw new Error(`Register plugin ${path} failed, since ${err.message}`)
+        throw new Error(`Register plugin ${pluginPath} failed, since ${err.message}`)
       }
     }
   }

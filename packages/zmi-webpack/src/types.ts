@@ -1,5 +1,4 @@
 import webpackDevServer from 'webpack-dev-server'
-import { IConfig as nerdConfig } from 'zmi-nerd'
 import HtmlPlugin from 'html-webpack-plugin'
 import WebpackChain from 'webpack-chain'
 import { Configuration } from 'webpack'
@@ -66,12 +65,12 @@ type KnownKeys<T> = {
 type RequireOnly<T extends Record<any, any>> = Pick<T, KnownKeys<T>>
 
 export interface IConfig {
+  frameType?: 'react' | 'vue'
   title?: string
   mountElementId?: string
   copy?: string[] | { from: string; to: string }[]
   disableESLint?: boolean
   devServer?: webpackDevServer.Configuration
-  frameType?: 'react' | 'vue' | 'miniApp'
   loaderOptions?: {
     lessLoader?: Record<string, any>
     scssLoader?: Record<string, any>
@@ -115,10 +114,6 @@ export interface IConfig {
   dynamicImport?: boolean
   autoCSSModules?: boolean
   targets?: ITargets
-  miniAppConfig?: Omit<
-    nerdConfig,
-    'pkgs' | 'nodeVersion' | 'nodeFiles' | 'browserFiles' | 'react' | 'target' | 'moduleType'
-  >
   chainWebpack?: (
     meme: WebpackChain,
     options: {

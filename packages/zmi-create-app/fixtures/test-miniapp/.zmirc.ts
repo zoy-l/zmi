@@ -1,5 +1,3 @@
 export default {
-  miniAppConfig: {
-    output: 'miniprogram'
-  }
+  output: 'miniprogram'
 }

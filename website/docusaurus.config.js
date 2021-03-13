@@ -41,6 +41,12 @@ module.exports = {
           position: 'left'
         },
         {
+          to: 'miniapp/',
+          activeBasePath: 'miniapp',
+          label: '小程序',
+          position: 'left'
+        },
+        {
           href: 'https://github.com/l-zoy/zmi',
           label: 'GitHub',
           position: 'right'

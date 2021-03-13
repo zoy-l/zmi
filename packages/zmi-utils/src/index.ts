@@ -26,7 +26,6 @@ import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
 import parseRequireDeps from './parseRequireDeps'
 import { NodeEnv, ArgsType } from './types'
-import BabelRegister from './BabelRegister'
 import clearConsole from './clearConsole'
 import mergeConfig from './mergeConfig'
 import flatDeep from './flatDeep'
@@ -56,7 +55,6 @@ export {
   pkgUp,
   lodash,
   chokidar,
-  BabelRegister,
   deepmerge,
   mergeConfig,
   compatibleWithESModule,

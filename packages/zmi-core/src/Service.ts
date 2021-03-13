@@ -1,4 +1,4 @@
-import { BabelRegister, lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
+import { lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { IConfig } from '@zmi-cli/webpack'
 import { EventEmitter } from 'events'
@@ -7,6 +7,7 @@ import path from 'path'
 
 import { resolvePlugins, pathToRegister } from './pluginUtils'
 import PluginAPI, { IPluginAPIOptions } from './PluginAPI'
+import BabelRegister from './BabelRegister'
 import loadDotEnv from './withEnv'
 import Config from './Config'
 import paths from './paths'
@@ -93,7 +94,7 @@ export default class Service extends EventEmitter {
   /**
    * @desc initial user config
    */
-  initConifg: IConfig
+  initConifg: Record<string, any>
 
   /**
    * @desc runtime babel

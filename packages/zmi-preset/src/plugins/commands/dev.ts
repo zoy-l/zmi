@@ -64,36 +64,7 @@ export default (api: IApi) => {
       api.env = 'development'
       process.env.NODE_ENV = 'development'
 
-      const { miniAppConfig, frameType } = api.config
-      let FrameType = frameType && (frameType !== 'miniApp' ? 'webDev' : 'miniAppDev')
-
-      if (!FrameType) {
-        if (miniAppConfig) {
-          FrameType = 'miniAppDev'
-        } else {
-          const projectConfig = [
-            fs.existsSync(`${api.paths.appSrcPath}/project.config.json`),
-            fs.existsSync(`${api.paths.appSrcPath}/app.json`)
-          ].some(Boolean)
-
-          let isWeb = false
-          if (api.pkg?.dependencies) {
-            isWeb = Object.keys(api.pkg?.dependencies).some((name) =>
-              ['react', 'vue'].includes(name)
-            )
-          }
-
-          if (isWeb && projectConfig) {
-            throw new Error(
-              `zmi can't determine it is a 'web/miniapp' environment, please specify 'frameType'`
-            )
-          }
-
-          FrameType = projectConfig ? 'miniAppDev' : 'webDev'
-        }
-      }
-
-      api.service.runCommand({ command: FrameType, args })
+      api.service.runCommand({ command: 'webDev', args })
 
       const watch = process.env.WATCH !== 'none'
 

@@ -5,8 +5,6 @@ export default {
     return memo.concat([
       '!packages/zmi-preset/src/plugins/features/*',
       '!packages/zmi-preset/src/plugins/commands/*',
-      '!packages/zmi-preset/src/plugins/common/BundleUtils.ts',
-      '!packages/zmi-preset/src/plugins/common/generateHtml.ts',
       '!packages/zmi-preset/src/plugins/registerMethods.ts',
 
       '!packages/zmi/src/cli.ts',
@@ -19,6 +17,8 @@ export default {
       '!packages/zmi-utils/src/launchDevice.ts',
 
       '!packages/*/fixtures/*/*',
+
+      '!packages/zmi-miniapp/src/**/*',
 
       '!<rootDir>/examples/**',
       '!<rootDir>/website/**'

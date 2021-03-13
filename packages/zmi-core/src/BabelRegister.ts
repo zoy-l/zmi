@@ -1,5 +1,4 @@
-import lodash from 'lodash'
-import slash from 'slash'
+import { lodash, slash } from '@zmi-cli/utils'
 
 export default class BabelRegister {
   only: Record<string, string[]> = {}
@@ -15,6 +14,7 @@ export default class BabelRegister {
         .reduce<string[]>((memo, key) => memo.concat(this.only[key]), [])
         .map(slash)
     )
+
     require('@babel/register')({
       presets: [require.resolve('@zmi-cli/babel-factory/node')],
       ignore: [/node_modules/],
