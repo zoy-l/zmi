@@ -6,12 +6,14 @@ name: Node CI
 on:
   push:
     paths-ignore:
+      - '.github/workflows/docs.yml'
       - '.github/**/*.md'
       - '.circleci/**'
       - 'examples/**'
       - 'website/**'
       - 'docs/**'
       - '*.md'
+
 
 jobs:
   build:

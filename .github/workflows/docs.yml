@@ -29,4 +29,4 @@ jobs:
           cd website
           yarn install
           yarn build-doc
-          yarn deployment
+          yarn deploy
