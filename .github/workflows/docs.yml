@@ -16,10 +16,17 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '15.x'
+      - uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: ${{ secrets.GH_PAGES_DEPLOY }}
+      - name: Release to GitHub Pages
+        env:
+          USE_SSH: true
+          GIT_USER: l-zoy
       - run: |
+          git config --global user.email "409626581@qq.com"
+          git config --global user.name "l-zoy"
           cd website
-          ls
           yarn install
           yarn build-doc
           yarn deployment
-

@@ -15,7 +15,6 @@
     "build-doc": "docusaurus build",
     "serve-doc": "docusaurus serve",
     "swizzle-doc": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "deployment": "GIT_USER=l-zoy yarn deploy"
+    "deploy": "docusaurus deploy"
   }
 }
