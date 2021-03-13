@@ -1,10 +1,11 @@
 // when using @zmi/webpack alone
 // The logic here is similar to the preset logic, but does not conflict
-export default {
+const configDefault = {
   alias: {},
   autoCSSModules: true,
   autoprefixer: { autoprefixer: { flexbox: 'no-2009' }, stage: 3 },
   define: {},
+  disableESLint: true,
   devServer: {},
   devtool: false,
   externals: {},
@@ -16,14 +17,8 @@ export default {
   hash: true,
   headScripts: [],
   htmlPlugin: {},
-  disableESLint: true,
   ignoreMomentLocale: true,
   links: [],
-  metas: [],
-  outputPath: 'dist',
-  plugins: [],
-  publicPath: '/',
-  scripts: [],
   loaderOptions: {
     lessLoader: {},
     scssLoader: {},
@@ -31,7 +26,22 @@ export default {
     styleLoader: {},
     cssLoader: {}
   },
+  metas: [],
+  mountElementId: 'root',
+  outputPath: 'dist',
+  plugins: [],
+  publicPath: '/',
+  scripts: [],
   styles: [],
   targets: { node: true, chrome: 49, firefox: 64, safari: 10, edge: 13, ios: 10 },
   terserOptions: {}
 }
+export const htmlDefaultOptions = {
+  headScripts: [],
+  scripts: [],
+  styles: [],
+  metas: [],
+  links: [],
+  config: configDefault
+}
+export default configDefault

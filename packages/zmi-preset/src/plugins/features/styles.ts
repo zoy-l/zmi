@@ -15,7 +15,7 @@ export default (api: IApi) => {
 
   const { styles = [] } = api.initConifg
 
-  const [linkArr, styleArr] = formatStyles(styles!)
+  const [linkArr, styleArr] = formatStyles(styles)
 
   api.addHTMLStyles(() => styleArr)
   api.addHTMLLinks(() => linkArr)

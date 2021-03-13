@@ -33,6 +33,6 @@ export default defineConfig({
     }
   ],
 
-  scripts: [`console.log('hello zmi');`],
+  scripts: [`console.log('hello zmi');`, { src: './foo.js' }],
   styles: [`body { color: red;margin:0 }`]
 })

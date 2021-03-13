@@ -114,8 +114,6 @@ function createCompiler(opts: {
     process.exit(1)
   }
 
-  // I don't know what happened,
-  // I need to return a Date type
   compiler.hooks.invalid.tap('invalid', () => {
     clearConsole()
     log(chalk.cyan('Accelerating compilation ,Wait a moment...'))
@@ -137,8 +135,6 @@ function createCompiler(opts: {
       log(chalk.bgBlue.black(' DONE '), chalk.blue('Compiled successfully !'))
       printInstructions({ appName, urls, port })
     }
-
-    // isFirstCompile = false
 
     if (messages.errors.length) {
       if (messages.errors.length > 1) {

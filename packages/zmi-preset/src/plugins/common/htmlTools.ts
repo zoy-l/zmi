@@ -8,7 +8,6 @@ export const formatScripts = (option: IScriptConfig): IScriptConfig => {
     return option
       .filter((script) => !lodash.isEmpty(script))
       .map((script) =>
-        // [{ content: '', async: true, crossOrigin: true }]
         typeof script !== 'string'
           ? script
           : EXP_URL.test(script)
@@ -19,9 +18,7 @@ export const formatScripts = (option: IScriptConfig): IScriptConfig => {
   return []
 }
 
-export const formatStyles = (
-  option: IStyleConfig
-): [Partial<HTMLLinkElement>[], IStyle[]] => {
+export const formatStyles = (option: IStyleConfig): [Partial<HTMLLinkElement>[], IStyle[]] => {
   const linkArr: Partial<HTMLLinkElement>[] = []
   const styleArr: IStyle[] = []
   if (Array.isArray(option) && option.length > 0) {

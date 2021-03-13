@@ -4,174 +4,80 @@ import assert from 'assert'
 import { join } from 'path'
 import ejs from 'ejs'
 
-import { IGetContentArgs, IConfig, IScript } from './types'
-import defaultConfig from './defaultConfig'
+import { IGetContentArgs, IConfig, IScript, INonEmpty } from './types'
+import { htmlDefaultOptions } from './defaultConfig'
 
-export type IOpts = {
-  config: IConfig
+export type IHtml = {
+  config?: IConfig
   tplPath?: string
+} & IGetContentArgs
+
+function getProps(attrs: Record<string, any>) {
+  return Object.keys(attrs).reduce((memo, key) => {
+    return memo.concat(` ${key}="${attrs[key]}"`)
+  }, '')
 }
 
-class Html {
-  /**
-   * @desc user config
-   */
-  config: IConfig
-
-  /**
-   * @desc Template path
-   */
-  tplPath?: string
-
-  constructor(options: IOpts = { config: {}, tplPath: undefined }) {
-    this.config = deepmerge(defaultConfig, options.config)
-    this.tplPath = options.tplPath
-  }
-
-  // getHtmlPath(path: string) {
-  //   if (path === '/') {
-  //     return 'index.html'
-  //   }
-
-  //   // remove first and last slash
-  //   path = path.replace(/^\//, '')
-  //   path = path.replace(/\/$/, '')
-
-  //   // this.config.exportStatic?.htmlSuffix
-  //   if (path === 'index.html') {
-  //     return `${path}`
-  //   }
-  //   return `${path}/index.html`
-  // }
-
-  // getRelPathToPublicPath(path: string) {
-  //   const htmlPath = this.getHtmlPath(path)
-  //   const len = htmlPath.split('/').length
-  //   return Array(len - 1).join('../') || './'
-  // }
-
-  getAsset(opts: { file: string; path?: string }) {
-    if (/^https?:\/\//.test(opts.file)) {
-      return opts.file
-    }
-    const file = opts.file.charAt(0) === '/' ? opts.file.slice(1) : opts.file
-
-    return `${this.config.publicPath}${file}`
-  }
-
-  getScriptsContent(scripts: IScript[]) {
-    return scripts
-      .map((script: any) => {
-        const { content, ...attrs } = script
-
-        if (content && !attrs.src) {
-          const newAttrs = Object.keys(attrs).reduce(
-            (memo: any, key: string) => [...memo, `${key}="${attrs[key]}"`],
-            []
-          )
-          return [
-            `<script${newAttrs.length ? ' ' : ''}${newAttrs.join(' ')}>`,
-            content
-              .split('\n')
-              .map((line: any) => `  ${line}`)
-              .join('\n'),
-            '</script>'
-          ].join('\n')
-        }
-        const newAttrs = Object.keys(attrs).reduce(
-          (memo: any, key: any) => [...memo, `${key}="${attrs[key]}"`],
-          []
-        )
-        return `<script ${newAttrs.join(' ')}></script>`
-      })
-      .join('\n')
-  }
-
-  async getContent(args: IGetContentArgs): Promise<string> {
-    const { headScripts, scripts, styles, metas, links, modifyHTML } = args
-
-    const tpl = readFileSync(this.tplPath || join(__dirname, 'document.ejs'), 'utf-8')
-    const context = {
-      config: this.config
-    }
-    const html = ejs.render(tpl, context, {
-      _with: false,
-      localsName: 'context',
-      filename: 'document.ejs'
-    })
-
-    const $ = cheerio.load(html, {
-      decodeEntities: false
-    })
-
-    metas.forEach((meta) => {
-      $('head').append(
-        [
-          '<meta',
-          ...Object.keys(meta).reduce(
-            (memo, key) => memo.concat(`${key}="${meta[key]}"`),
-            [] as string[]
-          ),
-          '/>'
-        ].join(' ')
-      )
-    })
-
-    links.forEach((link) => {
-      $('head').append(
-        [
-          '<link',
-          ...Object.keys(link).reduce(
-            (memo, key) => memo.concat(`${key}="${link[key]}"`),
-            [] as string[]
-          ),
-          '/>'
-        ].join(' ')
-      )
-    })
-
-    // styles
-    styles.forEach((style) => {
-      const { content = '', ...attrs } = style
-      const newAttrs = Object.keys(attrs).reduce(
-        (memo, key) => memo.concat(`${key}="${attrs[key]}"`),
-        [] as string[]
-      )
-      $('head').append(
-        [
-          `<style${newAttrs.length ? ' ' : ''}${newAttrs.join(' ')}>`,
-          content
-            .split('\n')
-            .map((line: any) => `  ${line}`)
-            .join('\n'),
-          '</style>'
-        ].join('\n')
-      )
-    })
-
-    // root element
-    // this.config.mountElementId ??
-    const mountElementId = 'root'
-    if (!$(`#${mountElementId}`).length) {
-      const bodyEl = $('body')
-      assert(bodyEl.length, '<body> not found in html template.')
-      bodyEl.append(`<div id="${mountElementId}"></div>`)
-    }
-
-    if (headScripts.length) {
-      $('head').append(this.getScriptsContent(headScripts))
-    }
-
-    if (scripts.length) {
-      $('body').append(this.getScriptsContent(scripts))
-    }
-
-    if (modifyHTML) {
-      modifyHTML($)
-    }
-
-    return $.html()
-  }
+function getScriptsContent(scripts: IScript[]) {
+  return scripts.reduce((memo, script) => {
+    const { content = '', ...attrs } = script
+    return memo.concat(`<script${getProps(attrs)}>${!attrs.src ? content : ''}</script>`)
+  }, '')
 }
 
-export default Html
+export default async function html(options: IHtml = {}) {
+  const { headScripts, scripts, styles, metas, links, modifyHTML, tplPath, config } = deepmerge(
+    htmlDefaultOptions,
+    options
+  ) as INonEmpty<IHtml, ''>
+
+  let html = readFileSync(tplPath ?? join(__dirname, 'document.ejs'), 'utf-8')
+  if (tplPath) {
+    html = ejs.render(
+      html,
+      { config },
+      {
+        _with: false,
+        localsName: 'context',
+        filename: 'document.ejs'
+      }
+    )
+  }
+  const $ = cheerio.load(html, { decodeEntities: false })
+
+  if (config.mountElementId && config.mountElementId.length) {
+    const bodyEl = $('body')
+    assert(bodyEl.length, '<body> not found in html template.')
+    bodyEl.append(`<div id="${config.mountElementId}"></div>`)
+  }
+
+  if (metas.length) {
+    $('head').append(metas.reduce((memo, meta) => memo.concat(`<meta${getProps(meta)}/>`), ''))
+  }
+
+  if (links.length) {
+    $('head').append(links.reduce((memo, link) => memo.concat(`<link${getProps(link)}/>`), ''))
+  }
+
+  if (styles.length) {
+    $('head').append(
+      styles.reduce((memo, style) => {
+        const { content = '', ...attrs } = style
+        return memo.concat(`<style${getProps(attrs)}>${content}</style>`)
+      }, '')
+    )
+  }
+
+  if (headScripts.length) {
+    $('head').append(getScriptsContent(headScripts))
+  }
+
+  if (scripts.length) {
+    $('body').append(getScriptsContent(scripts))
+  }
+
+  if (modifyHTML) {
+    modifyHTML($)
+  }
+  return $.html()
+}
