@@ -21,7 +21,8 @@
     "zmi-link:zmi": "cd packages/zmi && yarn link && cd -",
     "zmi-clean:modules": "node ./scripts/cleanModules.js",
     "zmi-update:deps": "yarn upgrade-interactive --latest",
-    "publish": "lerna publish"
+    "publish": "lerna publish",
+    "docs": "cd website && yarn start-doc && cd -"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",

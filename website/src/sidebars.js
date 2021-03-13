@@ -1,3 +1,14 @@
 module.exports = {
-  someSidebar: ['introduction', 'configuration', 'environment', 'runtime']
+  someSidebar: [
+    'introduction',
+    'configuration',
+    'environment',
+    'runtime',
+    'typescript',
+    'eslint',
+    'prettier',
+    'analyzer',
+    'https',
+    'styles'
+  ]
 }

@@ -54,6 +54,11 @@ html[data-theme='dark']
   border-right: 1px solid rgba(58, 58, 58, 0.288);
 }
 
+.docPage_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-,
+.docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage- {
+  flex: 1;
+}
+
 html[data-theme='dark'] {
   --ifm-color-primary: rgb(203, 145, 236);
   --ifm-font-color-base: white;

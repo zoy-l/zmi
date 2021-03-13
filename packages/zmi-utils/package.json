@@ -41,7 +41,6 @@
     "slash": "^3.0.0",
     "strip-ansi": "^6.0.0",
     "text-table": "^0.2.0",
-    "url": "^0.11.0",
     "yargs-parser": "^20.2.6"
   },
   "publishConfig": {

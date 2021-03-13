@@ -3,6 +3,9 @@ import { defineConfig } from 'zmi'
 export default defineConfig({
   title: 'zmi',
   frameOptions: {},
+  devServer: {
+    https: true
+  },
   chainWebpack: function (config) {
     config.merge({
       optimization: {
