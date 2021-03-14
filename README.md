@@ -25,7 +25,7 @@ English | [简体中文](./README.zh-CN.md)
 ## Documentation
 
 - for more details
-- please visit the [Zmi v1(Github)](https://l-zoy.github.io/zmi/) [Zmi v1(国内)](https://zaire.gitee.io/zmi/) website
+- please visit the [Doc v1(Github)](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/) website
 
 ## Quick start
 

@@ -22,11 +22,12 @@
 
 ## Documentation
 
-- 有关更多详细信息，请访问 [Zmi v1](https://l-zoy.github.io/zmi/) 网站
+- 有关更多详细信息请访问:
+- [Doc v1](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/)
 
 ## Quick start
 
-Create project
+创建项目
 
 ```bash
 $ yarn create @zmi-cli/zmi-app
