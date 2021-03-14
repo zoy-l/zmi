@@ -5,6 +5,7 @@ name: Node CI
 
 on:
   push:
+    branches: [main]
     paths-ignore:
       - '.github/workflows/docs.yml'
       - '.github/**/*.md'
