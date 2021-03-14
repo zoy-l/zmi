@@ -11,7 +11,19 @@ title: 小程序配置
 
 ### ESLint
 
-默认是支持的, 由于小程序官方没有 eslint 插件, 只能用 extends:["zmi-miniapp/base"] 或者 extends:["zmi-miniapp/typescript"]
+默认是支持的, 由于小程序官方没有 eslint 插件
+
+只能用
+
+```js
+extends:["zmi/base"] //js
+```
+
+或者
+
+```js
+extends:["zmi/typescript"] // typescript
+```
 
 比如:
 
@@ -19,7 +31,7 @@ title: 小程序配置
 // .erlintrc
 {
   "root": true,
-  "extends": ["zmi-miniapp/typescript"]
+  "extends": ["zmi/typescript"]
 }
 ```
 
@@ -29,10 +41,7 @@ Zmi 在 `.zmirc.js` 中配置项目和插件，支持 ts。一份常见的配置
 
 ```javascript
 export default {
-  entry: 'src',
-  paths: :{
-    '@':'./src'
-  }
+  entry: 'src'
 }
 ```
 
@@ -51,6 +60,10 @@ export default {
     '@': '/tmp/a/b/foo'
   }
 }
+
+import foo from '@/foo'
+// 编译成
+import foo from './src/foo'
 ```
 
 ### entry
@@ -108,14 +121,16 @@ export default {
 
 文件 tranfrom 开始前执行
 
-### afterReadWriteStream
+会传入三个参数
 
-- Type: `Function`
+- [through2](https://github.com/rvagg/through2)
+- [insert](https://github.com/rschmukler/gulp-insert)
+- [gulpIf](https://github.com/robrich/gulp-if)
 
-文件 tranfrom 开始后, 输出前执行
+可以直接使用 `gulp` 插件
 
 ### afterHook
 
 - Type: `Function`
 
-输出目录后执行
+输出文件至目录后执行
