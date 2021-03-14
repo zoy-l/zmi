@@ -1,4 +1,3 @@
-#
 version: 2.1
 jobs:
   build:
@@ -14,6 +13,5 @@ jobs:
       - checkout
       - run: yarn
       - run: yarn zmi-nerd
-      - run: yarn zmi-bootstrap
       - run: yarn test --forceExit
       - run: bash <(curl -s https://codecov.io/bash)
