@@ -54,7 +54,6 @@ export default (_context: never, options: Ioptions) => {
       require.resolve('@babel/plugin-syntax-top-level-await'),
       [require.resolve('@babel/plugin-transform-destructuring'), { loose: false }],
       options.typescript && [require.resolve('babel-plugin-transform-typescript-metadata')],
-      [require.resolve('@babel/plugin-proposal-decorators'), { legacy: true }],
       [require.resolve('@babel/plugin-proposal-class-properties'), { loose: true }],
       require.resolve('@babel/plugin-proposal-export-default-from'),
       [
