@@ -1,20 +1,18 @@
 English | [简体中文](./README.zh-CN.md)
 
-## Zmi
+# 🎃 Zmi be in common use react/vue/miniapp-ts application framework.
+
+If you can’t solve the problem, please ask [issue](https://github.com/l-zoy/zmi/issues/new)
 
 [![codecov](https://codecov.io/gh/l-zoy/zmi/branch/main/graph/badge.svg?token=804YLQMX9B)](https://codecov.io/gh/l-zoy/zmi) [![GitHub license](https://img.shields.io/github/license/l-zoy/zmi)](https://github.com/l-zoy/zmi/blob/master/LICENSE) [![<ORG_NAME>](https://circleci.com/gh/l-zoy/zmi.svg?style=svg)](https://app.circleci.com/pipelines/github/l-zoy/zmi) ![node-current](https://img.shields.io/node/v/zmi)
 
-🎃 A purely controllable react/vue/miniapp-ts application framework.
-
-> Consider starring, thank you 🌟 and support.
->
-> The plug-in mechanism of this project is a rewrite and modification of fork `UmiJs`
+<img alt="Logo" align="right" src="./website/build/img/logo.svg" width="25%" />
 
 ## Features
 
-- 🔩 **Extensible** Everything is plug-in, complete life cycle
+- 🔩 **Extensible** `Zmi` is completely configurable.
 
-- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp` `typescript` is supported by default, install `typescript`, add `tsconfig.json`
+- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp` `typescript` is supported by default
 
 - 🙅 **A large number of no self-research** Use mature community solutions first
 
@@ -27,31 +25,8 @@ English | [简体中文](./README.zh-CN.md)
 - for more details
 - please visit the [Doc v1(Github)](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/) website
 
-## Quick start
+#### LICENSE [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
 
-Create project
-
-```bash
-$ yarn create @zmi-cli/zmi-app
-# npx @zmi-cli/create-zmi-app
-```
-
-Install dependency
-
-```bash
-$ cd myApp && yarn
-```
-
-Start development
-
-```bash
-$ zmi dev
-```
-
-![Image text](./website/static/img/code.gif)
-
-## LICENSE
-
-[MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
+> This project references UmiJs
 
 <!-- yarn debug examples/normal dev -->
