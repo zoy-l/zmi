@@ -1,0 +1,17 @@
+name: Sync
+
+on:
+  push:
+    branches: [gh-pages]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync to Gitee
+        uses: wearerequired/git-mirror-action@master
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GH_PAGES_DEPLOY }}
+        with:
+          source-repo: git@github.com:l-zoy/zmi.git
+          destination-repo: git@gitee.com:zaire/zmi.git
