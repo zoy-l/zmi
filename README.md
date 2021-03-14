@@ -6,7 +6,7 @@ If you can’t solve the problem, please ask [issue](https://github.com/l-zoy/zm
 
 [![codecov](https://codecov.io/gh/l-zoy/zmi/branch/main/graph/badge.svg?token=804YLQMX9B)](https://codecov.io/gh/l-zoy/zmi) [![GitHub license](https://img.shields.io/github/license/l-zoy/zmi)](https://github.com/l-zoy/zmi/blob/master/LICENSE) [![<ORG_NAME>](https://circleci.com/gh/l-zoy/zmi.svg?style=svg)](https://app.circleci.com/pipelines/github/l-zoy/zmi) ![node-current](https://img.shields.io/node/v/zmi)
 
-<img alt="Logo" align="right" src="./website/build/img/logo.svg" width="25%" />
+<img alt="Logo" align="right" src="./website/static/img/logo.svg" width="25%" />
 
 ## Features
 

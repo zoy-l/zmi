@@ -4,7 +4,7 @@
 
 如果无法解决问题，请提出问题 [issue](https://github.com/l-zoy/zmi/issues/new)
 
-<img alt="Logo" align="right" src="./website/build/img/logo.svg" width="25%" />
+<img alt="Logo" align="right" src="./website/static/img/logo.svg" width="25%" />
 
 ## Features
 
