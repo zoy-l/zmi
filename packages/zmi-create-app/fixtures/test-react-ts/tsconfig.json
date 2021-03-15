@@ -5,7 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "esModuleInterop": true,
     "sourceMap": true,
     "strict": true,
