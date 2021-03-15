@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/babel-factory",
-  "version": "1.0.6-alpha.12",
+  "version": "1.0.6-alpha.13",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -28,5 +28,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "0928c38baadebfb232a4a9e2b69b470a434546d9"
+  "gitHead": "f23072bf63490ed1d7735f60201c4a0d09fdbd26"
 }
