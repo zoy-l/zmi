@@ -252,3 +252,19 @@ describe('app generator', () => {
     done()
   })
 })
+
+test('version', async () => {
+  const names = ['react', 'react-ts', 'vue', 'vue-ts']
+  names.forEach((name) => {
+    const cwd = path.join(fixtures, `test-${name}/package.json`)
+    const pkg = require(cwd)
+    const { version } = require('../../zmi/package.json')
+    expect(pkg.devDependencies.zmi.slice(1)).toEqual(version)
+  })
+})
+
+test('miniapp version', () => {
+  const pkg = require(path.join(fixtures, 'test-miniapp/package.json'))
+  const { version } = require('../../zmi-miniapp/package.json')
+  expect(pkg.devDependencies['zmi-miniapp'].slice(1)).toEqual(version)
+})

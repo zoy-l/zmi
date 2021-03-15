@@ -1,6 +1,6 @@
 {
   "name": "zmi-miniapp",
-  "version": "1.0.6-alpha.15.0",
+  "version": "1.0.6-alpha.16",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -11,9 +11,9 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.0.6-alpha.15.0",
+    "@zmi-cli/core": "^1.0.6-alpha.16",
     "eslint": "^7.22.0",
-    "eslint-config-zmi": "^1.2.3",
+    "eslint-config-zmi": "^1.2.4",
     "gulp-rename": "^2.0.0",
     "zmi-nerd": "^1.2.2-2"
   },

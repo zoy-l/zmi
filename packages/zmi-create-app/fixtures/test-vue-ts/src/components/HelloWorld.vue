@@ -1,5 +1,5 @@
 <template>
-  <h1></h1>
+  <h1>{{ msg }}</h1>
 
   <p>
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Documentation</a>
@@ -28,7 +28,7 @@
     >. <br />Note @vuedx is still experimental and this setup is provided for
     early feedback.
   </p>
-  <button @click="count++">count is: </button>
+  <button @click="count++">count is: {{ count }}</button>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.

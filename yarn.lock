@@ -5519,10 +5519,10 @@ eslint-config-prettier@^8.1.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.1.0.tgz#4ef1eaf97afe5176e6a75ddfb57c335121abc5a6"
   integrity sha512-oKMhGv3ihGbCIimCAjqkdzx2Q+jthoqnXSP+d86M9tptwugycmTFdVR4IpLgq2c4SHifbwO90z2fQ8/Aio73yw==
 
-eslint-config-zmi@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.2.3.tgz#7e4328968a0cff7ac219324bfcb826d22737af5c"
-  integrity sha512-LYJUIpgjFzjGJz7v8ddiW7Dpfw0bLPyB3TdfRzS/kL1RxBV+giZuk+Mmo8Ng2wIoJbbJ78PZcmEnQSqrrdsfsA==
+eslint-config-zmi@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/eslint-config-zmi/-/eslint-config-zmi-1.2.4.tgz#f35746fc8438d826b95d3c1257c6e0d60b12f715"
+  integrity sha512-bV7cA2F3Zk/vQo8ObENrIVYx6UwijL94cznwAwGR7Mw+FLE5w1G2LaO7uabI/9dcKnVvAWuuAo7gySIwYTudXA==
   dependencies:
     "@types/prettier" "^2.2.2"
     "@typescript-eslint/eslint-plugin" "^4.16.1"
