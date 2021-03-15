@@ -1,3 +1,5 @@
+import IConfig from 'zmi-miniapp';
+
 export default {
-  output: 'miniprogram'
-}
+  output: 'miniprogram',
+} as IConfig;

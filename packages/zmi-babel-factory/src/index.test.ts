@@ -58,7 +58,7 @@ test('typescript with namespace', () => {
   expect(code).toContain(`var V = _N.V = 1;`)
 })
 
-test('typescript with metadata', () => {
+test.skip('typescript with metadata', () => {
   const code = transformWithPreset(
     `@Decorate
     class MyClass {
@@ -80,7 +80,7 @@ test('typescript with metadata', () => {
   expect(code).toContain('Reflect.metadata')
 })
 
-test('typescript with nest-injection', () => {
+test.skip('typescript with nest-injection', () => {
   const code = transformWithPreset(
     `import { AppService } from './app.service';
 
@@ -152,7 +152,7 @@ test('async generator function', () => {
   expect(code).toContain(`return _awaitAsyncGenerator(111);`)
 })
 
-test('decorators', () => {
+test.skip('decorators', () => {
   const code = transformWithPreset(`@foo class Foo {}`, {
     env: {
       targets: { ie: 10 }
