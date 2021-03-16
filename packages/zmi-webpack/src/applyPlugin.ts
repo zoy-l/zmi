@@ -54,26 +54,6 @@ async function applyPlugin(options: IPenetrateOptions) {
     ])
   })
 
-  const forkTsCheckerOpt: Record<string, any> = {
-    async: false,
-    typescript: {
-      extensions: {
-        vue: {
-          enabled: true,
-          compiler: '@vue/compiler-sfc'
-        }
-      },
-      configFile: path.join(cwd, 'tsconfig.json'),
-      diagnosticOptions: {
-        semantic: true
-      }
-    }
-  }
-
-  if (isReact) {
-    delete forkTsCheckerOpt.typescript.extensions.vue
-  }
-
   let isEslint = false
   let eslintConfig: eslint.Linter.Config = {}
 
@@ -135,6 +115,26 @@ async function applyPlugin(options: IPenetrateOptions) {
   }
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [config.define])
+
+  const forkTsCheckerOpt: Record<string, any> = {
+    async: false,
+    typescript: {
+      extensions: {
+        vue: {
+          enabled: true,
+          compiler: '@vue/compiler-sfc'
+        }
+      },
+      configFile: path.join(cwd, 'tsconfig.json'),
+      diagnosticOptions: {
+        semantic: true
+      }
+    }
+  }
+
+  if (isReact) {
+    delete forkTsCheckerOpt.typescript.extensions.vue
+  }
 
   webpackConfig.when(isTypescript, (WConfig) => {
     WConfig.plugin('ForkTsChecker').use(ForkTsCheckerWebpackPlugin, [forkTsCheckerOpt])

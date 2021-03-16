@@ -103,19 +103,7 @@ async function applyLoader(options: IPenetrateOptions) {
       .test(/\.vue$/)
       .use('vue-loader')
       .loader(require.resolve('vue-loader'))
-      .options({ hotReload: hot })
-
-    if (isTypescript) {
-      WConifg.module
-        .rule('vue-ts')
-        .test(/\.ts$/)
-        .use('ts-loader')
-        .loader(require.resolve('ts-loader'))
-        .options({
-          transpileOnly: true,
-          appendTsSuffixTo: ['\\.vue$']
-        })
-    }
+      .options({ hotReload: hot, prettify: false })
   })
 }
 
