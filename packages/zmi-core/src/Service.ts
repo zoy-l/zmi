@@ -1,4 +1,4 @@
-import { lodash, NodeEnv, yargsParser } from '@zmi-cli/utils'
+import { lodash, NodeEnv, yargsParser, chalk } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
 import { IConfig } from '@zmi-cli/webpack'
 import { EventEmitter } from 'events'
@@ -461,7 +461,19 @@ export default class Service extends EventEmitter {
         ? this.commands[this.commands[command] as string]
         : this.commands[command]
 
-    assert(event, `run command failed, command "${command}" does not exists.`)
+    if (!event) {
+      console.log(chalk.red(`run command failed, command "${command}" does not exists.`))
+
+      Object.keys(this.commands).forEach((command) => {
+        if (command === 'webDev') return
+
+        const cmd = this.commands[command]
+        console.log(typeof cmd !== 'string' ? `${command} - ${cmd.description}` : command)
+      })
+
+      process.exit(1)
+    }
+
     const { fn } = event as ICommand
 
     return fn({ args })
