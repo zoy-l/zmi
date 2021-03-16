@@ -15,7 +15,7 @@
     "eslint": "^7.22.0",
     "eslint-config-zmi": "^1.2.4",
     "gulp-rename": "^2.0.0",
-    "zmi-nerd": "^1.2.2-2"
+    "zmi-nerd": "^1.2.2-3"
   },
   "publishConfig": {
     "access": "public"
