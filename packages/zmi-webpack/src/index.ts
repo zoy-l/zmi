@@ -1,3 +1,4 @@
+import { prettier } from 'eslint-config-zmi'
 import WebpackChain from 'webpack-chain'
 import webpack from 'webpack'
 
@@ -15,6 +16,6 @@ export {
   IModifyHTML
 } from './types'
 
-export { WebpackChain, webpack, html }
+export { WebpackChain, webpack, html, prettier }
 
 export default Bundler

@@ -1,6 +1,7 @@
 module.exports = {
   someSidebar: [
     'introduction',
+    'scripts',
     'configuration',
     'environment',
     'runtime',

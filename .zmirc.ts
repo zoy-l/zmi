@@ -1,5 +1,8 @@
 // debug
-export default {
-  cssModulesTypescript: {},
-  frameOptions: {}
-}
+import { defineConfig } from 'zmi'
+
+export default defineConfig({
+  cssModulesTypescript: 'emit',
+  frameOptions: {},
+  frameType: 'react'
+})
