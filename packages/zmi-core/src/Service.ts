@@ -470,7 +470,7 @@ export default class Service extends EventEmitter {
         console.log(typeof cmd !== 'string' ? `${command} - ${cmd.description}` : command)
       })
 
-      process.exit(1)
+      return
     }
 
     const { fn } = event as ICommand

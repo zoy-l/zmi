@@ -19,6 +19,14 @@ title: 可用的命令
 
 ### zmi webpack
 
+支持参数 `-d` or `-p` 分别对应 **开发模式** or **生成模式** 默认是开发模式
+
+比如:
+
+```bash
+zmi webpack -p # 开发模式
+```
+
 查看当前 **webpack** 配置, 会自动打开浏览器在 `http://localhost:8976` 输出
 
-为了方便阅读, 再输出之前会去掉 **ESLint Config** 和 **HTML template** 相关的配置
+为了方便阅读, 再输出之前会去掉 **ESLintPlugin BaseConfig** 和 **HTMLPlugin templateContent** 相关的配置

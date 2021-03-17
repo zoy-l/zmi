@@ -253,13 +253,17 @@ test('api.registerCommand', async () => {
     plugins: [require.resolve(path.join(cwd, 'plugin'))]
   })
 
-  await expect(
-    service.runCommand({
-      command: 'build'
-    })
-  ).rejects.toThrow('run command failed, command "build" does not exists.')
-
   let ret
+  console.log = jest.fn()
+  ret = await service.runCommand({
+    command: 'build'
+  })
+
+  // @ts-expect-error test
+  expect(console.log.mock.calls[0][0]).toMatch(/command "build" does not exists/)
+  expect(ret).toEqual(undefined)
+
+  jest.resetAllMocks()
 
   ret = await service.run({
     command: 'build',
