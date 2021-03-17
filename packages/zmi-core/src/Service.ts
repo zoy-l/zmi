@@ -1,6 +1,5 @@
 import { lodash, NodeEnv, yargsParser, chalk } from '@zmi-cli/utils'
 import { AsyncSeriesWaterfallHook } from 'tapable'
-import { IConfig } from '@zmi-cli/webpack'
 import { EventEmitter } from 'events'
 import assert from 'assert'
 import path from 'path'
@@ -164,7 +163,7 @@ export default class Service extends EventEmitter {
   /**
    * @desc finally config
    */
-  config!: IConfig
+  config!: Record<string, any>
 
   /**
    * @desc extra command

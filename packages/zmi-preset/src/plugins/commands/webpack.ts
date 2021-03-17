@@ -1,3 +1,4 @@
+import { clearConsole, chalk } from '@zmi-cli/utils'
 import { prettier } from '@zmi-cli/webpack'
 import { IApi } from '@zmi-cli/types'
 import { exec } from 'child_process'
@@ -32,18 +33,36 @@ export default (api: IApi) => {
   api.registerCommand({
     name: 'webpack',
     description: 'inspect webpack configurations',
-    async fn() {
+    async fn({ args }) {
+      clearConsole()
+      if (args.d || args.p) {
+        process.env.NODE_ENV = args.d ? 'development' : 'production'
+      } else {
+        process.env.NODE_ENV = 'development'
+      }
+
+      api.env = process.env.NODE_ENV
+
       const { bundleConfigs } = await getBundleAndConfigs({ api })
 
-      bundleConfigs.plugins.forEach((plugin: any, index: number) => {
+      const plugins: any[][] = []
+      bundleConfigs.plugins?.forEach((plugin: any, index: number) => {
         const pg = JSON.stringify(plugin)
         if (/templateContent/.test(pg)) {
-          bundleConfigs.plugins[index].userOptions.templateContent = ''
+          bundleConfigs.plugins[index].userOptions.templateContent = '...'
         }
 
         if (/baseConfig/.test(pg)) {
-          bundleConfigs.plugins[index].options.baseConfig = ''
+          bundleConfigs.plugins[index].options.baseConfig = '...'
         }
+        plugins.push([plugin.constructor.name, bundleConfigs.plugins[index]])
+      })
+
+      bundleConfigs.plugins = plugins
+
+      bundleConfigs.module.rules.forEach((rule: { test: any }, index: string | number) => {
+        rule.test = `${rule.test}`
+        bundleConfigs.module.rules[index] = rule
       })
 
       app.get('/', function (_, response) {
@@ -55,7 +74,8 @@ export default (api: IApi) => {
           <meta charset="UTF-8">
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Document</title>
+          <link rel="icon" type="image/x-icon" href="https://webpack.docschina.org/favicon.f326220248556af65f41.ico">
+          <title>WebPack Config</title>
         </head>
         <style>
         body {
@@ -100,8 +120,8 @@ export default (api: IApi) => {
             default:
               exec('xdg-open ' + url)
           }
-          console.log('Please check in your browser http://localhost:8976')
         }
+        console.log(`${chalk.yellow('Please check in your browser:')} http://localhost:8976`)
         openDefaultBrowser('http://localhost:8976')
       })
     }
