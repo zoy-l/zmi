@@ -14,8 +14,8 @@ const features = [
 
     description: (
       <>
-        您无需学习和配置许多构建工具。可有助您专注于开发,默认支持Typescript, ESlint, Babel,
-        PostCSS等,开箱即用
+        您无需学习和配置许多构建工具。可有助您专注于开发,默认支持Typescript, ESlint,
+        Babel, PostCSS等,开箱即用
       </>
     )
   },
@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <Layout
       title="通用的 React Vue miniapp-ts 开发工具"
-      description="Cli/Vue-Cli/React-Cli/微信小程序/React/Vue"
+      description="ZMI/zmi/zmi-cli/Vue-Cli/React-Cli/微信小程序/React/Vue"
     >
       <header className={clsx('hero', styles.heroBanner, 'container')}>
         <div>
@@ -109,7 +109,9 @@ export default function Home() {
             <use xlinkHref="#gentle-wave" x="48" y="7" fill="rgba(213, 172, 236, 0.1)" />
           </g>
         </svg>
-        <p className={styles.footer}>MIT Licensed | Copyright © {new Date().getFullYear()} zoy-l</p>
+        <p className={styles.footer}>
+          MIT Licensed | Copyright © {new Date().getFullYear()} zoy-l
+        </p>
       </div>
     </Layout>
   )

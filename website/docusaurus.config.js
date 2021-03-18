@@ -1,7 +1,7 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 
 module.exports = {
-  title: 'Zmi-CLI',
+  title: 'zmi-cli',
   tagline: '🎃 通用的 React Vue miniapp-ts 开发工具.',
   url: 'https://l-zoy.github.io',
   baseUrl: '/zmi/',
