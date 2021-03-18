@@ -1,6 +1,6 @@
 // Leave it to eslint to solve the annoying "..."
 {
   "javascript.validate.enable": false,
-  "vuedx.suggest.enabled": false,
+  // "vuedx.suggest.enabled": false,
   "typescript.tsdk": "node_modules/typescript/lib"
 }
