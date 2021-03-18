@@ -79,7 +79,9 @@ export default (api: IApi) => {
           async onChange(options: IChangeType) {
             const { pluginChanged, valueChanged } = options
             if (pluginChanged.length) {
-              restartServer(`Plugins of ${pluginChanged.map((p) => p.key).join(', ')} changed.`)
+              restartServer(
+                `Plugins of ${pluginChanged.map((p) => p.key).join(', ')} changed.`
+              )
             }
 
             if (valueChanged.length) {
