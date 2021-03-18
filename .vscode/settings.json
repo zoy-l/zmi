@@ -2,5 +2,7 @@
 {
   "javascript.validate.enable": false,
   // "vuedx.suggest.enabled": false,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "vetur.validation.template": false,
+  "vetur.validation.script": false
 }

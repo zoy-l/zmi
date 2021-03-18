@@ -3,6 +3,6 @@ node_modules
 dist
 bin
 __test__
-/packages/zmi-create-app/templates/vue-ts/src/**/*
-
+/packages/zmi-create-app/templates/
+/examples/**/src/*.css.d.ts
 

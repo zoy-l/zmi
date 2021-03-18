@@ -106,7 +106,10 @@ export default async function getConfig(opts: IConfigOpts): Promise<Configuratio
           compress: isProd,
           noInfo: true,
           stats: 'none',
-          publicPath: config.publicPath
+          publicPath: config.publicPath,
+          watchOptions: {
+            ignored: /.d.ts/
+          }
           // watchContentBase: isDev,
           // contentBase: path.join(cwd, 'public')
         } as WebpackDevServer.Configuration,

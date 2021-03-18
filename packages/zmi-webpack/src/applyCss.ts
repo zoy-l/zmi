@@ -13,7 +13,13 @@ export interface ICreateCSSRuleOpts {
 
 export default (options: IPenetrateOptions) => {
   const { webpackConfig, isDev, config, browserslist, sourceMap } = options
-  const { lessLoader, scssLoader, stylusLoader, styleLoader, cssLoader } = config.loaderOptions
+  const {
+    lessLoader,
+    scssLoader,
+    stylusLoader,
+    styleLoader,
+    cssLoader
+  } = config.loaderOptions
 
   function createCSSRule(createCSSRuleOptions: ICreateCSSRuleOpts) {
     const { lang, test, loader, options = {} } = createCSSRuleOptions
@@ -66,7 +72,10 @@ export default (options: IPenetrateOptions) => {
         delete cssLoaderOptions.modules
       }
 
-      rule.use('css-loader').loader(require.resolve('css-loader')).options(cssLoaderOptions)
+      rule
+        .use('css-loader')
+        .loader(require.resolve('css-loader'))
+        .options(cssLoaderOptions)
 
       rule
         .use('postcss')
