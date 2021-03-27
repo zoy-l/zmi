@@ -17,13 +17,6 @@ export interface IServicePath {
   cwd: string
 }
 
-export interface IServiceOptions {
-  plugins?: string[]
-  pkg?: IPackage
-  env?: Record<string, any>
-  cwd: string
-}
-
 export interface IPackage {
   name?: string
   dependencies?: Record<string, any>
@@ -31,6 +24,15 @@ export interface IPackage {
   [key: string]: any
 }
 
-export interface IApi extends IHinsApi {
+export interface IServiceOptions {
+  plugins?: string[]
+  pkg: IPackage
+  env?: Record<string, any>
+  cwd: string
+}
+
+export interface IService extends IHinsApi {
   paths: IServicePaths
+  pkg: IServiceOptions['pkg']
+  env?: string
 }

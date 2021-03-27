@@ -1,5 +1,5 @@
 import { createCSSRule, IStyle, WebpackChain, webpack } from '@zmi-cli/webpack'
-import { PluginAPI, Service } from '@zmi-cli/core'
+import { IService } from '@zmi-cli/core'
 import { cheerio } from '@zmi-cli/utils'
 
 export interface ITargets {
@@ -26,26 +26,7 @@ interface IAdd<T> {
   (fn: () => T[] | T): void
 }
 
-type ServicePluginApi = Pick<
-  Service,
-  | 'ConfigChangeType'
-  | 'ApplyPluginsType'
-  | 'applyPlugins'
-  | 'ServiceStage'
-  | 'hasPlugins'
-  | 'initConifg'
-  | 'EnableBy'
-  | 'config'
-  | 'stage'
-  | 'paths'
-  | 'args'
-  | 'cwd'
-  | 'pkg'
-  | 'env'
-> &
-  PluginAPI
-
-export type IApi = ServicePluginApi & {
+export interface IApi extends IService {
   getPort: IGetter<number>
   getHostname: IGetter<string>
   restartServer: () => void
@@ -74,6 +55,6 @@ export type IApi = ServicePluginApi & {
       createCSSRule: createCSSRule
     }
   >
-  modifyPaths: IModify<ServicePluginApi['paths'], null>
+  modifyPaths: IModify<IService['paths'], null>
   modifyHTML: IModify<cheerio.Root, null>
 }

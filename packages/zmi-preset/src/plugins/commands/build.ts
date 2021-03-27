@@ -19,15 +19,13 @@ export default (api: IApi) => {
           appOutputPath
         })
 
-        await api.applyPlugins({
+        await api.applyEventHooks({
           key: 'onBuildComplete',
-          type: api.ApplyPluginsType.event,
           args: { stats }
         })
       } catch (err) {
-        await api.applyPlugins({
+        await api.applyEventHooks({
           key: 'onBuildComplete',
-          type: api.ApplyPluginsType.event,
           args: { err }
         })
         throw new Error(err)

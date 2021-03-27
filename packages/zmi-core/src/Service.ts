@@ -1,7 +1,7 @@
 import { Core } from 'hins'
 
 import type { IPackage, IServiceOptions, IServicePaths } from './types'
-import babelRegister from './BabelRegister'
+import babelRegister from './babelRegister'
 import paths from './paths'
 
 export default class Service extends Core {

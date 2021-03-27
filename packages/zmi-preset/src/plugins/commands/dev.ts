@@ -8,7 +8,7 @@ export default (api: IApi) => {
       // api.env = 'development'
       process.env.NODE_ENV = 'development'
 
-      api.core.start({ command: 'webDev', args, reloadCommand: true })
+      api.start({ command: 'webDev', args, reloadCommand: true })
     }
   })
 }
