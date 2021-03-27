@@ -89,7 +89,9 @@ export default class Bundler {
             throw new Error(`build fail: ${err.message}`)
           }
         } else if (stats) {
-          messages = formatMessages(stats.toJson({ all: false, warnings: true, errors: true }))
+          messages = formatMessages(
+            stats.toJson({ all: false, warnings: true, errors: true })
+          )
         }
 
         if (messages && messages.errors.length && messages.errors.length > 1) {
@@ -98,7 +100,9 @@ export default class Bundler {
 
         clearConsole()
         console.log(
-          `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue('Compiled successfully !\n')} `
+          `${chalk.bgBlueBright.black(' BUILD ')} ${chalk.blue(
+            'Compiled successfully !\n'
+          )} `
         )
         console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
         if (stats) {

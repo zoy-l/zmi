@@ -31,7 +31,7 @@ function highLight(json: string) {
 export default (api: IApi) => {
   const app = express()
   api.registerCommand({
-    name: 'webpack',
+    command: 'webpack',
     description: 'inspect webpack configurations',
     async fn({ args }) {
       clearConsole()
@@ -60,10 +60,12 @@ export default (api: IApi) => {
 
       bundleConfigs.plugins = plugins
 
-      bundleConfigs.module.rules.forEach((rule: { test: any }, index: string | number) => {
-        rule.test = `${rule.test}`
-        bundleConfigs.module.rules[index] = rule
-      })
+      bundleConfigs.module.rules.forEach(
+        (rule: { test: any }, index: string | number) => {
+          rule.test = `${rule.test}`
+          bundleConfigs.module.rules[index] = rule
+        }
+      )
 
       app.get('/', function (_, response) {
         response.writeHead(200, { 'Content-Type': 'text/html' })
@@ -101,7 +103,9 @@ export default (api: IApi) => {
         }
       </style>
         <body>
-        <pre>${highLight(prettier.format(JSON.stringify(bundleConfigs), { parser: 'json' }))}</pre>
+        <pre>${highLight(
+          prettier.format(JSON.stringify(bundleConfigs), { parser: 'json' })
+        )}</pre>
         </body>
         </html>
         `)
@@ -121,7 +125,9 @@ export default (api: IApi) => {
               exec('xdg-open ' + url)
           }
         }
-        console.log(`${chalk.yellow('Please check in your browser:')} http://localhost:8976`)
+        console.log(
+          `${chalk.yellow('Please check in your browser:')} http://localhost:8976`
+        )
         openDefaultBrowser('http://localhost:8976')
       })
     }

@@ -3,9 +3,9 @@ import { Service } from '@zmi-cli/core'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'
-import fork from './fork'
+// import fork from './fork'
 
-const { args, command } = launchDevice(dyo)
+const { args, command = 'dev' } = launchDevice(dyo)
 
 ;(() => {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
@@ -13,7 +13,18 @@ const { args, command } = launchDevice(dyo)
   try {
     switch (command) {
       case 'dev':
-        const child = fork(require.resolve('./forkedDev'))
+        // const child = fork(require.resolve('./forkedDev'))
+
+        const service = new Service({
+          cwd: getCwd(),
+          pkg: getPkg(process.cwd()),
+          plugins: [require.resolve('@zmi-cli/preset')]
+        })
+
+        service.start({
+          command,
+          args
+        })
 
         if (isWin) {
           const rl = readline.createInterface({
@@ -28,7 +39,6 @@ const { args, command } = launchDevice(dyo)
 
         Signals.forEach((SignalKey) => {
           process.on(SignalKey, () => {
-            child.kill(SignalKey)
             process.exit(1)
           })
         })
@@ -45,7 +55,7 @@ const { args, command } = launchDevice(dyo)
           cwd: getCwd(),
           pkg: getPkg(process.cwd()),
           plugins: [require.resolve('@zmi-cli/preset')]
-        }).run({
+        }).start({
           command,
           args
         })

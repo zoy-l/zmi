@@ -1,7 +1,7 @@
 import { lodash, slash } from '@zmi-cli/utils'
 import { join, relative } from 'path'
 
-import { IServicePaths } from './types'
+import type { IServicePaths } from './types'
 import paths from './paths'
 
 const fixtures = join(__dirname, '../fixtures')

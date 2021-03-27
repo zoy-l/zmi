@@ -11,42 +11,39 @@ export function getHtmlGenerator(api: IApi) {
 
   return {
     getContent: async () => {
-      async function applyPlugins(opts: { initialState?: any[]; key: string }) {
-        return api.applyPlugins({
+      async function applyHooks(opts: { initialState?: any[]; key: string }) {
+        return api.applyAddHooks({
           key: opts.key,
-          type: api.ApplyPluginsType.add,
-          initialValue: opts.initialState ?? []
+          initialValue: opts.initialState
         })
       }
 
-      await api.applyPlugins({
+      await api.applyModifyHooks({
         key: 'modifyPublicPathStr',
-        type: api.ApplyPluginsType.modify,
         initialValue: api.config.publicPath
       })
 
       return html({
         config: api.config,
         tplPath: getDocumentTplPath(),
-        headScripts: await applyPlugins({
+        headScripts: await applyHooks({
           key: 'addHTMLHeadScripts'
         }),
-        links: await applyPlugins({
+        links: await applyHooks({
           key: 'addHTMLLinks'
         }),
-        metas: await applyPlugins({
+        metas: await applyHooks({
           key: 'addHTMLMetas'
         }),
-        scripts: await applyPlugins({
+        scripts: await applyHooks({
           key: 'addHTMLScripts'
         }),
-        styles: await applyPlugins({
+        styles: await applyHooks({
           key: 'addHTMLStyles'
         }),
         async modifyHTML(memo) {
-          return api.applyPlugins({
+          return api.applyModifyHooks({
             key: 'modifyHTML',
-            type: api.ApplyPluginsType.modify,
             initialValue: memo
           })
         }

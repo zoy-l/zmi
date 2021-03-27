@@ -9,7 +9,7 @@ export default (api: IApi) => {
   let host: string
 
   api.registerCommand({
-    name: 'webDev',
+    command: 'webDev',
     description: 'start a webDev server for development',
     fn: async ({ args }) => {
       const defaultPort = process.env.PORT ?? args?.port ?? api.config.devServer?.port
@@ -56,14 +56,6 @@ export default (api: IApi) => {
     fn() {
       assert(api.env === 'development', `api.getHostname() is only valid in development.`)
       return host
-    }
-  })
-
-  api.registerMethod({
-    name: 'restartServer',
-    fn() {
-      process.send?.({ type: 'RESTART' })
-      console.log(chalk.gray(`🎯 Try to restart dev server...`))
     }
   })
 }

@@ -16,16 +16,15 @@ const { args } = launchDevice()
       plugins: [require.resolve('@zmi-cli/preset')]
     })
 
-    service.run({
+    service.start({
       command: 'dev',
       args
     })
 
     Signals.forEach((signal) => {
       process.once(signal, () => {
-        service.applyPlugins({
+        service.applyEventHooks({
           key: 'onExit',
-          type: service.ApplyPluginsType.event,
           args: { signal }
         })
         process.exit(0)

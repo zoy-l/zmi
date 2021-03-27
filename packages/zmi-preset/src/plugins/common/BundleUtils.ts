@@ -15,8 +15,7 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
   // Apply webpack launcher to get an instance
   // Also used to switch between different build tools
   // Built-in device by default
-  const Bundler = await api.applyPlugins({
-    type: api.ApplyPluginsType.modify,
+  const Bundler = await api.applyModifyHooks({
     initialValue: DefaultBundler,
     key: 'modifyBundler'
   })
@@ -45,8 +44,7 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
     ) ?? 'index.js'
 
   async function getConfig() {
-    const getConfigOpts = await api.applyPlugins({
-      type: api.ApplyPluginsType.modify,
+    const getConfigOpts = await api.applyModifyHooks({
       key: 'modifyBundleConfigOpts',
       initialValue: {
         env: api.env ?? process.env.NODE_ENV,
@@ -56,22 +54,22 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
         },
         htmlContent,
         async modifyBabelOpts(initialValue: Record<string, any>) {
-          return api.applyPlugins({
-            type: api.ApplyPluginsType.modify,
+          return api.applyModifyHooks({
             key: 'modifyBabelOpts',
             initialValue
           })
         },
         async modifyBabelPresetOpts(initialValue: Record<string, any>) {
-          return api.applyPlugins({
-            type: api.ApplyPluginsType.modify,
+          return api.applyModifyHooks({
             key: 'modifyBabelPresetOpts',
             initialValue
           })
         },
-        async chainWebpack(webpackConfig: WebpackChain, opts: { createCSSRule: createCSSRule }) {
-          return api.applyPlugins({
-            type: api.ApplyPluginsType.modify,
+        async chainWebpack(
+          webpackConfig: WebpackChain,
+          opts: { createCSSRule: createCSSRule }
+        ) {
+          return api.applyModifyHooks({
             key: 'chainWebpack',
             initialValue: webpackConfig,
             args: opts
@@ -81,16 +79,14 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
       args: getArgs()
     })
 
-    return api.applyPlugins({
-      type: api.ApplyPluginsType.modify,
+    return api.applyModifyHooks({
       key: 'modifyBundleConfig',
       initialValue: await bundler.getConfig(getConfigOpts),
       args: getArgs()
     })
   }
 
-  const bundleConfigs = await api.applyPlugins({
-    type: api.ApplyPluginsType.modify,
+  const bundleConfigs = await api.applyModifyHooks({
     key: 'modifyBundleConfigs',
     initialValue: await getConfig(),
     args: getArgs({ getConfig })

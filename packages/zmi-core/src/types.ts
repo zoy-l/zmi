@@ -1,81 +1,4 @@
-import Joi from 'joi'
-
-export enum ServiceStage {
-  uninitialized,
-  init,
-  initPlugins,
-  initHooks,
-  pluginReady,
-  getConfig,
-  getPaths,
-  run
-}
-
-export enum EnumApplyPlugins {
-  add = 'add',
-  modify = 'modify',
-  event = 'event'
-}
-
-export enum EnumEnableBy {
-  register = 'register',
-  config = 'config'
-}
-
-export interface IDep {
-  [name: string]: string
-}
-
-export enum ConfigChangeType {
-  reload = 'reload'
-}
-
-export interface IChanged {
-  key: string
-  pluginId: string
-}
-
-export interface IPackage {
-  name?: string
-  dependencies?: IDep
-  devDependencies?: IDep
-  [key: string]: any
-}
-
-export interface IPluginConfig {
-  default?: any
-  schema?: {
-    (joi: Joi.Root): Joi.Schema
-  }
-  onChange?: string | { (): void }
-}
-
-export interface IPlugin {
-  id: string
-  key: string
-  path: string
-  apply: () => any
-  config?: IPluginConfig
-  enableBy?: EnumEnableBy | (() => void)
-}
-
-export interface IHook {
-  fn: (...args: any[]) => void | Promise<void>
-  pluginId?: string
-  before?: string
-  stage?: number
-  key: string
-}
-
-export interface ICommand {
-  name: string
-  alias?: string
-  description?: string
-  details?: string
-  fn: {
-    ({ args }: { args: any }): void
-  }
-}
+import { IApi as IHinsApi } from 'hins'
 
 export type IServicePathKeys =
   | 'cwd'
@@ -86,4 +9,28 @@ export type IServicePathKeys =
 
 export type IServicePaths = {
   [key in IServicePathKeys]: string
+}
+
+export interface IServicePath {
+  outputPath?: string
+  env?: string
+  cwd: string
+}
+
+export interface IServiceOptions {
+  plugins?: string[]
+  pkg?: IPackage
+  env?: Record<string, any>
+  cwd: string
+}
+
+export interface IPackage {
+  name?: string
+  dependencies?: Record<string, any>
+  devDependencies?: Record<string, any>
+  [key: string]: any
+}
+
+export interface IApi extends IHinsApi {
+  paths: IServicePaths
 }

@@ -1,5 +1,4 @@
-import Service, { IServiceOptions } from './Service'
-import { getPlugin } from './configUtils'
-import PluginAPI from './PluginAPI'
+import { IServiceOptions, IApi } from './types'
+import Service from './Service'
 
-export { Service, PluginAPI, IServiceOptions, getPlugin }
+export { Service, IServiceOptions, IApi }

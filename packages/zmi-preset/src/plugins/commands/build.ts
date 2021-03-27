@@ -4,7 +4,7 @@ import { getBundleAndConfigs } from '../common/BundleUtils'
 
 export default (api: IApi) => {
   api.registerCommand({
-    name: 'build',
+    command: 'build',
     description: 'build application production',
     async fn() {
       api.env = 'production'

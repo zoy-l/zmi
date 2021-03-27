@@ -2,13 +2,7 @@ import { lodash, slash } from '@zmi-cli/utils'
 import path from 'path'
 import fs from 'fs'
 
-import { IServicePaths } from './types'
-
-interface IServicePath {
-  outputPath?: string
-  env?: string
-  cwd: string
-}
+import type { IServicePath, IServicePaths } from './types'
 
 function isDirectoryAndExist(path: string) {
   return fs.existsSync(path) && fs.statSync(path).isDirectory()

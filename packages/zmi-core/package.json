@@ -12,9 +12,7 @@
     "@babel/register": "^7.13.8",
     "@zmi-cli/babel-factory": "^1.0.6-alpha.17",
     "@zmi-cli/utils": "^1.0.6-alpha.9",
-    "dotenv": "^8.2.0",
-    "joi": "^17.4.0",
-    "tapable": "^2.2.0"
+    "hins": "link:/Users/zoy/.nvm/versions/node/v15.8.0/lib/node_modules/hins"
   },
   "publishConfig": {
     "access": "public"
