@@ -1,4 +1,6 @@
-import { IApi as IHinsApi } from 'hins'
+import { Hins } from 'hins'
+
+type ICwd = string
 
 export type IServicePathKeys =
   | 'cwd'
@@ -12,9 +14,9 @@ export type IServicePaths = {
 }
 
 export interface IServicePath {
-  outputPath?: string
+  outputPath?: ICwd
   env?: string
-  cwd: string
+  cwd: ICwd
 }
 
 export interface IPackage {
@@ -28,10 +30,10 @@ export interface IServiceOptions {
   plugins?: string[]
   pkg: IPackage
   env?: Record<string, any>
-  cwd: string
+  cwd: ICwd
 }
 
-export interface IService extends IHinsApi {
+export interface IService extends Hins {
   paths: IServicePaths
   pkg: IServiceOptions['pkg']
   env?: string

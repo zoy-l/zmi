@@ -18,8 +18,6 @@ interface IEvent<T> {
 
 interface IModify<T, U> {
   (fn: { (memo: T, args: U): Promise<T> | T | void }): void
-  // (args: { fn: { (initialValue: T, args: U): T }; before?: string; stage?: number }): void
-  // (args: { fn: { (initialValue: T, args: U): Promise<T> }; before?: string; stage?: number }): void
 }
 
 interface IAdd<T> {
@@ -29,7 +27,6 @@ interface IAdd<T> {
 export interface IApi extends IService {
   getPort: IGetter<number>
   getHostname: IGetter<string>
-  restartServer: () => void
 
   onStart: IEvent<{ args: Record<string, any> }>
   onExit: IEvent<{ signal: 'SIGINT' | 'SIGQUIT' | 'SIGTERM' }>

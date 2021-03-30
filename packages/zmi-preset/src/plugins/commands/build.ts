@@ -12,24 +12,16 @@ export default (api: IApi) => {
 
       const { bundler, bundleConfigs } = await getBundleAndConfigs({ api })
 
-      try {
-        const { appOutputPath } = api.paths
-        const stats = await bundler.build({
-          bundleConfigs,
-          appOutputPath
-        })
+      const { appOutputPath } = api.paths
+      const stats = await bundler.build({
+        bundleConfigs,
+        appOutputPath
+      })
 
-        await api.applyEventHooks({
-          key: 'onBuildComplete',
-          args: { stats }
-        })
-      } catch (err) {
-        await api.applyEventHooks({
-          key: 'onBuildComplete',
-          args: { err }
-        })
-        throw new Error(err)
-      }
+      await api.applyEventHooks({
+        key: 'onBuildComplete',
+        args: { stats }
+      })
     }
   })
 }

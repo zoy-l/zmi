@@ -5,7 +5,7 @@ export default (api: IApi) => {
     command: 'dev',
     description: 'start dev server for development',
     async fn({ args }) {
-      // api.env = 'development'
+      api.env = 'development'
       process.env.NODE_ENV = 'development'
 
       api.start({ command: 'webDev', args, reloadCommand: true })
