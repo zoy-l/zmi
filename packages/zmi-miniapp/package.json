@@ -11,7 +11,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.0.6",
+    "@zmi-cli/core": "^1.0.7",
     "eslint": "^7.22.0",
     "eslint-config-zmi": "^1.2.4",
     "gulp-rename": "^2.0.0",

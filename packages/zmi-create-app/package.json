@@ -9,7 +9,7 @@
     "templates"
   ],
   "dependencies": {
-    "@zmi-cli/utils": "^1.0.6"
+    "@zmi-cli/utils": "^1.0.7"
   },
   "publishConfig": {
     "access": "public"

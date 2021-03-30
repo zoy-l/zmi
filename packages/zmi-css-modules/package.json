@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/traverse": "^7.13.0",
-    "@zmi-cli/utils": "^1.0.6"
+    "@zmi-cli/utils": "^1.0.7"
   },
   "publishConfig": {
     "access": "public"
