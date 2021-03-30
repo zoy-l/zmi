@@ -27,6 +27,4 @@ If you can’t solve the problem, please ask [issue](https://github.com/l-zoy/zm
 
 #### LICENSE [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
 
-> This project references UmiJs
-
 <!-- yarn debug examples/normal dev -->
