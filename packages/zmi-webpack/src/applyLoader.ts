@@ -48,15 +48,6 @@ async function applyLoader(options: IPenetrateOptions) {
   let babelOpts = getBabelOpts({ config, presetOpts, hot })
   modifyBabelOpts && (babelOpts = await modifyBabelOpts(babelOpts))
 
-  webpackConfig.when(isVue, (WConifg) => {
-    WConifg.module
-      .rule('vue')
-      .test(/\.vue$/)
-      .use('vue-loader')
-      .loader(require.resolve('vue-loader'))
-      .options({ hotReload: hot, prettify: false })
-  })
-
   webpackConfig.module
     .rule('js')
     .test(/\.(js|mjs|jsx|ts|tsx)$/)
@@ -105,6 +96,27 @@ async function applyLoader(options: IPenetrateOptions) {
     .test(/\.(txt|text|md)$/)
     .use('raw-loader')
     .loader(require.resolve('raw-loader'))
+
+  webpackConfig.when(isVue, (WConifg) => {
+    WConifg.module
+      .rule('vue')
+      .test(/\.vue$/)
+      .use('vue-loader')
+      .loader(require.resolve('vue-loader'))
+      .options({ hotReload: hot, prettify: false })
+
+    if (isTypescript) {
+      WConifg.module
+        .rule('vue-ts')
+        .test(/\.ts$/)
+        .use('ts-loader')
+        .loader(require.resolve('ts-loader'))
+        .options({
+          transpileOnly: true,
+          appendTsSuffixTo: ['\\.vue$']
+        })
+    }
+  })
 }
 
 export default applyLoader

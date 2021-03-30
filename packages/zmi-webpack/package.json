@@ -51,6 +51,7 @@
     "raw-loader": "^4.0.2",
     "react-refresh": "^0.9.0",
     "style-loader": "^2.0.0",
+    "ts-loader": "^8.1.0",
     "type-fest": "^0.21.2",
     "url-loader": "^4.1.0",
     "vue-loader": "^16.1.2",

@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -15,8 +15,8 @@ export default defineComponent({
     }
   },
   methods: {
-    hello() {
-      console.log(this.msg)
+    hello(num: number) {
+      console.log(num)
     }
   }
 })
