@@ -108,7 +108,7 @@ async function applyLoader(options: IPenetrateOptions) {
     if (isTypescript) {
       WConifg.module
         .rule('vue-ts')
-        .test(/\.ts$/)
+        .test(/\.(ts|tsx)$/)
         .use('ts-loader')
         .loader(require.resolve('ts-loader'))
         .options({
