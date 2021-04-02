@@ -2,17 +2,11 @@
   "packages": ["packages/*"],
   "useWorkspaces": true,
   "npmClient": "yarn",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "command": {
     "publish": {
       "message": "feat(release): %s"
     }
   },
-  "ignoreChanges": [
-    "**/*.md",
-    "**/*.test.ts",
-    "**/*.e2e.ts",
-    "**/fixtures/**",
-    "**/test/**"
-  ]
+  "ignoreChanges": ["**/*.md", "**/*.test.ts", "**/*.e2e.ts", "**/fixtures/**", "**/test/**"]
 }
