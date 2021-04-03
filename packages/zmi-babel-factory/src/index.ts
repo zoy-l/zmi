@@ -13,9 +13,7 @@ export interface Ioptions {
   modify?: <T>(value: T) => T
 }
 
-export function isObject<T extends Record<string, any>>(
-  obj: T | boolean
-): T | Partial<T> {
+export function isObject<T extends Record<string, any>>(obj: T | boolean): T | Partial<T> {
   return typeof obj === 'object' ? obj : {}
 }
 
@@ -52,15 +50,10 @@ export default (_context: never, options: Ioptions) => {
     ].filter(Boolean),
     plugins: [
       [require.resolve('@babel/plugin-proposal-optional-chaining'), { loose: false }],
-      [
-        require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
-        { loose: false }
-      ],
+      [require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'), { loose: false }],
       require.resolve('@babel/plugin-syntax-top-level-await'),
       [require.resolve('@babel/plugin-transform-destructuring'), { loose: false }],
-      options.typescript && [
-        require.resolve('babel-plugin-transform-typescript-metadata')
-      ],
+      options.typescript && [require.resolve('babel-plugin-transform-typescript-metadata')],
       [require.resolve('@babel/plugin-proposal-class-properties'), { loose: true }],
       require.resolve('@babel/plugin-proposal-export-default-from'),
       [
