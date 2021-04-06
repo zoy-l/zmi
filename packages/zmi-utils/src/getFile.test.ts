@@ -1,6 +1,7 @@
-import { slash } from '@zmi-cli/utils'
-import getFile from './getFile'
+import slash from 'slash'
 import path from 'path'
+
+import getFile from './getFile'
 
 test('getFile', () => {
   const file = getFile({

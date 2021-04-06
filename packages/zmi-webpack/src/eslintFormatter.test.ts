@@ -15,7 +15,10 @@ test('eslint formatter null', () => {
       source:
         "import app from './app'\n\nconst foo = 1\n\n// @ts-ignore\n\nconst a = 1\nconsole.log(a, app)\n",
       usedDeprecatedRules: [
-        { ruleId: 'lines-around-directive', replacedBy: ['padding-line-between-statements'] },
+        {
+          ruleId: 'lines-around-directive',
+          replacedBy: ['padding-line-between-statements']
+        },
         { ruleId: 'no-buffer-constructor', replacedBy: [] },
         { ruleId: 'no-new-require', replacedBy: [] },
         { ruleId: 'no-path-concat', replacedBy: [] }
@@ -51,7 +54,10 @@ test('eslint formatter e', () => {
       source:
         "import app from './app'\n\nconst foo = 1\n\n// @ts-ignore\n\nconst a = 1\nconsole.log(a, app)\n",
       usedDeprecatedRules: [
-        { ruleId: 'lines-around-directive', replacedBy: ['padding-line-between-statements'] },
+        {
+          ruleId: 'lines-around-directive',
+          replacedBy: ['padding-line-between-statements']
+        },
         { ruleId: 'no-buffer-constructor', replacedBy: [] },
         { ruleId: 'no-new-require', replacedBy: [] },
         { ruleId: 'no-path-concat', replacedBy: [] }
@@ -87,7 +93,10 @@ test('eslint formatter f', () => {
       source:
         "import app from './app'\n\nconst foo = 1\n\n// @ts-ignore\n\nconst a = 1\nconsole.log(a, app)\n",
       usedDeprecatedRules: [
-        { ruleId: 'lines-around-directive', replacedBy: ['padding-line-between-statements'] },
+        {
+          ruleId: 'lines-around-directive',
+          replacedBy: ['padding-line-between-statements']
+        },
         { ruleId: 'no-buffer-constructor', replacedBy: [] },
         { ruleId: 'no-new-require', replacedBy: [] },
         { ruleId: 'no-path-concat', replacedBy: [] }

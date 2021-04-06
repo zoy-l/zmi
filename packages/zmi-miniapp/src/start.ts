@@ -1,12 +1,12 @@
 import { Service } from '@zmi-cli/core'
 
-const start = () => {
+export default function start() {
   const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGQUIT', 'SIGTERM']
   try {
     const service = new Service({
       cwd: process.cwd(),
       plugins: [
-        require.resolve('./miniapp.js'),
+        require.resolve('./preset/miniapp.js'),
         require.resolve('./preset/afterHook.js'),
         require.resolve('./preset/beforeReadWriteStream.js'),
         require.resolve('./preset/disableTypes.js'),
@@ -17,12 +17,11 @@ const start = () => {
         require.resolve('./preset/lessOptions.js'),
         require.resolve('./preset/output.js'),
         require.resolve('./preset/paths.js')
-      ]
+      ],
+      pkg: {}
     })
 
-    service.run({
-      command: 'miniapp'
-    })
+    service.start({ command: 'miniapp' })
 
     Signals.forEach((signal) => {
       process.once(signal, () => {
@@ -35,4 +34,3 @@ const start = () => {
     process.exit(1)
   }
 }
-start()

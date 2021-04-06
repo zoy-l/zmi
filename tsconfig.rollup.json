@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "preserve",
+    "module": "esnext",
+    "target": "esnext",
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  }
+}

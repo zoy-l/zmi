@@ -1,11 +1,12 @@
-import { fork } from 'child_process'
 import readline from 'readline'
 
-const child = fork(require.resolve('./start'))
+import start from './start'
+
 const isWin = process.platform === 'win32'
 const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
 
 if (isWin) {
+  start()
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -18,7 +19,6 @@ if (isWin) {
 
 Signals.forEach((SignalKey) => {
   process.on(SignalKey, () => {
-    child.kill(SignalKey)
     process.exit(1)
   })
 })

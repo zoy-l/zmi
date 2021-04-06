@@ -23,7 +23,6 @@ import glob from 'glob'
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
 import parseRequireDeps from './parseRequireDeps'
-import { NodeEnv, ArgsType } from './types'
 import clearConsole from './clearConsole'
 import mergeConfig from './mergeConfig'
 import flatDeep from './flatDeep'
@@ -50,13 +49,11 @@ export {
   gzipSize,
   flatDeep,
   inquirer,
-  ArgsType,
   isLerna,
   getFile,
   address,
   fsExtra,
   makeDir,
-  NodeEnv,
   cheerio,
   resolve,
   lodash,

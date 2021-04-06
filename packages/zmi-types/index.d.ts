@@ -29,14 +29,9 @@ export interface IApi extends IService {
   getHostname: IGetter<string>
 
   onStart: IEvent<{ args: Record<string, any> }>
-  onExit: IEvent<{ signal: 'SIGINT' | 'SIGQUIT' | 'SIGTERM' }>
   onBuildComplete: IEvent<{
     err?: Error
     stats?: { stats: webpack.Stats[]; hash: string }
-  }>
-  onDevCompileDone: IEvent<{
-    isFirstCompile: boolean
-    stats: webpack.Stats
   }>
 
   addHTMLHeadScripts: IAdd<any>

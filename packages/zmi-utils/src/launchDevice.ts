@@ -8,7 +8,9 @@ export const defaultYargsOptions = {
   boolean: ['version']
 }
 
-export default (opts?: yargsParser.Options): { args: yargsParser.Arguments; command: string } => {
+export default (
+  opts?: yargsParser.Options
+): { args: yargsParser.Arguments; command: string } => {
   const args = yargsParser(process.argv.slice(2), opts)
   return { args, command: args._[0] }
 }

@@ -1,7 +1,6 @@
 import recursiveReaddir from 'recursive-readdir'
 import yargsParser from 'yargs-parser'
 import clearModule from 'clear-module'
-import babelTypes from '@babel/types'
 import portfinder from 'portfinder'
 import stripAnsi from 'strip-ansi'
 import textTable from 'text-table'
@@ -23,7 +22,6 @@ import glob from 'glob'
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
 import parseRequireDeps from './parseRequireDeps'
-import { NodeEnv, ArgsType } from './types'
 import clearConsole from './clearConsole'
 import mergeConfig from './mergeConfig'
 import flatDeep from './flatDeep'
@@ -40,7 +38,6 @@ export {
   clearModule,
   yargsParser,
   portfinder,
-  babelTypes,
   deepmerge,
   stripAnsi,
   textTable,
@@ -49,13 +46,11 @@ export {
   gzipSize,
   flatDeep,
   inquirer,
-  ArgsType,
   isLerna,
   getFile,
   address,
   fsExtra,
   makeDir,
-  NodeEnv,
   cheerio,
   resolve,
   lodash,
