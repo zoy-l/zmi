@@ -7158,9 +7158,14 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-"hins@link:../.nvm/versions/node/v15.8.0/lib/node_modules/hins":
-  version "0.0.0"
-  uid ""
+hins@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/hins/-/hins-1.0.2.tgz#661377cc36fa3a75c70374ca6c5e7217738b4308"
+  integrity sha512-XrRq7cu/wwwpQDPz9bRTPtErkVoayo8DAQLr1GJN4B2oqicMvqMgT7PVJapQiZgSU1CGMspD83NnjjLVaVmU4g==
+  dependencies:
+    resolve "^1.20.0"
+  optionalDependencies:
+    fsevents "~2.3.1"
 
 hosted-git-info@^2.1.4:
   version "2.8.8"
