@@ -106,14 +106,39 @@ async function applyLoader(options: IPenetrateOptions) {
       .options({ hotReload: hot, prettify: false })
 
     if (isTypescript) {
-      WConifg.module
-        .rule('vue-ts')
-        .test(/\.(ts|tsx)$/)
-        .use('ts-loader')
-        .loader(require.resolve('ts-loader'))
-        .options({
+      const tsRule = WConifg.module.rule('ts').test(/\.ts$/)
+      const tsxRule = WConifg.module.rule('tsx').test(/\.tsx$/)
+
+      const addLoader = ({
+        name,
+        loader,
+        options
+      }: {
+        name: string
+        loader: string
+        options: Record<string, any>
+      }) => {
+        tsRule.use(name).loader(loader).options(options)
+        tsxRule.use(name).loader(loader).options(options)
+      }
+
+      addLoader({
+        name: 'ts-loader',
+        loader: require.resolve('ts-loader'),
+        options: {
           transpileOnly: true,
           appendTsSuffixTo: ['\\.vue$']
+        }
+      })
+      // make sure to append TSX suffix
+      tsxRule
+        .use('ts-loader')
+        .loader(require.resolve('ts-loader'))
+        .tap((options) => {
+          options = { ...options }
+          delete options.appendTsSuffixTo
+          options.appendTsxSuffixTo = ['\\.vue$']
+          return options
         })
     }
   })
