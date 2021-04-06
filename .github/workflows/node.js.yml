@@ -15,7 +15,6 @@ on:
       - 'docs/**'
       - '*.md'
 
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -40,6 +39,7 @@ jobs:
       - name: Setup install
         if: ${{ steps.cache.outputs.cache-hit != true }}
         run: yarn --ignore-engines
+      - run: yarn zmi-bootstrap
       - run: yarn zmi-nerd
       - run: yarn test --forceExit
         env:

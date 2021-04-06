@@ -12,6 +12,7 @@ jobs:
     steps:
       - checkout
       - run: yarn
+      - run: zmi-bootstrap
       - run: yarn zmi-nerd
       - run: yarn test --forceExit
       - run: bash <(curl -s https://codecov.io/bash)
