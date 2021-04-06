@@ -11,11 +11,11 @@ export default (api: IApi) => {
   api.registerCommand({
     command: 'webDev',
     description: 'start a webDev server for development',
-    fn: async ({ args }) => {
-      const defaultPort = process.env.PORT ?? args?.port ?? api.initConfig.devServer?.port
+    fn: async ({ args = {} }) => {
+      const defaultPort = process.env.PORT ?? args.port ?? api.initConfig.devServer.port
 
       port = await portfinder.getPortPromise({ port: defaultPort })
-      host = process.env.HOST ?? api.initConfig.devServer?.host ?? '0.0.0.0'
+      host = process.env.HOST ?? api.initConfig.devServer.host ?? '0.0.0.0'
 
       const { bundler, bundleConfigs } = await getBundleAndConfigs({
         api,

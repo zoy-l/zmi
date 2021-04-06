@@ -19,8 +19,7 @@
     "@zmi-cli/types": "^1.0.7"
   },
   "scripts": {
-    "test": "nerd test",
-    "get-default-value": "node ./getDefaultValue.js"
+    "test": "nerd test"
   },
   "dependencies": {
     "@babel/core": "^7.13.14",

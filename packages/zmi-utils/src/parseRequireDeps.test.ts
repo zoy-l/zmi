@@ -24,6 +24,8 @@ test('directory index', () => {
 
 test('avoid cycle', () => {
   const fixture = join(fixtures, 'cycle')
-  const ret = parseRequireDeps(join(fixture, 'a.ts')).map((p) => p.replace(slash(fixture), '.'))
+  const ret = parseRequireDeps(join(fixture, 'a.ts')).map((p) =>
+    p.replace(slash(fixture), '.')
+  )
   expect(ret).toEqual(['./a.ts', './b.ts', './c.ts'])
 })

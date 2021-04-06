@@ -30,7 +30,7 @@ export default async function getConfig(opts: IConfigOpts): Promise<Configuratio
   const { targets, browserslist } = getTargets(config)
   const { isReact, isVue } = getFrameType(config, pkg)
 
-  const sourceMap = config.devtool !== 'none'
+  const sourceMap = config.devtool !== false
   const isDev = env === 'development'
   const isProd = env === 'production'
   const hot = isDev && process.env.HMR !== 'none'
@@ -58,10 +58,13 @@ export default async function getConfig(opts: IConfigOpts): Promise<Configuratio
   const createCSSRule = applyCss(penetrateOptions)
 
   await applyLoader(penetrateOptions)
-
   await applyPlugin(penetrateOptions)
 
-  webpackConfig.devtool(config.devtool as WebpackChain.DevTool)
+  webpackConfig.devtool(
+    (config.devtool ?? isDev
+      ? 'eval-cheap-module-source-map'
+      : false) as WebpackChain.DevTool
+  )
   webpackConfig.mode(env)
   webpackConfig.stats('normal')
 
