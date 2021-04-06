@@ -14,5 +14,5 @@ jobs:
       - run: yarn
       - run: yarn zmi-bootstrap
       - run: yarn zmi-nerd
-      - run: yarn test --forceExit
+      - run: yarn test --forceExit --detectOpenHandles --runInBand --maxWorkers=2
       - run: bash <(curl -s https://codecov.io/bash)
