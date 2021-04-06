@@ -22,7 +22,7 @@ $ set PORT=3000&&zmi dev
 如果要同时考虑 **OS X** 和 **Windows**，可借助三方工具 `cross-env`，
 
 ```bash
-$ yarn add cross-env --dev $ cross-env PORT=3000 umi dev
+$ yarn add cross-env --dev $ cross-env PORT=3000 zmi dev
 ```
 
 ### 在 .env 文件中定义

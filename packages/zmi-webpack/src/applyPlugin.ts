@@ -102,20 +102,16 @@ async function applyPlugin(options: IPenetrateOptions) {
   })
 
   if (config.copy && isProd) {
-    const copyPatterns = config.copy.map(
-      (item: string | { to: string; from: string }) => {
-        return typeof item === 'string'
-          ? { from: path.join(cwd, item) }
-          : {
-              from: path.join(cwd, item.from),
-              to: path.join(cwd, item.to)
-            }
-      }
-    )
+    const copyPatterns = config.copy.map((item: string | { to: string; from: string }) => {
+      return typeof item === 'string'
+        ? { from: path.join(cwd, item) }
+        : {
+            from: path.join(cwd, item.from),
+            to: path.join(cwd, item.to)
+          }
+    })
 
-    webpackConfig
-      .plugin('CopyWebpackPlugin')
-      .use(CopyWebpackPlugin, [{ patterns: copyPatterns }])
+    webpackConfig.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [{ patterns: copyPatterns }])
   }
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [config.define])
@@ -158,15 +154,13 @@ async function applyPlugin(options: IPenetrateOptions) {
       WConfig.optimization.minimize(false)
     },
     (WConfig) => {
-      WConfig.optimization
-        .minimizer('terser')
-        .use(require.resolve('terser-webpack-plugin'), [
-          {
-            terserOptions: deepmerge(terserOptions, config.terserOptions),
-            extractComments: false,
-            parallel: true
-          }
-        ])
+      WConfig.optimization.minimizer('terser').use(require.resolve('terser-webpack-plugin'), [
+        {
+          terserOptions: deepmerge(terserOptions, config.terserOptions),
+          extractComments: false,
+          parallel: true
+        }
+      ])
 
       WConfig.optimization
         .minimizer('css-minimizer')
@@ -207,9 +201,7 @@ async function applyPlugin(options: IPenetrateOptions) {
 
   webpackConfig
     .plugin('HtmlWebpackPlugin')
-    .use(HtmlWebpackPlugin, [
-      deepmerge(config.htmlPlugin, { templateContent: htmlContent })
-    ])
+    .use(HtmlWebpackPlugin, [deepmerge(config.htmlPlugin, { templateContent: htmlContent })])
 
   webpackConfig.when(isVue, (WConifg) => {
     if (isDev) {

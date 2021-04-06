@@ -1,10 +1,4 @@
-<template>
-  <div @click="hello" class="div">
-    {{ msg }}
-  </div>
-</template>
-
-<script>
+<script lang="tsx">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -15,9 +9,12 @@ export default defineComponent({
     }
   },
   methods: {
-    hello() {
-      console.log(this.msg)
+    hello(num: number) {
+      console.log(num)
     }
+  },
+  render() {
+    return <div onClick={() => this.hello(123)}>123</div>
   }
 })
 </script>

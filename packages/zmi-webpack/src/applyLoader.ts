@@ -48,15 +48,6 @@ async function applyLoader(options: IPenetrateOptions) {
   let babelOpts = getBabelOpts({ config, presetOpts, hot })
   modifyBabelOpts && (babelOpts = await modifyBabelOpts(babelOpts))
 
-  webpackConfig.when(isVue, (WConifg) => {
-    WConifg.module
-      .rule('vue')
-      .test(/\.vue$/)
-      .use('vue-loader')
-      .loader(require.resolve('vue-loader'))
-      .options({ hotReload: hot, prettify: false })
-  })
-
   webpackConfig.module
     .rule('js')
     .test(/\.(js|mjs|jsx|ts|tsx)$/)
@@ -105,6 +96,52 @@ async function applyLoader(options: IPenetrateOptions) {
     .test(/\.(txt|text|md)$/)
     .use('raw-loader')
     .loader(require.resolve('raw-loader'))
+
+  webpackConfig.when(isVue, (WConifg) => {
+    WConifg.module
+      .rule('vue')
+      .test(/\.vue$/)
+      .use('vue-loader')
+      .loader(require.resolve('vue-loader'))
+      .options({ hotReload: hot, prettify: false })
+
+    if (isTypescript) {
+      const tsRule = WConifg.module.rule('ts').test(/\.ts$/)
+      const tsxRule = WConifg.module.rule('tsx').test(/\.tsx$/)
+
+      const addLoader = ({
+        name,
+        loader,
+        options
+      }: {
+        name: string
+        loader: string
+        options: Record<string, any>
+      }) => {
+        tsRule.use(name).loader(loader).options(options)
+        tsxRule.use(name).loader(loader).options(options)
+      }
+
+      addLoader({
+        name: 'ts-loader',
+        loader: require.resolve('ts-loader'),
+        options: {
+          transpileOnly: true,
+          appendTsSuffixTo: ['\\.vue$']
+        }
+      })
+      // make sure to append TSX suffix
+      tsxRule
+        .use('ts-loader')
+        .loader(require.resolve('ts-loader'))
+        .tap((options) => {
+          options = { ...options }
+          delete options.appendTsSuffixTo
+          options.appendTsxSuffixTo = ['\\.vue$']
+          return options
+        })
+    }
+  })
 }
 
 export default applyLoader

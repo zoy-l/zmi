@@ -24,5 +24,3 @@
 - [Doc v1](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/)
 
 #### LICENSE [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
-
-> 此项目参考了 UmiJs
