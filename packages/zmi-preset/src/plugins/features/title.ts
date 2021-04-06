@@ -11,7 +11,7 @@ export default (api: IApi) => {
   })
 
   api.modifyHTML(($) => {
-    const { title } = api.config
+    const { title } = api.initConfig
     if (title) {
       const titleEl = $('head > title')
       if (titleEl.length) {

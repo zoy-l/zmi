@@ -22,7 +22,7 @@ export async function getBundleAndConfigs(options: { api: IApi; port?: number })
 
   // Initialize the webpack launcher
   const bundler: DefaultBundler = new Bundler({
-    config: api.config,
+    config: api.initConfig,
     cwd: api.cwd,
     pkg: api.pkg
   })

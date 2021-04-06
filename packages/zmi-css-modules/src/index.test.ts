@@ -9,7 +9,9 @@ function transformWithPlugin(code: string) {
 }
 
 test('css module', () => {
-  expect(transformWithPlugin(`import styles from 'a.jss';`)).toEqual(`import styles from 'a.jss';`)
+  expect(transformWithPlugin(`import styles from 'a.jss';`)).toEqual(
+    `import styles from 'a.jss';`
+  )
 
   expect(transformWithPlugin(`import styles from 'a.css';`)).toEqual(
     `import styles from "a.css?module";`

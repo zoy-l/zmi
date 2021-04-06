@@ -11,5 +11,5 @@ export default (api: IApi) => {
     }
   })
 
-  api.addHTMLMetas(() => api.config.metas!)
+  api.addHTMLMetas(() => api.initConfig.metas!)
 }

@@ -1,69 +1,57 @@
-import { launchDevice, chalk, dyo, isWin } from '@zmi-cli/utils'
+import { launchDevice, chalk, dyo, isWin, textTable } from '@zmi-cli/utils'
 import { Service } from '@zmi-cli/core'
 import readline from 'readline'
 
 import { getCwd, getPkg } from './getRoot'
-// import fork from './fork'
 
-const { args, command = 'dev' } = launchDevice(dyo)
+const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
+const { args, command } = launchDevice(dyo)
+const service = new Service({
+  cwd: getCwd(),
+  pkg: getPkg(process.cwd()),
+  plugins: [require.resolve('@zmi-cli/preset')]
+})
 
-;(() => {
-  const Signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
+try {
+  switch (command) {
+    case 'dev':
+    case 'build':
+    case 'webpack':
+      service.start({
+        command,
+        args
+      })
 
-  try {
-    switch (command) {
-      case 'dev':
-        // const child = fork(require.resolve('./forkedDev'))
-
-        const service = new Service({
-          cwd: getCwd(),
-          pkg: getPkg(process.cwd()),
-          plugins: [require.resolve('@zmi-cli/preset')]
+      if (isWin) {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
         })
 
-        service.start({
-          command,
-          args
+        rl.on(Signals[0], () => {
+          process.emit(Signals[0], Signals[0])
         })
+      }
 
-        if (isWin) {
-          const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-          })
-
-          rl.on(Signals[0], () => {
-            process.emit(Signals[0], Signals[0])
-          })
-        }
-
-        Signals.forEach((SignalKey) => {
-          process.on(SignalKey, () => {
-            process.exit(1)
-          })
+      Signals.forEach((SignalKey) => {
+        process.on(SignalKey, () => {
+          process.exit(1)
         })
-        break
-      default:
-        if (command === undefined) {
-          return
-        }
-        if (command === 'build') {
-          process.env.NODE_ENV = 'production'
-        }
-
-        new Service({
-          cwd: getCwd(),
-          pkg: getPkg(process.cwd()),
-          plugins: [require.resolve('@zmi-cli/preset')]
-        }).start({
-          command,
-          args
-        })
-        break
-    }
-  } catch (err) {
-    console.log(chalk.red(err.message))
-    console.log(err.stack)
-    process.exit(1)
+      })
+      break
+    default:
+      console.log('💡 Supported commands:')
+      console.log(
+        textTable([
+          ['   dev', 'Dev Run webpack dev server'],
+          ['   build', 'Compile bundler in production mode'],
+          ['   webpack', 'View current webpack configuration']
+        ])
+      )
+      break
   }
-})()
+} catch (err) {
+  console.log(chalk.red(err.message))
+  console.log(err.stack)
+  process.exit(1)
+}

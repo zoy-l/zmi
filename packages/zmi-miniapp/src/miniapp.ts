@@ -5,7 +5,7 @@ import Nerd from 'zmi-nerd'
 
 export default (api: IApi) => {
   api.registerCommand({
-    name: 'miniapp',
+    command: 'miniapp',
     description: 'start miniApp dev server for development',
     async fn() {
       const nerd = new Nerd({
@@ -13,9 +13,12 @@ export default (api: IApi) => {
         watch: true,
         userConfig: {
           output: 'miniprogram',
-          ...(api.config ?? {}),
+          ...(api.initConfig ?? {}),
           afterReadWriteStream({ gulpIf }) {
-            return gulpIf((file) => file.path.endsWith('.css'), rename({ extname: '.wxss' }))
+            return gulpIf(
+              (file) => file.path.endsWith('.css'),
+              rename({ extname: '.wxss' })
+            )
           }
         }
       })

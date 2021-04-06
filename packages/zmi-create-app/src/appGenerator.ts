@@ -28,7 +28,8 @@ export default async function generator(cwd: string, args: yargsParser.Arguments
   let IappName = appName
 
   const isEmptyDir =
-    fs.existsSync(path.join(cwd, IappName)) && !!fs.readdirSync(path.join(cwd, IappName)).length
+    fs.existsSync(path.join(cwd, IappName)) &&
+    !!fs.readdirSync(path.join(cwd, IappName)).length
 
   while (isEmptyDir) {
     const { newAppName } = await inquirer.prompt({

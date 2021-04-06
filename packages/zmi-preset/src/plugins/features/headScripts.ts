@@ -12,5 +12,5 @@ export default (api: IApi) => {
     }
   })
 
-  api.addHTMLHeadScripts(() => formatScripts(api.config.headScripts!))
+  api.addHTMLHeadScripts(() => formatScripts(api.initConfig.headScripts))
 }

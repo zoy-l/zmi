@@ -1,6 +1,7 @@
 import recursiveReaddir from 'recursive-readdir'
 import yargsParser from 'yargs-parser'
 import clearModule from 'clear-module'
+import babelTypes from '@babel/types'
 import portfinder from 'portfinder'
 import stripAnsi from 'strip-ansi'
 import textTable from 'text-table'
@@ -19,7 +20,6 @@ import pkgUp from 'pkg-up'
 import chalk from 'chalk'
 import slash from 'slash'
 import glob from 'glob'
-
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
 import parseRequireDeps from './parseRequireDeps'
@@ -29,9 +29,7 @@ import mergeConfig from './mergeConfig'
 import flatDeep from './flatDeep'
 import isLerna from './isLerna'
 import getFile from './getFile'
-
-const isWin = process.platform === 'win32'
-
+declare const isWin: boolean
 export {
   compatibleWithESModule,
   recursiveReaddir,
@@ -42,6 +40,7 @@ export {
   clearModule,
   yargsParser,
   portfinder,
+  babelTypes,
   deepmerge,
   stripAnsi,
   textTable,

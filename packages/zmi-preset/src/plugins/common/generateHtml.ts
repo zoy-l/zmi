@@ -1,5 +1,5 @@
-import { IApi } from '@zmi-cli/types'
 import { html } from '@zmi-cli/webpack'
+import { IApi } from '@zmi-cli/types'
 import path from 'path'
 import fs from 'fs'
 
@@ -20,11 +20,11 @@ export function getHtmlGenerator(api: IApi) {
 
       await api.applyModifyHooks({
         key: 'modifyPublicPathStr',
-        initialValue: api.config.publicPath
+        initialValue: api.initConfig.publicPath
       })
 
       return html({
-        config: api.config,
+        config: api.initConfig,
         tplPath: getDocumentTplPath(),
         headScripts: await applyHooks({
           key: 'addHTMLHeadScripts'

@@ -13,5 +13,7 @@ export default (api: IApi) => {
     }
   })
 
-  api.addHTMLScripts(() => formatScripts(api.config.scripts!))
+  api.addHTMLScripts(() => {
+    return formatScripts(api.initConfig.scripts)
+  })
 }
