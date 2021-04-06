@@ -104,7 +104,7 @@ export default class Bundler {
             'Compiled successfully !\n'
           )} `
         )
-        console.log(`${isWin ? '✨' : '📦'} Name: - Size`)
+        console.log(`${isWin ? '✨' : '📦'} Name: - Size(Gzip)`)
         if (stats) {
           printFileSizesAfterBuild(
             stats.toJson({ all: false, assets: true }),

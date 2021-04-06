@@ -1,4 +1,11 @@
-import { chalk, filesize, fsExtra, gzipSize, stripAnsi, recursiveReaddir } from '@zmi-cli/utils'
+import {
+  chalk,
+  filesize,
+  fsExtra,
+  gzipSize,
+  stripAnsi,
+  recursiveReaddir
+} from '@zmi-cli/utils'
 import webpack from 'webpack'
 import path from 'path'
 import fs from 'fs'
@@ -32,7 +39,10 @@ function removeFileNameHash(buildFolder: string, fileName: string) {
   return fileName
     .replace(buildFolder, '')
     .replace(/\\/g, '/')
-    .replace(/\/?(.*)(\.[0-9a-f]+)(\.chunk)?(\.js|\.css)/, (_match, p1, _p2, _p3, p4) => p1 + p4)
+    .replace(
+      /\/?(.*)(\.[0-9a-f]+)(\.chunk)?(\.js|\.css)/,
+      (_match, p1, _p2, _p3, p4) => p1 + p4
+    )
 }
 
 // Input: 1024, 2048
@@ -80,7 +90,9 @@ export function printFileSizesAfterBuild(
       .sort((a, b) => b.size - a.size)
   }
 
-  const longestSizeLabelLength = Math.max(...assets.map((a) => stripAnsi(a.sizeLabel).length))
+  const longestSizeLabelLength = Math.max(
+    ...assets.map((a) => stripAnsi(a.sizeLabel).length)
+  )
   let suggestBundleSplitting = false
 
   assets.forEach((asset) => {
@@ -93,7 +105,9 @@ export function printFileSizesAfterBuild(
 
     const isLarge =
       asset.size >
-      (asset.name.indexOf('main.') === 0 ? WARN_AFTER_BUNDLE_GZIP_SIZE : WARN_AFTER_CHUNK_GZIP_SIZE)
+      (asset.name.indexOf('main.') === 0
+        ? WARN_AFTER_BUNDLE_GZIP_SIZE
+        : WARN_AFTER_CHUNK_GZIP_SIZE)
 
     if (isLarge && path.extname(asset.name) === '.js') {
       suggestBundleSplitting = true
