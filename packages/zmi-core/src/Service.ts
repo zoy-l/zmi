@@ -6,19 +6,23 @@ import paths from './paths'
 
 export default class Service extends Core {
   /**
-   * @param object
+   * @param {String} paths.cwd
+   * @param {String} paths.appOutputPath
+   * @param {String} paths.appSrcPath
+   * @param {String} paths.appPagesPath
+   * @param {String} paths.appNodeModulesPath
    * @desc Path to the workspace
    */
   paths: IServicePaths
 
   /**
-   * @param object
+   * @param {Object} any[]
    * @desc Package.json of the workspace
    */
   pkg?: IPackage
 
   /**
-   * @param String
+   * @param {String}
    * @desc Environment variable
    */
   env?: string
