@@ -6935,10 +6935,10 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-hins@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/hins/-/hins-1.0.3.tgz#309f30444c69057388f052421cd24d4f25647307"
-  integrity sha512-178muYf/9FFpsdjZzjCZb0PsBKWjA7Hq7jmOwdkXl+BFk51UWGWAe0jo2JhW2yVTWc+pJo0Z0QeTKsVzGS23gQ==
+hins@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/hins/-/hins-1.0.4.tgz#c2c138051005f776aae329b60e2db294f6657a2b"
+  integrity sha512-zTb8sFG+EI0/hOrIIH4S4YRQVgUpvFurR1xQDVW/iKDJJKKeidmy8ExjY3Z9VfqonuubSgaLkLyfl0RM1XeEmg==
   dependencies:
     resolve "^1.20.0"
   optionalDependencies:

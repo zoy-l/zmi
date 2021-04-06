@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/utils",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -12,14 +12,14 @@
     "src"
   ],
   "dependencies": {
+    "@types/lodash": "^4.14.168",
     "cheerio": "^1.0.0-rc.3",
-    "glob": "^7.1.6",
-    "@types/lodash": "^4.14.168"
+    "glob": "^7.1.6"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "52284bd63e9557210bfdd10cf889a1a9a5e4f42c",
+  "gitHead": "e00cc20aec3576a5f549f770f0145d3a463734d5",
   "devDependencies": {
     "@types/cheerio": "^0.22.28",
     "@types/fs-extra": "^9.0.10",

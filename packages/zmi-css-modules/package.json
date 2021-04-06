@@ -1,10 +1,10 @@
 {
   "name": "@zmi-cli/css-modules",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "lib/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "52284bd63e9557210bfdd10cf889a1a9a5e4f42c"
+  "gitHead": "e00cc20aec3576a5f549f770f0145d3a463734d5"
 }

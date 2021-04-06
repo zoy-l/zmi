@@ -35,7 +35,7 @@ try {
 
       Signals.forEach((SignalKey) => {
         process.on(SignalKey, () => {
-          process.exit(1)
+          process.exit(0)
         })
       })
       break
