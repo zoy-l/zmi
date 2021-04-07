@@ -20,7 +20,8 @@ const urlRegex = /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/
 
 export function prepareUrls(prepareUrlOptions: IPrepareUrlOpts) {
   const { protocol, host, port, pathname } = prepareUrlOptions
-  const formatUrl = (hostname: string) => new URL(`${protocol}://${hostname}:${port}${pathname}`)
+  const formatUrl = (hostname: string) =>
+    new URL(`${protocol}://${hostname}:${port}${pathname}`)
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::'
 

@@ -26,10 +26,16 @@ function getScriptsContent(scripts: IScript[]) {
 }
 
 export default async function html(options: IHtml = {}) {
-  const { headScripts, scripts, styles, metas, links, modifyHTML, tplPath, config } = deepmerge(
-    htmlDefaultOptions,
-    options
-  ) as INonEmpty<IHtml, ''>
+  const {
+    headScripts,
+    scripts,
+    styles,
+    metas,
+    links,
+    modifyHTML,
+    tplPath,
+    config
+  } = deepmerge(htmlDefaultOptions, options) as INonEmpty<IHtml, ''>
 
   let html = readFileSync(tplPath ?? join(__dirname, 'document.ejs'), 'utf-8')
   if (tplPath) {
@@ -52,11 +58,15 @@ export default async function html(options: IHtml = {}) {
   }
 
   if (metas.length) {
-    $('head').append(metas.reduce((memo, meta) => memo.concat(`<meta${getProps(meta)}/>`), ''))
+    $('head').append(
+      metas.reduce((memo, meta) => memo.concat(`<meta${getProps(meta)}/>`), '')
+    )
   }
 
   if (links.length) {
-    $('head').append(links.reduce((memo, link) => memo.concat(`<link${getProps(link)}/>`), ''))
+    $('head').append(
+      links.reduce((memo, link) => memo.concat(`<link${getProps(link)}/>`), '')
+    )
   }
 
   if (styles.length) {

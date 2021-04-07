@@ -104,8 +104,12 @@ test.skip('typescript with nest-injection', () => {
     }
   )
   expect(code).toContain('Reflect.metadata')
-  expect(code).toContain('_initializerDefineProperty(this, "appService", _descriptor, this);')
-  expect(code).toContain('_initializerDefineProperty(this, "appService2", _descriptor2, this);')
+  expect(code).toContain(
+    '_initializerDefineProperty(this, "appService", _descriptor, this);'
+  )
+  expect(code).toContain(
+    '_initializerDefineProperty(this, "appService2", _descriptor2, this);'
+  )
 })
 
 test('typescript key remapping types', () => {
@@ -162,11 +166,14 @@ test.skip('decorators', () => {
 })
 
 test('class properties', () => {
-  const code = transformWithPreset(`class Foo { a = 'b'; foo = () => this.a; static c = 'd';}`, {
-    env: {
-      targets: { ie: 10 }
+  const code = transformWithPreset(
+    `class Foo { a = 'b'; foo = () => this.a; static c = 'd';}`,
+    {
+      env: {
+        targets: { ie: 10 }
+      }
     }
-  })
+  )
   expect(code).toContain(`this.a = 'b';`)
 })
 
@@ -231,7 +238,9 @@ test('transform runtime', () => {
     },
     transformRuntime: {}
   })
-  expect(slash(join(code!))).toContain(`node_modules/@babel/runtime/helpers/esm/classCallCheck"));`)
+  expect(slash(join(code!))).toContain(
+    `node_modules/@babel/runtime/helpers/esm/classCallCheck"));`
+  )
 })
 
 test('babel-plugin-auto-css-modules', () => {

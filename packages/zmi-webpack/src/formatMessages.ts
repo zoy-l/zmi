@@ -76,7 +76,8 @@ function formatMessage(message = '') {
 
   // Remove duplicated newlines
   lines = lines.filter(
-    (line, index, arr) => index === 0 || line.trim() !== '' || line.trim() !== arr[index - 1].trim()
+    (line, index, arr) =>
+      index === 0 || line.trim() !== '' || line.trim() !== arr[index - 1].trim()
   )
 
   // Reassemble the message

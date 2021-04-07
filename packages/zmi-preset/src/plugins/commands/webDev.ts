@@ -40,6 +40,18 @@ export default (api: IApi) => {
           console.log(err)
         }
       })
+
+      api.core.watchConfig = {
+        changeLog(event, paths, isReload) {
+          isReload && console.log(chalk.bgBlue.black(` ${event} `), paths)
+        },
+        reloadLog() {
+          devServer.close()
+          console.log(`\n 🎯 Try to restart...`)
+        }
+      }
+
+      api.configInstance.watchConfig()
     }
   })
 

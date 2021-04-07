@@ -28,7 +28,11 @@ export default class Service extends Core {
   env?: string
 
   constructor(options: IServiceOptions) {
-    super({ ...options, babelRegister, possibleConfigName: ['.zmirc.js', '.zmirc.ts'] })
+    super({
+      ...options,
+      babelRegister,
+      possibleConfigName: ['.zmirc.js', '.zmirc.ts']
+    })
     this.paths = paths({ cwd: options.cwd })
     this.pkg = options.pkg
   }

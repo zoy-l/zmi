@@ -7,5 +7,7 @@ test('preset', () => {
 
   const features = fs.readdirSync(`${__dirname}/plugins/features`)
 
-  expect(['registerMethods', ...commands, ...features].length).toEqual(index().plugins.length)
+  expect(['registerMethods', ...commands, ...features].length).toEqual(
+    index().plugins.length
+  )
 })
