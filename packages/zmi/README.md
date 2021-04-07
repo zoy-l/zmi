@@ -1,20 +1,18 @@
-English | [简体中文](https://github.com/l-zoy/zmi/blob/main/README.zh-CN.md)
+English | [简体中文](./README.zh-CN.md)
 
-## Zmi
+# 🎃 Zmi be in common use react/vue/miniapp-ts application framework.
 
-[![codecov](https://codecov.io/gh/l-zoy/zmi/branch/main/graph/badge.svg?token=804YLQMX9B)](https://codecov.io/gh/l-zoy/zmi) [![GitHub license](https://img.shields.io/github/license/l-zoy/zmi)](https://github.com/l-zoy/zmi/blob/master/LICENSE) [![<ORG_NAME>](https://circleci.com/gh/l-zoy/zmi.svg?style=svg)](https://app.circleci.com/pipelines/github/l-zoy/zmi)
+If you can’t solve the problem, please ask [issue](https://github.com/l-zoy/zmi/issues/new)
 
-🎃 A purely controllable react/vue/miniapp-ts application framework.
+[![codecov](https://codecov.io/gh/l-zoy/zmi/branch/main/graph/badge.svg?token=804YLQMX9B)](https://codecov.io/gh/l-zoy/zmi) [![GitHub license](https://img.shields.io/github/license/l-zoy/zmi)](https://github.com/l-zoy/zmi/blob/master/LICENSE) [![<ORG_NAME>](https://circleci.com/gh/l-zoy/zmi.svg?style=svg)](https://app.circleci.com/pipelines/github/l-zoy/zmi) ![node-current](https://img.shields.io/node/v/zmi)
 
-> Consider starring, thank you 🌟 and support.
->
-> The plug-in mechanism of this project is a rewrite and modification of fork `UmiJs`
+<img alt="Logo" align="right" src="./website/static/img/logo.svg" width="25%" />
 
 ## Features
 
-- 🔩 **Extensible** Everything is plug-in, complete life cycle
+- 🔩 **Extensible** `Zmi` is completely configurable.
 
-- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp` `typescript` is supported by default, install `typescript`, add `tsconfig.json`
+- 📦 **Out of the box** One dependency can support both `vue` / `react` / `miniapp` `typescript` is supported by default
 
 - 🙅 **A large number of no self-research** Use mature community solutions first
 
@@ -22,31 +20,9 @@ English | [简体中文](https://github.com/l-zoy/zmi/blob/main/README.zh-CN.md)
 
 - 🎉 **Based** on the latest `webpack 5`, Support vue3.x, react 17.x, miniapp file to file transform
 
-## Why?
+## Documentation
 
-- Then why not use UmiJs directly?
+- for more details
+- please visit the [Doc v1(Github)](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/) website
 
-  - Zmi positioning is a purely universal **scaffolding** tool without too much integration, so if you need a high degree of integration, then UmiJs may be more suitable for you
-
-- Why not create-react-app
-  - Don't want to be highly integrated, but also configurable
-
-## Quick start
-
-```bash
-# Create project
-$ yarn create @zmi-cli/zmi-app
-# or npx @zmi-cli/create-zmi-app
-
-# Install dependency
-$ cd myApp && yarn
-
-# Start development
-$ zmi dev
-```
-
-## LICENSE
-
-[MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
-
-<!-- yarn debug examples/normal dev -->
+#### LICENSE [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
