@@ -5,5 +5,5 @@ if (!__dirname.includes('node_modules')) {
     require('source-map-support').install()
   } catch (e) {}
 }
-
+require('v8-compile-cache')
 require('../lib/cli')
