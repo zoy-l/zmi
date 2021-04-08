@@ -14,13 +14,26 @@ export default defineComponent({
     }
   },
   render() {
-    return <div onClick={() => this.hello(123)}>123</div>
+    return (
+      <div class="helo" onClick={() => this.hello(123)}>
+        123
+      </div>
+    )
   }
 })
 </script>
 
-<style lang="less" scoped>
-.div {
-  color: blue;
+<style lang="less">
+// @keyframes mymove {
+//   from {
+//     top: 0px;
+//   }
+//   to {
+//     top: 200px;
+//   }
+// }
+.helo {
+  color: red;
+  // animation: mymove 5s infinite;
 }
 </style>

@@ -1,4 +1,3 @@
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { chalk, deepmerge, fsExtra, isWin } from '@zmi-cli/utils'
 import webpackBundleAnalyzer from 'webpack-bundle-analyzer'
@@ -149,7 +148,7 @@ async function applyPlugin(options: IPenetrateOptions) {
   // And also added in cra 4.0
   // https://github.com/pmmmwh/react-refresh-webpack-plugin
   webpackConfig.when(isReact && isDev && hot, (WConfig) => {
-    WConfig.plugin('hmr').use(ReactRefreshWebpackPlugin)
+    WConfig.plugin('hmr').use(require.resolve('@pmmmwh/react-refresh-webpack-plugin'))
   })
 
   webpackConfig.when(
