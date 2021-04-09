@@ -8,5 +8,5 @@ export default {
     }
   ],
   scripts: [`console.log(111);`, { src: ``, defer: true }],
-  styles: [`body { color: red; }`]
+  styles: [`body { color: red1; }`]
 }
