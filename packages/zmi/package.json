@@ -1,6 +1,6 @@
 {
   "name": "zmi",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "main": "index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -21,11 +21,11 @@
   "homepage": "https://github.com/l-zoy/zmi",
   "bugs": "https://github.com/l-zoy/zmi/issues",
   "dependencies": {
-    "@zmi-cli/core": "1.1.4",
-    "@zmi-cli/preset": "1.1.4",
-    "@zmi-cli/types": "1.1.4",
-    "@zmi-cli/utils": "1.1.4",
-    "@zmi-cli/webpack": "1.1.4",
+    "@zmi-cli/core": "^1.1.5",
+    "@zmi-cli/preset": "^1.1.5",
+    "@zmi-cli/types": "^1.1.5",
+    "@zmi-cli/utils": "^1.1.5",
+    "@zmi-cli/webpack": "^1.1.5",
     "v8-compile-cache": "^2.3.0"
   },
   "bin": {
