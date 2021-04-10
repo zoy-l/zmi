@@ -35,7 +35,7 @@ async function applyPlugin(options: IPenetrateOptions) {
     cwd
   } = options
 
-  const disableCompress = isProd && process.env.COMPRESS === 'none'
+  const disableCompress = isProd && process.env.COMPRESS !== 'none'
 
   webpackConfig.when(process.env.ZMI_TEST !== 'true', (WConfig) => {
     WConfig.plugin('ProgressBarPlugin').use(ProgressBarPlugin, [
@@ -154,9 +154,6 @@ async function applyPlugin(options: IPenetrateOptions) {
   webpackConfig.when(
     disableCompress,
     (WConfig) => {
-      WConfig.optimization.minimize(false)
-    },
-    (WConfig) => {
       WConfig.optimization
         .minimizer('terser')
         .use(require.resolve('terser-webpack-plugin'), [
@@ -170,6 +167,9 @@ async function applyPlugin(options: IPenetrateOptions) {
       WConfig.optimization
         .minimizer('css-minimizer')
         .use(require.resolve('css-minimizer-webpack-plugin'), [{ sourceMap }])
+    },
+    (WConfig) => {
+      WConfig.optimization.minimize(false)
     }
   )
 
