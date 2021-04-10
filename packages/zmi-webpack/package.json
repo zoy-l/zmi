@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/webpack",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "@types/webpack": "5.28.0",
     "@types/webpack-bundle-analyzer": "^3.9.2",
     "@types/webpack-dev-server": "^3.11.3",
-    "@zmi-cli/types": "^1.1.7"
+    "@zmi-cli/types": "^1.1.9"
   },
   "scripts": {
     "test": "nerd test"
@@ -24,8 +24,8 @@
   "dependencies": {
     "@babel/core": "^7.13.14",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@zmi-cli/babel-factory": "^1.1.7",
-    "@zmi-cli/utils": "^1.1.7",
+    "@zmi-cli/babel-factory": "^1.1.9",
+    "@zmi-cli/utils": "^1.1.9",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^8.1.0",
     "css-loader": "^5.2.0",

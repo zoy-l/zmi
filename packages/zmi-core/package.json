@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/core",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -10,8 +10,8 @@
   "dependencies": {
     "@babel/core": "^7.13.10",
     "@babel/register": "^7.13.8",
-    "@zmi-cli/babel-factory": "^1.1.7",
-    "@zmi-cli/utils": "^1.1.7",
+    "@zmi-cli/babel-factory": "^1.1.9",
+    "@zmi-cli/utils": "^1.1.9",
     "hins": "1.0.7"
   },
   "publishConfig": {

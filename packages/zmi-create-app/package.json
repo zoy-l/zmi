@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/create-zmi-app",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "main": "lib/index.js",
   "license": "MIT",
   "files": [
@@ -9,7 +9,7 @@
     "templates"
   ],
   "dependencies": {
-    "@zmi-cli/utils": "^1.1.7"
+    "@zmi-cli/utils": "^1.1.9"
   },
   "publishConfig": {
     "access": "public"
