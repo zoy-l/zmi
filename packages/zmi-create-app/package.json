@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/create-zmi-app",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "main": "lib/index.js",
   "license": "MIT",
   "files": [
