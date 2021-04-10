@@ -245,8 +245,8 @@ describe('app generator', () => {
         ])
       ]
 
-      expect(templateFile.files.length).toEqual(13)
-      expect(arr.length).toEqual(19)
+      expect(templateFile.files.length).toEqual(14)
+      expect(arr.length).toEqual(20)
     }
 
     done()
