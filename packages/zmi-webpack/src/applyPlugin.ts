@@ -23,7 +23,6 @@ async function applyPlugin(options: IPenetrateOptions) {
     webpackConfig,
     isTypescript,
     htmlContent,
-    sourceMap,
     isReact,
     useHash,
     isProd,
@@ -166,7 +165,7 @@ async function applyPlugin(options: IPenetrateOptions) {
 
       WConfig.optimization
         .minimizer('css-minimizer')
-        .use(require.resolve('css-minimizer-webpack-plugin'), [{ sourceMap }])
+        .use(require.resolve('css-minimizer-webpack-plugin'))
     },
     (WConfig) => {
       WConfig.optimization.minimize(false)

@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "@zmi-cli/core": "^1.1.9",
-    "eslint": "^7.23.0",
+    "eslint": "^7.24.0",
     "eslint-config-zmi": "^1.2.4",
     "gulp-rename": "^2.0.0",
     "zmi-nerd": "^1.2.2-3"
