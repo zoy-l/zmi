@@ -11,7 +11,7 @@ test('getBabelOptions', () => {
   expect(babel).toEqual({
     presets: [[babel.presets![0][0], { sourceMap: false }]],
     plugins: [],
-    sourceType: false,
+    sourceType: undefined,
     babelrc: false,
     configFile: false
   })

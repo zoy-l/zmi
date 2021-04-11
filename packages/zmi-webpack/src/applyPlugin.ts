@@ -179,17 +179,17 @@ async function applyPlugin(options: IPenetrateOptions) {
       WConfig.plugin('extract-css').use(miniCssExtractPlugin, [
         { filename: `${useHash}.css`, chunkFilename: `${[useHash]}.chunk.css` }
       ])
-
-      if (process.env.ANALYZER) {
-        webpackConfig
-          .plugin('webpackBundleAnalyzer')
-          .use(webpackBundleAnalyzer.BundleAnalyzerPlugin)
-      }
     },
     (WConfig) => {
       WConfig.plugin('prettier-html').use(PrettierHtml)
     }
   )
+
+  if (process.env.ANALYZER) {
+    webpackConfig
+      .plugin('webpackBundleAnalyzer')
+      .use(webpackBundleAnalyzer.BundleAnalyzerPlugin)
+  }
 
   webpackConfig.when(config.ignoreMomentLocale, (WConfig) => {
     WConfig.plugin('ignore-moment-locale').use(webpack.IgnorePlugin, [
