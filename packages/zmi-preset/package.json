@@ -15,7 +15,6 @@
   },
   "gitHead": "e00cc20aec3576a5f549f770f0145d3a463734d5",
   "dependencies": {
-    "@zmi-cli/core": "^1.1.9",
     "@zmi-cli/types": "^1.1.9",
     "@zmi-cli/utils": "^1.1.9",
     "@zmi-cli/webpack": "^1.1.9"

@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "miniprogram-api-typings": "^3.3.0",
-    "zmi-miniapp": "^1.1.7",
+    "zmi-miniapp": "^1.1.9",
     "typescript": "^4.2.0"
   },
   "scripts": {

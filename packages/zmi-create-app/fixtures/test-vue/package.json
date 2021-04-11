@@ -9,7 +9,7 @@
     "vue": "^3.0.7"
   },
   "devDependencies": {
-    "zmi": "^1.1.7",
+    "zmi": "^1.1.9",
     "@vue/compiler-sfc": "^3.0.7"
   }
 }
