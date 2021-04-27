@@ -23,7 +23,6 @@ async function applyPlugin(options: IPenetrateOptions) {
     webpackConfig,
     isTypescript,
     htmlContent,
-    sourceMap,
     isReact,
     useHash,
     isProd,
@@ -166,7 +165,7 @@ async function applyPlugin(options: IPenetrateOptions) {
 
       WConfig.optimization
         .minimizer('css-minimizer')
-        .use(require.resolve('css-minimizer-webpack-plugin'), [{ sourceMap }])
+        .use(require.resolve('css-minimizer-webpack-plugin'))
     },
     (WConfig) => {
       WConfig.optimization.minimize(false)
@@ -179,17 +178,17 @@ async function applyPlugin(options: IPenetrateOptions) {
       WConfig.plugin('extract-css').use(miniCssExtractPlugin, [
         { filename: `${useHash}.css`, chunkFilename: `${[useHash]}.chunk.css` }
       ])
-
-      if (process.env.ANALYZER) {
-        webpackConfig
-          .plugin('webpackBundleAnalyzer')
-          .use(webpackBundleAnalyzer.BundleAnalyzerPlugin)
-      }
     },
     (WConfig) => {
       WConfig.plugin('prettier-html').use(PrettierHtml)
     }
   )
+
+  if (process.env.ANALYZER) {
+    webpackConfig
+      .plugin('webpackBundleAnalyzer')
+      .use(webpackBundleAnalyzer.BundleAnalyzerPlugin)
+  }
 
   webpackConfig.when(config.ignoreMomentLocale, (WConfig) => {
     WConfig.plugin('ignore-moment-locale').use(webpack.IgnorePlugin, [

@@ -1,4 +1,4 @@
-import { lodash, filesize, gzipSize, stripAnsi, fsExtra } from '@zmi-cli/utils'
+import { filesize, gzipSize, stripAnsi, fsExtra } from '@zmi-cli/utils'
 
 import path from 'path'
 import fs from 'fs'
@@ -78,7 +78,7 @@ const formatTest = (log: string[]) => {
 
 test('reporter file size null', () => {
   const sizes = { 'main.css': 304, 'main.js': 123007 }
-  const _state = lodash.cloneDeep(state)
+  const _state = { ...state }
 
   _state.assets = undefined
   printFileSizesAfterBuild(_state, sizes, fixtures)

@@ -115,8 +115,8 @@ export interface IConfig {
   favicon?: string
   hash?: boolean
   define?: Record<string, any>
-  devtool?: Pick<Configuration, 'devtool'>
-  externals?: Pick<Configuration, 'externals'>
+  devtool?: Configuration['devtool']
+  externals?: Configuration['externals']
   dynamicImport?: boolean
   autoCSSModules?: boolean
   targets?: ITargets

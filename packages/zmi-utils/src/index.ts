@@ -1,6 +1,5 @@
 import recursiveReaddir from 'recursive-readdir'
 import yargsParser from 'yargs-parser'
-import clearModule from 'clear-module'
 import portfinder from 'portfinder'
 import stripAnsi from 'strip-ansi'
 import textTable from 'text-table'
@@ -14,11 +13,13 @@ import makeDir from 'make-dir'
 import cheerio from 'cheerio'
 import resolve from 'resolve'
 import address from 'address'
-import lodash from 'lodash'
 import pkgUp from 'pkg-up'
 import chalk from 'chalk'
 import slash from 'slash'
 import glob from 'glob'
+import isEmpty from 'lodash.isempty'
+import mapValues from 'lodash.mapvalues'
+import pullAll from 'lodash.pullall'
 
 import launchDevice, { defaultYargsOptions as dyo } from './launchDevice'
 import compatibleWithESModule from './compatibleWithESModule'
@@ -30,6 +31,7 @@ import isLerna from './isLerna'
 import getFile from './getFile'
 
 const isWin = process.platform === 'win32'
+const lodash = { isEmpty, mapValues, pullAll }
 
 export {
   compatibleWithESModule,
@@ -38,7 +40,6 @@ export {
   launchDevice,
   clearConsole,
   mergeConfig,
-  clearModule,
   yargsParser,
   portfinder,
   deepmerge,

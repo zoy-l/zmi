@@ -25,7 +25,7 @@ export default function getBabelOpts({
         ],
       ...config.extraBabelPlugins
     ].filter(Boolean),
-    sourceType: sourceMap ? 'unambiguous' : false,
+    sourceType: sourceMap ? 'unambiguous' : undefined,
     babelrc: false,
     configFile: false
   } as TransformOptions

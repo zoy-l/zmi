@@ -42,7 +42,7 @@ export default (options: IPenetrateOptions) => {
         (WConfig) => {
           WConfig.use('extract-css-loader')
             .loader(miniCssExtractPlugin.loader)
-            .options({ publicPath: './', esModule: !isDev })
+            .options({ publicPath: config.publicPath, esModule: !isDev })
         }
       )
 
