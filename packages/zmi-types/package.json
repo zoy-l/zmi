@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/types",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "index.js"
   ],
   "dependencies": {
-    "@zmi-cli/core": "^1.1.9",
-    "@zmi-cli/utils": "^1.1.9",
-    "@zmi-cli/webpack": "^1.1.9"
+    "@zmi-cli/core": "^1.2.1",
+    "@zmi-cli/utils": "^1.2.1",
+    "@zmi-cli/webpack": "^1.2.1"
   },
   "publishConfig": {
     "access": "public"
