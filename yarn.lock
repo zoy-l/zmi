@@ -6889,14 +6889,13 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-hins@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/hins/-/hins-1.0.7.tgz#db68d2cd0bd914342d467d741e09e5e4d465dd74"
-  integrity sha512-uLkVbQr+J+yio1muYc/R5N2P4ZYZD+jnDAjSX/Ws+hFJyocBlN2K/qxMIWH0EDwMTSUmBoyZsk9sOjqslFzW4Q==
+hins@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/hins/-/hins-1.0.9.tgz#520725618916bcab9e8a05b1e35a15c187c0bfb8"
+  integrity sha512-mP4juZwLGAdJgzwwLHcLU8T/qCKEQaQfGDq0rMKDHgMe/5jdO9YLF917cPaCqntc8VQLwy1CbGQL+2RO0WUzlg==
   dependencies:
+    chokidar "^3.5.1"
     resolve "^1.20.0"
-  optionalDependencies:
-    fsevents "~2.3.1"
 
 hosted-git-info@^2.1.4:
   version "2.8.9"

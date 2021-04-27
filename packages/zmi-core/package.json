@@ -1,6 +1,6 @@
 {
   "name": "@zmi-cli/core",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -12,7 +12,7 @@
     "@babel/register": "^7.13.8",
     "@zmi-cli/babel-factory": "^1.1.9",
     "@zmi-cli/utils": "^1.1.9",
-    "hins": "1.0.7"
+    "hins": "1.0.9"
   },
   "publishConfig": {
     "access": "public"
