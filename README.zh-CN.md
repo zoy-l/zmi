@@ -23,4 +23,6 @@
 - 有关更多详细信息请访问:
 - [Doc v1](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/)
 
+> 灵感来自 umijs
+
 #### LICENSE [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)

@@ -25,6 +25,8 @@ If you can’t solve the problem, please ask [issue](https://github.com/l-zoy/zm
 - for more details
 - please visit the [Doc v1(Github)](https://l-zoy.github.io/zmi/) [Doc v1(国内)](https://zaire.gitee.io/zmi/) website
 
+> Inspired by umijs
+
 #### LICENSE [MIT](https://github.com/l-zoy/zmi/blob/main/LICENSE)
 
 <!-- yarn debug examples/normal dev -->
